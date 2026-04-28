@@ -87,37 +87,42 @@ src/components/ui/
 
 ---
 
-## 마이그레이션 로드맵
+## 마이그레이션 정책
 
-총 29개 컴포넌트(+ 2개 템플릿)를 6개 Tier로 나눠 점진적으로 이전합니다.
+> **"라이브러리는 적게, 강하게. 실제 사용되는 컴포넌트만 옮긴다."**
 
-**시범 (완료)**
+기획팀장 결정으로 **사용 빈도 10회 이상** 컴포넌트만 ispark-ui로 마이그레이션합니다. 사용 빈도가 낮은 건 원본 프로젝트에 그대로 두고, 필요할 때 추가 검토.
 
-- UiButton
+### 데이터 기반 로드맵 (team_agent_front 사용 횟수 기준)
 
-**Tier 1 — 폼 기본**
+**🔴 핵심 — 10회 이상 (마이그레이션 대상, 총 10개)**
 
-- UiInput, UiTextarea, UiCheckbox, UiToggle, UiSelect
+- ✅ **UiButton** (71회) — 완료
+- ✅ **UiInput** (46회) — 완료
+- ⏳ **UiSelect** (32회)
+- ⏳ **UiModal** (31회)
+- ⏳ **UiTextarea** (20회)
+- ⏳ **UiEmpty** (19회)
+- ⏳ **UiToggle** (15회)
+- ⏳ **UiLoading** (13회)
+- ⏳ **UiCheckbox** (13회)
+- ⏳ **UiBadge** (10회)
 
-**Tier 2 — 표시**
+**🟡 중간 — 5~9회 (보류, 요청 시 검토)**
 
-- UiBadge, UiTag, UiStatusBadge, UiTooltip, UiLoading, UiEmpty
+- UiTable (7회)
 
-**Tier 3 — 레이아웃**
+**⚪ 미마이그레이션 — 4회 이하**
 
-- UiTab, UiPagination, UiFormField, UiSettingSection
+UiTooltip, UiTag, UiDropdownMenu, UiDatePicker, UiChart, UiPagination, UiDialogModal, UiCodeBlock, UiMultiSelect, UiTab, UiStatCard, UiSettingSection, UiFormField, UiFileUpload, UiToast, UiStatusBadge, UiDragTable, UiConfirmModal, TmplFormPanel, TmplListSections (총 20개)
 
-**Tier 4 — 모달 / 오버레이**
+→ 원본 프로젝트(`team_agent_front`)에 그대로 유지. 추가 요구 발생 시 재검토.
 
-- UiModal, UiConfirmModal, UiDialogModal, UiToast, UiDropdownMenu
+### 새 컴포넌트 추가 룰
 
-**Tier 5 — 데이터**
-
-- UiTable, UiDragTable, UiMultiSelect, UiDatePicker, UiStatCard
-
-**Tier 6 — 외부 의존**
-
-- UiChart (chart.js), UiCodeBlock (highlight.js), UiFileUpload, TmplFormPanel, TmplListSections
+1. **사용처 10곳 이상** 확인 후 추가
+2. variant/size 등 정리 적용 (UiButton 사례: 8→4, 6→3)
+3. PR description에 사유 명시
 
 ---
 

@@ -77,19 +77,44 @@ ispark-ui/
 └── vite.config.ts
 ```
 
-## 마이그레이션 출처
+## 마이그레이션 정책 (기획팀장 결정)
 
-원본: `C:\team_agent_front\components\ui\` (29개 컴포넌트)
+> **"라이브러리는 적게, 강하게. 사용 안 되는 건 옮기지 않는다."**
 
-| Tier | 컴포넌트 |
-|---|---|
-| 시범 | UiButton |
-| 1 - 폼 | UiInput, UiTextarea, UiCheckbox, UiToggle, UiSelect |
-| 2 - 표시 | UiBadge, UiTag, UiStatusBadge, UiTooltip, UiLoading, UiEmpty |
-| 3 - 레이아웃 | UiTab, UiPagination, UiFormField, UiSettingSection |
-| 4 - 모달 | UiModal, UiConfirmModal, UiDialogModal, UiToast, UiDropdownMenu |
-| 5 - 데이터 | UiTable, UiDragTable, UiMultiSelect, UiDatePicker, UiStatCard |
-| 6 - 외부 의존 | UiChart, UiCodeBlock, UiFileUpload, TmplFormPanel, TmplListSections |
+### 핵심 룰
+
+- **🔴 10회 이상 사용**: 즉시 마이그레이션 대상
+- **🟡 5~9회 사용**: 보류. 다른 프로젝트에서 요청 들어오거나 디자인팀장 승인 시에만
+- **⚪ 1~4회 사용**: 마이그레이션 **안 함**. 원본 프로젝트에 유지
+- **⚫ 0회 사용 (현재 미사용)**: 마이그레이션 **안 함**. 사용처 없는 컴포넌트는 라이브러리 부담만
+
+### 측정 방법
+
+```bash
+# team_agent_front 기준 사용 파일 수 측정
+cd C:/team_agent_front/components
+grep -r --include="*.vue" -l "<UiName\b" . | grep -v "^./ui/" | wc -l
+```
+
+### 데이터 기반 로드맵 (현재 측정값)
+
+| Tier | 컴포넌트 (사용 횟수) | 상태 |
+|---|---|---|
+| 🔴 핵심 (10+) | **UiButton (71)**, **UiInput (46)**, UiSelect (32), UiModal (31), UiTextarea (20), UiEmpty (19), UiToggle (15), UiLoading (13), UiCheckbox (13), UiBadge (10) | UiButton/UiInput ✅ 완료 · 8개 남음 |
+| 🟡 중간 (5~9) | UiTable (7) | 보류 |
+| ⚪ 적음 (1~4) | UiTooltip, UiTag, UiDropdownMenu, UiDatePicker, UiChart, UiPagination, UiDialogModal, UiCodeBlock, UiMultiSelect, UiTab, UiStatCard, UiSettingSection, UiFormField, UiFileUpload | 마이그레이션 안 함 |
+| ⚫ 미사용 (0) | UiToast, UiStatusBadge, UiDragTable, UiConfirmModal, TmplFormPanel, TmplListSections | 마이그레이션 안 함 |
+
+### 새 컴포넌트 추가 시 체크리스트
+
+1. **사용 빈도 측정** (위 명령) — 10회 미만이면 추가 안 함
+2. **다른 프로젝트 요청** 있으면 5회까지도 검토
+3. **이유 PR description에 명시** — "왜 추가하는지"
+4. **마이그레이션 시 정리 적용** — variant/size 단순화 (UiButton 사례 참고: 8→4, 6→3)
+
+### 원본은 살아있음
+
+마이그레이션 안 한 컴포넌트는 `C:\team_agent_front\components\ui\` 그대로 존재 — 원본 프로젝트에서 계속 사용 가능. 라이브러리 분리는 **재사용 가치 있는 것만**.
 
 ## 세부 규칙
 
