@@ -127,4 +127,7 @@ npm run build:icons     # SVG → base64 inline 재생성 (아이콘 추가 시)
 
 ## 라이센스
 
-UNLICENSED — 사내 전용
+MIT — 자유롭게 사용·수정·배포 가능.
+
+> 단, **현재 repo 자체는 비공개(private) 상태**라 install 시 GitHub PAT가 필요합니다.
+> 향후 라이브러리가 안정화되면 repo도 public으로 전환할 예정 — 그때부터는 PAT 없이 누구나 install 가능.

@@ -4,7 +4,7 @@
   "type": "module",
   "description": "Ispark Design System UI Library (Vue 3 + Vite + Storybook)",
   "author": "box3101 <tony.at.cp@gmail.com>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/box3101/ispark-ui.git"
@@ -16,7 +16,8 @@
   "files": [
     "dist",
     "README.md",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "LICENSE"
   ],
   "main": "./dist/ispark-ui.cjs",
   "module": "./dist/ispark-ui.js",

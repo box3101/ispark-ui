@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+### Changed
+- 라이센스 `UNLICENSED` → **`MIT`** 변경. `LICENSE` 파일 추가. 향후 public 전환 시 즉시 오픈소스화 가능하도록 사전 준비.
+
 ## [0.1.0] - 2026-04-28
 
 ### Added
