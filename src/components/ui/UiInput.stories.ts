@@ -85,6 +85,9 @@ const meta = {
   },
 } satisfies Meta<typeof UiInput>
 
+// 데모용 아이콘 옵션 (실제 사용 시는 slot으로 직접 전달)
+const ICON_OPTIONS = ['(없음)', 'plus', 'edit', 'trashcan', 'close', 'search', 'check', 'arrow-right', 'download', 'chevron-down', 'refresh']
+
 export default meta
 
 type Story = StoryObj<typeof meta>
@@ -92,11 +95,43 @@ type Story = StoryObj<typeof meta>
 // ===== 1. Playground — 모든 props 토글, v-model로 라이브 프리뷰 =====
 // 입력 동작 자동 테스트는 src/components/ui/UiInput.test.ts 에서 처리 (10 tests)
 export const Playground: Story = {
+  argTypes: {
+    iconLeft: {
+      control: 'select',
+      options: ICON_OPTIONS,
+      description: '🧪 데모 전용 (실제 API 아님). 실제는 #icon-left slot 사용',
+    },
+    iconRight: {
+      control: 'select',
+      options: ICON_OPTIONS,
+      description: '🧪 데모 전용 (실제 API 아님). type=search 면 자동 검색 아이콘',
+    },
+  } as never,
   args: {
     placeholder: '값을 입력하세요',
     size: 'sm',
+    iconLeft: '(없음)',
+    iconRight: '(없음)',
+  } as never,
+  parameters: {
+    docs: {
+      source: {
+        code: `<!-- 실제 사용법 -->
+<UiInput v-model="value" placeholder="값 입력" />
+
+<!-- 좌측 아이콘 -->
+<UiInput v-model="value" placeholder="검색">
+  <template #icon-left>
+    <i class="icon-search size-16" />
+  </template>
+</UiInput>
+
+<!-- 숫자 전용 + 소수점 2자리 -->
+<UiInput v-model="temp" number-only allow-decimal :decimals="2" placeholder="0.7" />`,
+      },
+    },
   },
-  render: (args) => ({
+  render: (args: Record<string, unknown>) => ({
     components: { UiInput },
     setup() {
       const value = ref('')
@@ -104,7 +139,14 @@ export const Playground: Story = {
     },
     template: `
       <div style="max-width: 320px;">
-        <UiInput v-bind="args" v-model="value" />
+        <UiInput v-bind="args" v-model="value">
+          <template v-if="args.iconLeft && args.iconLeft !== '(없음)'" #icon-left>
+            <i :class="['icon-' + args.iconLeft, 'size-16']" />
+          </template>
+          <template v-if="args.iconRight && args.iconRight !== '(없음)' && args.type !== 'search'" #icon-right>
+            <i :class="['icon-' + args.iconRight, 'size-16']" />
+          </template>
+        </UiInput>
         <p style="margin-top: 8px; font-size: 12px; color: #6f7a93;">value: "{{ value }}"</p>
       </div>
     `,

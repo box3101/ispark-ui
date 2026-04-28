@@ -83,19 +83,75 @@ const meta = {
   },
 } satisfies Meta<typeof UiButton>
 
+// 데모용 아이콘 옵션 (실제 사용 시는 slot으로 직접 전달)
+const ICON_OPTIONS = ['(없음)', 'plus', 'edit', 'trashcan', 'close', 'search', 'check', 'arrow-right', 'download', 'chevron-down', 'refresh']
+
 export default meta
 
 type Story = StoryObj<typeof meta>
 
 // ===== 1. Playground — 모든 props를 Controls로 조작 + 클릭 자동 테스트 =====
+// iconLeft/iconRight/label은 데모 편의용 (실제 API는 slot)
 export const Playground: Story = {
-  args: { variant: 'primary', size: 'md' },
-  render: (args) => ({
+  argTypes: {
+    iconLeft: {
+      control: 'select',
+      options: ICON_OPTIONS,
+      description: '🧪 데모 전용 (실제 API 아님). 실제는 #icon-left slot 사용',
+    },
+    iconRight: {
+      control: 'select',
+      options: ICON_OPTIONS,
+      description: '🧪 데모 전용 (실제 API 아님). 실제는 #icon-right slot 사용',
+    },
+    label: {
+      control: 'text',
+      description: '🧪 데모 전용 버튼 텍스트',
+    },
+  } as never,
+  args: {
+    variant: 'primary',
+    size: 'md',
+    iconLeft: '(없음)',
+    iconRight: '(없음)',
+    label: '버튼',
+  } as never,
+  parameters: {
+    docs: {
+      source: {
+        // 실제 사용법 코드 표시 (Controls 값과 무관하게 정답 예시)
+        code: `<!-- 실제 사용법 (slot 패턴) -->
+<UiButton variant="primary" size="md">
+  <template #icon-left>
+    <i class="icon-plus size-16" />
+  </template>
+  Agent 추가
+</UiButton>
+
+<!-- iconOnly는 ariaLabel 필수 -->
+<UiButton variant="ghost" iconOnly aria-label="삭제">
+  <template #icon-left>
+    <i class="icon-trashcan size-16" />
+  </template>
+</UiButton>`,
+      },
+    },
+  },
+  render: (args: Record<string, unknown>) => ({
     components: { UiButton },
     setup: () => ({ args }),
-    template: '<UiButton v-bind="args">버튼</UiButton>',
+    template: `
+      <UiButton v-bind="args">
+        <template v-if="args.iconLeft && args.iconLeft !== '(없음)'" #icon-left>
+          <i :class="['icon-' + args.iconLeft, 'size-16']" />
+        </template>
+        {{ !args.iconOnly ? (args.label || '버튼') : '' }}
+        <template v-if="args.iconRight && args.iconRight !== '(없음)'" #icon-right>
+          <i :class="['icon-' + args.iconRight, 'size-16']" />
+        </template>
+      </UiButton>
+    `,
   }),
-  // Storybook Interactions 패널에서 단계별 실행 결과 확인 가능
   play: async ({ canvasElement, args }) => {
     const btn = within(canvasElement).getByRole('button')
     await userEvent.click(btn)
