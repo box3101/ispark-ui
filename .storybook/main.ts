@@ -17,6 +17,14 @@ const config: StorybookConfig = {
     autodocs: 'tag',
     defaultName: 'Docs',
   },
+  // GitHub Pages 배포 시 base path 처리 (https://box3101.github.io/ispark-ui/)
+  // 환경변수 BASE_URL이 있으면 그 값, 없으면 dev에선 '/' 사용
+  viteFinal: async (config) => {
+    if (process.env.BASE_URL) {
+      config.base = process.env.BASE_URL
+    }
+    return config
+  },
 }
 
 export default config

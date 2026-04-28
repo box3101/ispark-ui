@@ -40,6 +40,26 @@ describe('UiInput', () => {
     expect(onUpdate).toHaveBeenCalledWith('1.5')
   })
 
+  it('decimals=2 면 입력 즉시 소수점 2자리로 잘라냄', async () => {
+    const onUpdate = vi.fn()
+    render(UiInput, {
+      props: { numberOnly: true, allowDecimal: true, decimals: 2, 'onUpdate:modelValue': onUpdate },
+    })
+    const input = screen.getByRole('textbox') as HTMLInputElement
+    await fireEvent.update(input, '0.12345')
+    expect(onUpdate).toHaveBeenCalledWith('0.12')
+  })
+
+  it('소수점 여러 개 입력 시 첫 번째만 유지', async () => {
+    const onUpdate = vi.fn()
+    render(UiInput, {
+      props: { numberOnly: true, allowDecimal: true, 'onUpdate:modelValue': onUpdate },
+    })
+    const input = screen.getByRole('textbox') as HTMLInputElement
+    await fireEvent.update(input, '1.2.3.4')
+    expect(onUpdate).toHaveBeenCalledWith('1.234')
+  })
+
   // ===== 안전성: type=search 일 때 native type은 text =====
   it('type="search" 시 native input type은 text (검색 아이콘은 별도 렌더)', () => {
     const { container } = render(UiInput, { props: { type: 'search' } })

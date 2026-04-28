@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import { within, userEvent, expect, fn } from '@storybook/test'
+import { fn } from '@storybook/test'
 import { ref } from 'vue'
 import UiInput from './UiInput.vue'
 
@@ -37,6 +37,28 @@ const meta = {
 - \`type="number"\` 사용 금지 — 한글 IME 환경에서 자음이 깜빡이는 브라우저 버그 → **\`numberOnly\` prop** 사용
 - 설명 텍스트는 \`<p class="hint">\` 등 별도 태그 대신 **\`desc\` prop** 사용
 - \`auth\` 사이즈는 로그인/회원가입 전용 (44px, autofill 흰 배경 강제)
+
+---
+
+## 테스트 현황
+
+\`npm test\` 로 실행되는 자동 테스트 **10가지** (\`src/components/ui/UiInput.test.ts\`).
+
+**동작 계약**
+- ✅ input 시 update:modelValue emit
+- ✅ Enter 키 시 enter 이벤트 emit
+
+**숫자 정책**
+- ✅ numberOnly 시 숫자 외 입력 제거
+- ✅ allowDecimal 시 소수점 허용
+- ✅ decimals=2 시 소수점 자릿수 즉시 제한
+- ✅ 소수점 여러 개 입력 시 첫 번째만 유지
+
+**type / 상태 / 부가**
+- ✅ type="search" 시 native input은 text + 검색 아이콘 별도 렌더
+- ✅ type="password" 시 native input type 적용
+- ✅ disabled 시 native disabled + 클래스
+- ✅ desc prop 시 설명 텍스트 렌더
         `,
       },
     },
@@ -56,8 +78,10 @@ const meta = {
     numberOnly: { control: 'boolean' },
     allowDecimal: { control: 'boolean' },
     allowNegative: { control: 'boolean' },
+    decimals: { control: 'number', description: 'allowDecimal=true 일 때 소수점 자릿수 제한' },
     placeholder: { control: 'text' },
     desc: { control: 'text' },
+    maxLength: { control: 'number' },
   },
 } satisfies Meta<typeof UiInput>
 
@@ -65,7 +89,8 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-// ===== 1. Playground — 모든 props 토글 + 자동 입력 테스트 =====
+// ===== 1. Playground — 모든 props 토글, v-model로 라이브 프리뷰 =====
+// 입력 동작 자동 테스트는 src/components/ui/UiInput.test.ts 에서 처리 (10 tests)
 export const Playground: Story = {
   args: {
     placeholder: '값을 입력하세요',
@@ -84,11 +109,6 @@ export const Playground: Story = {
       </div>
     `,
   }),
-  play: async ({ canvasElement, args }) => {
-    const input = within(canvasElement).getByRole('textbox')
-    await userEvent.type(input, '안녕하세요')
-    await expect(args['onUpdate:modelValue']).toHaveBeenCalled()
-  },
 }
 
 // ===== 2. AllSizes — 4종 사이즈 비교 =====
@@ -149,47 +169,15 @@ export const NumberOnly: Story = {
         <div>
           <UiInput v-model="constrainedValue" number-only allow-decimal :min="0" :max="1" :step="0.1" placeholder="0~1, 0.1 단위" desc="blur 시 자동 보정" />
         </div>
+        <div>
+          <UiInput number-only allow-decimal :decimals="2" placeholder="소수점 2자리만 (decimals=2)" desc="입력 즉시 초과 자릿수 제거" />
+        </div>
       </div>
     `,
   }),
 }
 
-// ===== 5. WithIcon — 좌/우 아이콘 슬롯 =====
-export const WithIcon: Story = {
-  name: '아이콘 사용',
-  render: () => ({
-    components: { UiInput },
-    template: `
-      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px;">
-        <UiInput placeholder="좌측 아이콘">
-          <template #icon-left><i class="icon-search size-16" style="color: #6f7a93;" /></template>
-        </UiInput>
-        <UiInput placeholder="우측 아이콘">
-          <template #icon-right><i class="icon-close size-16" style="color: #6f7a93;" /></template>
-        </UiInput>
-        <UiInput type="search" placeholder="search 타입 — 자동 우측 아이콘" />
-      </div>
-    `,
-  }),
-}
-
-// ===== 6. States — disabled / readonly / desc =====
-export const States: Story = {
-  name: '상태',
-  render: () => ({
-    components: { UiInput },
-    template: `
-      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px;">
-        <UiInput placeholder="기본" />
-        <UiInput placeholder="disabled" disabled />
-        <UiInput model-value="읽기 전용 값" readonly />
-        <UiInput placeholder="설명 텍스트 포함" desc="아이디는 영문/숫자 4~20자" />
-      </div>
-    `,
-  }),
-}
-
-// ===== 7. LoginForm — 실전: auth 사이즈 사용 =====
+// ===== 5. LoginForm — 실전: auth 사이즈 사용 =====
 export const LoginForm: Story = {
   name: '실전: 로그인 폼 (auth 사이즈)',
   render: () => ({

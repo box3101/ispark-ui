@@ -38,7 +38,6 @@
         :min="min"
         :max="max"
         :step="step"
-        :spellcheck="spellcheck"
         @input="onInput"
         @compositionupdate="onCompositionUpdate"
         @focus="onFocus"
@@ -103,8 +102,11 @@ interface Props {
   numberOnly?: boolean
   allowDecimal?: boolean
   allowNegative?: boolean
-  /** false면 브라우저 맞춤법 밑줄 비활성화 */
-  spellcheck?: boolean
+  /**
+   * 소수점 자릿수 제한 (allowDecimal=true일 때만 의미). 입력 즉시 초과 자릿수 제거.
+   * 예: decimals=2 면 "0.123" 입력 시 "0.12"로 자동 보정.
+   */
+  decimals?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -124,7 +126,7 @@ const props = withDefaults(defineProps<Props>(), {
   numberOnly: false,
   allowDecimal: false,
   allowNegative: false,
-  spellcheck: undefined,
+  decimals: undefined,
 })
 
 const emit = defineEmits<{
@@ -142,7 +144,29 @@ const stripNonNumeric = (val: string): string => {
   if (props.allowDecimal) pattern += '.'
   if (props.allowNegative) pattern += '-'
   const regex = new RegExp(`[^${pattern}]`, 'g')
-  return val.replace(regex, '')
+  let cleaned = val.replace(regex, '')
+
+  // 음수: 맨 앞에 1개만 허용
+  if (props.allowNegative) {
+    const isNeg = cleaned.startsWith('-')
+    cleaned = cleaned.replace(/-/g, '')
+    if (isNeg) cleaned = '-' + cleaned
+  }
+
+  // 소수점: 최대 1개 + decimals로 자릿수 제한
+  if (props.allowDecimal) {
+    const firstDot = cleaned.indexOf('.')
+    if (firstDot !== -1) {
+      const intPart = cleaned.slice(0, firstDot)
+      let decPart = cleaned.slice(firstDot + 1).replace(/\./g, '')
+      if (props.decimals !== undefined && props.decimals >= 0) {
+        decPart = decPart.slice(0, props.decimals)
+      }
+      cleaned = decPart === '' && intPart === '' ? '' : intPart + '.' + decPart
+    }
+  }
+
+  return cleaned
 }
 
 // number-only + min/max/step 보정 (blur 시점)
