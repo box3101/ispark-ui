@@ -1,6 +1,6 @@
 {
   "name": "@box3101/ispark-ui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "Ispark Design System UI Library (Vue 3 + Vite + Storybook)",
   "author": "box3101 <tony.at.cp@gmail.com>",
