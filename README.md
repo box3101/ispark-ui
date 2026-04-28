@@ -2,33 +2,19 @@
 
 Vue 3 + Vite + Storybook 기반 디자인 시스템 UI 라이브러리.
 
+> ⚠️ **테스트 단계 (v0.1.x)** — API가 자주 바뀔 수 있습니다. 프로덕션에서 사용 시 버전 고정 권장.
+
 ## 설치
 
-GitHub Packages registry에서 받습니다. 두 단계 필요.
+GitHub Packages registry에서 받습니다. **public 패키지라 인증 불필요.**
 
 ### 1. `.npmrc` 설정 (소비측 프로젝트 루트)
 
 ```ini
 @box3101:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
-### 2. GitHub Personal Access Token 발급
-
-1. GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
-2. **Generate new token (classic)**
-3. **Scopes**: `read:packages` 만 체크 (설치만 할 거면 충분)
-4. 발급된 토큰을 환경 변수로 등록:
-
-```bash
-# .env (git에 올리지 않음)
-GITHUB_TOKEN=ghp_xxxxxxxxxxxxx
-
-# 또는 ~/.bashrc / ~/.zshrc / Windows 환경변수
-export GITHUB_TOKEN=ghp_xxxxxxxxxxxxx
-```
-
-### 3. 설치
+### 2. 설치
 
 ```bash
 npm install @box3101/ispark-ui
@@ -128,6 +114,3 @@ npm run build:icons     # SVG → base64 inline 재생성 (아이콘 추가 시)
 ## 라이센스
 
 MIT — 자유롭게 사용·수정·배포 가능.
-
-> 단, **현재 repo 자체는 비공개(private) 상태**라 install 시 GitHub PAT가 필요합니다.
-> 향후 라이브러리가 안정화되면 repo도 public으로 전환할 예정 — 그때부터는 PAT 없이 누구나 install 가능.

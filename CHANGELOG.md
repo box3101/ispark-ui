@@ -5,7 +5,9 @@
 ## [Unreleased]
 
 ### Changed
-- 라이센스 `UNLICENSED` → **`MIT`** 변경. `LICENSE` 파일 추가. 향후 public 전환 시 즉시 오픈소스화 가능하도록 사전 준비.
+- **public 전환** — repo + package 모두 public. 인증(PAT) 없이 `npm install` 가능.
+- README 설치 가이드 단순화 (PAT 단계 제거).
+- 라이센스 `UNLICENSED` → **`MIT`** 변경. `LICENSE` 파일 추가.
 
 ## [0.1.0] - 2026-04-28
 
