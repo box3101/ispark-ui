@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: '20'
           registry-url: 'https://npm.pkg.github.com'
-          scope: '@ispark-ax'
+          scope: '@box3101'
 
       - name: Install dependencies
         run: npm ci

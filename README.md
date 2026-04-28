@@ -1,4 +1,4 @@
-# @ispark-ax/ispark-ui
+# @box3101/ispark-ui
 
 Vue 3 + Vite + Storybook 기반 디자인 시스템 UI 라이브러리.
 
@@ -9,7 +9,7 @@ GitHub Packages registry에서 받습니다. 두 단계 필요.
 ### 1. `.npmrc` 설정 (소비측 프로젝트 루트)
 
 ```ini
-@ispark-ax:registry=https://npm.pkg.github.com
+@box3101:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
@@ -31,7 +31,7 @@ export GITHUB_TOKEN=ghp_xxxxxxxxxxxxx
 ### 3. 설치
 
 ```bash
-npm install @ispark-ax/ispark-ui
+npm install @box3101/ispark-ui
 ```
 
 ## 사용
@@ -40,8 +40,8 @@ npm install @ispark-ax/ispark-ui
 
 ```vue
 <script setup lang="ts">
-import { UiButton } from '@ispark-ax/ispark-ui'
-import '@ispark-ax/ispark-ui/style.css' // 글로벌 스타일 1회 import (앱 진입점에서)
+import { UiButton } from '@box3101/ispark-ui'
+import '@box3101/ispark-ui/style.css' // 글로벌 스타일 1회 import (앱 진입점에서)
 </script>
 
 <template>
@@ -53,7 +53,7 @@ import '@ispark-ax/ispark-ui/style.css' // 글로벌 스타일 1회 import (앱 
 
 ```ts
 // main.ts (Vue) 또는 app.vue (Nuxt)
-import '@ispark-ax/ispark-ui/style.css'
+import '@box3101/ispark-ui/style.css'
 ```
 
 이 1줄로 다음이 한 번에 적용됩니다:
