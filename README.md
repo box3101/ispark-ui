@@ -6,11 +6,27 @@ Vue 3 + Vite + Storybook 기반 디자인 시스템 UI 라이브러리.
 
 ## 설치
 
+### Git URL 직접 설치 (현재 권장 — 인증 불필요)
+
 ```bash
-npm install @leechanyong/ispark-ui
+# 최신 main 브랜치
+npm install git+https://github.com/box3101/ispark-ui.git
+
+# 또는 특정 태그 (안정 버전 고정)
+npm install git+https://github.com/box3101/ispark-ui.git#v0.1.4
+
+# package.json에 명시
+# "@leechanyong/ispark-ui": "github:box3101/ispark-ui#v0.1.4"
 ```
 
-> 인증 불필요. 표준 npm 레지스트리(npmjs.com)에서 바로 설치됩니다.
+설치 시 자동으로 빌드(`prepare` 훅)되어 바로 사용 가능합니다.
+
+### npm registry 설치 (예정 — 미정)
+
+```bash
+# 향후 npmjs.com 또는 GitHub Packages publish 후 가능
+npm install @leechanyong/ispark-ui
+```
 
 ## 사용
 
