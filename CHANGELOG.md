@@ -5,8 +5,10 @@
 ## [Unreleased]
 
 ### Changed
-- **public 전환** — repo + package 모두 public. 인증(PAT) 없이 `npm install` 가능.
-- README 설치 가이드 단순화 (PAT 단계 제거).
+- **registry: GitHub Packages → npmjs.com** 으로 전환. 진짜 anonymous install 가능 (`.npmrc` 설정 불필요).
+- GitHub Actions 워크플로우: `NPM_TOKEN` 시크릿 사용.
+- README 설치 가이드 1줄로 단순화 (`npm install @box3101/ispark-ui`).
+- **public 전환** — repo + package 모두 public.
 - 라이센스 `UNLICENSED` → **`MIT`** 변경. `LICENSE` 파일 추가.
 
 ## [0.1.0] - 2026-04-28

@@ -1,6 +1,6 @@
-name: Publish to GitHub Packages
+name: Publish to npm
 
-# 태그 푸시 시 자동 배포 (예: git tag v0.1.1 && git push --tags)
+# 태그 푸시 시 자동 배포 (예: git tag v0.1.3 && git push --tags)
 # 또는 GitHub UI에서 수동 실행 가능
 on:
   push:
@@ -11,17 +11,13 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@box3101'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm ci
@@ -32,7 +28,9 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Publish to GitHub Packages
-        run: npm publish
+      - name: Publish to npm
+        run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # GitHub repo Settings → Secrets and variables → Actions에서 NPM_TOKEN 추가 필요
+          # 토큰 발급: https://www.npmjs.com/settings/<your-username>/tokens
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

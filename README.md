@@ -6,19 +6,11 @@ Vue 3 + Vite + Storybook 기반 디자인 시스템 UI 라이브러리.
 
 ## 설치
 
-GitHub Packages registry에서 받습니다. **public 패키지라 인증 불필요.**
-
-### 1. `.npmrc` 설정 (소비측 프로젝트 루트)
-
-```ini
-@box3101:registry=https://npm.pkg.github.com
-```
-
-### 2. 설치
-
 ```bash
 npm install @box3101/ispark-ui
 ```
+
+> 인증 불필요. 표준 npm 레지스트리(npmjs.com)에서 바로 설치됩니다.
 
 ## 사용
 
