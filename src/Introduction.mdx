@@ -1,0 +1,139 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta title="소개/Introduction" />
+
+# ispark-ui
+
+Vue 3 + Vite + Storybook 기반 디자인 시스템 UI 라이브러리입니다.
+`team_agent_front`의 UI 컴포넌트를 분리해, 재사용 가능한 라이브러리로 발전시킨 프로젝트입니다.
+
+---
+
+## 핵심 전략
+
+> **"스토리 하나로 문서 + 시각 회귀 + 단위 테스트, 3역할을 동시에"**
+
+이 라이브러리는 컴포넌트마다 작성하는 **스토리 파일 한 개**가 세 가지 역할을 합니다.
+
+- **문서** — Storybook 좌측 사이드바의 자동 문서(autodocs)로 변환됩니다.
+- **시각 회귀** — 스토리 화면 자체가 디자인 검증 대상이 됩니다 (선택적으로 Chromatic 연동).
+- **단위 테스트** — `composeStories`로 Vitest에서 그대로 가져다 쓰면, play 함수 안의 상호작용이 자동 테스트가 됩니다.
+
+즉, **테스트 코드를 따로 작성할 필요가 줄어들고**, 같은 시나리오를 두 번 작성하는 중복이 사라집니다.
+
+---
+
+## 컴포넌트 작성 3종 세트
+
+새 UI 컴포넌트를 만들 때는 항상 **세 개의 파일**을 함께 작성합니다.
+
+```
+src/components/ui/
+├── UiButton.vue          ← 컴포넌트 본체
+├── UiButton.stories.ts   ← CSF3 스토리 + play 함수 (문서 + 상호작용)
+└── UiButton.test.ts      ← composeStories 재사용 (엣지 케이스만 추가)
+```
+
+**원칙**
+
+- 스토리 = **최소 테스트 케이스**. 일반적인 동작은 스토리만으로 충분합니다.
+- `.test.ts`는 **엣지 케이스 / 클래스 검증 / 분기 로직**처럼 스토리로 커버 안 되는 부분만 다룹니다.
+- play 함수가 길어지기 시작하면 → E2E 신호. Playwright로 옮기는 것을 고려합니다.
+
+---
+
+## 현재 패키지 구성 — Phase 1 (총 7개)
+
+가이드 문서의 **"미리 다 깔지 않고, 필요해질 때 추가한다"** 원칙에 따라 최소 구성으로 출발합니다.
+
+**Storybook (3개)**
+
+- **`@storybook/vue3-vite`** — Storybook 본체 (Vue 3 + Vite 빌더)
+- **`@storybook/test`** — `fn()`, `expect`, `userEvent`, `within` 등 테스트 유틸
+- **`@storybook/addon-essentials`** — Controls, Docs, Viewport, Backgrounds 기본 세트
+
+**테스트 (4개)**
+
+- **`vitest`** — 테스트 러너
+- **`@vitejs/plugin-vue`** — Vue SFC 처리
+- **`@testing-library/vue`** — `render`, `screen` 등 렌더링 유틸
+- **`jsdom`** — Node 환경에서 브라우저 DOM 에뮬레이션
+
+---
+
+## Phase 2 — 필요할 때만 추가
+
+다음 패키지들은 **실제로 필요한 상황이 생기면** 그때 추가합니다. 미리 깔아두지 않습니다.
+
+- **`@testing-library/jest-dom`** — `toBeInTheDocument` 같은 매처가 필요해질 때
+- **`@testing-library/user-event`** — 타이핑·드래그처럼 복잡한 상호작용이 필요할 때
+- **`@storybook/addon-a11y`** — 접근성 위반이 릴리즈를 막아야 할 때
+- **`@storybook/test-runner`** — CI에서 play 함수를 자동 실행하고 싶을 때
+- **`@vue/test-utils`** — 컴포넌트 내부 상태나 메서드에 접근해야 할 때
+- **`@chromatic-com/storybook`** — 픽셀 단위 시각 회귀 테스트를 도입할 때
+
+> 패키지가 많으면 관리 부담과 빌드 시간이 같이 늘어납니다.
+> **문제가 생겼을 때 해결책으로** 추가하는 것이 원칙입니다.
+
+---
+
+## 구현된 컴포넌트
+
+좌측 사이드바의 **Components** 섹션에서 각 컴포넌트의 스토리와 자동 문서를 확인할 수 있습니다.
+
+- ✅ **UiButton** — variant 4종 시멘틱(`primary` / `secondary` / `ghost` / `danger`), size 3종(`sm` 28px / `md` 32px / `lg` 40px), loading / disabled / fullWidth / iconOnly 상태
+
+  > 디자인 시스템 정리: 원본 8종 variant + 6종 size를 시멘틱하고 일관된 4×3으로 통합. `outline`·`line-secondary`처럼 같은 역할이 분리되어 있던 문제 해결.
+
+---
+
+## 마이그레이션 로드맵
+
+총 29개 컴포넌트(+ 2개 템플릿)를 6개 Tier로 나눠 점진적으로 이전합니다.
+
+**시범 (완료)**
+
+- UiButton
+
+**Tier 1 — 폼 기본**
+
+- UiInput, UiTextarea, UiCheckbox, UiToggle, UiSelect
+
+**Tier 2 — 표시**
+
+- UiBadge, UiTag, UiStatusBadge, UiTooltip, UiLoading, UiEmpty
+
+**Tier 3 — 레이아웃**
+
+- UiTab, UiPagination, UiFormField, UiSettingSection
+
+**Tier 4 — 모달 / 오버레이**
+
+- UiModal, UiConfirmModal, UiDialogModal, UiToast, UiDropdownMenu
+
+**Tier 5 — 데이터**
+
+- UiTable, UiDragTable, UiMultiSelect, UiDatePicker, UiStatCard
+
+**Tier 6 — 외부 의존**
+
+- UiChart (chart.js), UiCodeBlock (highlight.js), UiFileUpload, TmplFormPanel, TmplListSections
+
+---
+
+## 명령어
+
+```bash
+npm run storybook         # Storybook dev 서버 (포트 6006)
+npm run build-storybook   # 정적 빌드 (storybook-static/)
+npm test                  # Vitest 1회 실행
+npm run test:watch        # Vitest watch 모드
+```
+
+---
+
+## 참고
+
+- **`CLAUDE.md`** — 프로젝트 정체성·구조·규칙 인덱스
+- **`.claude/rules/`** — UI 컴포넌트 / SCSS / 네이밍 / 컨벤션 등 세부 규칙
+- **원본 프로젝트** — `C:\team_agent_front`

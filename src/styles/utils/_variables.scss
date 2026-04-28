@@ -1,0 +1,208 @@
+// ===================================
+// 색상 (피그마에서 추출)
+// ===================================
+// 테마 색상 — CSS 변수로 런타임 전환 (useTheme.ts에서 제어)
+// SCSS 변수는 폴백 & SCSS 함수용으로 유지
+$color-primary: #3c69db;
+$color-primary-hover: #1d4ed8;
+$color-primary-dark: #2b43a2;
+$color-primary-dark-hover: #1d3589;
+$color-orange: #ff7518;
+$color-orange-hover: #e5660f;
+$color-orange-dark: #c73e07;
+$color-orange-dark-hover: #a83306;
+$color-secondary: #64748b;
+$color-background: #f4f7f9;
+$color-surface: #f8fafc;
+$color-border: #dce4e9;
+$color-border-light: #ecf0f3;
+$color-text-primary: #4d5462;
+$color-text-heading: #1e2124;
+$color-text-heading-sub: #2d3139; // 패널 제목 등 (카테고리 패널 등)
+$color-text-dark: #5c6677;
+$color-text-secondary: #64748b;
+$color-text-disabled: #6f7a93;
+$color-text-muted: #6f7a93; // 테이블 헤더 등 보조 텍스트
+$color-success: #22c55e;
+$color-error: #ef4444;
+$color-warning: #f59e0b;
+$color-info: #3b82f6;
+// danger: 파괴적 액션(삭제 등) 시멘틱 토큰 — error와 같은 적색이지만 의도가 다름
+$color-danger: #dc2626;
+$color-danger-hover: #b91c1c;
+$color-danger-dark: #991b1b; // :active 한 단계 더 진하게
+// 채팅 전용
+$color-chat-user-bg: #eff6ff;
+$color-chat-assistant-bg: #f8fafc;
+// ===================================
+// 타이포그래피
+// ===================================
+$font-family-base:
+  'Pretendard',
+  -apple-system,
+  sans-serif;
+$font-family-mono: ui-monospace, monospace;
+$font-size-xs: 0.625rem; // 10px — 캡션
+$font-size-sm: 0.75rem; // 12px — 보조 텍스트
+$font-size-base: 0.875rem; // 14px — 본문 기본
+$font-size-lg: 1rem; // 16px — 소제목
+$font-size-xl: 1.125rem; // 18px — 섹션 제목
+$font-size-2xl: 1.25rem; // 20px — 페이지 제목
+$font-weight-normal: 450;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$line-height-tight: 1.25; // 제목
+$line-height-base: 1.5; // 본문
+$line-height-relaxed: 1.75; // 채팅 메시지 (긴 텍스트 읽기 편하게)
+
+// ===================================
+// 타이포 프리셋 (Map) — @include typo($변수명)
+// font-family는 전역 적용이라 생략
+// ===================================
+
+// Body Caption (10px)
+$body-caption: (
+  font-size: 10px,
+  font-weight: $font-weight-normal,
+  line-height: 150%,
+);
+$body-caption-bold: (
+  font-size: 10px,
+  font-weight: $font-weight-bold,
+  line-height: 150%,
+);
+
+// Body XSmall (10px)
+$body-xsmall: (
+  font-size: $font-size-xs,
+  font-weight: $font-weight-normal,
+  line-height: 150%,
+);
+$body-xsmall-bold: (
+  font-size: $font-size-xs,
+  font-weight: $font-weight-bold,
+  line-height: 150%,
+);
+
+// Body Small (12px)
+$body-small: (
+  font-size: $font-size-sm,
+  font-weight: $font-weight-normal,
+  line-height: 150%,
+);
+$body-small-bold: (
+  font-size: $font-size-sm,
+  font-weight: $font-weight-bold,
+  line-height: 150%,
+);
+
+// Body Medium (14px)
+$body-medium: (
+  font-size: $font-size-base,
+  font-weight: $font-weight-normal,
+  line-height: 150%,
+);
+$body-medium-medium: (
+  font-size: $font-size-base,
+  font-weight: $font-weight-medium,
+  line-height: 150%,
+);
+$body-medium-bold: (
+  font-size: $font-size-base,
+  font-weight: $font-weight-bold,
+  line-height: 150%,
+);
+
+// Body Large (16px)
+$body-large: (
+  font-size: $font-size-lg,
+  font-weight: $font-weight-normal,
+  line-height: 150%,
+);
+$body-large-bold: (
+  font-size: $font-size-lg,
+  font-weight: $font-weight-bold,
+  line-height: 150%,
+);
+
+// Body XLarge (18px)
+$body-xlarge: (
+  font-size: $font-size-xl,
+  font-weight: $font-weight-normal,
+  line-height: 150%,
+);
+$body-xlarge-bold: (
+  font-size: $font-size-xl,
+  font-weight: $font-weight-bold,
+  line-height: 150%,
+);
+
+$body-2xlarge: (
+  font-size: $font-size-2xl,
+  font-weight: $font-weight-normal,
+  line-height: 150%,
+);
+
+$body-2xlarge-bold: (
+  font-size: $font-size-2xl,
+  font-weight: $font-weight-bold,
+  line-height: 150%,
+);
+// ===================================
+// 간격 (4px 기준 그리드)
+// ===================================
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-2xl: 48px;
+// ===================================
+// 반응형 분기점 (PC vs 모바일+태블릿 2분할)
+// ===================================
+$breakpoint-lg: 1024px; // 유일한 분기점: PC(1024~) / 모바일+태블릿(~1023)
+// ===================================
+// 레이아웃
+// ===================================
+$sidebar-width: 260px;
+$sidebar-width-collapsed: 52px;
+$header-height: 48px;
+$chat-input-height: 64px;
+$chat-max-width: 768px;
+// ===================================
+// 공통 높이 (디자인 시스템 정리: 3단계로 통일)
+// ===================================
+$height-sm: 28px;
+$height-md: 32px;
+$height-lg: 40px;
+/** 로그인·회원가입 등 인증 폼 입력 (UiInput size=auth) */
+$height-auth: 44px;
+// ===================================
+// 둥글기
+// ===================================
+$border-radius-sm: 4px;
+$border-radius-base: 6px;
+$border-radius-lg: 8px;
+$border-radius-100: 100px;
+$border-radius-full: 100%;
+// ===================================
+// 그림자
+// ===================================
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+$shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+// ===================================
+// z-index 체계
+// ===================================
+$z-dropdown: 100;
+$z-sticky: 200;
+$z-overlay: 300;
+$z-modal: 400;
+$z-toast: 500;
+// ===================================
+// 트랜지션
+// ===================================
+$transition-fast: 150ms ease;
+$transition-base: 200ms ease;
+$transition-slow: 300ms ease;

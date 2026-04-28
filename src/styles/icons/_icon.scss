@@ -1,0 +1,33 @@
+// 아이콘 사이즈 클래스 (4px 단위)
+// 원본: team_agent_front/assets/styles/components/_icon.scss
+@use '../utils/variables' as *;
+
+$icon-sizes: 8, 10, 12, 14, 16, 20, 24, 28, 32, 36, 40, 48;
+
+@each $size in $icon-sizes {
+  .size-#{$size} {
+    width: #{$size}px;
+    height: #{$size}px;
+  }
+}
+
+// 아이콘 색상 유틸리티 (mask-image + background-color 패턴)
+.icon-primary {
+  background-color: var(--color-primary);
+}
+
+.icon-danger {
+  background-color: var(--color-danger);
+}
+
+.icon-white {
+  background-color: #fff;
+}
+
+.icon-black {
+  background-color: #000;
+}
+
+.icon-muted {
+  background-color: $color-text-muted;
+}

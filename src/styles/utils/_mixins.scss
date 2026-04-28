@@ -1,0 +1,144 @@
+// vite.config.ts의 additionalData가 _variables.scss를 글로벌 주입하므로
+// 여기서 별도 @use 불필요 (sass-embedded + Windows 경로 호환)
+
+// 모바일+태블릿 분기 (1024px 미만)
+@mixin mobile {
+  @media (max-width: #{$breakpoint-lg - 1}) {
+    @content;
+  }
+}
+
+// 말줄임 처리 (ex. @include ellipsis(2))
+@mixin ellipsis($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+  }
+}
+
+@mixin custom-scrollbar($width: 4px) {
+  &::-webkit-scrollbar {
+    width: #{$width};
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 12px 0;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $color-border;
+    border-radius: $border-radius-100;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: $color-text-disabled;
+  }
+}
+
+// 스크롤바 숨김
+@mixin hide-scrollbar {
+  scrollbar-width: none; // Firefox
+  -ms-overflow-style: none; // IE, Edge
+
+  &::-webkit-scrollbar {
+    display: none; // Chrome, Safari
+  }
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// 타이포그래피 프리셋 적용 (SCSS Map → CSS 속성)
+// $color: 선택 인자 — 전달 시 color 속성도 함께 출력
+@mixin typo($map, $color: null) {
+  @each $prop, $val in $map {
+    #{$prop}: $val;
+  }
+  @if $color {
+    color: $color;
+  }
+}
+
+// input reset
+@mixin input-reset {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+// hover/focus 접근성 버전
+@mixin hover {
+  &:hover,
+  &:focus-visible {
+    @content;
+  }
+}
+
+// 아이콘 - SVG 파일 참조 방식 (assets/icons/svg/ 폴더의 파일명만 입력)
+@mixin icon-file($name) {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  background-image: url('@/assets/icons/svg/#{$name}.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+@mixin icon-file-bg($name) {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  mask-image: url('@/assets/icons/svg/#{$name}.svg');
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-image: url('@/assets/icons/svg/#{$name}.svg');
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  background-color: currentColor;
+}
+
+// button base
+@mixin btn-base {
+  @include input-reset;
+
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: $border-radius-base;
+  font-weight: $font-weight-semibold;
+  transition: all 0.3s;
+}
+
+@mixin bg-base($position: center, $size: auto, $repeat: no-repeat) {
+  background-position: $position;
+  background-size: $size;
+  background-repeat: $repeat;
+}
+
+@mixin icon-base($size: 24px) {
+  @include bg-base($size: contain);
+  display: inline-block;
+  width: $size;
+  height: $size;
+  vertical-align: middle;
+}
