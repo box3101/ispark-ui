@@ -6,3 +6,4 @@ import './styles/main.scss'
 
 // 컴포넌트
 export { default as UiButton } from './components/ui/UiButton.vue'
+export { default as UiInput } from './components/ui/UiInput.vue'
