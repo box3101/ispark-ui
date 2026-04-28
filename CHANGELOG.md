@@ -5,9 +5,10 @@
 ## [Unreleased]
 
 ### Changed
+- **scope `@box3101` → `@leechanyong`** 으로 변경 (GitHub은 box3101, npmjs는 leechanyong username). 패키지 import 경로 변경됨.
 - **registry: GitHub Packages → npmjs.com** 으로 전환. 진짜 anonymous install 가능 (`.npmrc` 설정 불필요).
 - GitHub Actions 워크플로우: `NPM_TOKEN` 시크릿 사용.
-- README 설치 가이드 1줄로 단순화 (`npm install @box3101/ispark-ui`).
+- README 설치 가이드 1줄로 단순화 (`npm install @leechanyong/ispark-ui`).
 - **public 전환** — repo + package 모두 public.
 - 라이센스 `UNLICENSED` → **`MIT`** 변경. `LICENSE` 파일 추가.
 
