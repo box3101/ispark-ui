@@ -35,6 +35,9 @@ jobs:
           BASE_URL: '/ispark-ui/'
 
       - uses: actions/configure-pages@v5
+        with:
+          # Pages가 아직 활성화 안 됐으면 자동 활성화
+          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
