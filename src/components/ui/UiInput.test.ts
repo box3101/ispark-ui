@@ -272,4 +272,87 @@ describe('UiInput', () => {
     const input = container.querySelector('input.ui-input') as HTMLInputElement
     expect(input.getAttribute('role')).toBe('searchbox')
   })
+
+  // ===== v0.3.0: label =====
+  it('label prop이 있으면 <label for=> 가 input id와 자동 연결됨', () => {
+    const { container } = render(UiInput, { props: { label: '이메일', id: 'email' } })
+    const label = container.querySelector('label.ui-input-label') as HTMLLabelElement
+    const input = container.querySelector('input.ui-input') as HTMLInputElement
+    expect(label).not.toBeNull()
+    expect(label.textContent).toContain('이메일')
+    expect(label.htmlFor).toBe('email')
+    expect(input.id).toBe('email')
+  })
+
+  it('id 미지정 시에도 자동 생성된 id로 label 연결됨', () => {
+    const { container } = render(UiInput, { props: { label: '이름' } })
+    const label = container.querySelector('label.ui-input-label') as HTMLLabelElement
+    const input = container.querySelector('input.ui-input') as HTMLInputElement
+    expect(label.htmlFor).toBeTruthy()
+    expect(label.htmlFor).toBe(input.id)
+  })
+
+  it('required + label 시 별표(*) 표시 (aria-hidden)', () => {
+    const { container } = render(UiInput, { props: { label: '비밀번호', required: true } })
+    const star = container.querySelector('.ui-input-required') as HTMLElement
+    expect(star).not.toBeNull()
+    expect(star.textContent).toBe('*')
+    expect(star.getAttribute('aria-hidden')).toBe('true')
+  })
+
+  it('labelHidden=true 시 label은 DOM에 있지만 시각 숨김 (스크린리더 인지)', () => {
+    const { container } = render(UiInput, { props: { label: '검색', labelHidden: true } })
+    const label = container.querySelector('label.ui-input-label') as HTMLLabelElement
+    expect(label).not.toBeNull()
+    expect(label.classList.contains('is-hidden')).toBe(true)
+  })
+
+  it('label 없으면 <label> 엘리먼트 자체가 렌더 안 됨', () => {
+    const { container } = render(UiInput)
+    expect(container.querySelector('label.ui-input-label')).toBeNull()
+  })
+
+  // ===== v0.3.0: error / errorMessage =====
+  it('error=true 시 wrap에 is-error 클래스 + input aria-invalid="true"', () => {
+    const { container } = render(UiInput, { props: { error: true } })
+    const wrap = container.querySelector('.ui-input-wrap') as HTMLElement
+    const input = container.querySelector('input.ui-input') as HTMLInputElement
+    expect(wrap.classList.contains('is-error')).toBe(true)
+    expect(input.getAttribute('aria-invalid')).toBe('true')
+  })
+
+  it('errorMessage 있으면 error 자동 + 메시지 렌더 + role="alert"', () => {
+    const { container } = render(UiInput, { props: { errorMessage: '이메일 형식이 잘못되었습니다.' } })
+    const wrap = container.querySelector('.ui-input-wrap') as HTMLElement
+    const error = container.querySelector('.ui-input-error') as HTMLElement
+    expect(wrap.classList.contains('is-error')).toBe(true)
+    expect(error).not.toBeNull()
+    expect(error.textContent).toContain('이메일 형식이 잘못되었습니다.')
+    expect(error.getAttribute('role')).toBe('alert')
+  })
+
+  it('errorMessage가 input의 aria-describedby로 연결됨 (desc보다 우선)', () => {
+    const { container } = render(UiInput, {
+      props: { id: 'pw', errorMessage: '에러', desc: '6자 이상' },
+    })
+    const input = container.querySelector('input.ui-input') as HTMLInputElement
+    const error = container.querySelector('.ui-input-error') as HTMLElement
+    expect(error.id).toBe('pw-error')
+    expect(input.getAttribute('aria-describedby')).toBe('pw-error')
+    // errorMessage 있을 땐 desc는 렌더 안 됨
+    expect(container.querySelector('.ui-input-desc')).toBeNull()
+  })
+
+  it('error 없을 땐 aria-invalid 속성 부재', () => {
+    const { container } = render(UiInput)
+    const input = container.querySelector('input.ui-input') as HTMLInputElement
+    expect(input.hasAttribute('aria-invalid')).toBe(false)
+  })
+
+  // ===== v0.3.0: type='url' =====
+  it('type="url" 시 native input.type 적용', () => {
+    const { container } = render(UiInput, { props: { type: 'url' } })
+    const input = container.querySelector('input.ui-input') as HTMLInputElement
+    expect(input.type).toBe('url')
+  })
 })

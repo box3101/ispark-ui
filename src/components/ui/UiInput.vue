@@ -1,9 +1,28 @@
 <template>
   <div
     class="ui-input-outer"
-    :class="[outerClass, { 'has-desc': !!desc }]"
+    :class="[outerClass, {
+      'has-desc': !!desc && !errorMessage,
+      'has-error': isError,
+      'has-label': !!(label || $slots.label),
+    }]"
     :style="outerStyle"
   >
+    <!-- Label — text prop 또는 slot. for=resolvedId로 자동 연결 -->
+    <label
+      v-if="label || $slots.label"
+      :for="resolvedId"
+      class="ui-input-label"
+      :class="{ 'is-hidden': labelHidden }"
+    >
+      <slot name="label">{{ label }}</slot>
+      <span
+        v-if="required"
+        class="ui-input-required"
+        aria-hidden="true"
+      >*</span>
+    </label>
+
     <div
       class="ui-input-wrap"
       :class="[
@@ -13,6 +32,7 @@
         {
           'is-disabled': disabled,
           'is-focused': isFocused,
+          'is-error': isError,
           'has-icon-left': !!$slots['icon-left'],
           'has-icon-right': !!$slots['icon-right'] || type === 'search',
         },
@@ -28,7 +48,7 @@
 
       <input
         v-bind="forwardedAttrs"
-        :id="id"
+        :id="resolvedId"
         ref="inputRef"
         class="ui-input"
         :type="type === 'search' ? 'text' : type"
@@ -42,7 +62,8 @@
         :autocomplete="autocomplete"
         :name="name"
         :maxlength="maxLength"
-        :aria-describedby="descId"
+        :aria-describedby="ariaDescribedby"
+        :aria-invalid="ariaInvalid"
         @input="onInput"
         @compositionstart="onCompositionStart"
         @compositionend="onCompositionEnd"
@@ -71,9 +92,19 @@
         <slot name="icon-right" />
       </span>
     </div>
-    <!-- 설명 텍스트 (input의 aria-describedby 와 연결) -->
+
+    <!-- 에러 메시지 (desc보다 우선) — role=alert로 변경 즉시 스크린리더 안내 -->
     <p
-      v-if="desc"
+      v-if="errorMessage"
+      :id="errorId"
+      class="ui-input-error"
+      role="alert"
+    >
+      {{ errorMessage }}
+    </p>
+    <!-- 설명 텍스트 (errorMessage 없을 때만, input의 aria-describedby와 연결) -->
+    <p
+      v-else-if="desc"
       :id="descId"
       class="ui-input-desc"
     >
@@ -94,7 +125,27 @@ interface Props {
    * input HTML type — `search`는 내부적으로 text + 우측 검색 아이콘 자동.
    * `number`는 사용 금지 (한글 IME 깜빡임) → `numberOnly` prop 사용.
    */
-  type?: 'text' | 'search' | 'password' | 'email' | 'tel'
+  type?: 'text' | 'search' | 'password' | 'email' | 'tel' | 'url'
+  /**
+   * label 텍스트 — `<label for>` 자동 연결. label slot이 있으면 그것을 우선.
+   * `id` prop이 없어도 자동 생성된 id로 연결됨.
+   */
+  label?: string
+  /**
+   * label 시각적 숨김 — DOM에는 있지만 CSS로 숨김. 스크린리더는 인지.
+   * search input에서 placeholder만 노출하고 싶을 때.
+   */
+  labelHidden?: boolean
+  /**
+   * 에러 상태 — input에 빨간 테두리 + `aria-invalid="true"` 자동.
+   * `errorMessage`가 있으면 별도 지정 안 해도 자동 true.
+   */
+  error?: boolean
+  /**
+   * 에러 메시지 — 비어있지 않으면 `error: true` 자동 + 빨간 텍스트로 표시.
+   * input의 `aria-describedby`가 이 메시지로 연결 (desc보다 우선).
+   */
+  errorMessage?: string
   /** 입력 영역 플레이스홀더 텍스트 */
   placeholder?: string
   /** 비활성화 — 입력 차단 + opacity 0.5 */
@@ -181,6 +232,10 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'md',
   shape: 'rounded',
   desc: '',
+  label: '',
+  labelHidden: false,
+  error: false,
+  errorMessage: '',
   numberOnly: false,
   allowDecimal: false,
   allowNegative: false,
@@ -209,11 +264,27 @@ const forwardedAttrs = computed(() => {
 const outerClass = computed(() => attrs.class as unknown)
 const outerStyle = computed<StyleValue | undefined>(() => (attrs.style as StyleValue | undefined) ?? undefined)
 
-// desc id — input의 aria-describedby로 연결 (Vue 3.5+ useId — SSR 안전, 인스턴스별 unique)
+// id 자동 생성 (Vue 3.5+ useId — SSR 안전, 인스턴스별 unique).
+// 외부에서 id prop을 안 주면 label/aria 연결을 위해 내부 id 사용.
 const uid = useId()
-const descId = computed(() => {
-  if (!props.desc) return undefined
-  return props.id ? `${props.id}-desc` : `${uid}-desc`
+const resolvedId = computed(() => props.id || `ui-input-${uid}`)
+
+// desc id — input의 aria-describedby로 연결
+const descId = computed(() => props.desc ? `${resolvedId.value}-desc` : undefined)
+// error message id — desc보다 우선해 aria-describedby 연결
+const errorId = computed(() => props.errorMessage ? `${resolvedId.value}-error` : undefined)
+
+// 에러 상태: error prop 또는 errorMessage 중 하나라도 있으면 true
+const isError = computed(() => props.error || !!props.errorMessage)
+
+// aria-describedby 우선순위: errorMessage > desc
+const ariaDescribedby = computed(() => errorId.value || descId.value)
+// aria-invalid: error 상태에서만 'true'. 외부에서 attrs로 명시한 값도 존중.
+const ariaInvalid = computed(() => {
+  if (isError.value) return 'true'
+  const fromAttrs = attrs['aria-invalid']
+  if (fromAttrs !== undefined && fromAttrs !== null) return String(fromAttrs)
+  return undefined
 })
 
 // inputmode — numberOnly + allow* 조합에 따라 모바일 키보드 결정
@@ -420,6 +491,35 @@ defineExpose({
   min-width: 0;
 }
 
+// ===== label =====
+.ui-input-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+  line-height: 1.5;
+
+  // labelHidden — 시각적 숨김 + 스크린리더는 인지
+  &.is-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+.ui-input-required {
+  color: var(--color-danger);
+  margin-left: 2px;
+  font-weight: 600;
+}
+
 .ui-input-wrap {
   display: inline-flex;
   align-items: center;
@@ -490,6 +590,17 @@ defineExpose({
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  // ===== 에러 상태 — error / errorMessage prop =====
+  // disabled보다 후행이라 disabled 일 땐 회색 우선, 활성 상태에서만 빨강
+  &.is-error:not(.is-disabled) {
+    border-color: var(--color-danger);
+
+    &.is-focused {
+      border-color: var(--color-danger);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+    }
+  }
 }
 
 .ui-input {
@@ -555,5 +666,14 @@ defineExpose({
   @include typo($body-small);
   color: var(--color-text-secondary);
   line-height: 1.5;
+}
+
+// ===== 에러 메시지 (errorMessage prop) — desc보다 우선 표시 =====
+.ui-input-error {
+  margin-top: 4px;
+  @include typo($body-small);
+  color: var(--color-danger);
+  line-height: 1.5;
+  font-weight: 500;
 }
 </style>

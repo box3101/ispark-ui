@@ -2,6 +2,30 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.3.0] - 2026-05-06
+
+### Added — UiInput a11y/UX 1순위 누락 보강
+- **`label`** prop + **label slot** + 자동 `id` 연결 — `<label for>` ↔ `<input id>` 매핑을 컴포넌트가 자동 처리. `id` 미지정 시 Vue 3.5 `useId`로 인스턴스별 unique id 생성 (SSR 안전).
+- **`labelHidden`** prop — DOM에는 있지만 시각 숨김 (스크린리더만 인지). search input 등에서 placeholder 단독 노출 시.
+- **`required`** prop과 결합 시 label 옆 빨간 별표(`*`) 자동 표시 (`aria-hidden`).
+- **`error`** prop — input 빨간 테두리 + `aria-invalid="true"` 자동.
+- **`errorMessage`** prop — 비어있지 않으면 `error: true` 자동 + `<p role="alert">` 빨간 텍스트로 desc 자리에 표시. input의 `aria-describedby`로 자동 연결 (desc보다 우선).
+- **`type='url'`** 추가 — 기존 5종(text/search/password/email/tel)에 더해 6종.
+- aria-invalid: 외부에서 attrs로 명시한 값도 존중 (내부 error 상태 우선).
+
+### Storybook
+- `WithLabel` 신규 스토리 — label / required / labelHidden 데모.
+- `ErrorState` 신규 스토리 — error / errorMessage / 메시지 없는 error만 데모.
+- `Types` 스토리에 `url` 추가.
+- Playground argTypes에 label/labelHidden/error/errorMessage/required 추가, transform이 v-model 코드에 포함.
+
+### Tests
+- 자동 테스트 29 → 39개 (label 자동 id, required *, labelHidden, error/aria-invalid, errorMessage role=alert + describedby 우선순위, type=url 등).
+
+### 마이그레이션 (v0.2.x → v0.3.0)
+- breaking 없음. 기존 prop 시그니처 그대로.
+- 기존 `<UiInput desc="...">` 사용처는 변동 없음. `errorMessage` 사용 시에만 desc가 자동으로 hidden.
+
 ## [0.2.0] - 2026-05-06
 
 ### Added

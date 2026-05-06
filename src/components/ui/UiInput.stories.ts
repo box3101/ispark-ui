@@ -20,7 +20,9 @@ const meta = {
 ## 핵심 props
 
 - **\`modelValue\`** — v-model 양방향 바인딩
-- **\`type\`** \`text\` | \`search\` | \`password\` | \`email\` | \`tel\`
+- **\`type\`** \`text\` | \`search\` | \`password\` | \`email\` | \`tel\` | \`url\`
+- **\`label\`** + **\`labelHidden\`** + **\`required\`** — \`<label for>\` 자동 연결 + 필수 표시(*) (v0.3.0)
+- **\`error\`** + **\`errorMessage\`** — 에러 상태 + aria-invalid 자동, 메시지 role=alert (v0.3.0)
 - **\`size\`** \`sm\`(28px) | \`md\`(32px·기본) | \`lg\`(40px) | \`auth\`(44px·로그인 전용) — 공용 토큰
 - **\`iconSize\`** \`xs\` | \`sm\` | \`md\` | \`lg\` — 미지정 시 size 따라감, 명시 시 override
 - **\`shape\`** \`rounded\`(기본 6px) | \`pill\`(완전 라운드, 검색바)
@@ -67,7 +69,7 @@ size/shape는 \`src/styles/tokens/_size.scss\`, \`_shape.scss\` 공용 토큰 �
   argTypes: {
     type: {
       control: 'inline-radio',
-      options: ['text', 'search', 'password', 'email', 'tel'],
+      options: ['text', 'search', 'password', 'email', 'tel', 'url'],
     },
     size: {
       control: 'inline-radio',
@@ -94,6 +96,11 @@ size/shape는 \`src/styles/tokens/_size.scss\`, \`_shape.scss\` 공용 토큰 �
     decimals: { control: 'number', description: 'allowDecimal=true 일 때 소수점 자릿수 제한' },
     placeholder: { control: 'text' },
     desc: { control: 'text' },
+    label: { control: 'text', description: 'label 텍스트 — `<label for>` 자동 연결' },
+    labelHidden: { control: 'boolean', description: 'label 시각 숨김 (스크린리더는 인지)' },
+    error: { control: 'boolean', description: '에러 상태 — 빨간 테두리 + aria-invalid' },
+    errorMessage: { control: 'text', description: '에러 메시지 — 비어있지 않으면 error 자동 true' },
+    required: { control: 'boolean', description: '필수 입력 — label 옆 * 표시' },
     maxLength: { control: 'number' },
   },
 } satisfies Meta<typeof UiInput>
@@ -155,6 +162,11 @@ export const Playground: Story = {
           if (a.step !== undefined && a.step !== null && a.step !== '') attrs.push(`:step="${a.step}"`)
           if (a.name) attrs.push(`name="${a.name}"`)
           if (a.id) attrs.push(`id="${a.id}"`)
+          if (a.required) attrs.push('required')
+          if (a.label) attrs.push(`label="${a.label}"`)
+          if (a.labelHidden) attrs.push('label-hidden')
+          if (a.error) attrs.push('error')
+          if (a.errorMessage) attrs.push(`error-message="${a.errorMessage}"`)
           if (a.desc) attrs.push(`desc="${a.desc}"`)
 
           const head = `<UiInput ${attrs.join(' ')}`
@@ -240,7 +252,7 @@ export const AllShapes: Story = {
   }),
 }
 
-// ===== 4. Types — 5종 type 시연 =====
+// ===== 4. Types — 6종 type 시연 (url v0.3.0 추가) =====
 export const Types: Story = {
   render: () => ({
     components: { UiInput },
@@ -251,6 +263,37 @@ export const Types: Story = {
         <UiInput type="password" placeholder="password — 비밀번호" />
         <UiInput type="email" placeholder="email — 이메일" />
         <UiInput type="tel" placeholder="tel — 전화번호" />
+        <UiInput type="url" placeholder="url — https://..." />
+      </div>
+    `,
+  }),
+}
+
+// ===== 4-1. WithLabel — label + required + labelHidden =====
+export const WithLabel: Story = {
+  name: 'Label 사용 (필수 표시 / 숨김)',
+  render: () => ({
+    components: { UiInput },
+    template: `
+      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 360px;">
+        <UiInput label="이메일" placeholder="example@anthropic.com" type="email" />
+        <UiInput label="비밀번호" placeholder="6자 이상" type="password" required desc="6자 이상 영문/숫자" />
+        <UiInput label-hidden label="검색" placeholder="검색어 입력 (label은 스크린리더에만)" type="search" />
+      </div>
+    `,
+  }),
+}
+
+// ===== 4-2. ErrorState — error / errorMessage =====
+export const ErrorState: Story = {
+  name: '에러 상태 (error / errorMessage)',
+  render: () => ({
+    components: { UiInput },
+    template: `
+      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 360px;">
+        <UiInput label="이메일" model-value="invalid@" error error-message="이메일 형식이 올바르지 않습니다." type="email" />
+        <UiInput label="비밀번호" type="password" required error-message="필수 입력 항목입니다." />
+        <UiInput label="이름" model-value="홍길동" error desc="error만 켜지면 빨간 테두리만 (메시지 없음)" />
       </div>
     `,
   }),
