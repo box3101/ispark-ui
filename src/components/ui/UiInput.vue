@@ -1,7 +1,8 @@
 <template>
   <div
     class="ui-input-outer"
-    :class="{ 'has-desc': !!desc }"
+    :class="[$attrs.class, { 'has-desc': !!desc }]"
+    :style="$attrs.style"
   >
     <div
       class="ui-input-wrap"
@@ -26,35 +27,41 @@
       </span>
 
       <input
+        v-bind="forwardedAttrs"
         :id="id"
         ref="inputRef"
         class="ui-input"
         :type="type === 'search' ? 'text' : type"
-        :inputmode="numberOnly ? 'numeric' : undefined"
+        :role="type === 'search' ? 'searchbox' : undefined"
+        :inputmode="inputMode"
         :value="modelValue"
         :placeholder="placeholder"
         :disabled="disabled"
         :readonly="readonly"
+        :required="required || undefined"
+        :autocomplete="autocomplete"
         :name="name"
         :maxlength="maxLength"
-        :min="min"
-        :max="max"
-        :step="step"
+        :aria-describedby="descId"
         @input="onInput"
-        @compositionupdate="onCompositionUpdate"
+        @compositionstart="onCompositionStart"
+        @compositionend="onCompositionEnd"
         @focus="onFocus"
         @blur="onBlur"
-        @keydown.enter="emit('enter', modelValue)"
+        @keydown.enter="onEnterKey"
       />
 
-      <!-- 우측 아이콘: search 타입이면 검색 아이콘 자동 표시 -->
-      <span
+      <!-- 우측 아이콘: search 타입이면 검색 아이콘 자동 표시 (button — 키보드 접근 + disabled 차단) -->
+      <button
         v-if="type === 'search'"
+        type="button"
         class="ui-input-icon is-right is-search"
-        @click="emit('search', modelValue)"
+        :disabled="disabled"
+        :aria-label="searchAriaLabel"
+        @click="onSearchClick"
       >
         <i class="icon-search" />
-      </span>
+      </button>
 
       <!-- 우측 커스텀 아이콘 -->
       <span
@@ -64,9 +71,10 @@
         <slot name="icon-right" />
       </span>
     </div>
-    <!-- 설명 텍스트 -->
+    <!-- 설명 텍스트 (input의 aria-describedby 와 연결) -->
     <p
       v-if="desc"
+      :id="descId"
       class="ui-input-desc"
     >
       {{ desc }}
@@ -75,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { computed, ref, useAttrs, useId, watchEffect } from 'vue'
 import type { Size, InputSize } from '@/design-tokens'
 
 interface Props {
@@ -92,6 +100,10 @@ interface Props {
   disabled?: boolean
   /** 읽기 전용 — 표시는 정상, 입력만 차단 */
   readonly?: boolean
+  /** 필수 입력 (HTML required) */
+  required?: boolean
+  /** autocomplete HTML 속성 (e.g., "email", "current-password", "off") */
+  autocomplete?: string
   /** form submit 시 사용할 input name 속성 */
   name?: string
   /** label htmlFor와 연결할 input id 속성 */
@@ -128,6 +140,7 @@ interface Props {
   shape?: 'rounded' | 'pill'
   /**
    * 입력 아래 설명 텍스트 — 별도 `<p class="hint">` 사용 금지, 이 prop 사용
+   * input의 `aria-describedby`와 자동 연결.
    */
   desc?: string
   /**
@@ -144,7 +157,11 @@ interface Props {
    * 입력 즉시 초과 자릿수 제거. 예: `decimals=2` → "0.123" 입력 시 "0.12"로 자동 보정.
    */
   decimals?: number
+  /** 검색 버튼 aria-label (type="search"일 때만, 기본 "검색") */
+  searchAriaLabel?: string
 }
+
+defineOptions({ inheritAttrs: false })
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
@@ -152,6 +169,8 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: '',
   disabled: false,
   readonly: false,
+  required: false,
+  autocomplete: undefined,
   name: undefined,
   id: undefined,
   maxLength: undefined,
@@ -165,18 +184,59 @@ const props = withDefaults(defineProps<Props>(), {
   allowDecimal: false,
   allowNegative: false,
   decimals: undefined,
+  searchAriaLabel: '검색',
 })
 
 const emit = defineEmits<{
-  'update:modelValue': [value: string]
-  enter: [value: string | number | undefined]
-  search: [value: string | number | undefined]
+  'update:modelValue': [value: string | number]
+  enter: [value: string | number]
+  search: [value: string | number]
 }>()
 
 const inputRef = ref<HTMLInputElement>()
 const isFocused = ref(false)
+const isComposing = ref(false)
 
-// dev 환경: min/max/step은 numberOnly와 함께만 동작 (type=text 사용으로 native 제약 없음)
+// $attrs에서 class/style을 제외하고 input으로 전달 (aria-*, data-*, role, autocomplete 등)
+// inheritAttrs: false라서 명시적 forward 필요
+const attrs = useAttrs()
+const forwardedAttrs = computed(() => {
+  const { class: _c, style: _s, ...rest } = attrs as Record<string, unknown>
+  return rest
+})
+
+// desc id — input의 aria-describedby로 연결 (Vue 3.5+ useId — SSR 안전, 인스턴스별 unique)
+const uid = useId()
+const descId = computed(() => {
+  if (!props.desc) return undefined
+  return props.id ? `${props.id}-desc` : `${uid}-desc`
+})
+
+// inputmode — numberOnly + allow* 조합에 따라 모바일 키보드 결정
+const inputMode = computed<'numeric' | 'decimal' | undefined>(() => {
+  if (!props.numberOnly) return undefined
+  return props.allowDecimal || props.allowNegative ? 'decimal' : 'numeric'
+})
+
+// decimals 검증 — 0 이상 정수만 유효
+const validDecimals = computed(() => {
+  const d = props.decimals
+  if (d === undefined) return undefined
+  if (Number.isInteger(d) && d >= 0) return d
+  return undefined
+})
+
+// emit 값 타입 정합 — modelValue가 number면 number로 emit
+const emitValue = (raw: string): string | number => {
+  if (typeof props.modelValue === 'number') {
+    if (raw === '' || raw === '-') return raw
+    const n = parseFloat(raw)
+    if (!Number.isNaN(n)) return n
+  }
+  return raw
+}
+
+// dev 환경 — props 검증 / 사용성 안내
 if (import.meta.env.DEV) {
   watchEffect(() => {
     const hasNumericConstraint =
@@ -186,6 +246,21 @@ if (import.meta.env.DEV) {
       console.warn(
         '[UiInput] min/max/step은 numberOnly=true일 때만 blur 시점에 적용됩니다. ' +
           '한글 IME 호환을 위해 native type="number" 대신 numberOnly prop을 사용하세요.',
+      )
+    }
+    const hasDecimalConstraint = [props.min, props.max, props.step].some(
+      (v) => v !== undefined && String(v).includes('.'),
+    )
+    if (props.numberOnly && hasDecimalConstraint && !props.allowDecimal) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        '[UiInput] min/max/step에 소수가 있는데 allowDecimal=false. allowDecimal=true도 함께 설정해야 정상 보정됩니다.',
+      )
+    }
+    if (props.decimals !== undefined && validDecimals.value === undefined) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[UiInput] decimals는 0 이상의 정수여야 합니다 (현재: ${props.decimals}).`,
       )
     }
   })
@@ -212,8 +287,8 @@ const stripNonNumeric = (val: string): string => {
     if (firstDot !== -1) {
       const intPart = cleaned.slice(0, firstDot)
       let decPart = cleaned.slice(firstDot + 1).replace(/\./g, '')
-      if (props.decimals !== undefined && props.decimals >= 0) {
-        decPart = decPart.slice(0, props.decimals)
+      if (validDecimals.value !== undefined) {
+        decPart = decPart.slice(0, validDecimals.value)
       }
       cleaned = decPart === '' && intPart === '' ? '' : intPart + '.' + decPart
     }
@@ -242,9 +317,18 @@ const applyNumericConstraints = (raw: string): string => {
   if (stepV !== undefined && stepV > 0 && !Number.isNaN(stepV)) {
     const base = minV !== undefined && !Number.isNaN(minV) ? minV : 0
     num = base + Math.round((num - base) / stepV) * stepV
+
+    // step 반올림 후 min/max 재-clamp — round가 max를 초과시키는 케이스 방지
+    // 예: min=0 max=1 step=0.6 value=1 → round(1/0.6)*0.6=1.2 → re-clamp → 1
+    if (minV !== undefined && !Number.isNaN(minV)) num = Math.max(num, minV)
+    if (maxV !== undefined && !Number.isNaN(maxV)) num = Math.min(num, maxV)
+
+    // 소수점 자릿수 결정 — step/min에서 유추 + props.decimals 상한 존중
     const stepDecimals = (String(props.step).split('.')[1] || '').length
     const minDecimals = (String(props.min ?? '').split('.')[1] || '').length
-    const decimals = Math.max(stepDecimals, minDecimals, props.allowDecimal ? 2 : 0)
+    const naturalDecimals = Math.max(stepDecimals, minDecimals, props.allowDecimal ? 2 : 0)
+    const userMax = validDecimals.value
+    const decimals = userMax !== undefined ? Math.min(naturalDecimals, userMax) : naturalDecimals
     num = Number(num.toFixed(decimals))
   }
 
@@ -264,29 +348,48 @@ const onBlur = (e: FocusEvent) => {
   const next = applyNumericConstraints(input.value)
   if (next !== input.value) {
     input.value = next
-    emit('update:modelValue', next)
+    emit('update:modelValue', emitValue(next))
+  }
+}
+
+// 입력값 동기화 — IME 안전성 위해 syncValue 함수로 분리
+const syncValue = (input: HTMLInputElement) => {
+  if (props.numberOnly) {
+    const cleaned = stripNonNumeric(input.value)
+    if (cleaned !== input.value) {
+      input.value = cleaned
+    }
+    emit('update:modelValue', emitValue(cleaned))
+  } else {
+    emit('update:modelValue', emitValue(input.value))
   }
 }
 
 const onInput = (e: Event) => {
-  const input = e.target as HTMLInputElement
-  if (props.numberOnly) {
-    const cleaned = stripNonNumeric(input.value)
-    input.value = cleaned
-    emit('update:modelValue', cleaned)
-  } else {
-    emit('update:modelValue', input.value)
-  }
+  // IME composition 중에는 sync 보류 — compositionend에서 처리
+  if (isComposing.value) return
+  syncValue(e.target as HTMLInputElement)
 }
 
-// 한글 IME 조합 중 즉시 제거
-const onCompositionUpdate = (e: CompositionEvent) => {
-  if (props.numberOnly) {
-    const input = e.target as HTMLInputElement
-    const cleaned = stripNonNumeric(input.value)
-    input.value = cleaned
-    emit('update:modelValue', cleaned)
-  }
+const onCompositionStart = () => {
+  isComposing.value = true
+}
+
+const onCompositionEnd = (e: CompositionEvent) => {
+  isComposing.value = false
+  // composition 종료 후 한 번 sync. (Chrome은 추가 input 이벤트 발생 → 동일 결과 idempotent emit)
+  syncValue(e.target as HTMLInputElement)
+}
+
+const onEnterKey = (e: KeyboardEvent) => {
+  // 현재 DOM 값 사용 (props.modelValue는 부모 reactivity 지연으로 stale 가능)
+  const input = e.target as HTMLInputElement
+  emit('enter', emitValue(input.value))
+}
+
+const onSearchClick = () => {
+  if (props.disabled) return
+  emit('search', emitValue(inputRef.value?.value ?? ''))
 }
 
 // 외부에서 focus/blur 호출 가능
@@ -394,6 +497,8 @@ defineExpose({
   background: transparent;
   font: inherit;
   font-weight: $font-weight-medium;
+  // line-height 명시 — UiButton과 시각 정렬
+  line-height: 1.5;
   color: var(--color-text-primary);
   outline: none;
 
@@ -421,8 +526,23 @@ defineExpose({
   flex-shrink: 0;
   color: var(--color-text-secondary);
 
+  // search 버튼 — native button 리셋 + 키보드 접근
   &.is-search {
+    border: 0;
+    background: transparent;
+    padding: 0;
+    color: inherit;
     cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
   }
 }
 
