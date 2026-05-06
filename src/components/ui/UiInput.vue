@@ -79,43 +79,69 @@ import { ref, watchEffect } from 'vue'
 import type { Size, InputSize } from '@/design-tokens'
 
 interface Props {
+  /** v-model 양방향 바인딩 값 */
   modelValue?: string | number
   /**
-   * input HTML type. `search`는 내부적으로 text + 검색 아이콘.
+   * input HTML type — `search`는 내부적으로 text + 우측 검색 아이콘 자동.
+   * `number`는 사용 금지 (한글 IME 깜빡임) → `numberOnly` prop 사용.
    */
   type?: 'text' | 'search' | 'password' | 'email' | 'tel'
+  /** 입력 영역 플레이스홀더 텍스트 */
   placeholder?: string
+  /** 비활성화 — 입력 차단 + opacity 0.5 */
   disabled?: boolean
+  /** 읽기 전용 — 표시는 정상, 입력만 차단 */
   readonly?: boolean
+  /** form submit 시 사용할 input name 속성 */
   name?: string
+  /** label htmlFor와 연결할 input id 속성 */
   id?: string
+  /** 입력 가능한 최대 글자 수 (HTML 표준 maxlength) */
   maxLength?: number
-  /** number-only일 때 blur 시 보정 (type=text라 native 제약 없음) */
+  /**
+   * 최솟값 — `numberOnly=true` 필수. blur 시점에 자동 보정.
+   * type=text 사용으로 HTML native 제약 없음.
+   */
   min?: string | number
+  /**
+   * 최댓값 — `numberOnly=true` 필수. blur 시점에 자동 보정.
+   */
   max?: string | number
+  /**
+   * 단위 — `numberOnly=true` 필수. blur 시 step 단위로 반올림.
+   * 예: `step=0.1` → 0.05 입력 시 0.1로 보정.
+   */
   step?: string | number
   /**
-   * 사이즈 — sm(28px) / md(32px·기본) / lg(40px) / auth(44px·로그인 전용)
+   * 사이즈 — `sm`(28px) / `md`(32px·기본) / `lg`(40px) / `auth`(44px·로그인 전용)
+   * UiButton과 동일 토큰 사용 → 검색바에서 자동 정렬.
    */
   size?: InputSize
   /**
-   * 아이콘 사이즈 — 미지정 시 size 따라감, 명시 시 override
+   * 아이콘 사이즈 — 미지정 시 `size` 따라감, 명시 시 override (xs/sm/md/lg).
+   * 슬롯 내 `<i>`에 `size-N` 클래스 안 붙였을 때만 적용.
    */
   iconSize?: Size
   /**
-   * 모서리 모양 — rounded(기본 6px) / pill(완전 라운드, 검색바)
+   * 모서리 모양 — `rounded`(기본 6px) / `pill`(완전 라운드 — 검색바·필터)
    */
   shape?: 'rounded' | 'pill'
+  /**
+   * 입력 아래 설명 텍스트 — 별도 `<p class="hint">` 사용 금지, 이 prop 사용
+   */
   desc?: string
   /**
-   * 숫자만 입력 — type="number" 사용 금지 정책 대신 사용 (한글 IME 깜빡임 방지)
+   * 숫자만 허용 — `type="number"` 사용 금지 정책 대신 사용 (한글 IME 깜빡임 방지).
+   * `min/max/step`은 이 prop이 true일 때만 동작.
    */
   numberOnly?: boolean
+  /** `numberOnly=true`일 때 소수점 허용 (예: 0.5) */
   allowDecimal?: boolean
+  /** `numberOnly=true`일 때 음수 부호(-) 허용 */
   allowNegative?: boolean
   /**
-   * 소수점 자릿수 제한 (allowDecimal=true일 때만 의미). 입력 즉시 초과 자릿수 제거.
-   * 예: decimals=2 면 "0.123" 입력 시 "0.12"로 자동 보정.
+   * 소수점 자릿수 제한 — `allowDecimal=true`일 때만 의미.
+   * 입력 즉시 초과 자릿수 제거. 예: `decimals=2` → "0.123" 입력 시 "0.12"로 자동 보정.
    */
   decimals?: number
 }
