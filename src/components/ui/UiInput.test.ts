@@ -87,4 +87,40 @@ describe('UiInput', () => {
     const { container } = render(UiInput, { props: { desc: '아이디는 영문/숫자 4~20자' } })
     expect(container.querySelector('.ui-input-desc')?.textContent).toContain('아이디는 영문/숫자 4~20자')
   })
+
+  // ===== shape =====
+  it('shape 기본값은 "rounded" (shape-rounded 클래스)', () => {
+    const { container } = render(UiInput)
+    expect(container.querySelector('.ui-input-wrap.shape-rounded')).not.toBeNull()
+  })
+
+  it('shape="pill" 시 shape-pill 클래스 적용', () => {
+    const { container } = render(UiInput, { props: { shape: 'pill' } })
+    expect(container.querySelector('.ui-input-wrap.shape-pill')).not.toBeNull()
+  })
+
+  // ===== size 토큰 (auth 포함 4단계) =====
+  it('size 기본값은 "md" (size-md 클래스)', () => {
+    const { container } = render(UiInput)
+    expect(container.querySelector('.ui-input-wrap.size-md')).not.toBeNull()
+  })
+
+  it('size="auth" 시 size-auth 클래스 적용 (로그인 폼)', () => {
+    const { container } = render(UiInput, { props: { size: 'auth' } })
+    expect(container.querySelector('.ui-input-wrap.size-auth')).not.toBeNull()
+  })
+
+  // ===== iconSize override =====
+  it('iconSize 미지정 시 icon-size-* 클래스 부재 (size 따라감)', () => {
+    const { container } = render(UiInput, { props: { size: 'md' } })
+    const wrap = container.querySelector('.ui-input-wrap') as HTMLElement
+    expect(wrap.className).not.toMatch(/\bicon-size-/)
+  })
+
+  it('iconSize="lg" 명시 시 icon-size-lg 클래스 부여', () => {
+    const { container } = render(UiInput, { props: { size: 'md', iconSize: 'lg' } })
+    const wrap = container.querySelector('.ui-input-wrap') as HTMLElement
+    expect(wrap.classList.contains('size-md')).toBe(true)
+    expect(wrap.classList.contains('icon-size-lg')).toBe(true)
+  })
 })

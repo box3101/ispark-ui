@@ -7,6 +7,8 @@
       class="ui-input-wrap"
       :class="[
         `size-${size}`,
+        `shape-${shape}`,
+        iconSize ? `icon-size-${iconSize}` : null,
         {
           'is-disabled': disabled,
           'is-focused': isFocused,
@@ -51,7 +53,7 @@
         class="ui-input-icon is-right is-search"
         @click="emit('search', modelValue)"
       >
-        <i class="icon-search size-20" />
+        <i class="icon-search" />
       </span>
 
       <!-- 우측 커스텀 아이콘 -->
@@ -74,6 +76,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import type { Size, InputSize } from '@/design-tokens'
 
 interface Props {
   modelValue?: string | number
@@ -92,9 +95,17 @@ interface Props {
   max?: string | number
   step?: string | number
   /**
-   * 사이즈 — sm(28px·기본) / md(32px) / lg(40px) / auth(44px·로그인 전용)
+   * 사이즈 — sm(28px) / md(32px·기본) / lg(40px) / auth(44px·로그인 전용)
    */
-  size?: 'sm' | 'md' | 'lg' | 'auth'
+  size?: InputSize
+  /**
+   * 아이콘 사이즈 — 미지정 시 size 따라감, 명시 시 override
+   */
+  iconSize?: Size
+  /**
+   * 모서리 모양 — rounded(기본 6px) / pill(완전 라운드, 검색바)
+   */
+  shape?: 'rounded' | 'pill'
   desc?: string
   /**
    * 숫자만 입력 — type="number" 사용 금지 정책 대신 사용 (한글 IME 깜빡임 방지)
@@ -121,7 +132,8 @@ const props = withDefaults(defineProps<Props>(), {
   min: undefined,
   max: undefined,
   step: undefined,
-  size: 'sm',
+  size: 'md',
+  shape: 'rounded',
   desc: '',
   numberOnly: false,
   allowDecimal: false,
@@ -245,6 +257,8 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
+@use 'sass:map';
+
 @mixin desktop-hover {
   @media (hover: hover) {
     &:hover:not(.is-disabled) {
@@ -264,7 +278,6 @@ defineExpose({
   width: 100%;
   background-color: #fff;
   border: 1px solid var(--color-border);
-  border-radius: $border-radius-base;
   overflow: hidden;
   transition: border-color $transition-base;
 
@@ -276,53 +289,53 @@ defineExpose({
     border-color: var(--color-primary);
   }
 
-  // ===== 사이즈 (UiButton과 통일된 토큰) =====
-  &.size-sm {
-    height: $height-sm; // 28px
-    @include typo($body-small);
-  }
+  // ===== size — 공용 토큰 (height/padding-x/font + 자동 icon size) =====
+  @each $key in (sm md lg auth) {
+    $vals: map.get($sizes, $key);
+    &.size-#{$key} {
+      height: map.get($vals, height);
+      font-size: map.get($vals, font);
 
-  &.size-md {
-    height: $height-md; // 32px
-    @include typo($body-medium);
-  }
-
-  &.size-lg {
-    height: $height-lg; // 40px
-    @include typo($body-medium);
-  }
-
-  // 로그인·회원가입 전용 — 다른 사이즈와 별개 사양
-  &.size-auth {
-    height: $height-auth; // 44px
-    @include typo($body-large);
-
-    .ui-input {
-      padding: 6px 8px;
-      font-weight: $font-weight-normal;
-      color: var(--color-text-primary);
-      background-color: #fff;
-
-      &::placeholder {
-        color: #94a3b8;
+      .ui-input {
+        padding: 0 map.get($vals, padding-x);
+      }
+      .ui-input-icon.is-left {
+        padding-left: map.get($vals, padding-x);
+      }
+      .ui-input-icon.is-right {
+        padding-right: map.get($vals, padding-x);
+      }
+      // 아이콘 있을 때 입력 영역의 인접 패딩은 4px로 줄여 시각적 간격 확보
+      &.has-icon-left .ui-input {
+        padding-left: 4px;
+      }
+      &.has-icon-right .ui-input {
+        padding-right: 4px;
       }
 
-      // autofill 시 흰 배경 강제 (브라우저 노란 배경 방지)
-      &:-webkit-autofill,
-      &:-webkit-autofill:hover,
-      &:-webkit-autofill:focus {
-        -webkit-box-shadow: 0 0 0 1000px #fff inset;
-        -webkit-text-fill-color: var(--color-text-primary);
+      // iconSize 미지정 시 size 따라감 (slot 내 <i>에 size-N 명시 안 했을 때만)
+      .ui-input-icon :deep(i:not([class*='size-'])) {
+        width: map.get($vals, icon);
+        height: map.get($vals, icon);
       }
     }
+  }
 
-    &.has-icon-left .ui-input {
-      padding-left: 4px;
+  // ===== iconSize override — size 클래스보다 후행 (specificity 동일 시 후행 승) =====
+  @each $key in (xs sm md lg) {
+    $vals: map.get($sizes, $key);
+    &.icon-size-#{$key} .ui-input-icon :deep(i:not([class*='size-'])) {
+      width: map.get($vals, icon);
+      height: map.get($vals, icon);
     }
+  }
 
-    &.has-icon-right .ui-input {
-      padding-right: 4px;
-    }
+  // ===== shape — 공용 토큰 (rounded 기본, pill 검색바) =====
+  &.shape-rounded {
+    border-radius: $shape-rounded;
+  }
+  &.shape-pill {
+    border-radius: $shape-pill;
   }
 
   &.is-disabled {
@@ -338,7 +351,6 @@ defineExpose({
   height: 100%;
   border: 0;
   background: transparent;
-  padding: 0 10px;
   font: inherit;
   font-weight: $font-weight-medium;
   color: var(--color-text-primary);
@@ -351,6 +363,15 @@ defineExpose({
   &:disabled {
     cursor: not-allowed;
   }
+
+  // autofill 시 흰 배경 강제 (브라우저 노란 배경 방지) — 모든 size 일관 적용
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #fff inset;
+    -webkit-text-fill-color: var(--color-text-primary);
+    transition: background-color 5000s ease-in-out 0s;
+  }
 }
 
 .ui-input-icon {
@@ -358,18 +379,6 @@ defineExpose({
   align-items: center;
   flex-shrink: 0;
   color: var(--color-text-secondary);
-
-  &.is-left {
-    padding-left: 10px;
-
-    & + .ui-input {
-      padding-left: 4px;
-    }
-  }
-
-  &.is-right {
-    padding-right: 10px;
-  }
 
   &.is-search {
     cursor: pointer;
