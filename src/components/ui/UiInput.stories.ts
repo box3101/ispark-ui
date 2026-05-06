@@ -149,7 +149,12 @@ export const Playground: Story = {
           if (a.allowDecimal) attrs.push('allow-decimal')
           if (a.allowNegative) attrs.push('allow-negative')
           if (a.decimals !== undefined && a.decimals !== null) attrs.push(`:decimals="${a.decimals}"`)
-          if (a.maxLength !== undefined && a.maxLength !== null) attrs.push(`:max-length="${a.maxLength}"`)
+          if (a.maxLength !== undefined && a.maxLength !== null && a.maxLength !== '') attrs.push(`:max-length="${a.maxLength}"`)
+          if (a.min !== undefined && a.min !== null && a.min !== '') attrs.push(`:min="${a.min}"`)
+          if (a.max !== undefined && a.max !== null && a.max !== '') attrs.push(`:max="${a.max}"`)
+          if (a.step !== undefined && a.step !== null && a.step !== '') attrs.push(`:step="${a.step}"`)
+          if (a.name) attrs.push(`name="${a.name}"`)
+          if (a.id) attrs.push(`id="${a.id}"`)
           if (a.desc) attrs.push(`desc="${a.desc}"`)
 
           const head = `<UiInput ${attrs.join(' ')}`
