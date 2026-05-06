@@ -104,6 +104,11 @@ size/shape는 \`src/styles/tokens/_size.scss\`, \`_shape.scss\` 공용 토큰 �
     clearable: { control: 'boolean', description: '입력 삭제 X 버튼 (값이 있을 때 표시)' },
     showPasswordToggle: { control: 'boolean', description: '비밀번호 표시/숨김 토글 (type=password일 때)' },
     maxLength: { control: 'number' },
+    autocomplete: {
+      control: 'select',
+      options: ['off', 'on', 'email', 'username', 'current-password', 'new-password', 'tel', 'street-address'],
+      description: 'autocomplete HTML 속성 (e.g., "email", "current-password", "off")',
+    },
   },
 } satisfies Meta<typeof UiInput>
 
@@ -149,7 +154,7 @@ export const Playground: Story = {
           const attrs: string[] = ['v-model="value"']
           if (a.size && a.size !== 'md') attrs.push(`size="${a.size}"`)
           if (a.shape && a.shape !== 'rounded') attrs.push(`shape="${a.shape}"`)
-          if (a.iconSize) attrs.push(`icon-size="${a.iconSize}"`)
+          if (a.iconSize && a.iconSize !== '(자동)') attrs.push(`icon-size="${a.iconSize}"`)
           if (a.type && a.type !== 'text') attrs.push(`type="${a.type}"`)
           if (a.placeholder) attrs.push(`placeholder="${a.placeholder}"`)
           if (a.disabled) attrs.push('disabled')
@@ -170,6 +175,7 @@ export const Playground: Story = {
           if (a.error) attrs.push('error')
           if (a.errorMessage) attrs.push(`error-message="${a.errorMessage}"`)
           if (a.desc) attrs.push(`desc="${a.desc}"`)
+          if (a.autocomplete) attrs.push(`autocomplete="${a.autocomplete}"`)
 
           const head = `<UiInput ${attrs.join(' ')}`
 
