@@ -34,7 +34,7 @@
           'is-focused': isFocused,
           'is-error': isError,
           'has-icon-left': !!$slots['icon-left'],
-          'has-icon-right': !!$slots['icon-right'] || type === 'search',
+          'has-icon-right': !!$slots['icon-right'] || type === 'search' || showClearButton || showPasswordToggleButton,
         },
       ]"
     >
@@ -51,7 +51,7 @@
         :id="resolvedId"
         ref="inputRef"
         class="ui-input"
-        :type="type === 'search' ? 'text' : type"
+        :type="resolvedType"
         :role="type === 'search' ? 'searchbox' : undefined"
         :inputmode="inputMode"
         :value="modelValue"
@@ -72,7 +72,18 @@
         @keydown.enter="onEnterKey"
       />
 
-      <!-- 우측 아이콘: search 타입이면 검색 아이콘 자동 표시 (button — 키보드 접근 + disabled 차단) -->
+      <!-- clearable X: 값이 있을 때 표시 (search 타입은 자동 clearable) -->
+      <button
+        v-if="showClearButton"
+        type="button"
+        class="ui-input-icon is-right is-clear"
+        aria-label="입력 삭제"
+        @click="onClearClick"
+      >
+        <i class="icon-close" />
+      </button>
+
+      <!-- search 타입: 돋보기 검색 버튼 (X 옆에 항상 표시) -->
       <button
         v-if="type === 'search'"
         type="button"
@@ -84,7 +95,18 @@
         <i class="icon-search" />
       </button>
 
-      <!-- 우측 커스텀 아이콘 -->
+      <!-- password toggle: 비밀번호 표시/숨김 (search가 아닐 때) -->
+      <button
+        v-else-if="showPasswordToggleButton"
+        type="button"
+        class="ui-input-icon is-right is-password-toggle"
+        :aria-label="passwordVisible ? '비밀번호 숨기기' : '비밀번호 표시'"
+        @click="onPasswordToggle"
+      >
+        <i :class="passwordVisible ? 'icon-eye-off' : 'icon-eye'" />
+      </button>
+
+      <!-- 우측 커스텀 아이콘 (위 기능 아이콘이 없을 때만) -->
       <span
         v-else-if="$slots['icon-right']"
         class="ui-input-icon is-right"
@@ -114,7 +136,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, useAttrs, useId, watchEffect } from 'vue'
+import { computed, nextTick, ref, useAttrs, useId, watchEffect } from 'vue'
 import type { StyleValue } from 'vue'
 import type { Size, InputSize } from '@/design-tokens'
 
@@ -209,6 +231,16 @@ interface Props {
    * 입력 즉시 초과 자릿수 제거. 예: `decimals=2` → "0.123" 입력 시 "0.12"로 자동 보정.
    */
   decimals?: number
+  /**
+   * 입력값 삭제 버튼 — 값이 비어있지 않고 disabled/readonly 아닐 때 우측 X 표시.
+   * 클릭 시 값 비움 + input re-focus + `clear` 이벤트 발생.
+   */
+  clearable?: boolean
+  /**
+   * 비밀번호 표시/숨김 토글 — `type="password"`일 때만 동작.
+   * 눈 아이콘 클릭으로 text↔password 전환.
+   */
+  showPasswordToggle?: boolean
   /** 검색 버튼 aria-label (type="search"일 때만, 기본 "검색") */
   searchAriaLabel?: string
 }
@@ -240,6 +272,8 @@ const props = withDefaults(defineProps<Props>(), {
   allowDecimal: false,
   allowNegative: false,
   decimals: undefined,
+  clearable: false,
+  showPasswordToggle: false,
   searchAriaLabel: '검색',
 })
 
@@ -247,11 +281,31 @@ const emit = defineEmits<{
   'update:modelValue': [value: string | number]
   enter: [value: string | number]
   search: [value: string | number]
+  clear: []
 }>()
 
 const inputRef = ref<HTMLInputElement>()
 const isFocused = ref(false)
 const isComposing = ref(false)
+const passwordVisible = ref(false)
+
+// input type 결정 — search는 text, password toggle 시 text↔password 전환
+const resolvedType = computed(() => {
+  if (props.type === 'search') return 'text'
+  if (props.type === 'password' && passwordVisible.value) return 'text'
+  return props.type
+})
+
+// clearable X 버튼 표시 조건: 값이 있고 disabled/readonly 아닐 때
+// search 타입은 clearable prop 없이도 자동 적용
+const showClearButton = computed(() =>
+  (props.clearable || props.type === 'search') && !!props.modelValue && !props.disabled && !props.readonly,
+)
+
+// password toggle 버튼 표시 조건: type="password" + prop 켜짐 + disabled 아닐 때
+const showPasswordToggleButton = computed(() =>
+  props.showPasswordToggle && props.type === 'password' && !props.disabled,
+)
 
 // $attrs에서 class/style을 제외하고 input으로 전달 (aria-*, data-*, role, autocomplete 등)
 // inheritAttrs: false라서 명시적 forward 필요
@@ -459,12 +513,28 @@ const onCompositionEnd = (e: CompositionEvent) => {
 const onEnterKey = (e: KeyboardEvent) => {
   // 현재 DOM 값 사용 (props.modelValue는 부모 reactivity 지연으로 stale 가능)
   const input = e.target as HTMLInputElement
-  emit('enter', emitValue(input.value))
+  const value = emitValue(input.value)
+  emit('enter', value)
+  // search 타입: Enter = 검색 실행 (기존 검색 버튼 클릭 대체)
+  if (props.type === 'search') {
+    emit('search', value)
+  }
 }
 
 const onSearchClick = () => {
   if (props.disabled) return
   emit('search', emitValue(inputRef.value?.value ?? ''))
+}
+
+const onClearClick = () => {
+  emit('update:modelValue', '')
+  emit('clear')
+  nextTick(() => inputRef.value?.focus())
+}
+
+const onPasswordToggle = () => {
+  passwordVisible.value = !passwordVisible.value
+  nextTick(() => inputRef.value?.focus())
 }
 
 // 외부에서 focus/blur 호출 가능
@@ -641,8 +711,10 @@ defineExpose({
   flex-shrink: 0;
   color: var(--color-text-secondary);
 
-  // search 버튼 — native button 리셋 + 키보드 접근
-  &.is-search {
+  // 기능 버튼 (search / clear / password-toggle) — native button 리셋 + 키보드 접근
+  &.is-search,
+  &.is-clear,
+  &.is-password-toggle {
     border: 0;
     background: transparent;
     padding: 0;
@@ -657,6 +729,15 @@ defineExpose({
     &:focus-visible {
       outline: 2px solid var(--color-primary);
       outline-offset: 2px;
+    }
+  }
+
+  &.is-clear {
+    opacity: 0.5;
+    transition: opacity $transition-base;
+
+    &:hover {
+      opacity: 1;
     }
   }
 }

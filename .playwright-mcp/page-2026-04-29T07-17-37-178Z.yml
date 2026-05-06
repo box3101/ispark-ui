@@ -1,0 +1,325 @@
+- generic [ref=e3]:
+  - main [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - button "Remount component" [ref=e9] [cursor=pointer]:
+          - img [ref=e10]
+        - button "Zoom in" [ref=e12] [cursor=pointer]:
+          - img [ref=e13]
+        - button "Zoom out" [ref=e16] [cursor=pointer]:
+          - img [ref=e17]
+        - button "Reset zoom" [ref=e20] [cursor=pointer]:
+          - img [ref=e21]
+        - button "Change the background of the preview" [ref=e130] [cursor=pointer]:
+          - img [ref=e131]
+        - button "Apply a grid to the preview" [ref=e24] [cursor=pointer]:
+          - img [ref=e25]
+        - button "Change the size of the preview" [ref=e28] [cursor=pointer]:
+          - img [ref=e29]
+        - button "Enable measure" [ref=e33] [cursor=pointer]:
+          - img [ref=e34]
+        - button "Apply outlines to the preview" [ref=e37] [cursor=pointer]:
+          - img [ref=e38]
+      - generic [ref=e40]:
+        - button "Go full screen" [ref=e41] [cursor=pointer]:
+          - img [ref=e42]
+        - link "Open canvas in new tab" [ref=e44] [cursor=pointer]:
+          - /url: iframe.html?globals=&id=components-uibutton--all-shapes
+          - img [ref=e45]
+        - button "Copy canvas link" [ref=e48] [cursor=pointer]:
+          - img [ref=e49]
+    - generic [ref=e56]:
+      - link "Skip to sidebar" [ref=e57] [cursor=pointer]:
+        - /url: "#components-uibutton--all-shapes"
+      - iframe [ref=e58]:
+        - generic [ref=f2e3]:
+          - generic [ref=f2e4]:
+            - generic [ref=f2e5]: rounded
+            - button "기본 6px" [ref=f2e6] [cursor=pointer]:
+              - generic [ref=f2e7]: 기본 6px
+            - button "취소" [ref=f2e8] [cursor=pointer]:
+              - generic [ref=f2e9]: 취소
+          - generic [ref=f2e10]:
+            - generic [ref=f2e11]: pill
+            - button "완전 라운드" [ref=f2e12] [cursor=pointer]:
+              - generic [ref=f2e13]: 완전 라운드
+            - button "필터" [ref=f2e14] [cursor=pointer]:
+              - generic [ref=f2e15]: 필터
+          - generic [ref=f2e16]:
+            - generic [ref=f2e17]: circle
+            - button "추가" [ref=f2e18] [cursor=pointer]
+            - button "닫기" [ref=f2e19] [cursor=pointer]
+            - button "삭제" [ref=f2e20] [cursor=pointer]
+  - navigation [ref=e61]:
+    - generic [ref=e65]:
+      - generic [ref=e66]:
+        - link "Skip to canvas" [ref=e67] [cursor=pointer]:
+          - /url: "#storybook-preview-wrapper"
+        - link "ispark-ui" [ref=e69] [cursor=pointer]:
+          - /url: /
+        - button "Shortcuts" [ref=e71] [cursor=pointer]:
+          - img [ref=e72]
+      - generic [ref=e75]: Search for components
+      - combobox "Search for components" [ref=e77]:
+        - generic:
+          - img
+        - searchbox "Search for components" [ref=e78]
+        - code: ⌃ K
+        - button "Tag filters" [ref=e137] [cursor=pointer]:
+          - img [ref=e138]
+      - generic [ref=e140]:
+        - img
+        - generic [ref=e141]:
+          - button "소개" [expanded] [ref=e142] [cursor=pointer]:
+            - img [ref=e144]
+            - text: 소개
+          - button "Collapse" [ref=e146] [cursor=pointer]:
+            - img [ref=e147]
+        - link "Introduction" [ref=e150] [cursor=pointer]:
+          - /url: /?path=/docs/소개-introduction--docs
+          - img [ref=e152]
+          - text: Introduction
+        - generic [ref=e154]:
+          - button "Components" [expanded] [ref=e155] [cursor=pointer]:
+            - img [ref=e157]
+            - text: Components
+          - button "Collapse" [ref=e159] [cursor=pointer]:
+            - img [ref=e160]
+        - button "UiButton" [expanded] [ref=e163] [cursor=pointer]:
+          - generic [ref=e164]:
+            - img [ref=e166]
+            - img [ref=e168]
+          - text: UiButton
+        - link "Docs" [ref=e171] [cursor=pointer]:
+          - /url: /?path=/docs/components-uibutton--docs
+          - img [ref=e173]
+          - text: Docs
+        - link "Playground" [ref=e176] [cursor=pointer]:
+          - /url: /?path=/story/components-uibutton--playground
+          - img [ref=e178]
+          - text: Playground
+        - link "All Variants" [ref=e181] [cursor=pointer]:
+          - /url: /?path=/story/components-uibutton--all-variants
+          - img [ref=e183]
+          - text: All Variants
+        - link "All Sizes" [ref=e186] [cursor=pointer]:
+          - /url: /?path=/story/components-uibutton--all-sizes
+          - img [ref=e188]
+          - text: All Sizes
+        - generic [ref=e190]:
+          - link "모서리 모양 (shape)" [ref=e191] [cursor=pointer]:
+            - /url: /?path=/story/components-uibutton--all-shapes
+            - img [ref=e193]
+            - text: 모서리 모양 (shape)
+          - link "Skip to canvas" [ref=e195] [cursor=pointer]:
+            - /url: "#storybook-preview-wrapper"
+        - link "아이콘 사용" [ref=e197] [cursor=pointer]:
+          - /url: /?path=/story/components-uibutton--with-icon
+          - img [ref=e199]
+          - text: 아이콘 사용
+        - 'link "확장: 링크로 사용" [ref=e202] [cursor=pointer]':
+          - /url: /?path=/story/components-uibutton--as-link
+          - img [ref=e204]
+          - text: "확장: 링크로 사용"
+        - 'link "접근성: iconOnly + ariaLabel" [ref=e207] [cursor=pointer]':
+          - /url: /?path=/story/components-uibutton--accessibility-icon-only
+          - img [ref=e209]
+          - text: "접근성: iconOnly + ariaLabel"
+        - 'link "안전성: form 안 type 동작" [ref=e212] [cursor=pointer]':
+          - /url: /?path=/story/components-uibutton--submit-in-form
+          - img [ref=e214]
+          - text: "안전성: form 안 type 동작"
+        - 'link "실전: 모달 푸터" [ref=e217] [cursor=pointer]':
+          - /url: /?path=/story/components-uibutton--modal-footer
+          - img [ref=e219]
+          - text: "실전: 모달 푸터"
+        - button "UiInput" [ref=e222] [cursor=pointer]:
+          - generic [ref=e223]:
+            - img [ref=e225]
+            - img [ref=e227]
+          - text: UiInput
+  - generic [ref=e103]:
+    - generic [ref=e105]:
+      - tablist [ref=e107]:
+        - tab "Controls 16" [ref=e229] [cursor=pointer]:
+          - generic [ref=e110]:
+            - generic [ref=e111]: Controls
+            - generic [ref=e230]: "16"
+        - tab "Actions" [ref=e112] [cursor=pointer]:
+          - generic [ref=e115]: Actions
+      - generic [ref=e119]:
+        - button "Change addon orientation [alt D]" [ref=e120] [cursor=pointer]:
+          - img [ref=e121]
+        - button "Hide addons [alt A]" [ref=e124] [cursor=pointer]:
+          - img [ref=e125]
+    - table [ref=e235]:
+      - rowgroup [ref=e236]:
+        - row "Name Control" [ref=e237]:
+          - columnheader "Name" [ref=e238]
+          - columnheader "Control" [ref=e239]:
+            - generic [ref=e240]:
+              - text: Control
+              - button "Reset controls" [ref=e241] [cursor=pointer]:
+                - img [ref=e242]
+      - rowgroup [ref=e244]:
+        - row "onClick -" [ref=e245]:
+          - cell "onClick" [ref=e246]
+          - cell "-" [ref=e247]
+        - row "Hide props items props Hide props items" [ref=e248]:
+          - cell "Hide props items props" [ref=e249]:
+            - button "Hide props items" [ref=e250]
+            - generic [ref=e251]:
+              - img [ref=e252]
+              - text: props
+          - cell "Hide props items" [ref=e254]:
+            - button "Hide props items" [ref=e255]
+        - row "variant primary secondary ghost danger" [ref=e256]:
+          - cell "variant" [ref=e257]
+          - cell "primary secondary ghost danger" [ref=e258]:
+            - generic [ref=e259]:
+              - generic [ref=e260]:
+                - radio "primary" [ref=e261]
+                - generic [ref=e262]: primary
+              - generic [ref=e263]:
+                - radio "secondary" [ref=e264]
+                - generic [ref=e265]: secondary
+              - generic [ref=e266]:
+                - radio "ghost" [ref=e267]
+                - generic [ref=e268]: ghost
+              - generic [ref=e269]:
+                - radio "danger" [ref=e270]
+                - generic [ref=e271]: danger
+        - row "size xs sm md lg" [ref=e272]:
+          - cell "size" [ref=e273]
+          - cell "xs sm md lg" [ref=e274]:
+            - generic [ref=e275]:
+              - generic [ref=e276]:
+                - radio "xs" [ref=e277]
+                - generic [ref=e278]: xs
+              - generic [ref=e279]:
+                - radio "sm" [ref=e280]
+                - generic [ref=e281]: sm
+              - generic [ref=e282]:
+                - radio "md" [ref=e283]
+                - generic [ref=e284]: md
+              - generic [ref=e285]:
+                - radio "lg" [ref=e286]
+                - generic [ref=e287]: lg
+        - row "iconSize -" [ref=e288]:
+          - cell "iconSize" [ref=e289]
+          - cell "-" [ref=e290]
+        - row "shape rounded pill circle" [ref=e291]:
+          - cell "shape" [ref=e292]
+          - cell "rounded pill circle" [ref=e293]:
+            - generic [ref=e294]:
+              - generic [ref=e295]:
+                - radio "rounded" [ref=e296]
+                - generic [ref=e297]: rounded
+              - generic [ref=e298]:
+                - radio "pill" [ref=e299]
+                - generic [ref=e300]: pill
+              - generic [ref=e301]:
+                - radio "circle" [ref=e302]
+                - generic [ref=e303]: circle
+        - row "as button a" [ref=e304]:
+          - cell "as" [ref=e305]
+          - cell "button a" [ref=e306]:
+            - generic [ref=e307]:
+              - generic [ref=e308]:
+                - radio "button" [ref=e309]
+                - generic [ref=e310]: button
+              - generic [ref=e311]:
+                - radio "a" [ref=e312]
+                - generic [ref=e313]: a
+        - row "type button submit" [ref=e314]:
+          - cell "type" [ref=e315]
+          - cell "button submit" [ref=e316]:
+            - generic [ref=e317]:
+              - generic [ref=e318]:
+                - radio "button" [ref=e319]
+                - generic [ref=e320]: button
+              - generic [ref=e321]:
+                - radio "submit" [ref=e322]
+                - generic [ref=e323]: submit
+        - row "href Set string" [ref=e324]:
+          - cell "href" [ref=e325]
+          - cell "Set string" [ref=e326]:
+            - button "Set string" [ref=e327] [cursor=pointer]
+        - row "target undefined _self _blank" [ref=e328]:
+          - cell "target" [ref=e329]
+          - cell "undefined _self _blank" [ref=e330]:
+            - generic [ref=e331]:
+              - generic [ref=e332]:
+                - radio "undefined" [checked] [ref=e333]
+                - generic [ref=e334]: undefined
+              - generic [ref=e335]:
+                - radio "_self" [ref=e336]
+                - generic [ref=e337]: _self
+              - generic [ref=e338]:
+                - radio "_blank" [ref=e339]
+                - generic [ref=e340]: _blank
+        - row "disabled Set boolean" [ref=e341]:
+          - cell "disabled" [ref=e342]
+          - cell "Set boolean" [ref=e343]:
+            - button "Set boolean" [ref=e344] [cursor=pointer]
+        - row "loading Set boolean" [ref=e345]:
+          - cell "loading" [ref=e346]
+          - cell "Set boolean" [ref=e347]:
+            - button "Set boolean" [ref=e348] [cursor=pointer]
+        - row "fullWidth Set boolean" [ref=e349]:
+          - cell "fullWidth" [ref=e350]
+          - cell "Set boolean" [ref=e351]:
+            - button "Set boolean" [ref=e352] [cursor=pointer]
+        - row "iconOnly Set boolean" [ref=e353]:
+          - cell "iconOnly" [ref=e354]
+          - cell "Set boolean" [ref=e355]:
+            - button "Set boolean" [ref=e356] [cursor=pointer]
+        - row "ariaLabel Set string" [ref=e357]:
+          - cell "ariaLabel" [ref=e358]
+          - cell "Set string" [ref=e359]:
+            - button "Set string" [ref=e360] [cursor=pointer]
+        - row "Hide events items events Hide events items" [ref=e361]:
+          - cell "Hide events items events" [ref=e362]:
+            - button "Hide events items" [ref=e363]
+            - generic [ref=e364]:
+              - img [ref=e365]
+              - text: events
+          - cell "Hide events items" [ref=e367]:
+            - button "Hide events items" [ref=e368]
+        - row "click -" [ref=e369]:
+          - cell "click" [ref=e370]
+          - cell "-" [ref=e371]
+        - row "Hide slots items slots Hide slots items" [ref=e372]:
+          - cell "Hide slots items slots" [ref=e373]:
+            - button "Hide slots items" [ref=e374]
+            - generic [ref=e375]:
+              - img [ref=e376]
+              - text: slots
+          - cell "Hide slots items" [ref=e378]:
+            - button "Hide slots items" [ref=e379]
+        - row "icon-left -" [ref=e380]:
+          - cell "icon-left" [ref=e381]
+          - cell "-" [ref=e382]
+        - row "default -" [ref=e383]:
+          - cell "default" [ref=e384]
+          - cell "-" [ref=e385]
+        - row "icon-right -" [ref=e386]:
+          - cell "icon-right" [ref=e387]
+          - cell "-" [ref=e388]
+        - row "Hide expose items expose Hide expose items" [ref=e389]:
+          - cell "Hide expose items expose" [ref=e390]:
+            - button "Hide expose items" [ref=e391]
+            - generic [ref=e392]:
+              - img [ref=e393]
+              - text: expose
+          - cell "Hide expose items" [ref=e395]:
+            - button "Hide expose items" [ref=e396]
+        - row "focus -" [ref=e397]:
+          - cell "focus" [ref=e398]
+          - cell "-" [ref=e399]
+        - row "blur -" [ref=e400]:
+          - cell "blur" [ref=e401]
+          - cell "-" [ref=e402]
+        - row "el -" [ref=e403]:
+          - cell "el" [ref=e404]
+          - cell "-" [ref=e405]

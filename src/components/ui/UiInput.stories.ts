@@ -101,6 +101,8 @@ size/shape는 \`src/styles/tokens/_size.scss\`, \`_shape.scss\` 공용 토큰 �
     error: { control: 'boolean', description: '에러 상태 — 빨간 테두리 + aria-invalid' },
     errorMessage: { control: 'text', description: '에러 메시지 — 비어있지 않으면 error 자동 true' },
     required: { control: 'boolean', description: '필수 입력 — label 옆 * 표시' },
+    clearable: { control: 'boolean', description: '입력 삭제 X 버튼 (값이 있을 때 표시)' },
+    showPasswordToggle: { control: 'boolean', description: '비밀번호 표시/숨김 토글 (type=password일 때)' },
     maxLength: { control: 'number' },
   },
 } satisfies Meta<typeof UiInput>
@@ -334,7 +336,111 @@ export const NumberOnly: Story = {
   }),
 }
 
-// ===== 6. LoginForm — 실전: auth 사이즈 사용 =====
+// ===== 6. FormValidation — 실시간 검증으로 errorMessage 동작 시연 =====
+export const FormValidation: Story = {
+  name: '실전: 폼 검증 (실시간 에러)',
+  render: () => ({
+    components: { UiInput },
+    setup() {
+      const email = ref('')
+      const emailError = ref('')
+      const name = ref('')
+      const nameError = ref('')
+
+      const validateEmail = (val: string) => {
+        if (!val) {
+          emailError.value = '이메일을 입력해주세요.'
+        } else if (!val.includes('@')) {
+          emailError.value = '올바른 이메일 형식이 아닙니다.'
+        } else {
+          emailError.value = ''
+        }
+      }
+
+      const validateName = (val: string) => {
+        if (!val) {
+          nameError.value = '이름을 입력해주세요.'
+        } else if (val.length < 2) {
+          nameError.value = '2자 이상 입력해주세요.'
+        } else {
+          nameError.value = ''
+        }
+      }
+
+      return { email, emailError, validateEmail, name, nameError, validateName }
+    },
+    template: `
+      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 360px;">
+        <UiInput
+          v-model="name"
+          label="이름"
+          required
+          placeholder="홍길동"
+          :error-message="nameError"
+          @update:model-value="validateName"
+        />
+        <UiInput
+          v-model="email"
+          label="이메일"
+          required
+          type="email"
+          placeholder="example@email.com"
+          :error-message="emailError"
+          @update:model-value="validateEmail"
+        />
+        <p style="margin-top: 4px; font-size: 12px; color: #6f7a93;">
+          💡 입력하면서 실시간 검증 — errorMessage가 비어있지 않으면 자동으로 에러 스타일 적용
+        </p>
+      </div>
+    `,
+  }),
+}
+
+// ===== 7. Clearable — 입력 삭제 버튼 =====
+export const Clearable: Story = {
+  name: '입력 삭제 (clearable)',
+  render: () => ({
+    components: { UiInput },
+    setup() {
+      const text = ref('삭제 가능한 텍스트')
+      const search = ref('검색어')
+      return { text, search }
+    },
+    template: `
+      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 360px;">
+        <UiInput v-model="text" label="일반 입력" clearable placeholder="입력 후 X 버튼 확인" />
+        <UiInput v-model="search" label="검색 (clearable 무시)" clearable type="search" placeholder="type=search는 검색 아이콘 우선" />
+        <UiInput model-value="비활성" label="disabled" clearable disabled />
+        <p style="margin-top: 4px; font-size: 12px; color: #6f7a93;">
+          💡 값이 있을 때만 X 표시. disabled/readonly일 때는 숨김.
+        </p>
+      </div>
+    `,
+  }),
+}
+
+// ===== 8. PasswordToggle — 비밀번호 표시/숨김 =====
+export const PasswordToggle: Story = {
+  name: '비밀번호 토글 (showPasswordToggle)',
+  render: () => ({
+    components: { UiInput },
+    setup() {
+      const pw = ref('mySecret123')
+      return { pw }
+    },
+    template: `
+      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 360px;">
+        <UiInput v-model="pw" label="비밀번호" type="password" show-password-toggle placeholder="비밀번호 입력" />
+        <UiInput model-value="disabled" label="disabled 상태" type="password" show-password-toggle disabled />
+        <p style="margin-top: 4px; font-size: 12px; color: #6f7a93;">
+          💡 눈 아이콘 클릭으로 비밀번호 표시/숨김 토글. type="password"일 때만 동작.
+        </p>
+      </div>
+    `,
+  }),
+}
+
+// ===== 9. LoginForm — 실전: auth 사이즈 사용 =====
 export const LoginForm: Story = {
   name: '실전: 로그인 폼 (auth 사이즈)',
   render: () => ({
@@ -346,8 +452,8 @@ export const LoginForm: Story = {
     },
     template: `
       <form style="display: flex; flex-direction: column; gap: 12px; padding: 24px; background: #f4f7f9; border-radius: 8px; max-width: 360px;">
-        <UiInput v-model="id" size="auth" placeholder="아이디" />
-        <UiInput v-model="pw" size="auth" type="password" placeholder="비밀번호" />
+        <UiInput v-model="id" size="auth" placeholder="아이디" clearable />
+        <UiInput v-model="pw" size="auth" type="password" placeholder="비밀번호" show-password-toggle />
       </form>
     `,
   }),

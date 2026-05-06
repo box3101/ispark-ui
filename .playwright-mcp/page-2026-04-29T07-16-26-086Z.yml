@@ -1,0 +1,190 @@
+- generic [ref=e3]:
+  - main [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - button "Remount component" [ref=e9] [cursor=pointer]:
+          - img [ref=e10]
+        - button "Zoom in" [ref=e12] [cursor=pointer]:
+          - img [ref=e13]
+        - button "Zoom out" [ref=e16] [cursor=pointer]:
+          - img [ref=e17]
+        - button "Reset zoom" [ref=e20] [cursor=pointer]:
+          - img [ref=e21]
+        - button "Apply a grid to the preview" [ref=e24] [cursor=pointer]:
+          - img [ref=e25]
+        - button "Change the size of the preview" [ref=e28] [cursor=pointer]:
+          - img [ref=e29]
+        - button "Enable measure" [ref=e33] [cursor=pointer]:
+          - img [ref=e34]
+        - button "Apply outlines to the preview" [ref=e37] [cursor=pointer]:
+          - img [ref=e38]
+      - generic [ref=e40]:
+        - button "Go full screen" [ref=e41] [cursor=pointer]:
+          - img [ref=e42]
+        - link "Open canvas in new tab" [ref=e44] [cursor=pointer]:
+          - /url: iframe.html?id=components-uibutton--all-shapes
+          - img [ref=e45]
+        - button "Copy canvas link" [ref=e48] [cursor=pointer]:
+          - img [ref=e49]
+    - generic [ref=e56]:
+      - link "Skip to sidebar" [ref=e57] [cursor=pointer]:
+        - /url: "#components-uibutton--all-shapes"
+      - iframe [ref=e58]:
+        - generic [active]:
+          - generic [ref=f1e2]:
+            - 'heading "Failed to fetch dynamically imported module: http://localhost:6006/src/components/ui/UiButton.stories.ts?t=1777446909652" [level=1] [ref=f1e3]'
+            - paragraph [ref=f1e4]: "The component failed to render properly, likely due to a configuration issue in Storybook. Here are some common causes and how you can address them:"
+            - list [ref=f1e5]:
+              - listitem [ref=f1e6]:
+                - strong [ref=f1e7]: Missing Context/Providers
+                - text: ": You can use decorators to supply specific contexts or providers, which are sometimes necessary for components to render correctly. For detailed instructions on using decorators, please visit the"
+                - link "Decorators documentation" [ref=f1e8] [cursor=pointer]:
+                  - /url: https://storybook.js.org/docs/writing-stories/decorators
+                - text: .
+              - listitem [ref=f1e9]:
+                - strong [ref=f1e10]: Misconfigured Webpack or Vite
+                - text: ": Verify that Storybook picks up all necessary settings for loaders, plugins, and other relevant parameters. You can find step-by-step guides for configuring"
+                - link "Webpack" [ref=f1e11] [cursor=pointer]:
+                  - /url: https://storybook.js.org/docs/builders/webpack
+                - text: or
+                - link "Vite" [ref=f1e12] [cursor=pointer]:
+                  - /url: https://storybook.js.org/docs/builders/vite
+                - text: with Storybook.
+              - listitem [ref=f1e13]:
+                - strong [ref=f1e14]: Missing Environment Variables
+                - text: ": Your Storybook may require specific environment variables to function as intended. You can set up custom environment variables as outlined in the"
+                - link "Environment Variables documentation" [ref=f1e15] [cursor=pointer]:
+                  - /url: https://storybook.js.org/docs/configure/environment-variables
+                - text: .
+            - code [ref=f1e17]: "TypeError: Failed to fetch dynamically imported module: http://localhost:6006/src/components/ui/UiButton.stories.ts?t=1777446909652"
+          - generic [ref=f1e20]:
+            - generic [ref=f1e21]: "[plugin:vite:css] [sass] Error: Undefined variable. ╷ 39 │ height: $size-xs-height; │ ^^^^^^^^^^^^^^^ ╵ C:\\ispark-ui\\src\\components\\ui\\UiButton.vue 39:13 root stylesheet"
+            - generic [ref=f1e22]: C:/ispark-ui/src/components/ui/UiButton.vue:39:13
+            - generic [ref=f1e24]: at handleCompileResponse (C:\ispark-ui\node_modules\sass-embedded\lib\src\compiler\utils.ts:226:11) at AsyncCompiler.compileRequestAsync (C:\ispark-ui\node_modules\sass-embedded\lib\src\compiler\async.ts:155:35) at process.processTicksAndRejections (node:internal/process/task_queues:104:5) at async Object.run (file:///C:/ispark-ui/node_modules/vite/dist/node/chunks/dep-Dq2t6Dq0.js:44582:22) at async process (file:///C:/ispark-ui/node_modules/vite/dist/node/chunks/dep-Dq2t6Dq0.js:44641:24) at async compileCSSPreprocessors (file:///C:/ispark-ui/node_modules/vite/dist/node/chunks/dep-Dq2t6Dq0.js:43644:28) at async compileCSS (file:///C:/ispark-ui/node_modules/vite/dist/node/chunks/dep-Dq2t6Dq0.js:43688:32) at async TransformPluginContext.handler (file:///C:/ispark-ui/node_modules/vite/dist/node/chunks/dep-Dq2t6Dq0.js:43019:11) at async EnvironmentPluginContainer.transform (file:///C:/ispark-ui/node_modules/vite/dist/node/chunks/dep-Dq2t6Dq0.js:42348:18) at async loadAndTransform (file:///C:/ispark-ui/node_modules/vite/dist/node/chunks/dep-Dq2t6Dq0.js:35740:27
+            - generic [ref=f1e25]:
+              - text: Click outside, press Esc key, or fix the code to dismiss.
+              - text: You can also disable this overlay by setting
+              - code [ref=f1e26]: server.hmr.overlay
+              - text: to
+              - code [ref=f1e27]: "false"
+              - text: in
+              - code [ref=f1e28]: vite.config.js
+              - text: .
+  - navigation [ref=e61]:
+    - generic [ref=e65]:
+      - generic [ref=e66]:
+        - link "Skip to canvas" [ref=e67] [cursor=pointer]:
+          - /url: "#storybook-preview-wrapper"
+        - link "ispark-ui" [ref=e69] [cursor=pointer]:
+          - /url: /
+        - button "Shortcuts" [ref=e71] [cursor=pointer]:
+          - img [ref=e72]
+      - generic [ref=e75]: Search for components
+      - combobox "Search for components" [ref=e77]:
+        - generic:
+          - img
+        - searchbox "Search for components" [ref=e78]
+        - code: ⌃ K
+        - button "Tag filters" [ref=e132] [cursor=pointer]:
+          - img [ref=e133]
+      - generic [ref=e135]:
+        - img
+        - generic [ref=e136]:
+          - button "소개" [expanded] [ref=e137] [cursor=pointer]:
+            - img [ref=e139]
+            - text: 소개
+          - button "Collapse" [ref=e141] [cursor=pointer]:
+            - img [ref=e142]
+        - link "Introduction" [ref=e145] [cursor=pointer]:
+          - /url: /?path=/docs/소개-introduction--docs
+          - img [ref=e147]
+          - text: Introduction
+        - generic [ref=e149]:
+          - button "Components" [expanded] [ref=e150] [cursor=pointer]:
+            - img [ref=e152]
+            - text: Components
+          - button "Collapse" [ref=e154] [cursor=pointer]:
+            - img [ref=e155]
+        - button "UiButton" [expanded] [ref=e158] [cursor=pointer]:
+          - generic [ref=e159]:
+            - img [ref=e161]
+            - img [ref=e163]
+          - text: UiButton
+        - link "Docs" [ref=e166] [cursor=pointer]:
+          - /url: /?path=/docs/components-uibutton--docs
+          - img [ref=e168]
+          - text: Docs
+        - link "Playground" [ref=e171] [cursor=pointer]:
+          - /url: /?path=/story/components-uibutton--playground
+          - img [ref=e173]
+          - text: Playground
+        - link "All Variants" [ref=e176] [cursor=pointer]:
+          - /url: /?path=/story/components-uibutton--all-variants
+          - img [ref=e178]
+          - text: All Variants
+        - link "All Sizes" [ref=e181] [cursor=pointer]:
+          - /url: /?path=/story/components-uibutton--all-sizes
+          - img [ref=e183]
+          - text: All Sizes
+        - generic [ref=e185]:
+          - link "모서리 모양 (shape)" [ref=e186] [cursor=pointer]:
+            - /url: /?path=/story/components-uibutton--all-shapes
+            - img [ref=e188]
+            - text: 모서리 모양 (shape)
+          - link "Skip to canvas" [ref=e190] [cursor=pointer]:
+            - /url: "#storybook-preview-wrapper"
+        - link "아이콘 사용" [ref=e192] [cursor=pointer]:
+          - /url: /?path=/story/components-uibutton--with-icon
+          - img [ref=e194]
+          - text: 아이콘 사용
+        - 'link "확장: 링크로 사용" [ref=e197] [cursor=pointer]':
+          - /url: /?path=/story/components-uibutton--as-link
+          - img [ref=e199]
+          - text: "확장: 링크로 사용"
+        - 'link "접근성: iconOnly + ariaLabel" [ref=e202] [cursor=pointer]':
+          - /url: /?path=/story/components-uibutton--accessibility-icon-only
+          - img [ref=e204]
+          - text: "접근성: iconOnly + ariaLabel"
+        - 'link "안전성: form 안 type 동작" [ref=e207] [cursor=pointer]':
+          - /url: /?path=/story/components-uibutton--submit-in-form
+          - img [ref=e209]
+          - text: "안전성: form 안 type 동작"
+        - 'link "실전: 모달 푸터" [ref=e212] [cursor=pointer]':
+          - /url: /?path=/story/components-uibutton--modal-footer
+          - img [ref=e214]
+          - text: "실전: 모달 푸터"
+        - button "UiInput" [ref=e217] [cursor=pointer]:
+          - generic [ref=e218]:
+            - img [ref=e220]
+            - img [ref=e222]
+          - text: UiInput
+  - generic [ref=e103]:
+    - generic [ref=e105]:
+      - tablist [ref=e107]:
+        - tab "Controls" [ref=e108] [cursor=pointer]:
+          - generic [ref=e111]: Controls
+        - tab "Actions" [ref=e112] [cursor=pointer]:
+          - generic [ref=e115]: Actions
+        - tab "Code" [ref=e116] [cursor=pointer]
+      - generic [ref=e119]:
+        - button "Change addon orientation [alt D]" [ref=e120] [cursor=pointer]:
+          - img [ref=e121]
+        - button "Hide addons [alt A]" [ref=e124] [cursor=pointer]:
+          - img [ref=e125]
+    - generic [ref=e228]:
+      - generic [ref=e229]:
+        - generic [ref=e230]: Interactive story playground
+        - generic [ref=e231]: Controls give you an easy to use interface to test your components. Set your story args and you'll see controls appearing here automatically.
+      - generic [ref=e232]:
+        - link "Watch 5m video" [ref=e233] [cursor=pointer]:
+          - /url: https://youtu.be/0gOfS6K0x0E
+          - generic [ref=e234]:
+            - img [ref=e235]
+            - text: Watch 5m video
+            - img [ref=e238]
+        - link "Read docs" [ref=e241] [cursor=pointer]:
+          - /url: https://storybook.js.org/docs/essentials/controls
+          - generic [ref=e242]:
+            - img [ref=e243]
+            - text: Read docs
+            - img [ref=e246]
