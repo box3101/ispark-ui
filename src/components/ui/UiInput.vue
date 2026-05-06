@@ -1,8 +1,8 @@
 <template>
   <div
     class="ui-input-outer"
-    :class="[$attrs.class, { 'has-desc': !!desc }]"
-    :style="$attrs.style"
+    :class="[outerClass, { 'has-desc': !!desc }]"
+    :style="outerStyle"
   >
     <div
       class="ui-input-wrap"
@@ -84,6 +84,7 @@
 
 <script setup lang="ts">
 import { computed, ref, useAttrs, useId, watchEffect } from 'vue'
+import type { StyleValue } from 'vue'
 import type { Size, InputSize } from '@/design-tokens'
 
 interface Props {
@@ -204,6 +205,9 @@ const forwardedAttrs = computed(() => {
   const { class: _c, style: _s, ...rest } = attrs as Record<string, unknown>
   return rest
 })
+// outer wrapper로 forward되는 class/style — useAttrs() 반환은 unknown이라 명시 cast
+const outerClass = computed(() => attrs.class as unknown)
+const outerStyle = computed<StyleValue | undefined>(() => (attrs.style as StyleValue | undefined) ?? undefined)
 
 // desc id — input의 aria-describedby로 연결 (Vue 3.5+ useId — SSR 안전, 인스턴스별 unique)
 const uid = useId()

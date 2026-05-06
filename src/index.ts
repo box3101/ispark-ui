@@ -7,3 +7,7 @@ import './styles/main.scss'
 // 컴포넌트
 export { default as UiButton } from './components/ui/UiButton.vue'
 export { default as UiInput } from './components/ui/UiInput.vue'
+
+// 디자인 토큰 (TypeScript 타입 + 옵션 키 배열)
+// SIZES / INPUT_SIZES / SHAPES + Size / InputSize / Shape 타입
+export * from './design-tokens'
