@@ -26,7 +26,7 @@ const meta = {
 - **\`shape\`** \`rounded\`(기본 6px) | \`pill\`(완전 라운드, 검색바)
 - **\`disabled\`** / **\`readonly\`**
 - **\`numberOnly\`** + \`allowDecimal\` / \`allowNegative\` — 숫자 전용 (한글 IME 대응)
-- **\`min\`** / **\`max\`** / **\`step\`** — numberOnly와 함께 사용 시 blur 보정
+- **\`min\`** / **\`max\`** / **\`step\`** — **\`numberOnly=true\` 필수**. blur 시점 자동 보정 (native type=text 사용 → HTML 제약 없음)
 - **\`maxLength\`** / **\`placeholder\`** / **\`desc\`**
 
 > **외부 메서드**: \`inputRef.value.focus()\` / \`.blur()\` / \`.el\`

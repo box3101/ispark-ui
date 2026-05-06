@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import type { Size, InputSize } from '@/design-tokens'
 
 interface Props {
@@ -149,6 +149,21 @@ const emit = defineEmits<{
 
 const inputRef = ref<HTMLInputElement>()
 const isFocused = ref(false)
+
+// dev 환경: min/max/step은 numberOnly와 함께만 동작 (type=text 사용으로 native 제약 없음)
+if (import.meta.env.DEV) {
+  watchEffect(() => {
+    const hasNumericConstraint =
+      props.min !== undefined || props.max !== undefined || props.step !== undefined
+    if (hasNumericConstraint && !props.numberOnly) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        '[UiInput] min/max/step은 numberOnly=true일 때만 blur 시점에 적용됩니다. ' +
+          '한글 IME 호환을 위해 native type="number" 대신 numberOnly prop을 사용하세요.',
+      )
+    }
+  })
+}
 
 // ===== 숫자 전용 처리 =====
 const stripNonNumeric = (val: string): string => {
