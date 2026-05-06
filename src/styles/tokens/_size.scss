@@ -1,0 +1,33 @@
+// 모든 폼/액션 컴포넌트가 참조하는 공용 size 토큰
+// (UiButton, UiInput, UiSelect, UiTag, UiBadge 등)
+//
+// 컴포넌트 고유 속성(button의 min-width, input의 border-color 등)은
+// 여기에 넣지 않는다. 그것은 해당 컴포넌트 SCSS에서 직접 정의한다.
+
+$size-xs-height:     24px;
+$size-xs-icon:       12px;
+$size-xs-font:       12px;
+$size-xs-padding-x:  8px;
+
+$size-sm-height:     28px;
+$size-sm-icon:       16px;
+$size-sm-font:       13px;
+$size-sm-padding-x:  10px;
+
+$size-md-height:     32px;
+$size-md-icon:       18px;
+$size-md-font:       14px;
+$size-md-padding-x:  12px;
+
+$size-lg-height:     40px;
+$size-lg-icon:       20px;
+$size-lg-font:       15px;
+$size-lg-padding-x:  16px;
+
+// SCSS @each 반복용 map (개별 변수와 동일한 출처)
+$sizes: (
+  xs: (height: $size-xs-height, icon: $size-xs-icon, font: $size-xs-font, padding-x: $size-xs-padding-x),
+  sm: (height: $size-sm-height, icon: $size-sm-icon, font: $size-sm-font, padding-x: $size-sm-padding-x),
+  md: (height: $size-md-height, icon: $size-md-icon, font: $size-md-font, padding-x: $size-md-padding-x),
+  lg: (height: $size-lg-height, icon: $size-lg-icon, font: $size-lg-font, padding-x: $size-lg-padding-x),
+);

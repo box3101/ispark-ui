@@ -1,0 +1,11 @@
+// 모든 컴포넌트가 참조하는 공용 shape (border-radius) 토큰
+
+$shape-rounded: 6px;       // 기본 — 살짝 둥근
+$shape-pill:    9999px;    // 완전 라운드 (태그/필터)
+$shape-circle:  50%;       // 정원 (iconOnly FAB)
+
+$shapes: (
+  rounded: $shape-rounded,
+  pill:    $shape-pill,
+  circle:  $shape-circle,
+);

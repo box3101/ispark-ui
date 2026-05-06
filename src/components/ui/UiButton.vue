@@ -6,6 +6,8 @@
     :class="[
       `variant-${variant}`,
       `size-${size}`,
+      `shape-${shape}`,
+      iconSize ? `icon-size-${iconSize}` : null,
       {
         'is-disabled': disabled,
         'is-loading': loading,
@@ -15,6 +17,8 @@
     ]"
     :type="as === 'button' ? type : undefined"
     :href="as === 'a' ? href : undefined"
+    :target="as === 'a' ? target : undefined"
+    :rel="as === 'a' && target === '_blank' ? 'noopener noreferrer' : undefined"
     :disabled="as === 'button' && (disabled || loading) ? true : undefined"
     :aria-disabled="as === 'a' && (disabled || loading) ? 'true' : undefined"
     :tabindex="as === 'a' && (disabled || loading) ? -1 : undefined"
@@ -54,6 +58,7 @@
 
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
+import type { Size, Shape } from '@/design-tokens'
 
 interface Props {
   /**
@@ -61,27 +66,39 @@ interface Props {
    */
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger'
   /**
-   * 사이즈 — sm(28px) / md(32px·기본) / lg(40px)
+   * 사이즈 — xs(24px) / sm(28px) / md(32px·기본) / lg(40px)
    */
-  size?: 'sm' | 'md' | 'lg'
+  size?: Size
+  /**
+   * 아이콘 사이즈 — 미지정 시 size 따라감. 명시 시 override.
+   */
+  iconSize?: Size
+  /**
+   * 모서리 모양 — rounded(기본 6px) / pill(완전 라운드) / circle(iconOnly FAB)
+   */
+  shape?: Shape
   /**
    * 렌더링 태그 — button(기본) / a(링크)
    */
   as?: 'button' | 'a'
   /**
-   * button 태그일 때만 적용. form 안에서 의도치 않은 submit 방지를 위해 기본 'button'.
+   * button 태그일 때만 적용. form 안 의도치 않은 submit 방지로 기본 'button'.
    */
-  type?: 'button' | 'submit' | 'reset'
+  type?: 'button' | 'submit'
   /**
    * as='a'일 때 링크 경로
    */
   href?: string
+  /**
+   * as='a'일 때 link target. '_blank'이면 rel="noopener noreferrer" 자동 부여.
+   */
+  target?: '_blank' | '_self' | '_parent' | '_top'
   disabled?: boolean
   loading?: boolean
   fullWidth?: boolean
   iconOnly?: boolean
   /**
-   * 접근성 라벨 — iconOnly=true일 때 필수 (스크린리더가 무엇을 위한 버튼인지 인지)
+   * 접근성 라벨 — iconOnly=true일 때 필수
    */
   ariaLabel?: string
 }
@@ -89,6 +106,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   variant: 'primary',
   size: 'md',
+  shape: 'rounded',
   as: 'button',
   type: 'button',
   disabled: false,
@@ -114,6 +132,12 @@ if (import.meta.env.DEV) {
       // eslint-disable-next-line no-console
       console.warn(
         '[UiButton] as="a" 사용 시 href prop이 필요합니다. (현재 페이지로 새로고침될 수 있음)',
+      )
+    }
+    if (props.shape === 'circle' && !props.iconOnly) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        '[UiButton] shape="circle"은 iconOnly와 함께 사용하세요. 텍스트 버튼에 정원 모양은 어색합니다.',
       )
     }
   })
@@ -154,7 +178,6 @@ defineExpose({
   justify-content: center;
   gap: 4px;
   border: 1px solid transparent;
-  border-radius: $border-radius-base;
   cursor: pointer;
   // 명시적 속성만 transition (성능 최적화)
   transition:
@@ -164,71 +187,146 @@ defineExpose({
   white-space: nowrap;
   letter-spacing: -0.02em;
   text-decoration: none; // a 태그 underline 제거
-  // font-weight는 @include typo가 사이즈별로 결정 (정책 통일)
+  font-weight: 700;
+  line-height: 1.5;
 
   &:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 
-  // ===== 사이즈 (3단계) =====
-  &.size-sm {
-    @include typo($body-small-bold);
-    height: $height-sm; // 28px
-    min-width: 60px;
-    padding: 0 10px;
+  // ===== size — 공용 토큰 (height/padding-x/font + 자동 icon size) =====
+  &.size-xs {
+    height: $size-xs-height;
+    padding: 0 $size-xs-padding-x;
+    font-size: $size-xs-font;
 
+    .ui-button-icon :deep(i:not([class*='size-'])) {
+      width: $size-xs-icon;
+      height: $size-xs-icon;
+    }
     .ui-button-spinner {
-      width: 12px;
-      height: 12px;
+      width: $size-xs-icon;
+      height: $size-xs-icon;
+      border-width: 1.5px;
+    }
+  }
+
+  &.size-sm {
+    height: $size-sm-height;
+    padding: 0 $size-sm-padding-x;
+    font-size: $size-sm-font;
+
+    .ui-button-icon :deep(i:not([class*='size-'])) {
+      width: $size-sm-icon;
+      height: $size-sm-icon;
+    }
+    .ui-button-spinner {
+      width: $size-sm-icon;
+      height: $size-sm-icon;
       border-width: 1.5px;
     }
   }
 
   &.size-md {
-    @include typo($body-medium-bold);
-    height: $height-md; // 32px
-    min-width: 68px;
-    padding: 0 12px;
+    height: $size-md-height;
+    padding: 0 $size-md-padding-x;
+    font-size: $size-md-font;
 
+    .ui-button-icon :deep(i:not([class*='size-'])) {
+      width: $size-md-icon;
+      height: $size-md-icon;
+    }
     .ui-button-spinner {
-      width: 14px;
-      height: 14px;
+      width: $size-md-icon;
+      height: $size-md-icon;
       border-width: 1.5px;
     }
   }
 
   &.size-lg {
-    @include typo($body-medium-bold);
-    height: $height-lg; // 40px
-    min-width: 84px;
-    padding: 0 16px;
+    height: $size-lg-height;
+    padding: 0 $size-lg-padding-x;
+    font-size: $size-lg-font;
 
+    .ui-button-icon :deep(i:not([class*='size-'])) {
+      width: $size-lg-icon;
+      height: $size-lg-icon;
+    }
     .ui-button-spinner {
-      width: 18px;
-      height: 18px;
+      width: $size-lg-icon;
+      height: $size-lg-icon;
       border-width: 2px;
     }
   }
 
-  // ===== 아이콘 온리 =====
+  // ===== iconSize override — size 클래스보다 후행 → 동일 specificity에서 후행 승 =====
+  &.icon-size-xs .ui-button-icon :deep(i:not([class*='size-'])) {
+    width: $size-xs-icon;
+    height: $size-xs-icon;
+  }
+  &.icon-size-sm .ui-button-icon :deep(i:not([class*='size-'])) {
+    width: $size-sm-icon;
+    height: $size-sm-icon;
+  }
+  &.icon-size-md .ui-button-icon :deep(i:not([class*='size-'])) {
+    width: $size-md-icon;
+    height: $size-md-icon;
+  }
+  &.icon-size-lg .ui-button-icon :deep(i:not([class*='size-'])) {
+    width: $size-lg-icon;
+    height: $size-lg-icon;
+  }
+
+  // ===== shape — 공용 토큰 =====
+  &.shape-rounded {
+    border-radius: $shape-rounded;
+  }
+  &.shape-pill {
+    border-radius: $shape-pill;
+  }
+  &.shape-circle {
+    border-radius: $shape-circle;
+  }
+
+  // ===== component-local: button 고유 min-width =====
+  &.size-xs {
+    min-width: 52px;
+  }
+  &.size-sm {
+    min-width: 60px;
+  }
+  &.size-md {
+    min-width: 68px;
+  }
+  &.size-lg {
+    min-width: 84px;
+  }
+
+  // ===== component-local: iconOnly 정사각 (size별 height와 동일) =====
   &.is-icon-only {
     padding: 0;
     min-width: auto;
 
+    &.size-xs {
+      width: $size-xs-height;
+      min-width: $size-xs-height;
+    }
     &.size-sm {
-      width: $height-sm;
+      width: $size-sm-height;
+      min-width: $size-sm-height;
     }
     &.size-md {
-      width: $height-md;
+      width: $size-md-height;
+      min-width: $size-md-height;
     }
     &.size-lg {
-      width: $height-lg;
+      width: $size-lg-height;
+      min-width: $size-lg-height;
     }
   }
 
   // ===== variant (4종) — 모두 CSS 변수, hover는 desktop-hover로 보호 =====
-  // variant cascade: default → :hover → :active (한 단계씩 진해짐)
   &.variant-primary {
     background-color: var(--color-primary);
     color: #fff;
@@ -247,7 +345,6 @@ defineExpose({
     border-color: var(--color-border);
     color: var(--color-text-primary);
 
-    // hover 시 primary blue로 변하던 문제 해결 — 보조 액션은 보조답게
     @include desktop-hover {
       background-color: var(--color-background);
       border-color: var(--color-text-primary);
@@ -262,7 +359,7 @@ defineExpose({
   &.variant-ghost {
     background-color: transparent;
     color: var(--color-text-secondary);
-    min-width: auto;
+    min-width: auto; // ghost는 트리거 용도가 많아 min-width 해제
 
     @include desktop-hover {
       background-color: var(--color-background);
@@ -310,10 +407,11 @@ defineExpose({
 .ui-button-icon {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 }
 
-// ===== 로딩 스피너 — 사이즈는 .size-{N} 안에서 결정 =====
+// 로딩 스피너 — 사이즈는 size-{key} 안에서 결정
 .ui-button-spinner {
   display: inline-block;
   flex-shrink: 0;
