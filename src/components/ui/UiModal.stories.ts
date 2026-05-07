@@ -29,6 +29,18 @@ const meta = {
       control: 'text',
       description: '추가 클래스명',
     },
+    showOverlay: {
+      control: 'boolean',
+      description: '오버레이 배경 표시 (default true)',
+    },
+    closeOnOverlayClick: {
+      control: 'boolean',
+      description: '오버레이 클릭 시 닫기 (default true)',
+    },
+    closeOnEscape: {
+      control: 'boolean',
+      description: 'ESC 키 닫기 (default true)',
+    },
   },
 } satisfies Meta<typeof UiModal>
 
@@ -212,6 +224,68 @@ export const CustomMaxWidth: Story = {
       </div>
     `,
   }),
+}
+
+export const NoOverlay: Story = {
+  args: {
+    title: '오버레이 없음',
+    showOverlay: false,
+  },
+  render: (args) => ({
+    components: { UiModal },
+    setup: () => {
+      const open = ref(false)
+      return { args, open }
+    },
+    template: `
+      <div>
+        <button type="button" @click="open = true" style="padding: 8px 16px; cursor: pointer;">
+          모달 열기
+        </button>
+        <UiModal v-bind="args" v-model:open="open">
+          <p>showOverlay=false. 배경 어두워지지 않음.</p>
+        </UiModal>
+      </div>
+    `,
+  }),
+}
+
+export const StrictNoEscape: Story = {
+  args: {
+    title: '엄격 모드 — ESC/overlay 무시',
+    closeOnEscape: false,
+    closeOnOverlayClick: false,
+  },
+  render: (args) => ({
+    components: { UiModal },
+    setup: () => {
+      const open = ref(false)
+      return { args, open }
+    },
+    template: `
+      <div>
+        <button type="button" @click="open = true" style="padding: 8px 16px; cursor: pointer;">
+          모달 열기
+        </button>
+        <UiModal v-bind="args" v-model:open="open">
+          <p>ESC 키와 overlay 클릭 모두 무시. X 버튼만 닫기 가능. 작업 중 실수 방지용.</p>
+        </UiModal>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole('button', { name: '모달 열기' }))
+    await screen.findByRole('dialog')
+    // ESC 시도 — 닫히지 않아야
+    await userEvent.keyboard('{Escape}')
+    // dialog 여전히 존재
+    await expect(screen.queryByRole('dialog')).toBeTruthy()
+    // update:open(false) emit 안 됨
+    const calls = (args['onUpdate:open'] as ReturnType<typeof fn>).mock.calls
+    const closeCalls = calls.filter(([v]: [boolean]) => v === false)
+    await expect(closeCalls.length).toBe(0)
+  },
 }
 
 export const CustomHeaderSlot: Story = {

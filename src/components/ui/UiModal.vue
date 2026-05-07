@@ -1,11 +1,14 @@
 <template>
   <DialogRoot :open="open" @update:open="onUpdateOpen">
     <DialogPortal>
-      <DialogOverlay class="ui-modal-overlay" />
+      <DialogOverlay v-if="showOverlay" class="ui-modal-overlay" />
       <DialogContent
         class="ui-modal-content"
         :class="[`size-${size}`, customClass]"
         :style="contentStyle"
+        @escape-key-down="onEscapeKeyDown"
+        @pointer-down-outside="onPointerDownOutside"
+        @interact-outside="onInteractOutside"
       >
         <header v-if="$slots.header || title || showClose" class="ui-modal-header">
           <slot name="header">
@@ -45,6 +48,9 @@ interface Props {
   title?: string
   size?: 'sm' | 'md' | 'lg' | 'xl'
   showClose?: boolean
+  showOverlay?: boolean
+  closeOnOverlayClick?: boolean
+  closeOnEscape?: boolean
   customClass?: string
   maxWidth?: string
 }
@@ -54,6 +60,9 @@ const props = withDefaults(defineProps<Props>(), {
   title: '',
   size: 'md',
   showClose: true,
+  showOverlay: true,
+  closeOnOverlayClick: true,
+  closeOnEscape: true,
   customClass: '',
   maxWidth: '',
 })
@@ -66,6 +75,19 @@ const emit = defineEmits<{
 const onUpdateOpen = (value: boolean) => {
   emit('update:open', value)
   if (!value) emit('close')
+}
+
+const onEscapeKeyDown = (e: KeyboardEvent) => {
+  if (!props.closeOnEscape) e.preventDefault()
+}
+
+const onPointerDownOutside = (e: Event) => {
+  if (!props.closeOnOverlayClick) e.preventDefault()
+}
+
+// interactOutside는 pointer + focus 두 케이스 통합 — focus도 차단해야 일관
+const onInteractOutside = (e: Event) => {
+  if (!props.closeOnOverlayClick) e.preventDefault()
 }
 
 // maxWidth 명시 시 size 토큰 max-width override
