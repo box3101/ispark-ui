@@ -51,7 +51,7 @@
             <SelectItem
               v-for="opt in options"
               :key="opt.value"
-              :value="normalizeValue(opt.value)"
+              :value="normalizeItemValue(opt.value)"
               :disabled="opt.disabled"
               class="ui-select-item"
             >
@@ -154,10 +154,16 @@ const errorId = computed(() => (props.errorMessage ? `${resolvedId.value}-error`
 const isError = computed(() => props.error || !!props.errorMessage)
 const ariaDescribedby = computed(() => errorId.value || descId.value)
 
+// radix-vue는 SelectItem :value=""를 거부 → 옵션에 빈 값이 있을 때만 토큰으로 우회.
+// 옵션에 빈 값 없는 일반 케이스에서 modelValue=''는 그대로 빈 문자열 유지 →
+// radix-vue가 selected 없음으로 인식하고 placeholder 표시.
 const EMPTY_VALUE_TOKEN = '__ui_select_empty__'
 
-const normalizeValue = (value: string | number | undefined) => {
-  if (value === '' || value === undefined) return EMPTY_VALUE_TOKEN
+const hasEmptyOption = computed(() => props.options.some((o) => o.value === ''))
+
+// SelectItem용 — 옵션 value가 ''이면 토큰으로 (radix-vue 제약 우회)
+const normalizeItemValue = (value: string | number) => {
+  if (value === '') return EMPTY_VALUE_TOKEN
   return String(value)
 }
 
@@ -168,7 +174,14 @@ const denormalizeValue = (value: string): string | number => {
   return matched ? matched.value : value
 }
 
-const resolvedModelValue = computed(() => normalizeValue(props.modelValue))
+const resolvedModelValue = computed(() => {
+  const v = props.modelValue
+  if (v === '' || v === undefined) {
+    // 빈 값 옵션이 있으면 토큰으로 매칭, 없으면 '' 그대로 → radix-vue가 placeholder 표시
+    return hasEmptyOption.value ? EMPTY_VALUE_TOKEN : ''
+  }
+  return String(v)
+})
 
 const onUpdate = (val: string) => {
   const v = denormalizeValue(val)
