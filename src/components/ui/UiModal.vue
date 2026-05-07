@@ -3,8 +3,20 @@
     <DialogPortal>
       <DialogOverlay class="ui-modal-overlay" />
       <DialogContent class="ui-modal-content" :class="[`size-${size}`]">
-        <!-- T3에서 title prop으로 교체 — 현재는 radix-vue a11y 경고 회피용 sr-only -->
-        <DialogTitle class="ui-modal-sr-only">모달</DialogTitle>
+        <header v-if="title || showClose" class="ui-modal-header">
+          <DialogTitle v-if="title" class="ui-modal-title">{{ title }}</DialogTitle>
+          <DialogTitle v-else class="ui-modal-sr-only">모달</DialogTitle>
+          <DialogClose
+            v-if="showClose"
+            class="ui-modal-close"
+            aria-label="닫기"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </DialogClose>
+        </header>
+        <DialogTitle v-if="!title && !showClose" class="ui-modal-sr-only">모달</DialogTitle>
         <slot />
       </DialogContent>
     </DialogPortal>
@@ -12,16 +24,20 @@
 </template>
 
 <script setup lang="ts">
-import { DialogRoot, DialogPortal, DialogOverlay, DialogContent, DialogTitle } from 'radix-vue'
+import { DialogClose, DialogContent, DialogOverlay, DialogPortal, DialogRoot, DialogTitle } from 'radix-vue'
 
 interface Props {
   open?: boolean
+  title?: string
   size?: 'sm' | 'md' | 'lg' | 'xl'
+  showClose?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   open: false,
+  title: '',
   size: 'md',
+  showClose: true,
 })
 
 const emit = defineEmits<{
@@ -77,6 +93,50 @@ const onUpdateOpen = (value: boolean) => {
   }
   &[data-state='closed'] {
     animation: ui-modal-content-out 150ms ease-in forwards;
+  }
+}
+
+.ui-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ui-modal-title {
+  margin: 0;
+  @include typo($body-large-bold, var(--color-text-heading));
+  flex: 1;
+  min-width: 0;
+}
+
+.ui-modal-close {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-secondary);
+  border-radius: $shape-rounded;
+  cursor: pointer;
+  transition: background-color $transition-base, color $transition-base;
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--color-background);
+      color: var(--color-text-primary);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
   }
 }
 
