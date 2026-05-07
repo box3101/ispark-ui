@@ -38,3 +38,34 @@ export const Default: Story = {
     await expect(args['onUpdate:modelValue']).toHaveBeenCalledWith('b')
   },
 }
+
+export const WithLabel: Story = {
+  args: {
+    options: sampleOptions,
+    label: '카테고리',
+    placeholder: '카테고리 선택',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const label = canvas.getByText('카테고리')
+    const trigger = canvas.getByRole('combobox')
+    // label htmlFor와 trigger id 매칭
+    await expect(label.getAttribute('for')).toBe(trigger.getAttribute('id'))
+  },
+}
+
+export const Required: Story = {
+  args: {
+    options: sampleOptions,
+    label: '필수 항목',
+    required: true,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // label은 "필수 항목" 텍스트 + 별도 <span>에 *. label 전체를 textContent로 검증
+    const labelEl = canvas.getByText(/필수 항목/)
+    await expect(labelEl.textContent).toContain('*')
+    const trigger = canvas.getByRole('combobox')
+    await expect(trigger.getAttribute('aria-required')).toBe('true')
+  },
+}

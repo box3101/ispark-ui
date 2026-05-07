@@ -1,11 +1,33 @@
 <template>
-  <div class="ui-select-outer">
+  <div
+    class="ui-select-outer"
+    :class="{ 'has-label': !!label }"
+  >
+    <label
+      v-if="label"
+      :for="resolvedId"
+      class="ui-select-label"
+      :class="{ 'is-hidden': labelHidden }"
+    >
+      {{ label }}
+      <span
+        v-if="required"
+        class="ui-select-required"
+        aria-hidden="true"
+      >*</span>
+    </label>
+
     <SelectRoot
       :model-value="resolvedModelValue"
       :disabled="disabled"
       @update:model-value="onUpdate"
     >
-      <SelectTrigger class="ui-select-trigger" :class="[`size-${size}`, `shape-${shape}`]">
+      <SelectTrigger
+        :id="resolvedId"
+        class="ui-select-trigger"
+        :class="[`size-${size}`, `shape-${shape}`, { 'is-disabled': disabled }]"
+        :aria-required="required || undefined"
+      >
         <SelectValue :placeholder="placeholder" class="ui-select-value" />
         <SelectIcon class="ui-select-icon">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -34,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useId } from 'vue'
 import {
   SelectContent,
   SelectIcon,
@@ -58,6 +80,13 @@ interface Props {
   modelValue?: string | number
   options: SelectOption[]
   placeholder?: string
+  // === 폼 필드 ===
+  label?: string
+  labelHidden?: boolean
+  required?: boolean
+  // === HTML ===
+  id?: string
+  // === 기존 ===
   disabled?: boolean
   size?: InputSize
   shape?: 'rounded' | 'pill'
@@ -66,6 +95,10 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
   placeholder: '선택',
+  label: '',
+  labelHidden: false,
+  required: false,
+  id: undefined,
   disabled: false,
   size: 'md',
   shape: 'rounded',
@@ -75,6 +108,10 @@ const emit = defineEmits<{
   'update:modelValue': [value: string | number]
   change: [value: string | number]
 }>()
+
+// id 자동 생성 (Vue 3.5+ useId — SSR 안전)
+const uid = useId()
+const resolvedId = computed(() => props.id || `ui-select-${uid}`)
 
 const EMPTY_VALUE_TOKEN = '__ui_select_empty__'
 
@@ -103,6 +140,33 @@ const onUpdate = (val: string) => {
 .ui-select-outer {
   flex: 1;
   min-width: 0;
+}
+
+.ui-select-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+  line-height: 1.5;
+
+  &.is-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+.ui-select-required {
+  color: var(--color-danger);
+  margin-left: 2px;
+  font-weight: 600;
 }
 
 .ui-select-trigger {
