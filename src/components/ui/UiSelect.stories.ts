@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import { expect, fn, screen, userEvent, within } from '@storybook/test'
 import { ref } from 'vue'
 import UiSelect from './UiSelect.vue'
+import { INPUT_SIZES } from '@/design-tokens'
 
 const meta = {
   title: 'Components/UiSelect',
@@ -10,6 +11,18 @@ const meta = {
   args: {
     'onUpdate:modelValue': fn(),
     onChange: fn(),
+  },
+  argTypes: {
+    size: {
+      control: 'inline-radio',
+      options: INPUT_SIZES,
+      description: 'sm(28px) / md(32px·기본) / lg(40px) / auth(44px·로그인) — 공용 토큰',
+    },
+    shape: {
+      control: 'inline-radio',
+      options: ['rounded', 'pill'],
+      description: 'rounded(기본 6px) / pill(완전 라운드)',
+    },
   },
 } satisfies Meta<typeof UiSelect>
 
