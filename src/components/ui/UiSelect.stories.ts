@@ -120,3 +120,31 @@ export const Desc: Story = {
     await expect(trigger.getAttribute('aria-describedby')).toBe(descEl.getAttribute('id'))
   },
 }
+
+export const Sizes: Story = {
+  render: (args) => ({
+    components: { UiSelect },
+    setup: () => ({ args, sampleOptions }),
+    template: `
+      <div style="display: flex; flex-direction: column; gap: 12px; width: 240px;">
+        <UiSelect v-bind="args" :options="sampleOptions" size="sm" placeholder="sm 28px" />
+        <UiSelect v-bind="args" :options="sampleOptions" size="md" placeholder="md 32px" />
+        <UiSelect v-bind="args" :options="sampleOptions" size="lg" placeholder="lg 40px" />
+        <UiSelect v-bind="args" :options="sampleOptions" size="auth" placeholder="auth 44px" />
+      </div>
+    `,
+  }),
+}
+
+export const Shapes: Story = {
+  render: (args) => ({
+    components: { UiSelect },
+    setup: () => ({ args, sampleOptions }),
+    template: `
+      <div style="display: flex; flex-direction: column; gap: 12px; width: 240px;">
+        <UiSelect v-bind="args" :options="sampleOptions" shape="rounded" placeholder="rounded" />
+        <UiSelect v-bind="args" :options="sampleOptions" shape="pill" placeholder="pill" />
+      </div>
+    `,
+  }),
+}

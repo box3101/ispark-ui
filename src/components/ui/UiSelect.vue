@@ -178,6 +178,8 @@ const onUpdate = (val: string) => {
 </script>
 
 <style lang="scss" scoped>
+@use 'sass:map';
+
 .ui-select-outer {
   flex: 1;
   min-width: 0;
@@ -230,25 +232,54 @@ const onUpdate = (val: string) => {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 32px;
-  padding: 0 12px;
   gap: 4px;
   background-color: #fff;
   border: 1px solid var(--color-border);
   color: var(--color-text-primary);
   cursor: pointer;
   outline: none;
+  transition: border-color $transition-base;
+
+  &[data-placeholder] {
+    color: #aebccb;
+  }
+
+  &:hover:not(.is-disabled) {
+    border-color: var(--color-primary);
+  }
+
+  &:focus,
+  &[data-state='open'] {
+    border-color: var(--color-primary);
+  }
 
   &:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 
+  // ===== size — 공용 토큰 =====
+  @each $key in (sm md lg auth) {
+    $vals: map.get($sizes, $key);
+    &.size-#{$key} {
+      height:    map.get($vals, height);
+      font-size: map.get($vals, font);
+      padding:   0 map.get($vals, padding-x);
+
+      .ui-select-icon {
+        width:  map.get($vals, icon);
+        height: map.get($vals, icon);
+      }
+    }
+  }
+
+  // ===== shape — 공용 토큰 =====
   &.shape-rounded { border-radius: $shape-rounded; }
   &.shape-pill    { border-radius: $shape-pill; }
 
-  &[data-placeholder] {
-    color: #aebccb;
+  &.is-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   &.is-error:not(.is-disabled) {
@@ -268,6 +299,11 @@ const onUpdate = (val: string) => {
 .ui-select-icon {
   flex-shrink: 0;
   color: var(--color-text-secondary);
+  transition: transform $transition-base;
+
+  [data-state='open'] & {
+    transform: rotate(180deg);
+  }
 }
 </style>
 
