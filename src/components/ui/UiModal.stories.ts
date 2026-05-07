@@ -190,8 +190,8 @@ export const WithFooter: Story = {
         <UiModal v-bind="args" v-model:open="open">
           <p style="margin: 0;">변경사항이 즉시 반영됩니다.</p>
           <template #footer>
-            <UiButton variant="secondary" size="lg" @click="open = false">취소</UiButton>
-            <UiButton variant="primary" size="lg" @click="open = false">저장</UiButton>
+            <UiButton variant="secondary" size="md" @click="open = false">취소</UiButton>
+            <UiButton variant="primary" size="md" @click="open = false">저장</UiButton>
           </template>
         </UiModal>
       </div>
