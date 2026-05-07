@@ -4,28 +4,44 @@
       <DialogOverlay v-if="showOverlay" class="ui-modal-overlay" />
       <DialogContent
         class="ui-modal-content"
-        :class="[`size-${size}`, customClass]"
+        :class="[`size-${size}`, customClass, { 'is-fullscreen': isFullscreen }]"
         :style="contentStyle"
         @escape-key-down="onEscapeKeyDown"
         @pointer-down-outside="onPointerDownOutside"
         @interact-outside="onInteractOutside"
       >
-        <header v-if="$slots.header || title || showClose" class="ui-modal-header">
+        <header v-if="$slots.header || title || showClose || showFullscreen" class="ui-modal-header">
           <slot name="header">
             <DialogTitle v-if="title" class="ui-modal-title">{{ title }}</DialogTitle>
             <DialogTitle v-else class="ui-modal-sr-only">모달</DialogTitle>
-            <DialogClose
-              v-if="showClose"
-              class="ui-modal-close"
-              aria-label="닫기"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-              </svg>
-            </DialogClose>
+            <div class="ui-modal-header-actions">
+              <button
+                v-if="showFullscreen"
+                type="button"
+                class="ui-modal-fullscreen-toggle"
+                :aria-label="isFullscreen ? '축소' : '전체화면'"
+                @click="toggleFullscreen"
+              >
+                <svg v-if="!isFullscreen" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+              <DialogClose
+                v-if="showClose"
+                class="ui-modal-close"
+                aria-label="닫기"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+              </DialogClose>
+            </div>
           </slot>
         </header>
-        <DialogTitle v-if="!$slots.header && !title && !showClose" class="ui-modal-sr-only">모달</DialogTitle>
+        <DialogTitle v-if="!$slots.header && !title && !showClose && !showFullscreen" class="ui-modal-sr-only">모달</DialogTitle>
 
         <div class="ui-modal-body">
           <slot />
@@ -40,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { DialogClose, DialogContent, DialogOverlay, DialogPortal, DialogRoot, DialogTitle } from 'radix-vue'
 
 interface Props {
@@ -49,6 +65,7 @@ interface Props {
   size?: 'sm' | 'md' | 'lg' | 'xl'
   showClose?: boolean
   showOverlay?: boolean
+  showFullscreen?: boolean
   closeOnOverlayClick?: boolean
   closeOnEscape?: boolean
   customClass?: string
@@ -61,6 +78,7 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'md',
   showClose: true,
   showOverlay: true,
+  showFullscreen: false,
   closeOnOverlayClick: true,
   closeOnEscape: true,
   customClass: '',
@@ -77,6 +95,21 @@ const onUpdateOpen = (value: boolean) => {
   if (!value) emit('close')
 }
 
+// fullscreen state — 외부에서 직접 제어 안 함, 헤더 토글 버튼으로만
+const isFullscreen = ref(false)
+
+const toggleFullscreen = () => {
+  isFullscreen.value = !isFullscreen.value
+}
+
+// 닫힐 때 fullscreen reset — 다시 열면 원래 size로
+watch(
+  () => props.open,
+  (open) => {
+    if (!open) isFullscreen.value = false
+  },
+)
+
 const onEscapeKeyDown = (e: KeyboardEvent) => {
   if (!props.closeOnEscape) e.preventDefault()
 }
@@ -90,9 +123,9 @@ const onInteractOutside = (e: Event) => {
   if (!props.closeOnOverlayClick) e.preventDefault()
 }
 
-// maxWidth 명시 시 size 토큰 max-width override
+// maxWidth 명시 시 size 토큰 max-width override — fullscreen 시 무시
 const contentStyle = computed(() => {
-  if (!props.maxWidth) return {}
+  if (isFullscreen.value || !props.maxWidth) return {}
   return { maxWidth: props.maxWidth }
 })
 </script>
@@ -134,6 +167,17 @@ const contentStyle = computed(() => {
   max-height: calc(100vh - 40px);
   overflow-y: auto;
 
+  &.is-fullscreen {
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    transform: none;
+    border-radius: 0;
+  }
+
   &[data-state='open'] {
     animation: ui-modal-content-in 200ms ease-out forwards;
   }
@@ -173,6 +217,40 @@ const contentStyle = computed(() => {
 
 .ui-modal-close {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-secondary);
+  border-radius: $shape-rounded;
+  cursor: pointer;
+  transition: background-color $transition-base, color $transition-base;
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--color-background);
+      color: var(--color-text-primary);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+.ui-modal-header-actions {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.ui-modal-fullscreen-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;

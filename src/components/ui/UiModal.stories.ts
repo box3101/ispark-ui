@@ -41,6 +41,10 @@ const meta = {
       control: 'boolean',
       description: 'ESC 키 닫기 (default true)',
     },
+    showFullscreen: {
+      control: 'boolean',
+      description: '헤더에 전체화면 토글 버튼 표시 (default false)',
+    },
   },
 } satisfies Meta<typeof UiModal>
 
@@ -285,6 +289,41 @@ export const StrictNoEscape: Story = {
     const calls = (args['onUpdate:open'] as ReturnType<typeof fn>).mock.calls
     const closeCalls = calls.filter(([v]: [boolean]) => v === false)
     await expect(closeCalls.length).toBe(0)
+  },
+}
+
+export const Fullscreen: Story = {
+  args: {
+    title: '전체화면 토글 가능',
+    size: 'md',
+    showFullscreen: true,
+  },
+  render: (args) => ({
+    components: { UiModal },
+    setup: () => {
+      const open = ref(false)
+      return { args, open }
+    },
+    template: `
+      <div>
+        <button type="button" @click="open = true" style="padding: 8px 16px; cursor: pointer;">
+          모달 열기
+        </button>
+        <UiModal v-bind="args" v-model:open="open">
+          <p>헤더 우측 expand 아이콘 클릭으로 전체화면 토글. 닫으면 자동으로 원래 size 복귀.</p>
+        </UiModal>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole('button', { name: '모달 열기' }))
+    await screen.findByRole('dialog')
+    // 전체화면 토글 버튼 존재
+    const expandBtn = await screen.findByRole('button', { name: '전체화면' })
+    await userEvent.click(expandBtn)
+    // 클릭 후 aria-label이 '축소'로 변경
+    await screen.findByRole('button', { name: '축소' })
   },
 }
 
