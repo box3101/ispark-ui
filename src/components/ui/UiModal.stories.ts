@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import { expect, fn, screen, userEvent, within } from '@storybook/test'
 import { ref } from 'vue'
 import UiModal from './UiModal.vue'
+import UiButton from './UiButton.vue'
 
 const meta = {
   title: 'Components/UiModal',
@@ -176,7 +177,7 @@ export const WithFooter: Story = {
     size: 'sm',
   },
   render: (args) => ({
-    components: { UiModal },
+    components: { UiModal, UiButton },
     setup: () => {
       const open = ref(false)
       return { args, open }
@@ -189,8 +190,8 @@ export const WithFooter: Story = {
         <UiModal v-bind="args" v-model:open="open">
           <p style="margin: 0;">변경사항이 즉시 반영됩니다.</p>
           <template #footer>
-            <button type="button" @click="open = false" style="padding: 6px 14px;">취소</button>
-            <button type="button" @click="open = false" style="padding: 6px 14px; background: var(--color-primary); color: #fff; border: 0; border-radius: 6px;">저장</button>
+            <UiButton variant="secondary" @click="open = false">취소</UiButton>
+            <UiButton variant="primary" @click="open = false">저장</UiButton>
           </template>
         </UiModal>
       </div>
