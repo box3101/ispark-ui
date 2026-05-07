@@ -167,22 +167,27 @@ const contentStyle = computed(() => {
   max-height: calc(100vh - 40px);
   overflow-y: auto;
 
-  &.is-fullscreen {
+  &[data-state='open'] {
+    animation: ui-modal-content-in 200ms ease-out forwards;
+  }
+  &[data-state='closed'] {
+    animation: ui-modal-content-out 150ms ease-in forwards;
+  }
+
+  // fullscreen은 animation 이후 와서 transform 등을 짓밟음
+  // (animation forwards가 마지막 keyframe 값을 강제해서 specificity와 별개로 덮음)
+  &.is-fullscreen,
+  &.is-fullscreen[data-state='open'],
+  &.is-fullscreen[data-state='closed'] {
     max-width: 100vw !important;
     max-height: 100vh !important;
     width: 100vw;
     height: 100vh;
     top: 0;
     left: 0;
-    transform: none;
+    transform: none !important;
     border-radius: 0;
-  }
-
-  &[data-state='open'] {
-    animation: ui-modal-content-in 200ms ease-out forwards;
-  }
-  &[data-state='closed'] {
-    animation: ui-modal-content-out 150ms ease-in forwards;
+    animation: none !important;
   }
 }
 
