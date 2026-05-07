@@ -81,7 +81,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useId } from 'vue'
+import { computed, useId, watchEffect } from 'vue'
 import {
   SelectContent,
   SelectIcon,
@@ -175,6 +175,40 @@ const onUpdate = (val: string) => {
   emit('update:modelValue', v)
   emit('change', v)
 }
+
+// dev 환경 검증
+if (import.meta.env.DEV) {
+  watchEffect(() => {
+    if (props.options.length === 0) {
+      // eslint-disable-next-line no-console
+      console.warn('[UiSelect] options 배열이 비어 있습니다.')
+    }
+    if (props.required && !props.label && !props.labelHidden) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        '[UiSelect] required=true인데 label이 없습니다. 스크린리더가 필수 항목임을 인지할 수 없습니다. label prop 또는 labelHidden을 사용하세요.',
+      )
+    }
+    const seen = new Set<string>()
+    for (const opt of props.options) {
+      const k = String(opt.value)
+      if (seen.has(k)) {
+        // eslint-disable-next-line no-console
+        console.warn(`[UiSelect] 중복된 option.value 발견: "${k}"`)
+      }
+      seen.add(k)
+    }
+  })
+}
+
+// 외부에서 focus 호출 가능하도록 trigger DOM 직접 접근 helper
+// (radix-vue Trigger는 ref 노출이 까다로워서 id로 querySelector)
+defineExpose({
+  focus: () => {
+    const el = document.getElementById(resolvedId.value)
+    el?.focus()
+  },
+})
 </script>
 
 <style lang="scss" scoped>

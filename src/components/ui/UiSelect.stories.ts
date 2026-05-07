@@ -148,3 +148,44 @@ export const Shapes: Story = {
     `,
   }),
 }
+
+export const Disabled: Story = {
+  args: {
+    options: sampleOptions,
+    placeholder: '비활성',
+    disabled: true,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('combobox')
+    await expect(trigger.hasAttribute('disabled') || trigger.getAttribute('aria-disabled') === 'true').toBe(true)
+  },
+}
+
+export const DisabledOption: Story = {
+  args: {
+    options: [
+      { label: '활성', value: 'on' },
+      { label: '비활성', value: 'off', disabled: true },
+    ],
+    placeholder: '선택',
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('combobox')
+    await userEvent.click(trigger)
+    const disabledOpt = await screen.findByRole('option', { name: '비활성' })
+    // radix-vue가 [data-disabled] 속성 부여
+    await expect(disabledOpt.hasAttribute('data-disabled')).toBe(true)
+  },
+}
+
+export const LongList: Story = {
+  args: {
+    options: Array.from({ length: 30 }, (_, i) => ({
+      label: `옵션 ${i + 1}`,
+      value: `opt-${i + 1}`,
+    })),
+    placeholder: '30개 중 선택',
+  },
+}
