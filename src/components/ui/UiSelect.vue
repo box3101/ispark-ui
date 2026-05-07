@@ -6,7 +6,7 @@
       @update:model-value="onUpdate"
     >
       <SelectTrigger class="ui-select-trigger" :class="[`size-${size}`, `shape-${shape}`]">
-        <SelectValue :placeholder="placeholder || '선택'" class="ui-select-value" />
+        <SelectValue :placeholder="placeholder" class="ui-select-value" />
         <SelectIcon class="ui-select-icon">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -65,7 +65,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
-  placeholder: '',
+  placeholder: '선택',
   disabled: false,
   size: 'md',
   shape: 'rounded',
@@ -115,10 +115,17 @@ const onUpdate = (val: string) => {
   gap: 4px;
   background-color: #fff;
   border: 1px solid var(--color-border);
-  border-radius: $shape-rounded;
   color: var(--color-text-primary);
   cursor: pointer;
   outline: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  &.shape-rounded { border-radius: $shape-rounded; }
+  &.shape-pill    { border-radius: $shape-pill; }
 
   &[data-placeholder] {
     color: #aebccb;
@@ -146,7 +153,7 @@ const onUpdate = (val: string) => {
   border: 1px solid var(--color-border);
   border-radius: $shape-rounded;
   box-shadow: $shadow-md;
-  z-index: $z-modal;
+  z-index: $z-dropdown;
 }
 
 .ui-select-item {
