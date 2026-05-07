@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import { fn } from '@storybook/test'
+import { expect, fn, screen, userEvent, within } from '@storybook/test'
 import { ref } from 'vue'
 import UiModal from './UiModal.vue'
 
@@ -47,4 +47,17 @@ export const Default: Story = {
       </div>
     `,
   }),
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: '모달 열기' })
+    await userEvent.click(trigger)
+    // Portal 이라 screen 사용 — DialogContent에 role=dialog
+    const dialog = await screen.findByRole('dialog')
+    await expect(dialog).toBeTruthy()
+    await expect(args['onUpdate:open']).toHaveBeenCalledWith(true)
+    // ESC 키로 닫기
+    await userEvent.keyboard('{Escape}')
+    await expect(args['onUpdate:open']).toHaveBeenCalledWith(false)
+    await expect(args.onClose).toHaveBeenCalled()
+  },
 }
