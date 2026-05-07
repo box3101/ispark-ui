@@ -3,6 +3,8 @@
     <DialogPortal>
       <DialogOverlay class="ui-modal-overlay" />
       <DialogContent class="ui-modal-content" :class="[`size-${size}`]">
+        <!-- T3에서 title prop으로 교체 — 현재는 radix-vue a11y 경고 회피용 sr-only -->
+        <DialogTitle class="ui-modal-sr-only">모달</DialogTitle>
         <slot />
       </DialogContent>
     </DialogPortal>
@@ -10,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { DialogRoot, DialogPortal, DialogOverlay, DialogContent } from 'radix-vue'
+import { DialogRoot, DialogPortal, DialogOverlay, DialogContent, DialogTitle } from 'radix-vue'
 
 interface Props {
   open?: boolean
@@ -43,10 +45,10 @@ const onUpdateOpen = (value: boolean) => {
 
   // radix-vue 애니메이션 hook
   &[data-state='open'] {
-    animation: ui-modal-overlay-in 150ms ease-out;
+    animation: ui-modal-overlay-in 150ms ease-out forwards;
   }
   &[data-state='closed'] {
-    animation: ui-modal-overlay-out 100ms ease-in;
+    animation: ui-modal-overlay-out 100ms ease-in forwards;
   }
 }
 
@@ -59,7 +61,7 @@ const onUpdateOpen = (value: boolean) => {
   background: #fff;
   border-radius: $shape-rounded;
   box-shadow: $shadow-md;
-  z-index: $z-modal;
+  z-index: $z-modal + 1;
 
   // 반응형 max-width — viewport 안전 여백 보장
   &.size-sm { max-width: min(400px, calc(100vw - 40px)); }
@@ -71,10 +73,10 @@ const onUpdateOpen = (value: boolean) => {
   overflow-y: auto;
 
   &[data-state='open'] {
-    animation: ui-modal-content-in 200ms ease-out;
+    animation: ui-modal-content-in 200ms ease-out forwards;
   }
   &[data-state='closed'] {
-    animation: ui-modal-content-out 150ms ease-in;
+    animation: ui-modal-content-out 150ms ease-in forwards;
   }
 }
 
@@ -93,5 +95,17 @@ const onUpdateOpen = (value: boolean) => {
 @keyframes ui-modal-content-out {
   from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   to   { opacity: 0; transform: translate(-50%, -48%) scale(0.96); }
+}
+
+.ui-modal-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 </style>
