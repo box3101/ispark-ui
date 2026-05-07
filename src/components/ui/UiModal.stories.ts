@@ -21,6 +21,14 @@ const meta = {
       control: 'boolean',
       description: '우상단 X 버튼 표시 (default true)',
     },
+    maxWidth: {
+      control: 'text',
+      description: '예: "720px" — size 토큰 max-width override',
+    },
+    customClass: {
+      control: 'text',
+      description: '추가 클래스명',
+    },
   },
 } satisfies Meta<typeof UiModal>
 
@@ -43,7 +51,7 @@ export const Default: Story = {
           모달 열기
         </button>
         <UiModal v-bind="args" v-model:open="open">
-          <div style="padding: 24px;">
+          <div>
             <h2 style="margin: 0 0 12px;">Default Modal</h2>
             <p>radix-vue Dialog 기반 빈 골격. ESC / overlay 클릭으로 닫힘 (radix 기본).</p>
           </div>
@@ -83,9 +91,7 @@ export const WithTitle: Story = {
           모달 열기
         </button>
         <UiModal v-bind="args" v-model:open="open">
-          <div style="padding: 20px 24px;">
-            <p>title prop과 X 닫기 버튼이 헤더에 자동 배치.</p>
-          </div>
+          <p>title prop과 X 닫기 버튼이 헤더에 자동 배치.</p>
         </UiModal>
       </div>
     `,
@@ -116,10 +122,8 @@ export const Sizes: Story = {
         <button type="button" @click="openSize('lg')" style="padding: 6px 12px;">lg 800</button>
         <button type="button" @click="openSize('xl')" style="padding: 6px 12px;">xl 1080</button>
         <UiModal v-model:open="open" :size="size" :title="\`size = \${size}\`">
-          <div style="padding: 20px 24px;">
-            <p>현재 사이즈: <strong>{{ size }}</strong></p>
-            <p>모바일에서 max-width: calc(100vw - 40px) 로 자동 축소.</p>
-          </div>
+          <p>현재 사이즈: <strong>{{ size }}</strong></p>
+          <p>모바일에서 max-width: calc(100vw - 40px) 로 자동 축소.</p>
         </UiModal>
       </div>
     `,
@@ -143,9 +147,99 @@ export const NoCloseButton: Story = {
           모달 열기
         </button>
         <UiModal v-bind="args" v-model:open="open">
-          <div style="padding: 20px 24px;">
-            <p>showClose=false. ESC 또는 overlay 클릭으로만 닫힘.</p>
-          </div>
+          <p>showClose=false. ESC 또는 overlay 클릭으로만 닫힘.</p>
+        </UiModal>
+      </div>
+    `,
+  }),
+}
+
+export const WithFooter: Story = {
+  args: {
+    title: '저장하시겠습니까?',
+    size: 'sm',
+  },
+  render: (args) => ({
+    components: { UiModal },
+    setup: () => {
+      const open = ref(false)
+      return { args, open }
+    },
+    template: `
+      <div>
+        <button type="button" @click="open = true" style="padding: 8px 16px; cursor: pointer;">
+          확인 모달 열기
+        </button>
+        <UiModal v-bind="args" v-model:open="open">
+          <p style="margin: 0;">변경사항이 즉시 반영됩니다.</p>
+          <template #footer>
+            <button type="button" @click="open = false" style="padding: 6px 14px;">취소</button>
+            <button type="button" @click="open = false" style="padding: 6px 14px; background: var(--color-primary); color: #fff; border: 0; border-radius: 6px;">저장</button>
+          </template>
+        </UiModal>
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole('button', { name: '확인 모달 열기' }))
+    await screen.findByRole('dialog')
+    // footer의 저장 버튼 존재 확인
+    await expect(screen.getByRole('button', { name: '저장' })).toBeTruthy()
+    await expect(screen.getByRole('button', { name: '취소' })).toBeTruthy()
+  },
+}
+
+export const CustomMaxWidth: Story = {
+  args: {
+    title: '커스텀 max-width = 720px',
+    maxWidth: '720px',
+  },
+  render: (args) => ({
+    components: { UiModal },
+    setup: () => {
+      const open = ref(false)
+      return { args, open }
+    },
+    template: `
+      <div>
+        <button type="button" @click="open = true" style="padding: 8px 16px; cursor: pointer;">
+          모달 열기
+        </button>
+        <UiModal v-bind="args" v-model:open="open">
+          <p>maxWidth='720px' prop이 size 토큰을 override.</p>
+        </UiModal>
+      </div>
+    `,
+  }),
+}
+
+export const CustomHeaderSlot: Story = {
+  args: {
+    size: 'md',
+  },
+  render: (args) => ({
+    components: { UiModal },
+    setup: () => {
+      const open = ref(false)
+      return { args, open }
+    },
+    template: `
+      <div>
+        <button type="button" @click="open = true" style="padding: 8px 16px; cursor: pointer;">
+          모달 열기
+        </button>
+        <UiModal v-bind="args" v-model:open="open">
+          <template #header>
+            <div style="display: flex; align-items: center; gap: 12px; padding: 16px 24px; border-bottom: 1px solid #eee;">
+              <div style="width: 32px; height: 32px; border-radius: 50%; background: #6366f1;"></div>
+              <div style="flex: 1;">
+                <div style="font-weight: 600;">커스텀 헤더</div>
+                <div style="font-size: 12px; color: #888;">아바타 + 이름 형태</div>
+              </div>
+            </div>
+          </template>
+          <p style="margin: 0;">header slot 사용 시 title/showClose 자동 헤더 비활성.</p>
         </UiModal>
       </div>
     `,

@@ -2,28 +2,42 @@
   <DialogRoot :open="open" @update:open="onUpdateOpen">
     <DialogPortal>
       <DialogOverlay class="ui-modal-overlay" />
-      <DialogContent class="ui-modal-content" :class="[`size-${size}`]">
-        <header v-if="title || showClose" class="ui-modal-header">
-          <DialogTitle v-if="title" class="ui-modal-title">{{ title }}</DialogTitle>
-          <DialogTitle v-else class="ui-modal-sr-only">모달</DialogTitle>
-          <DialogClose
-            v-if="showClose"
-            class="ui-modal-close"
-            aria-label="닫기"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-            </svg>
-          </DialogClose>
+      <DialogContent
+        class="ui-modal-content"
+        :class="[`size-${size}`, customClass]"
+        :style="contentStyle"
+      >
+        <header v-if="$slots.header || title || showClose" class="ui-modal-header">
+          <slot name="header">
+            <DialogTitle v-if="title" class="ui-modal-title">{{ title }}</DialogTitle>
+            <DialogTitle v-else class="ui-modal-sr-only">모달</DialogTitle>
+            <DialogClose
+              v-if="showClose"
+              class="ui-modal-close"
+              aria-label="닫기"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </DialogClose>
+          </slot>
         </header>
-        <DialogTitle v-if="!title && !showClose" class="ui-modal-sr-only">모달</DialogTitle>
-        <slot />
+        <DialogTitle v-if="!$slots.header && !title && !showClose" class="ui-modal-sr-only">모달</DialogTitle>
+
+        <div class="ui-modal-body">
+          <slot />
+        </div>
+
+        <footer v-if="$slots.footer" class="ui-modal-footer">
+          <slot name="footer" />
+        </footer>
       </DialogContent>
     </DialogPortal>
   </DialogRoot>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { DialogClose, DialogContent, DialogOverlay, DialogPortal, DialogRoot, DialogTitle } from 'radix-vue'
 
 interface Props {
@@ -31,6 +45,8 @@ interface Props {
   title?: string
   size?: 'sm' | 'md' | 'lg' | 'xl'
   showClose?: boolean
+  customClass?: string
+  maxWidth?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -38,6 +54,8 @@ const props = withDefaults(defineProps<Props>(), {
   title: '',
   size: 'md',
   showClose: true,
+  customClass: '',
+  maxWidth: '',
 })
 
 const emit = defineEmits<{
@@ -49,6 +67,12 @@ const onUpdateOpen = (value: boolean) => {
   emit('update:open', value)
   if (!value) emit('close')
 }
+
+// maxWidth 명시 시 size 토큰 max-width override
+const contentStyle = computed(() => {
+  if (!props.maxWidth) return {}
+  return { maxWidth: props.maxWidth }
+})
 </script>
 
 <style lang="scss">
@@ -103,6 +127,19 @@ const onUpdateOpen = (value: boolean) => {
   gap: $spacing-md;
   padding: $spacing-md $spacing-lg;
   border-bottom: 1px solid var(--color-border);
+}
+
+.ui-modal-body {
+  padding: $spacing-lg;
+  // header/footer가 sticky가 아니라 단순 영역. 본문 길면 .ui-modal-content가 스크롤
+}
+
+.ui-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-sm;
+  padding: $spacing-md $spacing-lg;
+  border-top: 1px solid var(--color-border);
 }
 
 .ui-modal-title {
