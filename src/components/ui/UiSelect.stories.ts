@@ -83,6 +83,11 @@ export const Error: Story = {
     // border 색상은 시각 확인이지만 클래스 적용은 검증 가능
     await expect(trigger.className).toContain('is-error')
     await expect(trigger.getAttribute('aria-invalid')).toBe('true')
+    // errorMessage 없으면 aria-describedby 없어야 함 (radix-vue 자동 부여 외)
+    // radix-vue가 listbox 연결로 aria-describedby를 자체 부여할 수 있음 → 우리 errorId가 포함되지 않는지 검증
+    const ariaDesc = trigger.getAttribute('aria-describedby') || ''
+    await expect(ariaDesc.includes('-error')).toBe(false)
+    await expect(ariaDesc.includes('-desc')).toBe(false)
   },
 }
 

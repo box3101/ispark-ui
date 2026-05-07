@@ -117,6 +117,9 @@ interface Props {
   shape?: 'rounded' | 'pill'
   // === 에러/설명 ===
   error?: boolean
+  /**
+   * 에러 메시지 — 비어있지 않으면 `error: true` 자동 + 빨간 텍스트로 표시.
+   */
   errorMessage?: string
   desc?: string
 }
@@ -209,14 +212,14 @@ const onUpdate = (val: string) => {
 
 .ui-select-desc {
   margin-top: 4px;
-  font-size: 13px;
+  @include typo($body-small);
   color: var(--color-text-secondary);
   line-height: 1.5;
 }
 
 .ui-select-error {
   margin-top: 4px;
-  font-size: 13px;
+  @include typo($body-small);
   color: var(--color-danger);
   line-height: 1.5;
   font-weight: 500;
@@ -248,7 +251,7 @@ const onUpdate = (val: string) => {
     color: #aebccb;
   }
 
-  &.is-error {
+  &.is-error:not(.is-disabled) {
     border-color: var(--color-danger);
 
     &[data-state='open'] {
