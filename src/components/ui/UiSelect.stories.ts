@@ -170,7 +170,7 @@ export const DisabledOption: Story = {
     ],
     placeholder: '선택',
   },
-  play: async ({ canvasElement, args }) => {
+  play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const trigger = canvas.getByRole('combobox')
     await userEvent.click(trigger)
