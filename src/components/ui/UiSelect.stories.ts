@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import { expect, fn, screen, userEvent, within } from '@storybook/test'
+import { ref } from 'vue'
 import UiSelect from './UiSelect.vue'
 
 const meta = {
@@ -26,6 +27,14 @@ export const Default: Story = {
     options: sampleOptions,
     placeholder: '선택해주세요',
   },
+  render: (args) => ({
+    components: { UiSelect },
+    setup: () => {
+      const value = ref('')
+      return { args, value }
+    },
+    template: '<UiSelect v-bind="args" v-model="value" />',
+  }),
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     // radix-vue Trigger는 role=combobox
@@ -45,6 +54,14 @@ export const WithLabel: Story = {
     label: '카테고리',
     placeholder: '카테고리 선택',
   },
+  render: (args) => ({
+    components: { UiSelect },
+    setup: () => {
+      const value = ref('')
+      return { args, value }
+    },
+    template: '<UiSelect v-bind="args" v-model="value" />',
+  }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const label = canvas.getByText('카테고리')
@@ -60,6 +77,14 @@ export const Required: Story = {
     label: '필수 항목',
     required: true,
   },
+  render: (args) => ({
+    components: { UiSelect },
+    setup: () => {
+      const value = ref('')
+      return { args, value }
+    },
+    template: '<UiSelect v-bind="args" v-model="value" />',
+  }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     // label은 "필수 항목" 텍스트 + 별도 <span>에 *. label 전체를 textContent로 검증
@@ -77,6 +102,14 @@ export const Error: Story = {
     error: true,
     placeholder: '선택해주세요',
   },
+  render: (args) => ({
+    components: { UiSelect },
+    setup: () => {
+      const value = ref('')
+      return { args, value }
+    },
+    template: '<UiSelect v-bind="args" v-model="value" />',
+  }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const trigger = canvas.getByRole('combobox')
@@ -97,6 +130,14 @@ export const ErrorMessage: Story = {
     label: '카테고리',
     errorMessage: '필수 입력입니다',
   },
+  render: (args) => ({
+    components: { UiSelect },
+    setup: () => {
+      const value = ref('')
+      return { args, value }
+    },
+    template: '<UiSelect v-bind="args" v-model="value" />',
+  }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const errorEl = canvas.getByRole('alert')
@@ -113,6 +154,14 @@ export const Desc: Story = {
     label: '카테고리',
     desc: '하나만 선택할 수 있습니다',
   },
+  render: (args) => ({
+    components: { UiSelect },
+    setup: () => {
+      const value = ref('')
+      return { args, value }
+    },
+    template: '<UiSelect v-bind="args" v-model="value" />',
+  }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const descEl = canvas.getByText('하나만 선택할 수 있습니다')
@@ -124,13 +173,19 @@ export const Desc: Story = {
 export const Sizes: Story = {
   render: (args) => ({
     components: { UiSelect },
-    setup: () => ({ args, sampleOptions }),
+    setup: () => {
+      const vSm = ref('')
+      const vMd = ref('')
+      const vLg = ref('')
+      const vAuth = ref('')
+      return { args, sampleOptions, vSm, vMd, vLg, vAuth }
+    },
     template: `
       <div style="display: flex; flex-direction: column; gap: 12px; width: 240px;">
-        <UiSelect v-bind="args" :options="sampleOptions" size="sm" placeholder="sm 28px" />
-        <UiSelect v-bind="args" :options="sampleOptions" size="md" placeholder="md 32px" />
-        <UiSelect v-bind="args" :options="sampleOptions" size="lg" placeholder="lg 40px" />
-        <UiSelect v-bind="args" :options="sampleOptions" size="auth" placeholder="auth 44px" />
+        <UiSelect v-bind="args" v-model="vSm" :options="sampleOptions" size="sm" placeholder="sm 28px" />
+        <UiSelect v-bind="args" v-model="vMd" :options="sampleOptions" size="md" placeholder="md 32px" />
+        <UiSelect v-bind="args" v-model="vLg" :options="sampleOptions" size="lg" placeholder="lg 40px" />
+        <UiSelect v-bind="args" v-model="vAuth" :options="sampleOptions" size="auth" placeholder="auth 44px" />
       </div>
     `,
   }),
@@ -139,11 +194,15 @@ export const Sizes: Story = {
 export const Shapes: Story = {
   render: (args) => ({
     components: { UiSelect },
-    setup: () => ({ args, sampleOptions }),
+    setup: () => {
+      const vRounded = ref('')
+      const vPill = ref('')
+      return { args, sampleOptions, vRounded, vPill }
+    },
     template: `
       <div style="display: flex; flex-direction: column; gap: 12px; width: 240px;">
-        <UiSelect v-bind="args" :options="sampleOptions" shape="rounded" placeholder="rounded" />
-        <UiSelect v-bind="args" :options="sampleOptions" shape="pill" placeholder="pill" />
+        <UiSelect v-bind="args" v-model="vRounded" :options="sampleOptions" shape="rounded" placeholder="rounded" />
+        <UiSelect v-bind="args" v-model="vPill" :options="sampleOptions" shape="pill" placeholder="pill" />
       </div>
     `,
   }),
@@ -155,6 +214,14 @@ export const Disabled: Story = {
     placeholder: '비활성',
     disabled: true,
   },
+  render: (args) => ({
+    components: { UiSelect },
+    setup: () => {
+      const value = ref('')
+      return { args, value }
+    },
+    template: '<UiSelect v-bind="args" v-model="value" />',
+  }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const trigger = canvas.getByRole('combobox')
@@ -170,6 +237,14 @@ export const DisabledOption: Story = {
     ],
     placeholder: '선택',
   },
+  render: (args) => ({
+    components: { UiSelect },
+    setup: () => {
+      const value = ref('')
+      return { args, value }
+    },
+    template: '<UiSelect v-bind="args" v-model="value" />',
+  }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const trigger = canvas.getByRole('combobox')
@@ -188,4 +263,12 @@ export const LongList: Story = {
     })),
     placeholder: '30개 중 선택',
   },
+  render: (args) => ({
+    components: { UiSelect },
+    setup: () => {
+      const value = ref('')
+      return { args, value }
+    },
+    template: '<UiSelect v-bind="args" v-model="value" />',
+  }),
 }
