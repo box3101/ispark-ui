@@ -180,6 +180,15 @@ const onUpdate = (val: string) => {
 <style lang="scss" scoped>
 @use 'sass:map';
 
+// 데스크탑(마우스) 환경에서만 hover — 모바일 hover stuck 방어
+@mixin desktop-hover {
+  @media (hover: hover) {
+    &:hover:not(.is-disabled) {
+      @content;
+    }
+  }
+}
+
 .ui-select-outer {
   flex: 1;
   min-width: 0;
@@ -244,13 +253,19 @@ const onUpdate = (val: string) => {
     color: #aebccb;
   }
 
-  &:hover:not(.is-disabled) {
+  @include desktop-hover {
     border-color: var(--color-primary);
   }
 
   &:focus,
   &[data-state='open'] {
     border-color: var(--color-primary);
+  }
+
+  &[data-state='open'] {
+    .ui-select-icon {
+      transform: rotate(180deg);
+    }
   }
 
   &:focus-visible {
@@ -300,10 +315,6 @@ const onUpdate = (val: string) => {
   flex-shrink: 0;
   color: var(--color-text-secondary);
   transition: transform $transition-base;
-
-  [data-state='open'] & {
-    transform: rotate(180deg);
-  }
 }
 </style>
 
