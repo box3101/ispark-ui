@@ -25,8 +25,17 @@
       <SelectTrigger
         :id="resolvedId"
         class="ui-select-trigger"
-        :class="[`size-${size}`, `shape-${shape}`, { 'is-disabled': disabled }]"
+        :class="[
+          `size-${size}`,
+          `shape-${shape}`,
+          {
+            'is-disabled': disabled,
+            'is-error': isError,
+          },
+        ]"
         :aria-required="required || undefined"
+        :aria-invalid="isError ? 'true' : undefined"
+        :aria-describedby="ariaDescribedby"
       >
         <SelectValue :placeholder="placeholder" class="ui-select-value" />
         <SelectIcon class="ui-select-icon">
@@ -52,6 +61,22 @@
         </SelectContent>
       </SelectPortal>
     </SelectRoot>
+
+    <p
+      v-if="errorMessage"
+      :id="errorId"
+      class="ui-select-error"
+      role="alert"
+    >
+      {{ errorMessage }}
+    </p>
+    <p
+      v-else-if="desc"
+      :id="descId"
+      class="ui-select-desc"
+    >
+      {{ desc }}
+    </p>
   </div>
 </template>
 
@@ -90,6 +115,10 @@ interface Props {
   disabled?: boolean
   size?: InputSize
   shape?: 'rounded' | 'pill'
+  // === 에러/설명 ===
+  error?: boolean
+  errorMessage?: string
+  desc?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -102,6 +131,9 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   size: 'md',
   shape: 'rounded',
+  error: false,
+  errorMessage: '',
+  desc: '',
 })
 
 const emit = defineEmits<{
@@ -112,6 +144,12 @@ const emit = defineEmits<{
 // id 자동 생성 (Vue 3.5+ useId — SSR 안전)
 const uid = useId()
 const resolvedId = computed(() => props.id || `ui-select-${uid}`)
+
+const descId = computed(() => (props.desc ? `${resolvedId.value}-desc` : undefined))
+const errorId = computed(() => (props.errorMessage ? `${resolvedId.value}-error` : undefined))
+
+const isError = computed(() => props.error || !!props.errorMessage)
+const ariaDescribedby = computed(() => errorId.value || descId.value)
 
 const EMPTY_VALUE_TOKEN = '__ui_select_empty__'
 
@@ -169,6 +207,21 @@ const onUpdate = (val: string) => {
   font-weight: 600;
 }
 
+.ui-select-desc {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.ui-select-error {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--color-danger);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
 .ui-select-trigger {
   display: inline-flex;
   align-items: center;
@@ -193,6 +246,14 @@ const onUpdate = (val: string) => {
 
   &[data-placeholder] {
     color: #aebccb;
+  }
+
+  &.is-error {
+    border-color: var(--color-danger);
+
+    &[data-state='open'] {
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+    }
   }
 }
 

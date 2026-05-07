@@ -69,3 +69,49 @@ export const Required: Story = {
     await expect(trigger.getAttribute('aria-required')).toBe('true')
   },
 }
+
+export const Error: Story = {
+  args: {
+    options: sampleOptions,
+    label: '카테고리',
+    error: true,
+    placeholder: '선택해주세요',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('combobox')
+    // border 색상은 시각 확인이지만 클래스 적용은 검증 가능
+    await expect(trigger.className).toContain('is-error')
+    await expect(trigger.getAttribute('aria-invalid')).toBe('true')
+  },
+}
+
+export const ErrorMessage: Story = {
+  args: {
+    options: sampleOptions,
+    label: '카테고리',
+    errorMessage: '필수 입력입니다',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const errorEl = canvas.getByRole('alert')
+    await expect(errorEl.textContent).toContain('필수 입력입니다')
+    const trigger = canvas.getByRole('combobox')
+    await expect(trigger.getAttribute('aria-invalid')).toBe('true')
+    await expect(trigger.getAttribute('aria-describedby')).toBe(errorEl.getAttribute('id'))
+  },
+}
+
+export const Desc: Story = {
+  args: {
+    options: sampleOptions,
+    label: '카테고리',
+    desc: '하나만 선택할 수 있습니다',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const descEl = canvas.getByText('하나만 선택할 수 있습니다')
+    const trigger = canvas.getByRole('combobox')
+    await expect(trigger.getAttribute('aria-describedby')).toBe(descEl.getAttribute('id'))
+  },
+}
