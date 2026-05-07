@@ -2,6 +2,33 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.5.0] - 2026-05-07
+
+### Added — UiModal 신규 컴포넌트
+- **`UiModal`** — radix-vue Dialog 기반 center 모달 폼 필드. 31회 사용처 핵심 Tier.
+  - **a11y 자동**: radix-vue가 포커스 트랩 / ESC / role=dialog / aria-labelledby 처리.
+  - **size 토큰**: sm(400) / md(560·기본) / lg(800) / xl(1080) — `min(px, calc(100vw - 40px))` 반응형 자동 축소 (별도 미디어쿼리 없음).
+  - **3-슬롯 구조**: `header` (title prop fallback) / default(body) / `footer`. header slot 명시 시 default header 자동 비활성.
+  - **`title`** prop — DialogTitle 자동 연결.
+  - **`showClose`** (default true) — 우상단 X 버튼.
+  - **`showOverlay`** (default true) — 어두운 배경.
+  - **`closeOnOverlayClick`** / **`closeOnEscape`** (default true) — radix-vue 이벤트 preventDefault로 차단.
+  - **`showFullscreen`** (default false) — 헤더에 expand/collapse 토글 버튼. fullscreen 시 size 토큰 무시 + viewport 100% + border-radius 0. 닫힐 때 자동 reset.
+  - **`customClass`** / **`maxWidth`** — 추가 클래스 / size 토큰 override.
+  - 본문 길 때 `max-height: calc(100vh - 40px)` + `overflow-y: auto` (모달 내부 스크롤).
+  - overlay/content fade+scale 애니메이션 (`animation-fill-mode: forwards` 적용 — 닫힘 깜빡임 없음).
+
+### Storybook
+- 10 시나리오 — `Default` / `WithTitle` / `Sizes` (sm/md/lg/xl 시각 비교) / `NoCloseButton` / `WithFooter` (저장/취소 액션) / `CustomMaxWidth` (720px override) / `CustomHeaderSlot` (아바타+이름) / `NoOverlay` / `StrictNoEscape` (ESC/overlay 무시) / `Fullscreen` (토글 검증).
+
+### Tests
+- 자동 테스트 60 → 64 (UiModal 4개, 1개 it.skip — closeOnEscape는 jsdom radix-vue 한계로 Storybook play 검증).
+
+### 마이그레이션 (v0.4.x → v0.5.0)
+- breaking 없음.
+- `radix-vue` peerDependency는 v0.4.0(UiSelect)에서 이미 추가됨 — 추가 설치 불필요.
+- 원본 `team_agent_front`의 `position='right'` 사이드 모달은 미포함 — 추후 `UiDrawer` 별도 컴포넌트로.
+
 ## [0.4.0] - 2026-05-07
 
 ### Added — UiSelect 신규 컴포넌트
