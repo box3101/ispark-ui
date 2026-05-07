@@ -100,7 +100,7 @@ grep -r --include="*.vue" -l "<UiName\b" . | grep -v "^./ui/" | wc -l
 
 | Tier | 컴포넌트 (사용 횟수) | 상태 |
 |---|---|---|
-| 🔴 핵심 (10+) | **UiButton (71)**, **UiInput (46)**, UiSelect (32), UiModal (31), UiTextarea (20), UiEmpty (19), UiToggle (15), UiLoading (13), UiCheckbox (13), UiBadge (10) | UiButton/UiInput ✅ 완료 · 8개 남음 |
+| 🔴 핵심 (10+) | **UiButton (71)**, **UiInput (46)**, **UiSelect (32)**, UiModal (31), UiTextarea (20), UiEmpty (19), UiToggle (15), UiLoading (13), UiCheckbox (13), UiBadge (10) | UiButton/UiInput/UiSelect ✅ 완료 · 7개 남음 |
 | 🟡 중간 (5~9) | UiTable (7) | 보류 |
 | ⚪ 적음 (1~4) | UiTooltip, UiTag, UiDropdownMenu, UiDatePicker, UiChart, UiPagination, UiDialogModal, UiCodeBlock, UiMultiSelect, UiTab, UiStatCard, UiSettingSection, UiFormField, UiFileUpload | 마이그레이션 안 함 |
 | ⚫ 미사용 (0) | UiToast, UiStatusBadge, UiDragTable, UiConfirmModal, TmplFormPanel, TmplListSections | 마이그레이션 안 함 |

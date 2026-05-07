@@ -2,6 +2,34 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.4.0] - 2026-05-07
+
+### Added — UiSelect 신규 컴포넌트
+- **`UiSelect`** — radix-vue 기반 단일 선택 드롭다운 폼 필드. 32회 사용처 핵심 Tier.
+  - 폼 필드 풀세트: `label` / `labelHidden` / `required` / `error` / `errorMessage` / `desc` (UiInput과 동일 인터페이스).
+  - **a11y 자동**: `aria-required` / `aria-invalid` / `aria-describedby` 자동 연결, errorMessage는 `role="alert"`. radix-vue가 키보드 내비게이션 / 포커스 트랩 / ESC 닫기 처리.
+  - **size 토큰**: `sm`(28px) / `md`(32px·기본) / `lg`(40px) / `auth`(44px) — UiInput과 동일 토큰 → 검색바·필터에서 자동 정렬.
+  - **shape 토큰**: `rounded`(기본 6px) / `pill`(완전 라운드).
+  - **option.disabled** 지원 — radix-vue Item에 그대로 전달, `[data-disabled]` CSS로 흐림 처리.
+  - **빈 문자열 value 처리** — radix-vue가 `value=""` 미허용 → 내부 `__ui_select_empty__` 토큰으로 round-trip.
+  - **dev 검증** (`import.meta.env.DEV`) — 빈 옵션 / `required + label` 누락 / 중복 `option.value` 시 콘솔 경고.
+  - **`focus()` 외부 메서드** — `defineExpose`로 노출.
+  - Trigger는 scoped, Portal Content는 global SCSS로 분리 (radix-vue Portal 특성).
+- **`SelectOption`** 타입 export — `{ label, value, disabled? }`.
+
+### Storybook
+- 11 시나리오 — `Default` (옵션 클릭 + change emit) / `WithLabel` / `Required` / `Error` / `ErrorMessage` (aria-invalid + describedby) / `Desc` (aria-describedby) / `Disabled` / `DisabledOption` (data-disabled) / `Sizes` (sm/md/lg/auth 정렬) / `Shapes` (rounded/pill) / `LongList` (30개 + 240px max-height 스크롤).
+
+### Tests
+- 자동 테스트 39 → 60개 (UiSelect 5개 추가, 1개 it.skip — emit round-trip은 jsdom Portal 한계로 Storybook play에서 검증).
+
+### Changed
+- `peerDependencies`에 `radix-vue ^1.9.0` 추가 — UiSelect 사용 시 사용자가 함께 설치 필요.
+
+### 마이그레이션 (v0.3.x → v0.4.0)
+- breaking 없음.
+- UiSelect 사용 프로젝트는 `npm i radix-vue` 추가 필요 (peerDependencies).
+
 ## [0.3.0] - 2026-05-06
 
 ### Added — UiInput a11y/UX 1순위 누락 보강
