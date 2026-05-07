@@ -9,8 +9,9 @@ const opts = [
 ]
 
 describe('UiSelect', () => {
-  // 1. v-model 양방향 — 외부 값 변경 시 trigger 표시 텍스트 동기화
-  it('외부 modelValue 변경 시 트리거 표시 텍스트 동기화', async () => {
+  // 1. modelValue prop 변경 → trigger 표시 동기화 (단방향: prop → display)
+  // 양방향 round-trip(emit → display)은 it.skip #4 / Storybook Default play로 검증
+  it('외부 modelValue prop 변경 시 트리거 텍스트 동기화', async () => {
     const Wrapper = defineComponent({
       setup() {
         const v = ref<string>('a')
@@ -29,7 +30,8 @@ describe('UiSelect', () => {
     expect(screen.getByRole('combobox').textContent).toContain('옵션 B')
   })
 
-  // 2. 빈 문자열 value — EMPTY_VALUE_TOKEN 변환 정상 동작
+  // 2. 빈 문자열 value — EMPTY_VALUE_TOKEN normalize 경로 (display side)
+  // denormalize(emit) 경로는 jsdom Portal 한계로 it.skip #4 / Storybook play 검증
   it('빈 문자열 value 옵션도 정상 선택/표시', async () => {
     render(UiSelect, {
       props: {
