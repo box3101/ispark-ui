@@ -103,7 +103,7 @@ export const CustomCell: Story = {
   render: (args) => ({
     components: { UiTable },
     setup: () => ({ args }),
-    // UiBadge 미존재 — 임시로 색상 입힌 span으로 대체
+    // UiBadge 미존재 — 임시 span. 라이트 틴트 + 짙은 텍스트로 테이블 톤에 맞춤
     template: `
       <UiTable v-bind="args">
         <template #cell-status="{ value }">
@@ -113,8 +113,8 @@ export const CustomCell: Story = {
             borderRadius: '999px',
             fontSize: '12px',
             fontWeight: 600,
-            color: '#fff',
-            background: value === '정상' ? '#22c55e' : '#ef4444',
+            color: value === '정상' ? '#15803d' : '#b91c1c',
+            background: value === '정상' ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)',
           }">{{ value }}</span>
         </template>
       </UiTable>
