@@ -190,3 +190,49 @@ export const SelectedRow: Story = {
     template: '<UiTable v-bind="args" />',
   }),
 }
+
+export const Sortable: Story = {
+  args: {
+    columns: [
+      { key: 'name', label: '이름', width: '200px', align: 'left', sortable: true, sortType: 'string' },
+      { key: 'score', label: '점수', align: 'right', sortable: true, sortType: 'number' },
+      { key: 'joined', label: '가입일', align: 'center', sortable: true, sortType: 'date' },
+    ],
+    data: [
+      { name: '김철수', score: '1,234', joined: '2025-03-15' },
+      { name: '이영희', score: '890', joined: '2024-11-20' },
+      { name: '박민수', score: '2,567', joined: '2025-07-01' },
+      { name: '최지원', score: '456', joined: '2024-08-10' },
+    ],
+  },
+  render: (args) => ({
+    components: { UiTable },
+    setup: () => ({ args }),
+    template: '<UiTable v-bind="args" />',
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // 점수 컬럼 헤더 버튼
+    const scoreBtn = canvas.getByRole('button', { name: /점수/ })
+    const sortMark = scoreBtn.querySelector('.ui-table-sort-mark')!
+
+    // 1차 클릭: asc — is-active 적용, is-desc 미적용
+    await userEvent.click(scoreBtn)
+    await expect(sortMark.classList.contains('is-active')).toBe(true)
+    await expect(sortMark.classList.contains('is-desc')).toBe(false)
+
+    // 정렬 결과 확인 — 첫 행이 가장 낮은 점수(456)
+    const firstRow = canvasElement.querySelector('tbody tr')!
+    await expect(firstRow.textContent).toContain('최지원')
+
+    // 2차 클릭: desc — is-desc 적용
+    await userEvent.click(scoreBtn)
+    await expect(sortMark.classList.contains('is-desc')).toBe(true)
+    const firstRowDesc = canvasElement.querySelector('tbody tr')!
+    await expect(firstRowDesc.textContent).toContain('박민수') // 2,567
+
+    // 3차 클릭: 해제 — is-active 미적용
+    await userEvent.click(scoreBtn)
+    await expect(sortMark.classList.contains('is-active')).toBe(false)
+  },
+}
