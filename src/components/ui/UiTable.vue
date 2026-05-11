@@ -287,8 +287,9 @@ const onRowClick = (row: Record<string, any>, index: number) => {
 
       // hover 배경은 clickable 행에만 — 단순 view 테이블은 hover 효과 없음.
       // row-click이 clickable=true일 때만 발생하는 것과 시맨틱 일치.
+      // selected 행(primary 0.08)과 같은 색조 0.04로 톤 일관성 확보.
       &.is-clickable:hover td {
-        background: $color-background;
+        background: rgba(var(--color-primary-rgb, 59, 130, 246), 0.04);
       }
 
       &.is-clickable {
