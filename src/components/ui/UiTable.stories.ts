@@ -75,22 +75,100 @@ interface TableColumn {
     },
   },
   argTypes: {
+    // ===== Data =====
+    columns: {
+      control: 'object',
+      description: '컬럼 정의 배열. `key`/`label` 필수, `width`/`align`/`headerAlign`/`sortable`/`sortType` 선택.',
+      table: {
+        category: 'Data',
+        type: { summary: 'TableColumn[]' },
+      },
+    },
+    data: {
+      control: 'object',
+      description: '행 데이터 배열. 각 행은 `columns[].key`를 키로 갖는 객체.',
+      table: {
+        category: 'Data',
+        type: { summary: 'Record<string, any>[]' },
+      },
+    },
+
+    // ===== Appearance =====
     size: {
       control: 'inline-radio',
       options: ['md', 'sm'],
-      description: 'md(기본 42px) / sm(28px 컴팩트)',
+      description: '`md`(기본 42px) / `sm`(28px 컴팩트).',
+      table: {
+        category: 'Appearance',
+        type: { summary: "'md' | 'sm'" },
+        defaultValue: { summary: "'md'" },
+      },
     },
     stickyHeader: {
       control: 'boolean',
-      description: 'maxHeight과 함께 사용',
+      description: '`maxHeight`과 함께 사용. 스크롤 중에도 헤더가 상단에 고정된다.',
+      table: {
+        category: 'Appearance',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
     },
     maxHeight: {
       control: 'text',
-      description: '예: "200px" — 초과 시 스크롤',
+      description: '예: `"200px"`. 초과 시 세로 스크롤 + 커스텀 스크롤바 적용.',
+      table: {
+        category: 'Appearance',
+        type: { summary: 'string' },
+      },
     },
+
+    // ===== Behavior =====
     clickable: {
       control: 'boolean',
-      description: '행 hover/cursor 스타일 (row-click 이벤트는 항상 발생)',
+      description: '행 hover 배경 + cursor pointer 적용. ⚠️ `row-click` 이벤트는 이 prop과 무관하게 **항상** emit된다.',
+      table: {
+        category: 'Behavior',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    emptyText: {
+      control: 'text',
+      description: '`data`가 빈 배열일 때 표시할 메시지. 빈 상태 UI 전체를 교체하려면 컴포넌트 바깥에서 `UiEmpty` 사용 권장.',
+      table: {
+        category: 'Behavior',
+        type: { summary: 'string' },
+        defaultValue: { summary: "'데이터가 없습니다.'" },
+      },
+    },
+
+    // ===== Selection =====
+    selectedRowKey: {
+      control: 'text',
+      description: '선택 행 강조용 키. `selectedRowValue`와 함께 지정 시 `row[selectedRowKey] === selectedRowValue` 행에 `is-selected` 클래스 + primary 색 배경.',
+      table: {
+        category: 'Selection',
+        type: { summary: 'string' },
+      },
+    },
+    selectedRowValue: {
+      control: 'text',
+      description: '선택 행 강조용 값. `selectedRowKey`와 짝으로 사용. 둘 중 하나만 지정하면 강조 효과 없음.',
+      table: {
+        category: 'Selection',
+        type: { summary: 'string' },
+      },
+    },
+
+    // ===== Events =====
+    onRowClick: {
+      name: 'row-click',
+      action: 'row-click',
+      description: '행 클릭 시 emit. payload: `(row: Record<string, any>, index: number)`. `clickable` prop 여부와 무관하게 항상 발생.',
+      table: {
+        category: 'Events',
+        type: { summary: '(row, index) => void' },
+      },
     },
   },
 } satisfies Meta<typeof UiTable>
