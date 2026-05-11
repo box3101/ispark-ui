@@ -85,3 +85,56 @@ export const StickyHeader: Story = {
     template: '<UiTable v-bind="args" />',
   }),
 }
+
+export const CustomCell: Story = {
+  args: {
+    columns: [
+      { key: 'service', label: '서비스명', width: '200px', align: 'left' },
+      { key: 'region', label: '지역', width: '120px' },
+      { key: 'count', label: '건수', align: 'right' },
+      { key: 'status', label: '상태', width: '120px' },
+    ],
+    data: [
+      { service: '케이블 인터넷', region: '서울', count: '1,234', status: '정상' },
+      { service: 'IPTV 서비스', region: '부산', count: '567', status: '점검' },
+      { service: '유선전화', region: '대구', count: '890', status: '정상' },
+    ],
+  },
+  render: (args) => ({
+    components: { UiTable },
+    setup: () => ({ args }),
+    // UiBadge 미존재 — 임시로 색상 입힌 span으로 대체
+    template: `
+      <UiTable v-bind="args">
+        <template #cell-status="{ value }">
+          <span :style="{
+            display: 'inline-block',
+            padding: '2px 10px',
+            borderRadius: '999px',
+            fontSize: '12px',
+            fontWeight: 600,
+            color: '#fff',
+            background: value === '정상' ? '#22c55e' : '#ef4444',
+          }">{{ value }}</span>
+        </template>
+      </UiTable>
+    `,
+  }),
+}
+
+export const Empty: Story = {
+  args: {
+    columns: baseColumns,
+    data: [],
+  },
+  render: (args) => ({
+    components: { UiTable },
+    setup: () => ({ args }),
+    template: '<UiTable v-bind="args" />',
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // 기본 emptyText 노출 검증
+    await expect(canvas.getByText('데이터가 없습니다.')).toBeTruthy()
+  },
+}
