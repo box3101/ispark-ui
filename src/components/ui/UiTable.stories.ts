@@ -10,6 +10,70 @@ const meta = {
   args: {
     onRowClick: fn(),
   },
+  parameters: {
+    docs: {
+      description: {
+        component: `
+## 핵심 props
+
+- **\`columns\`** \`TableColumn[]\` — 컬럼 정의 (key/label/width/align/headerAlign/sortable/sortType)
+- **\`data\`** \`Record<string, any>[]\` — 행 데이터 배열
+- **\`stickyHeader\`** \`boolean\` — \`maxHeight\`과 함께 사용해 헤더 고정
+- **\`maxHeight\`** \`string\` — 예: \`"200px"\`. 초과 시 세로 스크롤 + 커스텀 스크롤바
+- **\`emptyText\`** \`string\` — 빈 상태 메시지 (기본 \`'데이터가 없습니다.'\`)
+- **\`clickable\`** \`boolean\` — 행 hover 배경 + cursor pointer (\`row-click\` 이벤트는 항상 emit)
+- **\`size\`** \`'md'\`(기본 42px) | \`'sm'\`(28px 컴팩트)
+- **\`selectedRowKey\`** + **\`selectedRowValue\`** — 둘 다 지정 시 매칭 행에 primary 색 배경
+
+---
+
+## TableColumn 인터페이스
+
+\`\`\`ts
+interface TableColumn {
+  key: string                                          // 데이터 객체의 키
+  label: string                                        // 헤더 텍스트
+  width?: string                                       // '320px', '150px' 등 (미지정 시 auto)
+  align?: 'left' | 'center' | 'right'                  // 바디 셀 정렬 (기본 'center')
+  headerAlign?: 'left' | 'center' | 'right'            // 헤더 정렬 (기본 'center')
+  sortable?: boolean                                   // 헤더 클릭 정렬 사용 여부
+  sortType?: 'auto' | 'string' | 'number' | 'date'    // 정렬 비교 타입 (기본 'auto')
+}
+\`\`\`
+
+---
+
+## 슬롯 / 이벤트
+
+- **\`#header-{key}\`** — 헤더 셀 커스텀. 슬롯 props: \`{ column, isSortable, sortOrder, onSort }\`
+- **\`#cell-{key}\`** — 바디 셀 커스텀. 슬롯 props: \`{ row, value, index }\`
+- **\`@row-click\`** — \`(row, index)\` 페이로드. \`clickable\` 여부와 무관하게 항상 발생
+
+---
+
+## 정렬 동작
+
+\`sortable: true\` 컬럼 헤더 클릭 시: **asc → desc → 해제** 3단 토글.
+\`sortType\` 비교 방식:
+- \`'auto'\`(기본): 숫자 변환 → 날짜 변환 → 문자열(한국어 \`localeCompare\`) 순 폴백
+- \`'number'\`: 쉼표 제거 후 숫자 비교 (예: \`"44,865,368,290"\` → \`44865368290\`)
+- \`'date'\`: \`Date.parse\` ms
+- \`'string'\`: 한국어 \`localeCompare\`
+
+\`columns\`에서 정렬 중인 컬럼이 사라지면 sortState는 자동 리셋된다.
+
+---
+
+## 테스트 현황
+
+자동 테스트 3개(엣지 케이스) + Storybook play 함수 3개로 동작 보장.
+
+- **엣지** — 쉼표 포함 number 정렬, columns 변경 시 sortState 리셋, emptyText 커스텀
+- **play** — Empty(메시지), Clickable(row-click 호출), Sortable(asc/desc/해제)
+        `,
+      },
+    },
+  },
   argTypes: {
     size: {
       control: 'inline-radio',
