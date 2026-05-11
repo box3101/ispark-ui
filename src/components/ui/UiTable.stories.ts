@@ -282,20 +282,33 @@ export const CustomCell: Story = {
   },
   render: (args) => ({
     components: { UiTable },
-    setup: () => ({ args }),
-    // UiBadge 미존재 — 임시 span. 라이트 틴트 + 짙은 텍스트로 테이블 톤에 맞춤
+    setup: () => {
+      // 셀 클릭으로 상태 토글 — 슬롯 안에서도 인터랙션 가능함을 보여줌
+      const rows = ref(args.data.map((r) => ({ ...r })))
+      const toggleStatus = (idx: number) => {
+        rows.value[idx].status = rows.value[idx].status === '정상' ? '점검' : '정상'
+      }
+      return { args, rows, toggleStatus }
+    },
+    // UiBadge 미존재 — 임시 button. 라이트 틴트 + 짙은 텍스트 + 클릭 토글
     template: `
-      <UiTable v-bind="args">
-        <template #cell-status="{ value }">
-          <span :style="{
-            display: 'inline-block',
-            padding: '2px 10px',
-            borderRadius: '999px',
-            fontSize: '12px',
-            fontWeight: 600,
-            color: value === '정상' ? '#15803d' : '#b91c1c',
-            background: value === '정상' ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)',
-          }">{{ value }}</span>
+      <UiTable v-bind="args" :data="rows">
+        <template #cell-status="{ value, index }">
+          <button
+            type="button"
+            @click="toggleStatus(index)"
+            :style="{
+              display: 'inline-block',
+              padding: '2px 10px',
+              border: 0,
+              borderRadius: '999px',
+              fontSize: '12px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              color: value === '정상' ? '#15803d' : '#b91c1c',
+              background: value === '정상' ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+            }"
+          >{{ value }}</button>
         </template>
       </UiTable>
     `,
@@ -353,6 +366,7 @@ export const HeaderSlot: Story = {
   }),
 }
 
+// 데이터 ↔ 빈 상태 토글로 transition 직접 확인
 export const Empty: Story = {
   args: {
     columns: baseColumns,
@@ -360,12 +374,28 @@ export const Empty: Story = {
   },
   render: (args) => ({
     components: { UiTable },
-    setup: () => ({ args }),
-    template: '<UiTable v-bind="args" />',
+    setup: () => {
+      const data = ref<Record<string, any>[]>([])
+      const toggle = () => {
+        data.value = data.value.length > 0 ? [] : [...baseData]
+      }
+      return { args, data, toggle }
+    },
+    template: `
+      <div>
+        <button
+          @click="toggle"
+          style="margin-bottom: 12px; padding: 6px 14px; border: 1px solid #dce4e9; border-radius: 6px; background: #fff; cursor: pointer; font-size: 13px;"
+        >
+          {{ data.length > 0 ? '데이터 비우기' : '데이터 채우기' }}
+        </button>
+        <UiTable v-bind="args" :data="data" />
+      </div>
+    `,
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    // 기본 emptyText 노출 검증
+    // 초기 상태: 빈 배열 → emptyText 노출
     await expect(canvas.getByText('데이터가 없습니다.')).toBeTruthy()
   },
 }
@@ -388,6 +418,7 @@ export const EmptyTextCustom: Story = {
   },
 }
 
+// clickable=true 시 row-click payload 확인용 인터랙티브 데모
 export const Clickable: Story = {
   args: {
     columns: baseColumns,
@@ -396,8 +427,25 @@ export const Clickable: Story = {
   },
   render: (args) => ({
     components: { UiTable },
-    setup: () => ({ args }),
-    template: '<UiTable v-bind="args" />',
+    setup: () => {
+      const lastClick = ref<{ index: number; row: Record<string, any> } | null>(null)
+      const onRowClick = (row: Record<string, any>, index: number) => {
+        lastClick.value = { index, row }
+        // Playground args.onRowClick는 fn() spy — Actions 패널 + play 함수 호환 유지
+        args.onRowClick?.(row, index)
+      }
+      return { args, lastClick, onRowClick }
+    },
+    template: `
+      <div>
+        <UiTable v-bind="args" @row-click="onRowClick" />
+        <div style="margin-top: 12px; padding: 10px 14px; background: #f4f7f9; border-radius: 6px; font-size: 13px; color: #4d5462;">
+          <strong style="margin-right: 8px;">마지막 클릭:</strong>
+          <span v-if="lastClick">행 #{{ lastClick.index }} — {{ lastClick.row.region }} / {{ lastClick.row.name }}</span>
+          <span v-else style="color: #6f7a93;">(행을 클릭해 보세요)</span>
+        </div>
+      </div>
+    `,
   }),
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
@@ -413,6 +461,7 @@ export const Clickable: Story = {
   },
 }
 
+// md ↔ sm 토글로 컴팩트 vs 기본 사이즈를 즉시 비교
 export const SmallSize: Story = {
   args: {
     columns: baseColumns,
@@ -421,8 +470,24 @@ export const SmallSize: Story = {
   },
   render: (args) => ({
     components: { UiTable },
-    setup: () => ({ args }),
-    template: '<UiTable v-bind="args" />',
+    setup: () => {
+      const size = ref<'md' | 'sm'>(args.size ?? 'sm')
+      const toggle = () => {
+        size.value = size.value === 'sm' ? 'md' : 'sm'
+      }
+      return { args, size, toggle }
+    },
+    template: `
+      <div>
+        <button
+          @click="toggle"
+          style="margin-bottom: 12px; padding: 6px 14px; border: 1px solid #dce4e9; border-radius: 6px; background: #fff; cursor: pointer; font-size: 13px;"
+        >
+          size: <strong>{{ size }}</strong> — 클릭해서 토글
+        </button>
+        <UiTable v-bind="args" :size="size" />
+      </div>
+    `,
   }),
 }
 
