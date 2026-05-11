@@ -285,7 +285,9 @@ const onRowClick = (row: Record<string, any>, index: number) => {
     tr {
       transition: background-color 0.15s;
 
-      &:hover td {
+      // hover 배경은 clickable 행에만 — 단순 view 테이블은 hover 효과 없음.
+      // row-click이 clickable=true일 때만 발생하는 것과 시맨틱 일치.
+      &.is-clickable:hover td {
         background: $color-background;
       }
 
