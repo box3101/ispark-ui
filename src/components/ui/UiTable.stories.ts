@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import { expect, fn, userEvent, within } from '@storybook/test'
+import { ref } from 'vue'
 import UiTable from './UiTable.vue'
 import type { TableColumn } from './UiTable.vue'
 
@@ -425,17 +426,33 @@ export const SmallSize: Story = {
   }),
 }
 
+// 실제 사용 패턴: 부모가 selectedRowValue를 ref로 들고 있고
+// @row-click에서 업데이트 → UiTable이 강조를 자동 이동
 export const SelectedRow: Story = {
   args: {
     columns: baseColumns,
     data: baseData,
     selectedRowKey: 'region',
     selectedRowValue: '부산',
+    clickable: true,
   },
   render: (args) => ({
     components: { UiTable },
-    setup: () => ({ args }),
-    template: '<UiTable v-bind="args" />',
+    setup: () => {
+      const selectedRowValue = ref<string>(args.selectedRowValue ?? '')
+      const onRowClick = (row: Record<string, any>) => {
+        const key = args.selectedRowKey
+        if (key) selectedRowValue.value = String(row[key] ?? '')
+      }
+      return { args, selectedRowValue, onRowClick }
+    },
+    template: `
+      <UiTable
+        v-bind="args"
+        :selected-row-value="selectedRowValue"
+        @row-click="onRowClick"
+      />
+    `,
   }),
 }
 
