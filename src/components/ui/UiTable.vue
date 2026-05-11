@@ -71,7 +71,7 @@
           v-else
           :key="rowIdx"
           :class="{ 'is-clickable': clickable, 'is-selected': isRowSelected(row) }"
-          @click="onRowClick(row, rowIdx)"
+          @click="clickable && onRowClick(row, rowIdx)"
         >
           <td
             v-for="(col, colIdx) in columns"

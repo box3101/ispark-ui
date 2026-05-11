@@ -14,46 +14,40 @@ const meta = {
     docs: {
       description: {
         component: `
-## 핵심 props
+ispark-ui 표준 데이터 테이블. 컬럼 정의 + 행 데이터를 받아 정렬·고정 헤더·스크롤·행 클릭·선택 강조를 지원한다.
 
-- **\`columns\`** \`TableColumn[]\` — 컬럼 정의 (key/label/width/align/headerAlign/sortable/sortType)
-- **\`data\`** \`Record<string, any>[]\` — 행 데이터 배열
-- **\`stickyHeader\`** \`boolean\` — \`maxHeight\`과 함께 사용해 헤더 고정
-- **\`maxHeight\`** \`string\` — 예: \`"200px"\`. 초과 시 세로 스크롤 + 커스텀 스크롤바
-- **\`emptyText\`** \`string\` — 빈 상태 메시지 (기본 \`'데이터가 없습니다.'\`)
-- **\`clickable\`** \`boolean\` — 행 hover 배경 + cursor pointer (\`row-click\` 이벤트는 항상 emit)
-- **\`size\`** \`'md'\`(기본 42px) | \`'sm'\`(28px 컴팩트)
-- **\`selectedRowKey\`** + **\`selectedRowValue\`** — 둘 다 지정 시 매칭 행에 primary 색 배경
+## 언제 사용하나
+- 정형 데이터(사용자, 통계, 내역 등)의 컬럼/행 표시
+- 컬럼 단위 **로컬 정렬**(asc → desc → 해제 3단)이 필요한 경우
+- 행 클릭으로 상세 진입 또는 선택 행 강조가 필요한 경우
 
----
+## 제약
+- \`table-layout: fixed\` — 컬럼 너비는 \`columns[].width\`로 명시 (미지정 시 균등 분할)
+- **로컬 정렬만 지원** — 서버 정렬은 부모에서 정렬 완료 후 \`data\`로 주입
+- 페이지네이션 / 다중 선택 / 셀 편집 미지원 (필요 시 외부 컴포넌트와 조합)
+- 빈 상태 UI 전체를 교체하려면 컴포넌트 바깥에서 \`data.length === 0\` 분기 후 \`UiEmpty\` 사용 권장
+
+## API 한눈에 보기
+- **Props**: 아래 Args 테이블 — Data / Appearance / Behavior / Selection 그룹
+- **Slots**: \`#header-{key}\` (헤더 셀 커스텀, props: \`{ column, isSortable, sortOrder, onSort }\`), \`#cell-{key}\` (바디 셀 커스텀, props: \`{ row, value, index }\`)
+- **Events**: \`row-click(row, index)\` — \`clickable: true\`일 때만 emit (단순 view 테이블에서는 클릭 핸들러 자체가 바인딩되지 않음)
 
 ## TableColumn 인터페이스
-
 \`\`\`ts
 interface TableColumn {
-  key: string                                          // 데이터 객체의 키
-  label: string                                        // 헤더 텍스트
-  width?: string                                       // '320px', '150px' 등 (미지정 시 auto)
-  align?: 'left' | 'center' | 'right'                  // 바디 셀 정렬 (기본 'center')
-  headerAlign?: 'left' | 'center' | 'right'            // 헤더 정렬 (기본 'center')
-  sortable?: boolean                                   // 헤더 클릭 정렬 사용 여부
-  sortType?: 'auto' | 'string' | 'number' | 'date'    // 정렬 비교 타입 (기본 'auto')
+  key: string                                        // 데이터 객체의 키
+  label: string                                      // 헤더 텍스트
+  width?: string                                     // '320px' 등 (미지정 시 균등)
+  align?: 'left' | 'center' | 'right'                // 바디 셀 정렬 (기본 'center')
+  headerAlign?: 'left' | 'center' | 'right'          // 헤더 정렬 (기본 'center')
+  sortable?: boolean                                 // 헤더 클릭 정렬 사용 여부
+  sortType?: 'auto' | 'string' | 'number' | 'date'  // 정렬 비교 타입 (기본 'auto')
 }
 \`\`\`
 
----
-
-## 슬롯 / 이벤트
-
-- **\`#header-{key}\`** — 헤더 셀 커스텀. 슬롯 props: \`{ column, isSortable, sortOrder, onSort }\`
-- **\`#cell-{key}\`** — 바디 셀 커스텀. 슬롯 props: \`{ row, value, index }\`
-- **\`@row-click\`** — \`(row, index)\` 페이로드. \`clickable\` 여부와 무관하게 항상 발생
-
----
-
 ## 정렬 동작
+\`sortable: true\` 컬럼 헤더 클릭 시 **asc → desc → 해제** 3단 토글. 접근성을 위해 \`<th aria-sort>\`가 \`'ascending' | 'descending' | 'none'\` 으로 동기화된다.
 
-\`sortable: true\` 컬럼 헤더 클릭 시: **asc → desc → 해제** 3단 토글.
 \`sortType\` 비교 방식:
 - \`'auto'\`(기본): 숫자 변환 → 날짜 변환 → 문자열(한국어 \`localeCompare\`) 순 폴백
 - \`'number'\`: 쉼표 제거 후 숫자 비교 (예: \`"44,865,368,290"\` → \`44865368290\`)
@@ -61,15 +55,6 @@ interface TableColumn {
 - \`'string'\`: 한국어 \`localeCompare\`
 
 \`columns\`에서 정렬 중인 컬럼이 사라지면 sortState는 자동 리셋된다.
-
----
-
-## 테스트 현황
-
-자동 테스트 3개(엣지 케이스) + Storybook play 함수 3개로 동작 보장.
-
-- **엣지** — 쉼표 포함 number 정렬, columns 변경 시 sortState 리셋, emptyText 커스텀
-- **play** — Empty(메시지), Clickable(row-click 호출), Sortable(asc/desc/해제)
         `,
       },
     },
@@ -125,7 +110,7 @@ interface TableColumn {
     // ===== Behavior =====
     clickable: {
       control: 'boolean',
-      description: '행 hover 배경 + cursor pointer 적용. ⚠️ `row-click` 이벤트는 이 prop과 무관하게 **항상** emit된다.',
+      description: '행 hover 배경 + cursor pointer + `row-click` 이벤트 활성화. `false`(기본)면 click 핸들러 자체가 바인딩되지 않아 단순 view 테이블에 안전.',
       table: {
         category: 'Behavior',
         type: { summary: 'boolean' },
@@ -164,7 +149,7 @@ interface TableColumn {
     onRowClick: {
       name: 'row-click',
       action: 'row-click',
-      description: '행 클릭 시 emit. payload: `(row: Record<string, any>, index: number)`. `clickable` prop 여부와 무관하게 항상 발생.',
+      description: '행 클릭 시 emit. payload: `(row: Record<string, any>, index: number)`. `clickable: true`일 때만 발생.',
       table: {
         category: 'Events',
         type: { summary: '(row, index) => void' },
@@ -185,20 +170,20 @@ const baseColumns: TableColumn[] = [
 ]
 
 const baseData = [
-  { name: 'BF.총매출액.케이블플랫폼매출액', region: '대전', total: '44,865,368,290', average: '3,738,780,690.83' },
-  { name: 'BF.총매출액.케이블플랫폼매출액', region: '서울', total: '52,341,200,100', average: '4,361,766,675.00' },
-  { name: 'BF.총매출액.SO매출액', region: '부산', total: '31,256,890,450', average: '2,604,740,870.83' },
-  { name: 'BF.총매출액.SO매출액', region: '대구', total: '28,904,112,300', average: '2,408,676,025.00' },
+  { name: '케이블 플랫폼 매출', region: '대전', total: '44,865,368,290', average: '3,738,780,690.83' },
+  { name: '케이블 플랫폼 매출', region: '서울', total: '52,341,200,100', average: '4,361,766,675.00' },
+  { name: 'SO 매출', region: '부산', total: '31,256,890,450', average: '2,604,740,870.83' },
+  { name: 'SO 매출', region: '대구', total: '28,904,112,300', average: '2,408,676,025.00' },
 ]
 
 const longData = [
   ...baseData,
-  { name: 'BF.영업이익.케이블영업이익', region: '인천', total: '15,230,450,000', average: '1,269,204,166.67' },
-  { name: 'BF.영업이익.SO영업이익', region: '광주', total: '12,890,330,200', average: '1,074,194,183.33' },
-  { name: 'BF.영업이익.SO영업이익', region: '울산', total: '9,456,780,100', average: '788,065,008.33' },
-  { name: 'BF.당기순이익.케이블당기순이익', region: '세종', total: '7,234,560,000', average: '602,880,000.00' },
-  { name: 'BF.당기순이익.SO당기순이익', region: '경기', total: '65,432,100,500', average: '5,452,675,041.67' },
-  { name: 'BF.당기순이익.SO당기순이익', region: '강원', total: '4,567,890,300', average: '380,657,525.00' },
+  { name: '케이블 영업이익', region: '인천', total: '15,230,450,000', average: '1,269,204,166.67' },
+  { name: 'SO 영업이익', region: '광주', total: '12,890,330,200', average: '1,074,194,183.33' },
+  { name: 'SO 영업이익', region: '울산', total: '9,456,780,100', average: '788,065,008.33' },
+  { name: '케이블 당기순이익', region: '세종', total: '7,234,560,000', average: '602,880,000.00' },
+  { name: 'SO 당기순이익', region: '경기', total: '65,432,100,500', average: '5,452,675,041.67' },
+  { name: 'SO 당기순이익', region: '강원', total: '4,567,890,300', average: '380,657,525.00' },
 ]
 
 // ===== Stories =====
@@ -265,6 +250,21 @@ export const StickyHeader: Story = {
   }),
 }
 
+// maxHeight만 적용 (sticky 미사용) — 스크롤 시 헤더가 함께 흐른다.
+// StickyHeader 스토리와 시각적으로 비교해서 동작 차이를 보여준다.
+export const MaxHeightScroll: Story = {
+  args: {
+    columns: baseColumns,
+    data: longData,
+    maxHeight: '180px',
+  },
+  render: (args) => ({
+    components: { UiTable },
+    setup: () => ({ args }),
+    template: '<UiTable v-bind="args" />',
+  }),
+}
+
 export const CustomCell: Story = {
   args: {
     columns: [
@@ -301,6 +301,57 @@ export const CustomCell: Story = {
   }),
 }
 
+// #header-{key} 슬롯 — 헤더 셀에 보조 텍스트 / 아이콘 / 정렬 버튼 커스텀
+// 슬롯 props: { column, isSortable, sortOrder, onSort } — sortable 컬럼은 onSort 호출 필수
+export const HeaderSlot: Story = {
+  args: {
+    columns: [
+      { key: 'name', label: '제품명', width: '240px', align: 'left' },
+      { key: 'price', label: '가격', align: 'right', sortable: true, sortType: 'number' },
+      { key: 'stock', label: '재고', width: '120px' },
+    ],
+    data: [
+      { name: '케이블 모뎀 (3.1)', price: '89,000', stock: '정상' },
+      { name: '무선 공유기 (Wi-Fi 6)', price: '129,000', stock: '품절' },
+      { name: 'IPTV 셋톱박스', price: '45,000', stock: '정상' },
+    ],
+  },
+  render: (args) => ({
+    components: { UiTable },
+    setup: () => ({ args }),
+    template: `
+      <UiTable v-bind="args">
+        <template #header-price="{ column, isSortable, sortOrder, onSort }">
+          <button
+            v-if="isSortable"
+            type="button"
+            @click="onSort"
+            :style="{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              border: 0,
+              background: 'transparent',
+              color: sortOrder ? '#2563eb' : 'inherit',
+              cursor: 'pointer',
+              font: 'inherit',
+            }"
+          >
+            <span>💰 {{ column.label }}</span>
+            <span style="font-size: 10px;">{{ sortOrder === 'desc' ? '▼' : '▲' }}</span>
+          </button>
+        </template>
+        <template #header-stock="{ column }">
+          <span style="display:inline-flex; align-items:center; gap:4px;">
+            {{ column.label }}
+            <span style="font-size: 10px; color: #888;">(실시간)</span>
+          </span>
+        </template>
+      </UiTable>
+    `,
+  }),
+}
+
 export const Empty: Story = {
   args: {
     columns: baseColumns,
@@ -318,6 +369,24 @@ export const Empty: Story = {
   },
 }
 
+// emptyText prop 커스텀 — 검색 결과 없음 등 컨텍스트별 메시지
+export const EmptyTextCustom: Story = {
+  args: {
+    columns: baseColumns,
+    data: [],
+    emptyText: '조회 결과가 없습니다. 검색 조건을 변경해주세요.',
+  },
+  render: (args) => ({
+    components: { UiTable },
+    setup: () => ({ args }),
+    template: '<UiTable v-bind="args" />',
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await expect(canvas.getByText('조회 결과가 없습니다. 검색 조건을 변경해주세요.')).toBeTruthy()
+  },
+}
+
 export const Clickable: Story = {
   args: {
     columns: baseColumns,
@@ -332,7 +401,7 @@ export const Clickable: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     // 첫 번째 데이터 행 — 통계명 셀 텍스트로 행 찾기
-    const firstRowCell = canvas.getAllByText('BF.총매출액.케이블플랫폼매출액')[0]
+    const firstRowCell = canvas.getAllByText('케이블 플랫폼 매출')[0]
     const tr = firstRowCell.closest('tr')!
     await userEvent.click(tr)
     // onRowClick(row, index) 호출 검증 — 첫 행 = index 0
