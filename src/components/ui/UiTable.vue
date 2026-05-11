@@ -212,11 +212,31 @@ const onRowClick = (row: Record<string, any>, index: number) => {
 </script>
 
 <style lang="scss" scoped>
+// 스크롤바 인라인 정의 — ispark-ui의 _mixins.scss `custom-scrollbar`가
+// 변수 의존을 외부 모듈로 풀지 못해 빌드 실패. 다른 컴포넌트(UiButton 등)도
+// desktop-hover를 인라인 정의하는 패턴과 동일.
+@mixin ui-table-scrollbar($width: 4px) {
+  &::-webkit-scrollbar {
+    width: #{$width};
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 12px 0;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $color-border;
+    border-radius: $border-radius-100;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: $color-text-disabled;
+  }
+}
+
 .ui-table-wrap {
   width: 100%;
   overflow: auto;
   border-radius: 0;
-  @include custom-scrollbar;
+  @include ui-table-scrollbar;
 }
 
 .ui-table {
