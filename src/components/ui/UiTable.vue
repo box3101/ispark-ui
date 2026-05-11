@@ -132,8 +132,22 @@ const props = withDefaults(defineProps<Props>(), {
   selectedRowValue: undefined,
 })
 
-const isRowSelected = (row: Record<string, any>) =>
-  props.selectedRowKey != null && props.selectedRowValue != null && row[props.selectedRowKey] === props.selectedRowValue
+// 선택 행 추적 — 두 가지 모드
+//   1) Controlled: selectedRowKey + selectedRowValue 둘 다 값 있음 → 부모가 관리
+//   2) Uncontrolled: 둘 중 하나라도 비면 → 컴포넌트가 마지막 클릭 행 자체 추적
+//      (clickable=true + 행 클릭 시 자동 is-selected)
+const internalSelectedRow = ref<Record<string, any> | null>(null)
+
+const hasControlledSelection = computed(
+  () => !!props.selectedRowKey && !!props.selectedRowValue,
+)
+
+const isRowSelected = (row: Record<string, any>) => {
+  if (hasControlledSelection.value) {
+    return row[props.selectedRowKey!] === props.selectedRowValue
+  }
+  return props.clickable && internalSelectedRow.value === row
+}
 
 type SortOrder = 'asc' | 'desc' | ''
 const sortState = ref<{ key: string; order: SortOrder }>({ key: '', order: '' })
@@ -218,8 +232,20 @@ const emit = defineEmits<{
 }>()
 
 const onRowClick = (row: Record<string, any>, index: number) => {
+  // Uncontrolled 모드에서만 내부 selection 업데이트
+  if (!hasControlledSelection.value) {
+    internalSelectedRow.value = row
+  }
   emit('row-click', row, index)
 }
+
+// data가 새로 주입되면 (reference 변경) uncontrolled selection 리셋
+watch(
+  () => props.data,
+  () => {
+    if (!hasControlledSelection.value) internalSelectedRow.value = null
+  },
+)
 </script>
 
 <style lang="scss" scoped>

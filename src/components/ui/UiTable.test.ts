@@ -119,4 +119,49 @@ describe('UiTable', () => {
     await nextTick()
     expect(ths[1].getAttribute('aria-sort')).toBe('none')
   })
+
+  // 5. uncontrolled selection — clickable=true 시 클릭한 행 자동 is-selected
+  it('uncontrolled selection: clickable=true 시 클릭한 행 자동 is-selected', async () => {
+    const columns: TableColumn[] = [
+      { key: 'name', label: '이름', align: 'left' },
+      { key: 'score', label: '점수', align: 'right' },
+    ]
+    const data = [
+      { name: 'A', score: 1 },
+      { name: 'B', score: 2 },
+      { name: 'C', score: 3 },
+    ]
+    render(UiTable, { props: { columns, data, clickable: true } })
+    await nextTick()
+
+    const rows = document.querySelectorAll('tbody tr')
+    // 초기엔 어느 행도 is-selected 아님
+    expect(rows[0].classList.contains('is-selected')).toBe(false)
+    expect(rows[1].classList.contains('is-selected')).toBe(false)
+
+    // 두 번째 행(B) 클릭
+    await fireEvent.click(rows[1])
+    await nextTick()
+    expect(rows[1].classList.contains('is-selected')).toBe(true)
+    expect(rows[0].classList.contains('is-selected')).toBe(false)
+
+    // 첫 행(A) 클릭 → A로 이동, B 해제
+    await fireEvent.click(rows[0])
+    await nextTick()
+    expect(rows[0].classList.contains('is-selected')).toBe(true)
+    expect(rows[1].classList.contains('is-selected')).toBe(false)
+  })
+
+  // 6. clickable=false면 클릭해도 uncontrolled selection 비활성
+  it('clickable=false면 uncontrolled selection도 비활성', async () => {
+    const columns: TableColumn[] = [{ key: 'name', label: '이름' }]
+    const data = [{ name: 'A' }, { name: 'B' }]
+    render(UiTable, { props: { columns, data, clickable: false } })
+    await nextTick()
+
+    const rows = document.querySelectorAll('tbody tr')
+    await fireEvent.click(rows[0])
+    await nextTick()
+    expect(rows[0].classList.contains('is-selected')).toBe(false)
+  })
 })

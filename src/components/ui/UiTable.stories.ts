@@ -131,7 +131,7 @@ interface TableColumn {
     // ===== Selection =====
     selectedRowKey: {
       control: 'text',
-      description: '선택 행 강조용 키. `selectedRowValue`와 함께 지정 시 `row[selectedRowKey] === selectedRowValue` 행에 `is-selected` 클래스 + primary 색 배경.',
+      description: '**Controlled** 모드 키. `selectedRowValue`와 둘 다 값이 있으면 매칭 행에 `is-selected` 강조. 둘 다 비어있고 `clickable=true`면 **uncontrolled** — 컴포넌트가 마지막 클릭 행을 자체 추적.',
       table: {
         category: 'Selection',
         type: { summary: 'string' },
@@ -139,7 +139,7 @@ interface TableColumn {
     },
     selectedRowValue: {
       control: 'text',
-      description: '선택 행 강조용 값. `selectedRowKey`와 짝으로 사용. 둘 중 하나만 지정하면 강조 효과 없음.',
+      description: '**Controlled** 모드 값. `selectedRowKey`와 짝으로 사용. 둘 다 비어있으면 uncontrolled 모드(clickable=true 시 클릭한 행 자동 강조).',
       table: {
         category: 'Selection',
         type: { summary: 'string' },
