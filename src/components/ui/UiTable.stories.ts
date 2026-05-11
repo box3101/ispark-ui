@@ -138,3 +138,28 @@ export const Empty: Story = {
     await expect(canvas.getByText('데이터가 없습니다.')).toBeTruthy()
   },
 }
+
+export const Clickable: Story = {
+  args: {
+    columns: baseColumns,
+    data: baseData,
+    clickable: true,
+  },
+  render: (args) => ({
+    components: { UiTable },
+    setup: () => ({ args }),
+    template: '<UiTable v-bind="args" />',
+  }),
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement)
+    // 첫 번째 데이터 행 — 통계명 셀 텍스트로 행 찾기
+    const firstRowCell = canvas.getAllByText('BF.총매출액.케이블플랫폼매출액')[0]
+    const tr = firstRowCell.closest('tr')!
+    await userEvent.click(tr)
+    // onRowClick(row, index) 호출 검증 — 첫 행 = index 0
+    await expect(args.onRowClick).toHaveBeenCalledWith(
+      expect.objectContaining({ region: '대전' }),
+      0,
+    )
+  },
+}
