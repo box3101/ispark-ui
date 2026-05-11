@@ -163,3 +163,30 @@ export const Clickable: Story = {
     )
   },
 }
+
+export const SmallSize: Story = {
+  args: {
+    columns: baseColumns,
+    data: baseData,
+    size: 'sm',
+  },
+  render: (args) => ({
+    components: { UiTable },
+    setup: () => ({ args }),
+    template: '<UiTable v-bind="args" />',
+  }),
+}
+
+export const SelectedRow: Story = {
+  args: {
+    columns: baseColumns,
+    data: baseData,
+    selectedRowKey: 'region',
+    selectedRowValue: '부산',
+  },
+  render: (args) => ({
+    components: { UiTable },
+    setup: () => ({ args }),
+    template: '<UiTable v-bind="args" />',
+  }),
+}
