@@ -124,6 +124,43 @@ const longData = [
 ]
 
 // ===== Stories =====
+
+// ===== 1. Playground — 모든 props를 Controls로 조작 =====
+// columns/data는 baseColumns/baseData 고정. size/stickyHeader/maxHeight/
+// clickable/emptyText/selectedRowKey·Value를 패널에서 토글
+export const Playground: Story = {
+  args: {
+    columns: baseColumns,
+    data: baseData,
+    size: 'md',
+    stickyHeader: false,
+    maxHeight: '',
+    clickable: false,
+    emptyText: '데이터가 없습니다.',
+    selectedRowKey: '',
+    selectedRowValue: '',
+  },
+  argTypes: {
+    emptyText: {
+      control: 'text',
+      description: '빈 상태 메시지 (기본 "데이터가 없습니다.")',
+    },
+    selectedRowKey: {
+      control: 'text',
+      description: '예: "region" — selectedRowValue와 매칭되는 행 강조',
+    },
+    selectedRowValue: {
+      control: 'text',
+      description: '예: "부산" — selectedRowKey와 함께 사용',
+    },
+  } as never,
+  render: (args) => ({
+    components: { UiTable },
+    setup: () => ({ args }),
+    template: '<UiTable v-bind="args" />',
+  }),
+}
+
 export const Default: Story = {
   args: {
     columns: baseColumns,
@@ -276,27 +313,36 @@ export const Sortable: Story = {
   }),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
-    // 점수 컬럼 헤더 버튼
+    // 점수 컬럼 헤더 버튼 + 해당 <th>
     const scoreBtn = canvas.getByRole('button', { name: /점수/ })
+    const scoreTh = scoreBtn.closest('th')!
     const sortMark = scoreBtn.querySelector('.ui-table-sort-mark')!
 
-    // 1차 클릭: asc — is-active 적용, is-desc 미적용
+    // 초기 상태: aria-sort="none" — 정렬 가능 컬럼이지만 미정렬
+    await expect(scoreTh.getAttribute('aria-sort')).toBe('none')
+
+    // 1차 클릭: asc — is-active 적용, is-desc 미적용, aria-sort="ascending"
     await userEvent.click(scoreBtn)
     await expect(sortMark.classList.contains('is-active')).toBe(true)
     await expect(sortMark.classList.contains('is-desc')).toBe(false)
+    await expect(scoreTh.getAttribute('aria-sort')).toBe('ascending')
 
     // 정렬 결과 확인 — 첫 행이 가장 낮은 점수(456)
     const firstRow = canvasElement.querySelector('tbody tr')!
     await expect(firstRow.textContent).toContain('최지원')
 
-    // 2차 클릭: desc — is-desc 적용
+    // 2차 클릭: desc — is-desc 적용, aria-sort="descending"
     await userEvent.click(scoreBtn)
     await expect(sortMark.classList.contains('is-desc')).toBe(true)
+    await expect(scoreTh.getAttribute('aria-sort')).toBe('descending')
     const firstRowDesc = canvasElement.querySelector('tbody tr')!
     await expect(firstRowDesc.textContent).toContain('박민수') // 2,567
 
-    // 3차 클릭: 해제 — is-active 미적용
+    // 3차 클릭: 해제 — is-active 미적용, aria-sort="none"
     await userEvent.click(scoreBtn)
     await expect(sortMark.classList.contains('is-active')).toBe(false)
+    await expect(scoreTh.getAttribute('aria-sort')).toBe('none')
+
+    // 비정렬 컬럼은 aria-sort 속성 자체가 없어야 함 — 같은 스토리에는 sortable 3개뿐이므로 검증 생략
   },
 }

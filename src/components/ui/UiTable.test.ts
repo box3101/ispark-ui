@@ -83,4 +83,40 @@ describe('UiTable', () => {
     await nextTick()
     expect(screen.getByText('조회 결과가 없습니다.')).toBeTruthy()
   })
+
+  // 4. aria-sort — sortable 컬럼은 'none' 기본, 비정렬 컬럼은 속성 자체가 없음
+  it('aria-sort 접근성 속성: 비정렬 컬럼은 미렌더, 정렬 가능 컬럼은 토글에 따라 ascending/descending/none', async () => {
+    const columns: TableColumn[] = [
+      { key: 'name', label: '이름', align: 'left' },
+      { key: 'score', label: '점수', align: 'right', sortable: true, sortType: 'number' },
+    ]
+    const data = [
+      { name: 'A', score: '30' },
+      { name: 'B', score: '10' },
+    ]
+    render(UiTable, { props: { columns, data } })
+    await nextTick()
+
+    const ths = document.querySelectorAll('thead th')
+    // 비정렬 컬럼: aria-sort 속성 자체가 없어야 함 (undefined 바인딩 → 미렌더)
+    expect(ths[0].hasAttribute('aria-sort')).toBe(false)
+    // 정렬 가능 컬럼: 초기 'none'
+    expect(ths[1].getAttribute('aria-sort')).toBe('none')
+
+    // 1차 클릭 → ascending
+    const btn = screen.getByRole('button', { name: /점수/ })
+    await fireEvent.click(btn)
+    await nextTick()
+    expect(ths[1].getAttribute('aria-sort')).toBe('ascending')
+
+    // 2차 클릭 → descending
+    await fireEvent.click(btn)
+    await nextTick()
+    expect(ths[1].getAttribute('aria-sort')).toBe('descending')
+
+    // 3차 클릭 → 다시 none
+    await fireEvent.click(btn)
+    await nextTick()
+    expect(ths[1].getAttribute('aria-sort')).toBe('none')
+  })
 })

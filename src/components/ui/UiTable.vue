@@ -20,6 +20,7 @@
             :key="col.key"
             :class="{ 'is-last': idx === columns.length - 1, 'is-sortable': isColumnSortable(col) }"
             :style="{ textAlign: col.headerAlign || 'center' }"
+            :aria-sort="getAriaSort(col)"
           >
             <slot
               :name="`header-${col.key}`"
@@ -37,6 +38,7 @@
                 <span>{{ col.label }}</span>
                 <span
                   class="ui-table-sort-mark"
+                  aria-hidden="true"
                   :class="{
                     'is-active': !!getSortOrder(col.key),
                     'is-desc': getSortOrder(col.key) === 'desc',
@@ -139,6 +141,15 @@ const sortState = ref<{ key: string; order: SortOrder }>({ key: '', order: '' })
 const isColumnSortable = (col: TableColumn) => col.sortable === true
 
 const getSortOrder = (key: string): SortOrder => (sortState.value.key === key ? sortState.value.order : '')
+
+// WAI-ARIA aria-sort: sortable 컬럼은 'ascending' | 'descending' | 'none', 비정렬 컬럼은 undefined (속성 미렌더)
+const getAriaSort = (col: TableColumn): 'ascending' | 'descending' | 'none' | undefined => {
+  if (!isColumnSortable(col)) return undefined
+  const order = getSortOrder(col.key)
+  if (order === 'asc') return 'ascending'
+  if (order === 'desc') return 'descending'
+  return 'none'
+}
 
 const onSortColumn = (col: TableColumn) => {
   if (!isColumnSortable(col)) return
