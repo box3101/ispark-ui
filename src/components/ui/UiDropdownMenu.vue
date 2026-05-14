@@ -3,6 +3,7 @@
     <DropdownMenuTrigger as-child>
       <span
         class="ui-dropdown-trigger-wrap"
+        :style="hoverBridgeStyle"
         @mouseenter="onTriggerMouseEnter"
         @mouseleave="onTriggerMouseLeave"
       >
@@ -53,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -103,8 +104,23 @@ const props = withDefaults(defineProps<Props>(), {
   sideOffset: 5,
   collisionPadding: 8,
   openOnHover: false,
-  hoverCloseDelay: 120,
+  hoverCloseDelay: 200,
   contentClass: '',
+})
+
+// openOnHover 시 trigger와 메뉴 사이 sideOffset gap이 mouseleave를 유발하므로,
+// trigger-wrap에 그 방향으로 padding을 부여해 hover 영역을 연속으로 만든다.
+// (padding 영역은 trigger의 일부로 인식 → 마우스가 그 안에 있으면 mouseleave 미발생)
+const hoverBridgeStyle = computed<Record<string, string>>(() => {
+  if (!props.openOnHover) return { display: 'inline-block' }
+  const pad = `${props.sideOffset + 2}px`
+  const sideMap: Record<NonNullable<Props['side']>, string> = {
+    top: 'paddingTop',
+    bottom: 'paddingBottom',
+    left: 'paddingLeft',
+    right: 'paddingRight',
+  }
+  return { display: 'inline-block', [sideMap[props.side]]: pad }
 })
 
 const emit = defineEmits<{
