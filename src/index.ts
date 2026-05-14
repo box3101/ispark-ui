@@ -20,6 +20,8 @@ export { default as UiToggle } from './components/ui/UiToggle.vue'
 export { default as UiCheckbox } from './components/ui/UiCheckbox.vue'
 export { default as UiRadio } from './components/ui/UiRadio.vue'
 export { default as UiTextarea } from './components/ui/UiTextarea.vue'
+export { default as UiTooltip } from './components/ui/UiTooltip.vue'
+export { default as UiPagination } from './components/ui/UiPagination.vue'
 
 // 디자인 토큰 (TypeScript 타입 + 옵션 키 배열)
 // SIZES / INPUT_SIZES / SHAPES + Size / InputSize / Shape 타입
