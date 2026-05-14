@@ -24,6 +24,13 @@
   --color-danger-hover: #{$color-danger-hover};
   --color-danger-dark: #{$color-danger-dark};
 
+  --color-success: #{$color-success};
+  --color-success-hover: #{$color-success-hover};
+  --color-warning: #{$color-warning};
+  --color-warning-hover: #{$color-warning-hover};
+  --color-info: #{$color-info};
+  --color-info-hover: #{$color-info-hover};
+
   // 경계·텍스트·배경 (런타임 테마 전환 대응)
   --color-border: #{$color-border};
   --color-border-light: #{$color-border-light};

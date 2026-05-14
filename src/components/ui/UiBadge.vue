@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-export type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'danger'
+export type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
 export type BadgeSize = 'xs' | 'sm' | 'md' | 'lg'
 
 interface Props {
@@ -164,6 +164,11 @@ const badgeStyle = computed((): Record<string, string> => {
   &.variant-danger {
     background: rgba(239, 68, 68, 0.12);
     color: #b91c1c;
+  }
+
+  &.variant-info {
+    background: rgba(143, 79, 223, 0.12);
+    color: #6d28d9;
   }
 }
 

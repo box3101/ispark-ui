@@ -56,9 +56,23 @@ size/shape는 \`src/styles/tokens/_size.scss\`, \`_shape.scss\` 공용 토큰 �
   },
   argTypes: {
     variant: {
-      control: 'inline-radio',
-      options: ['primary', 'secondary', 'ghost', 'danger'],
-      description: '시멘틱 variant — primary(강조) / secondary(보조) / ghost(트리거) / danger(파괴)',
+      control: 'select',
+      options: [
+        'primary',
+        'primary-dark',
+        'primary-line',
+        'secondary',
+        'line-secondary',
+        'outline',
+        'ghost',
+        'dark',
+        'danger',
+        'success',
+        'warning',
+        'info',
+      ],
+      description:
+        'variant 12종 — primary(강조) / primary-dark / primary-line / secondary / line-secondary / outline / ghost / dark / danger / success / warning / info',
     },
     size: {
       control: 'inline-radio',

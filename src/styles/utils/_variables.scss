@@ -25,8 +25,12 @@ $color-text-disabled: #6f7a93;
 $color-text-muted: #6f7a93; // 테이블 헤더 등 보조 텍스트
 $color-success: #22c55e;
 $color-error: #ef4444;
+$color-success: #16a34a;
+$color-success-hover: #15803d;
 $color-warning: #f59e0b;
+$color-warning-hover: #d97706;
 $color-info: #3b82f6;
+$color-info-hover: #2563eb;
 // danger: 파괴적 액션(삭제 등) 시멘틱 토큰 — error와 같은 적색이지만 의도가 다름
 $color-danger: #dc2626;
 $color-danger-hover: #b91c1c;
