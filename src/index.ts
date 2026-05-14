@@ -13,6 +13,8 @@ export { default as UiModal } from './components/ui/UiModal.vue'
 export { default as UiTable } from './components/ui/UiTable.vue'
 export type { TableColumn } from './components/ui/UiTable.vue'
 export { default as UiEmpty } from './components/ui/UiEmpty.vue'
+export { default as UiBadge } from './components/ui/UiBadge.vue'
+export type { BadgeVariant, BadgeSize } from './components/ui/UiBadge.vue'
 
 // 디자인 토큰 (TypeScript 타입 + 옵션 키 배열)
 // SIZES / INPUT_SIZES / SHAPES + Size / InputSize / Shape 타입

@@ -3,6 +3,7 @@ import { expect, fn, userEvent, within } from '@storybook/test'
 import { ref } from 'vue'
 import UiTable from './UiTable.vue'
 import type { TableColumn } from './UiTable.vue'
+import UiBadge from './UiBadge.vue'
 
 const meta = {
   title: 'Components/UiTable',
@@ -281,7 +282,7 @@ export const CustomCell: Story = {
     ],
   },
   render: (args) => ({
-    components: { UiTable },
+    components: { UiTable, UiBadge },
     setup: () => {
       // 셀 클릭으로 상태 토글 — 슬롯 안에서도 인터랙션 가능함을 보여줌
       const rows = ref(args.data.map((r) => ({ ...r })))
@@ -290,25 +291,17 @@ export const CustomCell: Story = {
       }
       return { args, rows, toggleStatus }
     },
-    // UiBadge 미존재 — 임시 button. 라이트 틴트 + 짙은 텍스트 + 클릭 토글
+    // UiBadge로 정식 교체 — variant success/danger 시맨틱. 셀 클릭으로 상태 토글
     template: `
       <UiTable v-bind="args" :data="rows">
         <template #cell-status="{ value, index }">
           <button
             type="button"
             @click="toggleStatus(index)"
-            :style="{
-              display: 'inline-block',
-              padding: '2px 10px',
-              border: 0,
-              borderRadius: '999px',
-              fontSize: '12px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              color: value === '정상' ? '#15803d' : '#b91c1c',
-              background: value === '정상' ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)',
-            }"
-          >{{ value }}</button>
+            style="border: 0; background: transparent; padding: 0; cursor: pointer;"
+          >
+            <UiBadge :variant="value === '정상' ? 'success' : 'danger'">{{ value }}</UiBadge>
+          </button>
         </template>
       </UiTable>
     `,
