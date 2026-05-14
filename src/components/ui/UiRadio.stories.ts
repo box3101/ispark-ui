@@ -66,17 +66,35 @@ type Story = StoryObj<typeof meta>
 
 // ===== Stories =====
 
+// 라디오는 그룹으로 동작이 자연스러움 — 같은 v-model + 같은 name으로 묶인 3개 옵션
+// Controls 패널의 disabled/labelHidden은 그룹 전체에 적용됨
 export const Playground: Story = {
   args: {
-    modelValue: 'a',
-    value: 'a',
-    label: '옵션 A',
     disabled: false,
+    labelHidden: false,
   },
+  argTypes: {
+    // 그룹 데모라 단일 라디오 props는 Controls에서 숨김
+    modelValue: { table: { disable: true } },
+    value: { table: { disable: true } },
+    label: { table: { disable: true } },
+    name: { table: { disable: true } },
+    id: { table: { disable: true } },
+  } as never,
   render: (args) => ({
     components: { UiRadio },
-    setup: () => ({ args }),
-    template: '<UiRadio v-bind="args" />',
+    setup: () => {
+      const selected = ref<string>('a')
+      return { args, selected }
+    },
+    template: `
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px;">
+        <UiRadio v-model="selected" value="a" name="playground" label="옵션 A" :disabled="args.disabled" :label-hidden="args.labelHidden" />
+        <UiRadio v-model="selected" value="b" name="playground" label="옵션 B" :disabled="args.disabled" :label-hidden="args.labelHidden" />
+        <UiRadio v-model="selected" value="c" name="playground" label="옵션 C" :disabled="args.disabled" :label-hidden="args.labelHidden" />
+        <pre style="margin-top: 8px; padding: 10px; background: #f4f7f9; border-radius: 6px; font-size: 11px; color: #4d5462;">선택: {{ selected }}</pre>
+      </div>
+    `,
   }),
 }
 
