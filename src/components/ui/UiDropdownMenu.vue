@@ -158,8 +158,14 @@ const onTriggerMouseEnter = () => {
   openState.value = true
 }
 
+// 메뉴가 열린 후에는 trigger.mouseleave를 무시한다.
+// 사유: 메뉴 열리면 radix가 portal 콘텐츠를 trigger 옆에 렌더하면서
+// 마우스가 trigger 본체에서 패딩/메뉴로 이동하는 짧은 순간 잘못된 leave가
+// 발생할 수 있음. 닫힘은 content.mouseleave에서만 트리거 (메뉴 위에 마우스
+// 없으면 닫음). 메뉴가 아직 안 열렸을 때만 trigger leave가 의미 있음.
 const onTriggerMouseLeave = () => {
   if (!props.openOnHover) return
+  if (openState.value) return
   scheduleHoverClose()
 }
 
