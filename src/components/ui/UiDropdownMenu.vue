@@ -15,12 +15,11 @@
       <DropdownMenuContent
         :class="[
           'ui-dropdown-content',
-          { 'ui-dropdown-content--titled': Boolean(title), 'has-hover-bridge': openOnHover },
+          { 'ui-dropdown-content--titled': Boolean(title) },
           contentClass || undefined,
         ]"
-        :style="hoverBridgeContentVar"
         :side="side"
-        :side-offset="sideOffset"
+        :side-offset="effectiveSideOffset"
         :align="align"
         :collision-padding="collisionPadding"
         @mouseenter="onContentMouseEnter"
@@ -109,10 +108,14 @@ const props = withDefaults(defineProps<Props>(), {
   contentClass: '',
 })
 
-// openOnHover hover bridge — trigger와 메뉴 사이 sideOffset gap을 양쪽에서 흡수
-// 1) trigger-wrap에 side 방향 padding → trigger 측 hover 영역 확장
-// 2) content에 ::before invisible 영역 → portal(body 직속)인 메뉴 측 hover 영역 확장
-//    두 영역이 겹쳐서 빈 공간 없이 hover 연속 보장.
+// openOnHover 모드에서는 trigger ↔ 메뉴 사이 sideOffset gap이 mouse가 어디
+// element에 있는지 모호하게 만들어 깜박임을 유발한다. gap 자체를 제거 —
+// 메뉴를 trigger에 딱 붙여 표시. hover 메뉴 패턴(네비게이션 등)에 일반적.
+const effectiveSideOffset = computed(() =>
+  props.openOnHover ? 0 : props.sideOffset,
+)
+
+// trigger-wrap padding은 hover 영역 확장 fallback(여전히 안전)
 const hoverBridgeStyle = computed<Record<string, string>>(() => {
   if (!props.openOnHover) return { display: 'inline-block' }
   const pad = `${props.sideOffset + 2}px`
@@ -123,12 +126,6 @@ const hoverBridgeStyle = computed<Record<string, string>>(() => {
     right: 'paddingRight',
   }
   return { display: 'inline-block', [sideMap[props.side]]: pad }
-})
-
-// content ::before 크기를 CSS 변수로 전달 — SCSS가 동적 sideOffset을 읽도록
-const hoverBridgeContentVar = computed<Record<string, string>>(() => {
-  if (!props.openOnHover) return {}
-  return { '--ui-dropdown-bridge': `${props.sideOffset + 2}px` }
 })
 
 const emit = defineEmits<{
@@ -214,43 +211,6 @@ watch(openState, (v) => emit('update:open', v))
     animation: ui-dropdown-out 0.1s ease forwards;
   }
 
-  // ===== openOnHover hover bridge =====
-  // radix portal이 body 직속이라 trigger-wrap padding과 별개로 끊기는
-  // hover 영역을 ::before invisible 박스로 채워준다. data-side 기반으로
-  // trigger 방향에 맞춰 박스 위치 결정. pointer-events auto가 핵심.
-  &.has-hover-bridge {
-    &::before {
-      content: '';
-      position: absolute;
-      pointer-events: auto;
-      background: transparent;
-    }
-
-    &[data-side='bottom']::before {
-      top: calc(var(--ui-dropdown-bridge, 8px) * -1);
-      left: 0;
-      right: 0;
-      height: var(--ui-dropdown-bridge, 8px);
-    }
-    &[data-side='top']::before {
-      bottom: calc(var(--ui-dropdown-bridge, 8px) * -1);
-      left: 0;
-      right: 0;
-      height: var(--ui-dropdown-bridge, 8px);
-    }
-    &[data-side='left']::before {
-      right: calc(var(--ui-dropdown-bridge, 8px) * -1);
-      top: 0;
-      bottom: 0;
-      width: var(--ui-dropdown-bridge, 8px);
-    }
-    &[data-side='right']::before {
-      left: calc(var(--ui-dropdown-bridge, 8px) * -1);
-      top: 0;
-      bottom: 0;
-      width: var(--ui-dropdown-bridge, 8px);
-    }
-  }
 }
 
 .ui-dropdown-title {
