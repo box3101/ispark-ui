@@ -27,7 +27,13 @@ import { Meta } from '@storybook/blocks'
   </tbody>
 </table>
 
-정책 외 추가 구현분: UiRadio, UiTooltip, UiPagination, UiTab, UiDropdownMenu. 실사용 요구로 먼저 들어왔다. (`CLAUDE.md` 마이그레이션 정책 표는 별도 동기화 필요)
+## 정책 외 추가 구현분
+
+원본 사용 빈도는 낮거나 0이지만 실사용 요구로 라이브러리화한 컴포넌트.
+
+- **Radix-vue 래퍼** · UiTooltip, UiDropdownMenu, UiDatePicker, UiDateRangePicker, UiAccordion
+- **유틸리티 / 폼 보조** · UiPagination, UiTab, UiRadio
+- **알림 인프라** · UiToast + `openToast()` composable
 
 ## 마이그레이션 정책
 
