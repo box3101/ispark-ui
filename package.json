@@ -49,8 +49,8 @@
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "vue": "^3.5.0",
-    "radix-vue": "^1.9.0"
+    "radix-vue": "^1.9.0",
+    "vue": "^3.5.0"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^8.6.14",
@@ -68,5 +68,8 @@
     "vitest": "^2.1.8",
     "vue": "^3.5.13",
     "vue-tsc": "^2.2.0"
+  },
+  "dependencies": {
+    "@internationalized/date": "^3.12.1"
   }
 }

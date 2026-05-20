@@ -27,6 +27,9 @@ export type { DropdownMenuItemDef } from './components/ui/UiDropdownMenu.vue'
 export { default as UiTab } from './components/ui/UiTab.vue'
 export type { TabItem } from './components/ui/UiTab.vue'
 export { default as UiToast } from './components/ui/UiToast.vue'
+export { default as UiDatePicker } from './components/ui/UiDatePicker.vue'
+export { default as UiDateRangePicker } from './components/ui/UiDateRangePicker.vue'
+export type { DateRange } from './components/ui/UiDateRangePicker.vue'
 
 // Toast composable — 어디서든 openToast() 호출
 export { openToast, closeToast } from './composables/useToast'

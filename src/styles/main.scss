@@ -8,6 +8,9 @@
 @use './icons/icon';
 @use './icons/icons.custom';
 
+// components (글로벌 SCSS — radix-vue 내부 등 scoped 불가)
+@use './components/datepicker';
+
 // ===================================
 // 테마 CSS 변수 (런타임 전환 가능)
 // 원본: team_agent_front/assets/styles/main.scss

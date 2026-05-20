@@ -375,7 +375,8 @@ defineExpose({
   border: 1px solid var(--color-border);
   border-radius: $shape-rounded;
   box-shadow: $shadow-md;
-  z-index: $z-dropdown;
+  // modal/popover 안에서 열릴 때도 보이도록 — toast 바로 아래
+  z-index: calc(#{$z-toast} - 10);
 }
 
 .ui-select-item {
