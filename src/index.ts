@@ -30,6 +30,8 @@ export { default as UiToast } from './components/ui/UiToast.vue'
 export { default as UiDatePicker } from './components/ui/UiDatePicker.vue'
 export { default as UiDateRangePicker } from './components/ui/UiDateRangePicker.vue'
 export type { DateRange } from './components/ui/UiDateRangePicker.vue'
+export { default as UiAccordion } from './components/ui/UiAccordion.vue'
+export type { AccordionItemDef } from './components/ui/UiAccordion.vue'
 
 // Toast composable — 어디서든 openToast() 호출
 export { openToast, closeToast } from './composables/useToast'
