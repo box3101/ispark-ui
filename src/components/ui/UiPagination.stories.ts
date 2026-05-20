@@ -7,7 +7,7 @@ import UiEmpty from './UiEmpty.vue'
 import type { TableColumn } from './UiTable.vue'
 
 const meta = {
-  title: 'Components/UiPagination',
+  title: 'Components/Display/UiPagination',
   component: UiPagination,
   tags: ['autodocs'],
   args: {

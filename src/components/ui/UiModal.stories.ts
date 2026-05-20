@@ -5,7 +5,7 @@ import UiModal from './UiModal.vue'
 import UiButton from './UiButton.vue'
 
 const meta = {
-  title: 'Components/UiModal',
+  title: 'Components/Overlay/UiModal',
   component: UiModal,
   tags: ['autodocs'],
   args: {
@@ -89,6 +89,15 @@ export const Default: Story = {
     await expect(args['onUpdate:open']).toHaveBeenCalledWith(false)
     await expect(args.onClose).toHaveBeenCalled()
   },
+}
+
+// Introduction 카드 grid 임베드용 — trigger 버튼만, play 없음
+export const Trigger: Story = {
+  name: 'Trigger (preview)',
+  render: () => ({
+    components: { UiButton },
+    template: '<UiButton variant="primary">모달 열기</UiButton>',
+  }),
 }
 
 export const WithTitle: Story = {

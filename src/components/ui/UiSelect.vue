@@ -145,7 +145,7 @@ const emit = defineEmits<{
 }>()
 
 // id 자동 생성 (Vue 3.5+ useId — SSR 안전)
-const uid = useId()
+const uid = Math.random().toString(36).slice(2, 11)
 const resolvedId = computed(() => props.id || `ui-select-${uid}`)
 
 const descId = computed(() => (props.desc ? `${resolvedId.value}-desc` : undefined))

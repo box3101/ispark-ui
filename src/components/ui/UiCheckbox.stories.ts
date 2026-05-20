@@ -4,7 +4,7 @@ import { computed, ref } from 'vue'
 import UiCheckbox from './UiCheckbox.vue'
 
 const meta = {
-  title: 'Components/UiCheckbox',
+  title: 'Components/Form/UiCheckbox',
   component: UiCheckbox,
   tags: ['autodocs'],
   args: {
@@ -89,7 +89,7 @@ export const Default: Story = {
     const canvas = within(canvasElement)
     const cb = canvas.getByRole('checkbox')
     await expect((cb as HTMLInputElement).checked).toBe(false)
-    await userEvent.click(cb)
+    cb.click()
     await expect(args['onUpdate:modelValue']).toHaveBeenCalledWith(true)
     await expect(args.onChange).toHaveBeenCalledWith(true)
   },
@@ -132,7 +132,7 @@ export const Disabled: Story = {
     const canvas = within(canvasElement)
     const cb = canvas.getByRole('checkbox') as HTMLInputElement
     await expect(cb.disabled).toBe(true)
-    await userEvent.click(cb)
+    cb.click()
     // disabled native — 브라우저가 change 자체를 발생 안 시킴
     await expect(args['onUpdate:modelValue']).not.toHaveBeenCalled()
   },

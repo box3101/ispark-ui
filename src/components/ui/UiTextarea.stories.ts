@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import UiTextarea from './UiTextarea.vue'
 
 const meta = {
-  title: 'Components/UiTextarea',
+  title: 'Components/Form/UiTextarea',
   component: UiTextarea,
   tags: ['autodocs'],
   args: {

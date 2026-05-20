@@ -6,7 +6,7 @@ import type { TableColumn } from './UiTable.vue'
 import UiBadge from './UiBadge.vue'
 
 const meta = {
-  title: 'Components/UiTable',
+  title: 'Components/Display/UiTable',
   component: UiTable,
   tags: ['autodocs'],
   args: {

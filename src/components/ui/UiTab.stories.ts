@@ -5,7 +5,7 @@ import UiTab from './UiTab.vue'
 import type { TabItem } from './UiTab.vue'
 
 const meta = {
-  title: 'Components/UiTab',
+  title: 'Components/Navigation/UiTab',
   component: UiTab,
   tags: ['autodocs'],
   args: {

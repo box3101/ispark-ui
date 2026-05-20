@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import UiToggle from './UiToggle.vue'
 
 const meta = {
-  title: 'Components/UiToggle',
+  title: 'Components/Form/UiToggle',
   component: UiToggle,
   tags: ['autodocs'],
   args: {

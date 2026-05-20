@@ -98,7 +98,7 @@ const emit = defineEmits<{
   change: [value: boolean]
 }>()
 
-const uid = useId()
+const uid = Math.random().toString(36).slice(2, 11)
 const resolvedId = computed(() => props.id || `ui-checkbox-${uid}`)
 
 // indeterminate는 HTML attribute가 아닌 DOM property — :indeterminate 바인딩 X

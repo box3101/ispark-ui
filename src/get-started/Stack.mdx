@@ -1,0 +1,49 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta title="Get Started/Stack" />
+
+# 스택 · 패키지 · 명령어
+
+## 패키지: 최소로 시작
+
+미리 다 깔지 않는다. 필요해지면 그때 추가한다. Phase 1은 7개로 출발한다.
+
+**Storybook**
+
+- `@storybook/vue3-vite` · Storybook 본체 (Vue 3 + Vite 빌더)
+- `@storybook/test` · `fn()`, `expect`, `userEvent`, `within`
+- `@storybook/addon-essentials` · Controls, Docs, Viewport, Backgrounds
+
+**테스트**
+
+- `vitest` · 러너
+- `@vitejs/plugin-vue` · Vue SFC 처리
+- `@testing-library/vue` · `render`, `screen`
+- `jsdom` · Node에서 DOM 에뮬레이션
+
+Phase 2는 문제가 생겼을 때 해결책으로만 추가한다.
+
+<table>
+  <thead>
+    <tr><th>패키지</th><th>추가 시점</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>@testing-library/jest-dom</code></td><td><code>toBeInTheDocument</code> 매처가 필요할 때</td></tr>
+    <tr><td><code>@testing-library/user-event</code></td><td>타이핑·드래그 등 복잡한 상호작용</td></tr>
+    <tr><td><code>@storybook/addon-a11y</code></td><td>접근성 위반이 릴리즈를 막아야 할 때</td></tr>
+    <tr><td><code>@storybook/test-runner</code></td><td>CI에서 play 자동 실행</td></tr>
+    <tr><td><code>@vue/test-utils</code></td><td>컴포넌트 내부 상태·메서드 접근</td></tr>
+    <tr><td><code>@chromatic-com/storybook</code></td><td>픽셀 단위 시각 회귀 도입</td></tr>
+  </tbody>
+</table>
+
+패키지가 늘면 관리 부담과 빌드 시간도 같이 는다.
+
+## 명령어
+
+```bash
+npm run storybook         # dev 서버 (6006)
+npm run build-storybook   # 정적 빌드 → storybook-static/
+npm test                  # Vitest 1회
+npm run test:watch        # Vitest watch
+```

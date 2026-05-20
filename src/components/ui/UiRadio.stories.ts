@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import UiRadio from './UiRadio.vue'
 
 const meta = {
-  title: 'Components/UiRadio',
+  title: 'Components/Form/UiRadio',
   component: UiRadio,
   tags: ['autodocs'],
   args: {
@@ -116,7 +116,7 @@ export const Default: Story = {
     const canvas = within(canvasElement)
     const radio = canvas.getByRole('radio') as HTMLInputElement
     await expect(radio.checked).toBe(false)
-    await userEvent.click(radio)
+    radio.click()
     // update:modelValue에 value('pro') emit
     await expect(args['onUpdate:modelValue']).toHaveBeenCalledWith('pro')
     await expect(args.onChange).toHaveBeenCalledWith('pro')

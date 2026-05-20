@@ -4,7 +4,7 @@ import UiButton from './UiButton.vue'
 import { SIZES, SHAPES } from '@/design-tokens'
 
 const meta = {
-  title: 'Components/UiButton',
+  title: 'Components/Form/UiButton',
   component: UiButton,
   tags: ['autodocs'],
   args: {

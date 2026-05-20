@@ -1,0 +1,85 @@
+<!-- Manager UI (사이드바/툴바) 전용 폰트 + 디테일 폴리시 -->
+<link rel="stylesheet" as="style" crossorigin
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
+
+<style>
+  /* ── 사이드바 전체 폰트 통일 (Pretendard) ───────────────────── */
+  .sidebar-container,
+  .sidebar-container *,
+  [id^="storybook-explorer-tree"],
+  [id^="storybook-explorer-tree"] *,
+  nav[aria-label="Sidebar"],
+  nav[aria-label="Sidebar"] * {
+    font-family: "Pretendard Variable", Pretendard, -apple-system,
+      BlinkMacSystemFont, system-ui, sans-serif !important;
+  }
+
+  /* ── 그룹 헤더(루트) — letter-spacing 살짝, 톤다운 ──────────── */
+  .sidebar-container button[data-nodetype="root"],
+  [id^="storybook-explorer-tree"] button[data-nodetype="root"] {
+    letter-spacing: 0.04em;
+    font-size: 11px;
+  }
+
+  /* ── 선택 상태: 풀-블루 → 연한 primary 톤 + 좌측 인디케이터 ─── */
+  .sidebar-container a[data-selected="true"],
+  .sidebar-container button[data-selected="true"],
+  [id^="storybook-explorer-tree"] a[data-selected="true"],
+  [id^="storybook-explorer-tree"] button[data-selected="true"] {
+    background: rgba(60, 105, 219, 0.10) !important;
+    color: #3c69db !important;
+    font-weight: 600 !important;
+    position: relative;
+  }
+  .sidebar-container a[data-selected="true"]::before,
+  .sidebar-container button[data-selected="true"]::before,
+  [id^="storybook-explorer-tree"] a[data-selected="true"]::before,
+  [id^="storybook-explorer-tree"] button[data-selected="true"]::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 2px;
+    background: #3c69db;
+    border-radius: 0 2px 2px 0;
+  }
+  /* 선택 상태 내부 텍스트(span 포함)도 primary 색으로 통일 */
+  .sidebar-container a[data-selected="true"] *,
+  .sidebar-container button[data-selected="true"] *,
+  [id^="storybook-explorer-tree"] a[data-selected="true"] *,
+  [id^="storybook-explorer-tree"] button[data-selected="true"] * {
+    color: #3c69db !important;
+  }
+
+  /* ── 호버 상태 — 부드러운 그레이 ──────────────────────────── */
+  .sidebar-container a:not([data-selected="true"]):hover,
+  .sidebar-container button:not([data-selected="true"]):hover,
+  [id^="storybook-explorer-tree"] a:not([data-selected="true"]):hover,
+  [id^="storybook-explorer-tree"] button:not([data-selected="true"]):hover {
+    background: rgba(60, 105, 219, 0.04) !important;
+  }
+
+  /* ── 트리 아이콘(격자 등) 톤다운 ───────────────────────────── */
+  .sidebar-container a:not([data-selected="true"]) svg,
+  .sidebar-container button:not([data-selected="true"]) > svg,
+  [id^="storybook-explorer-tree"] a:not([data-selected="true"]) svg,
+  [id^="storybook-explorer-tree"] button:not([data-selected="true"]) > svg {
+    opacity: 0.5;
+  }
+  .sidebar-container a[data-selected="true"] svg,
+  [id^="storybook-explorer-tree"] a[data-selected="true"] svg {
+    opacity: 1;
+    color: #3c69db !important;
+  }
+
+  /* ── 검색바 — 둥글기 + placeholder 톤다운 ─────────────────── */
+  .sidebar-container input[type="search"],
+  .search-field input,
+  .sidebar-container [class*="search"] input {
+    border-radius: 8px !important;
+  }
+  .sidebar-container input::placeholder {
+    color: #9ca3af !important;
+  }
+</style>

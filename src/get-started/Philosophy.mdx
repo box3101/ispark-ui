@@ -1,0 +1,35 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta title="Get Started/Philosophy" />
+
+# 철학
+
+## 한 스토리, 세 가지 역할
+
+컴포넌트마다 스토리 파일을 하나 쓴다. 그 한 파일이 세 가지 일을 동시에 한다.
+
+<table>
+  <thead>
+    <tr><th>역할</th><th>작동 방식</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>문서</td><td>Storybook autodocs 로 자동 변환되어 사이드바에 노출</td></tr>
+    <tr><td>시각 회귀</td><td>스토리 화면이 곧 디자인 검증 대상 (Chromatic 연동은 선택)</td></tr>
+    <tr><td>단위 테스트</td><td><code>composeStories</code> 로 Vitest 에 그대로 import 하면 play 함수 상호작용이 테스트가 됨</td></tr>
+  </tbody>
+</table>
+
+같은 시나리오를 테스트 코드로 다시 쓰지 않는다. 중복이 사라진다.
+
+## 컴포넌트 = 세 파일 세트
+
+새 컴포넌트는 항상 세 파일을 같이 만든다.
+
+```
+src/components/ui/
+├── UiButton.vue          컴포넌트 본체
+├── UiButton.stories.ts   CSF3 스토리 + play (문서 + 상호작용)
+└── UiButton.test.ts      composeStories 재사용 (엣지 케이스만)
+```
+
+스토리가 최소 테스트 케이스다. 일반 동작은 스토리로 충분하고, `.test.ts` 는 엣지 케이스·클래스 검증·분기 로직처럼 스토리가 못 잡는 것만 맡는다. play 함수가 길어지면 E2E 신호다. 그때는 Playwright 이전을 검토한다.

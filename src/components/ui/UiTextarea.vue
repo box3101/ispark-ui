@@ -140,7 +140,7 @@ const emit = defineEmits<{
   'update:modelValue': [value: string]
 }>()
 
-const uid = useId()
+const uid = Math.random().toString(36).slice(2, 11)
 const resolvedId = computed(() => props.id || `ui-textarea-${uid}`)
 const errorId = computed(() => (props.errorMessage ? `${resolvedId.value}-error` : undefined))
 const descId = computed(() => (props.desc && !props.errorMessage ? `${resolvedId.value}-desc` : undefined))

@@ -3,7 +3,7 @@ import UiTooltip from './UiTooltip.vue'
 import UiButton from './UiButton.vue'
 
 const meta = {
-  title: 'Components/UiTooltip',
+  title: 'Components/Overlay/UiTooltip',
   component: UiTooltip,
   tags: ['autodocs'],
   parameters: {

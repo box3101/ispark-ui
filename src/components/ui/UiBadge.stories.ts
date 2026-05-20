@@ -3,7 +3,7 @@ import { expect, within } from '@storybook/test'
 import UiBadge from './UiBadge.vue'
 
 const meta = {
-  title: 'Components/UiBadge',
+  title: 'Components/Display/UiBadge',
   component: UiBadge,
   tags: ['autodocs'],
   parameters: {

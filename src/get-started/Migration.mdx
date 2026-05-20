@@ -1,0 +1,46 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta title="Get Started/Migration" />
+
+# 마이그레이션 정책 · 구현 현황
+
+## 구현 현황
+
+핵심 10개와 UiTable까지 완료했다. 사이드바 **Components**에서 각 스토리와 자동 문서를 본다.
+
+<table>
+  <thead>
+    <tr><th>컴포넌트</th><th style={{ textAlign: 'right' }}>사용</th><th>비고</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>UiButton</td><td style={{ textAlign: 'right' }}>71</td><td>variant 4 (primary/secondary/ghost/danger), size 3 (sm 28 / md 32 / lg 40), loading·disabled·fullWidth·iconOnly. 원본 8×6 → 4×3 정리</td></tr>
+    <tr><td>UiInput</td><td style={{ textAlign: 'right' }}>46</td><td></td></tr>
+    <tr><td>UiSelect</td><td style={{ textAlign: 'right' }}>32</td><td></td></tr>
+    <tr><td>UiModal</td><td style={{ textAlign: 'right' }}>31</td><td></td></tr>
+    <tr><td>UiTextarea</td><td style={{ textAlign: 'right' }}>20</td><td></td></tr>
+    <tr><td>UiEmpty</td><td style={{ textAlign: 'right' }}>22</td><td></td></tr>
+    <tr><td>UiToggle</td><td style={{ textAlign: 'right' }}>15</td><td></td></tr>
+    <tr><td>UiLoading</td><td style={{ textAlign: 'right' }}>13</td><td></td></tr>
+    <tr><td>UiCheckbox</td><td style={{ textAlign: 'right' }}>13</td><td></td></tr>
+    <tr><td>UiBadge</td><td style={{ textAlign: 'right' }}>10</td><td></td></tr>
+    <tr><td>UiTable</td><td style={{ textAlign: 'right' }}>7</td><td>중간 빈도지만 요청으로 라이브러리화</td></tr>
+  </tbody>
+</table>
+
+정책 외 추가 구현분: UiRadio, UiTooltip, UiPagination, UiTab, UiDropdownMenu. 실사용 요구로 먼저 들어왔다. (`CLAUDE.md` 마이그레이션 정책 표는 별도 동기화 필요)
+
+## 마이그레이션 정책
+
+라이브러리는 적게, 강하게. 실제로 쓰이는 것만 옮긴다.
+
+`team_agent_front` 사용 빈도 10회 이상만 마이그레이션 대상이다. 그 아래는 원본에 두고, 요청이 오면 다시 검토한다. 새로 추가할 때는:
+
+1. 사용처 10곳 이상 확인
+2. variant·size 정리 적용 (UiButton: 8→4, 6→3)
+3. PR description에 사유 명시
+
+## 참고
+
+- `CLAUDE.md` · 프로젝트 정체성·구조·규칙 인덱스
+- `.claude/rules/` · 컴포넌트·SCSS·네이밍·컨벤션 세부 규칙
+- 원본 프로젝트 · `C:\team_agent_front`

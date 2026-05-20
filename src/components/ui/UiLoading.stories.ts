@@ -8,7 +8,7 @@ import UiButton from './UiButton.vue'
 import type { TableColumn } from './UiTable.vue'
 
 const meta = {
-  title: 'Components/UiLoading',
+  title: 'Components/Feedback/UiLoading',
   component: UiLoading,
   tags: ['autodocs'],
   parameters: {

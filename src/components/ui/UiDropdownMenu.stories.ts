@@ -6,7 +6,7 @@ import UiButton from './UiButton.vue'
 import type { DropdownMenuItemDef } from './UiDropdownMenu.vue'
 
 const meta = {
-  title: 'Components/UiDropdownMenu',
+  title: 'Components/Overlay/UiDropdownMenu',
   component: UiDropdownMenu,
   tags: ['autodocs'],
   args: {

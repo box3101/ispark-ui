@@ -323,7 +323,7 @@ const outerStyle = computed<StyleValue | undefined>(() => (attrs.style as StyleV
 
 // id 자동 생성 (Vue 3.5+ useId — SSR 안전, 인스턴스별 unique).
 // 외부에서 id prop을 안 주면 label/aria 연결을 위해 내부 id 사용.
-const uid = useId()
+const uid = Math.random().toString(36).slice(2, 11)
 const resolvedId = computed(() => props.id || `ui-input-${uid}`)
 
 // desc id — input의 aria-describedby로 연결

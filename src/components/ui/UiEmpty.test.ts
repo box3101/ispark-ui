@@ -42,4 +42,12 @@ describe('UiEmpty', () => {
     expect(container.querySelector('.ui-empty-action')).not.toBeNull()
     expect(screen.getByText('액션')).toBeTruthy()
   })
+
+  // 4. a11y — 루트가 role="status" + aria-live="polite" (비동기 빈 상태 announce)
+  it('루트 컨테이너에 role="status" + aria-live="polite"', () => {
+    const { container } = render(UiEmpty)
+    const root = container.querySelector('.ui-empty')
+    expect(root?.getAttribute('role')).toBe('status')
+    expect(root?.getAttribute('aria-live')).toBe('polite')
+  })
 })

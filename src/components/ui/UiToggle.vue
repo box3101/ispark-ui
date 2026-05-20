@@ -57,7 +57,7 @@ const emit = defineEmits<{
   change: [value: boolean]
 }>()
 
-const uid = useId()
+const uid = Math.random().toString(36).slice(2, 11)
 const resolvedId = computed(() => props.id || `ui-toggle-${uid}`)
 
 const onClick = () => {

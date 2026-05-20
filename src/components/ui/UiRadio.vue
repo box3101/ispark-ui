@@ -71,7 +71,7 @@ const emit = defineEmits<{
   change: [value: RadioValue]
 }>()
 
-const uid = useId()
+const uid = Math.random().toString(36).slice(2, 11)
 const resolvedId = computed(() => props.id || `ui-radio-${uid}`)
 // name 미지정 시 그룹은 fall back 자동 — 사용자가 명시하지 않으면 각 라디오가 독립 그룹
 // 같은 v-model을 공유하는 라디오들은 같은 name을 명시하거나 외부 RadioGroup wrapper 패턴 사용 권장

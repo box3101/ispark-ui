@@ -1,6 +1,15 @@
 <template>
-  <div class="ui-empty">
-    <!-- 아이콘 -->
+  <!--
+    a11y: role="status" + aria-live="polite"
+    데이터가 비동기로 비워질 때(검색·필터 결과 변경 등) 스크린리더가 "조회 결과 없음"을 polite하게 announce.
+    polite는 사용자 작업을 끊지 않고 대기 큐에 들어감.
+  -->
+  <div
+    class="ui-empty"
+    role="status"
+    aria-live="polite"
+  >
+    <!-- 아이콘 — 장식용이므로 aria-hidden -->
     <i
       v-if="icon"
       :class="[icon, 'size-24']"

@@ -5,7 +5,7 @@ import UiInput from './UiInput.vue'
 import { INPUT_SIZES, SIZES } from '@/design-tokens'
 
 const meta = {
-  title: 'Components/UiInput',
+  title: 'Components/Form/UiInput',
   component: UiInput,
   tags: ['autodocs'],
   args: {
