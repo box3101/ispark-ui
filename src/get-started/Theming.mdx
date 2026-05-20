@@ -1,0 +1,107 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta title="Get Started/Theming" />
+
+# 테마 커스터마이즈
+
+ispark-ui는 두 종류의 변경 지점을 제공한다.
+
+| 종류 | 변경 방법 | 자유도 |
+|---|---|---|
+| **색상 (테마)** | CSS 변수 덮어쓰기 | 무조건 OK |
+| **구조 (간격·radius·border 등)** | 부모 클래스로 specificity 끌어올리기 | 가능, 단 import 순서 주의 |
+
+라이브러리 컴포넌트는 모두 `<style scoped>`로 빌드되어 `.ui-accordion-trigger[data-v-xxxxx]` 형태로 hash 속성이 박힌다. 그래서 단순히 `.ui-accordion-trigger { ... }`만 쓰면 specificity가 낮아 덮어쓰기 실패한다.
+
+## 1. 색상 — CSS 변수
+
+`:root`에서 ispark-ui가 노출하는 변수를 덮어쓰면 모든 컴포넌트에 즉시 반영된다. specificity 무관.
+
+```scss
+// 컨슈머 프로젝트 main.scss
+@import 'ispark-ui/style.css';
+
+:root {
+  --color-primary: #ff7518;
+  --color-primary-hover: #e5660f;
+  --color-primary-bg: #fff4eb;
+  --color-primary-rgb: 255, 117, 24;
+
+  --color-danger: #c73e07;
+}
+```
+
+### 노출된 변수
+
+| 카테고리 | 변수 |
+|---|---|
+| **Primary** | `--color-primary`, `--color-primary-hover`, `--color-primary-dark`, `--color-primary-dark-hover`, `--color-primary-rgb`, `--color-primary-bg` |
+| **Semantic** | `--color-danger`, `--color-danger-hover`, `--color-danger-dark`, `--color-success`, `--color-success-hover`, `--color-warning`, `--color-warning-hover`, `--color-info`, `--color-info-hover` |
+| **Surface** | `--color-border`, `--color-border-light`, `--color-text-primary`, `--color-text-secondary`, `--color-text-heading-sub`, `--color-background` |
+
+폰트·간격·shape는 빌드 타임 SCSS 변수라 런타임 변경 불가.
+
+## 2. 구조 — 부모 클래스로 덮어쓰기
+
+`<style scoped>`의 hash specificity를 같은 수준으로 맞추려면 부모 클래스를 하나 끼워 selector를 한 칸 더 길게 만든다.
+
+```vue
+<!-- 컨슈머 App.vue 루트에 클래스 하나 -->
+<template>
+  <div class="app-theme">
+    <!-- 모든 ispark-ui 컴포넌트는 이 안에서 렌더 -->
+  </div>
+</template>
+```
+
+```scss
+// 컨슈머 SCSS — ispark-ui 다음에 로드
+.app-theme {
+  .ui-accordion-trigger { padding: 20px 24px; }
+  .ui-accordion-item    { border-bottom-style: dashed; }
+  .ui-tab-item.is-active::after { height: 3px; }
+  .ui-button { letter-spacing: 0.02em; }
+}
+```
+
+**왜 동작하나** — 라이브러리는 `.ui-accordion-trigger[data-v-xxxxx]` (specificity `0,2,0`), 컨슈머는 `.app-theme .ui-accordion-trigger` (specificity `0,2,0`). 동률일 땐 **뒤에 로드된 쪽이 이긴다.**
+
+## 3. Import 순서 (중요)
+
+```ts
+// ❌ 잘못 — 라이브러리가 뒤에 와서 컨슈머 override를 덮어버림
+import './app-theme.scss'
+import 'ispark-ui/style.css'
+
+// ✅ 올바름
+import 'ispark-ui/style.css'
+import './app-theme.scss'
+```
+
+Vue/Nuxt 진입점, Vite `main.ts`, 또는 글로벌 CSS 등록 순서를 확인할 것.
+
+## 4. 안 되는 것 (의도된 한계)
+
+- **`<style scoped>` 내부의 미세 디테일**까지는 못 건드림. 예: `.ui-accordion-content`의 `animation` 이름. 필요하면 같은 keyframe을 부모 스코프에서 재정의.
+- **컴포넌트 props로 노출되지 않은 동작**. 디자인 정책상 막아둔 것은 라이브러리에 요청.
+- **`!important`는 마지막 수단**. 일단 부모 클래스 specificity로 해결되면 그쪽이 깨끗하다.
+
+## 5. 권장 패턴 — `.app-theme` 하나면 충분
+
+```scss
+// theme.scss — 한 파일에 모음
+.app-theme {
+  // 색상
+  --color-primary: #ff7518;
+  --color-primary-bg: #fff4eb;
+
+  // 폰트
+  font-family: 'Spoqa Han Sans Neo', sans-serif;
+
+  // 컴포넌트 미세 조정
+  .ui-button { font-weight: 600; }
+  .ui-accordion-item { border-color: #eee; }
+}
+```
+
+CSS 변수 + 부모 클래스 조합으로 대부분의 브랜드 차이는 한 파일 안에 끝낸다.
