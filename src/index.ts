@@ -26,6 +26,16 @@ export { default as UiDropdownMenu } from './components/ui/UiDropdownMenu.vue'
 export type { DropdownMenuItemDef } from './components/ui/UiDropdownMenu.vue'
 export { default as UiTab } from './components/ui/UiTab.vue'
 export type { TabItem } from './components/ui/UiTab.vue'
+export { default as UiToast } from './components/ui/UiToast.vue'
+
+// Toast composable — 어디서든 openToast() 호출
+export { openToast, closeToast } from './composables/useToast'
+export type {
+  ToastType,
+  ToastPlacement,
+  ToastOptions,
+  ToastItem,
+} from './composables/useToast'
 
 // 디자인 토큰 (TypeScript 타입 + 옵션 키 배열)
 // SIZES / INPUT_SIZES / SHAPES + Size / InputSize / Shape 타입
