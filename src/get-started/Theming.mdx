@@ -4,26 +4,40 @@ import { Meta } from '@storybook/blocks'
 
 # 테마 커스터마이즈
 
-ispark-ui는 두 종류의 변경 지점을 제공한다.
+`ispark-ui`는 두 종류의 변경 지점을 제공한다. **색상**은 CSS 변수, **구조**는 부모 클래스로 specificity 끌어올리기.
 
 <table>
   <thead>
-    <tr><th>종류</th><th>변경 방법</th><th>자유도</th></tr>
+    <tr><th>종류</th><th>변경 방법</th><th>자유도</th><th>런타임 전환</th></tr>
   </thead>
   <tbody>
-    <tr><td><strong>색상 (테마)</strong></td><td>CSS 변수 덮어쓰기</td><td>무조건 OK</td></tr>
-    <tr><td><strong>구조 (간격·radius·border 등)</strong></td><td>부모 클래스로 specificity 끌어올리기</td><td>가능, 단 import 순서 주의</td></tr>
+    <tr><td><strong>색상</strong></td><td><code>:root</code> CSS 변수 덮어쓰기</td><td>무조건 OK</td><td>가능 (즉시 반영)</td></tr>
+    <tr><td><strong>구조 (간격·radius·border)</strong></td><td>부모 클래스로 selector 확장</td><td>가능, import 순서 주의</td><td>불가 (빌드 타임)</td></tr>
+    <tr><td><strong>폰트·shape·spacing 토큰</strong></td><td>SCSS 변수 (라이브러리 빌드 시점)</td><td>불가</td><td>불가</td></tr>
   </tbody>
 </table>
 
-라이브러리 컴포넌트는 모두 `<style scoped>`로 빌드되어 `.ui-accordion-trigger[data-v-xxxxx]` 형태로 hash 속성이 박힌다. 그래서 단순히 `.ui-accordion-trigger { ... }`만 쓰면 specificity가 낮아 덮어쓰기 실패한다.
+라이브러리 컴포넌트는 모두 `<style scoped>`로 빌드되어 `.ui-accordion-trigger[data-v-xxxxx]` 형태로 hash 속성이 박힌다. 단순히 `.ui-accordion-trigger { ... }`만 쓰면 specificity가 낮아 덮어쓰기 실패한다.
 
-## 1. 색상 — CSS 변수
-
-`:root`에서 ispark-ui가 노출하는 변수를 덮어쓰면 모든 컴포넌트에 즉시 반영된다. specificity 무관.
+## 빠른 시작 — 5줄로 브랜드 컬러 적용
 
 ```scss
-// 컨슈머 프로젝트 main.scss
+// app.scss — ispark-ui style.css 뒤에 로드
+:root {
+  --color-primary: #ff7518;
+  --color-primary-hover: #e5660f;
+  --color-primary-bg: #fff4eb;
+  --color-primary-rgb: 255, 117, 24; // tint 배경 계산용 (필수)
+}
+```
+
+primary 한 톤만 바꿔도 Button/Select/Input focus ring/Tab indicator/Pagination active/Badge primary tint/Modal accent까지 일괄 반영. 다른 변수는 그대로 두고 시작해도 충돌 없음.
+
+## 1. 색상 — `:root` CSS 변수
+
+`ispark-ui/style.css`가 `:root`에 모든 테마 변수를 노출한다. 컨슈머가 같은 `:root` 또는 더 specific한 selector(예: `.app-theme`)에서 덮어쓰면 즉시 반영.
+
+```scss
 @import 'ispark-ui/style.css';
 
 :root {
@@ -36,36 +50,76 @@ ispark-ui는 두 종류의 변경 지점을 제공한다.
 }
 ```
 
-### 노출된 변수
+### 노출된 CSS 변수 (전체)
 
 <table>
   <thead>
-    <tr><th>카테고리</th><th>변수</th></tr>
+    <tr><th>카테고리</th><th>변수</th><th>용도</th></tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>Primary</strong></td>
-      <td><code>--color-primary</code>, <code>--color-primary-hover</code>, <code>--color-primary-dark</code>, <code>--color-primary-dark-hover</code>, <code>--color-primary-rgb</code>, <code>--color-primary-bg</code></td>
+      <td rowspan="3"><strong>Primary</strong></td>
+      <td><code>--color-primary</code> · <code>-hover</code> · <code>-dark</code> · <code>-dark-hover</code></td>
+      <td>브랜드 메인 + 4단계 상태</td>
     </tr>
     <tr>
-      <td><strong>Semantic</strong></td>
-      <td><code>--color-danger</code>, <code>--color-danger-hover</code>, <code>--color-danger-dark</code>, <code>--color-success</code>, <code>--color-success-hover</code>, <code>--color-warning</code>, <code>--color-warning-hover</code>, <code>--color-info</code>, <code>--color-info-hover</code></td>
+      <td><code>--color-primary-rgb</code></td>
+      <td>tint 배경 계산용 (예: <code>rgba(var(--color-primary-rgb), 0.12)</code>)</td>
+    </tr>
+    <tr>
+      <td><code>--color-primary-bg</code></td>
+      <td>primary 계열 옅은 배경 (Chat user message 등)</td>
+    </tr>
+    <tr>
+      <td><strong>Danger</strong></td>
+      <td><code>--color-danger</code> · <code>-hover</code> · <code>-dark</code></td>
+      <td>파괴적 액션 (삭제·에러)</td>
+    </tr>
+    <tr>
+      <td><strong>Success</strong></td>
+      <td><code>--color-success</code> · <code>-hover</code></td>
+      <td>완료·확인</td>
+    </tr>
+    <tr>
+      <td><strong>Warning</strong></td>
+      <td><code>--color-warning</code> · <code>-hover</code></td>
+      <td>주의·검토 필요</td>
+    </tr>
+    <tr>
+      <td><strong>Info</strong></td>
+      <td><code>--color-info</code> · <code>-hover</code></td>
+      <td>안내·중립 정보</td>
+    </tr>
+    <tr>
+      <td><strong>Border</strong></td>
+      <td><code>--color-border</code> · <code>--color-border-light</code></td>
+      <td>일반 경계 / 옅은 구분선</td>
+    </tr>
+    <tr>
+      <td rowspan="2"><strong>Text</strong></td>
+      <td><code>--color-text-primary</code> · <code>-secondary</code> · <code>-dark</code></td>
+      <td>본문 / 보조 / 강조</td>
+    </tr>
+    <tr>
+      <td><code>--color-text-heading</code> · <code>-heading-sub</code> · <code>-muted</code> · <code>-disabled</code></td>
+      <td>제목 / 부제 / 뮤트 / 비활성</td>
     </tr>
     <tr>
       <td><strong>Surface</strong></td>
-      <td><code>--color-border</code>, <code>--color-border-light</code>, <code>--color-text-primary</code>, <code>--color-text-secondary</code>, <code>--color-text-heading-sub</code>, <code>--color-background</code></td>
+      <td><code>--color-background</code> · <code>--color-surface</code> · <code>--color-bg-elevated</code></td>
+      <td>페이지 배경 / 카드 배경 / 모달·드롭다운 등 위로 떠 있는 표면</td>
     </tr>
   </tbody>
 </table>
 
-폰트·간격·shape는 빌드 타임 SCSS 변수라 런타임 변경 불가.
+폰트·간격·shape는 빌드 타임 SCSS 변수라 런타임 변경 불가. (향후 SCSS API 노출 검토 — 마지막 섹션 참고)
 
 ## 2. 구조 — 부모 클래스로 덮어쓰기
 
-`<style scoped>`의 hash specificity를 같은 수준으로 맞추려면 부모 클래스를 하나 끼워 selector를 한 칸 더 길게 만든다.
+`<style scoped>`의 hash specificity(`0,2,0`)에 맞추려면 부모 클래스를 한 칸 끼워 selector를 같은 specificity로 만든다.
 
 ```vue
-<!-- 컨슈머 App.vue 루트에 클래스 하나 -->
+<!-- 컨슈머 App.vue 루트 -->
 <template>
   <div class="app-theme">
     <!-- 모든 ispark-ui 컴포넌트는 이 안에서 렌더 -->
@@ -83,7 +137,7 @@ ispark-ui는 두 종류의 변경 지점을 제공한다.
 }
 ```
 
-**왜 동작하나** — 라이브러리는 `.ui-accordion-trigger[data-v-xxxxx]` (specificity `0,2,0`), 컨슈머는 `.app-theme .ui-accordion-trigger` (specificity `0,2,0`). 동률일 땐 **뒤에 로드된 쪽이 이긴다.**
+**왜 동작하나** — 라이브러리는 `.ui-accordion-trigger[data-v-xxxxx]` (specificity `0,2,0`), 컨슈머는 `.app-theme .ui-accordion-trigger` (specificity `0,2,0`). 동률일 땐 **뒤에 로드된 쪽이 이긴다**.
 
 ## 3. Import 순서 (중요)
 
@@ -97,37 +151,185 @@ import 'ispark-ui/style.css'
 import './app-theme.scss'
 ```
 
-Vue/Nuxt 진입점, Vite `main.ts`, 또는 글로벌 CSS 등록 순서를 확인할 것.
+## 4. 실전 레시피
 
-## 4. 권장 패턴 — `.app-theme` 하나면 충분
+### 4-1. 회사 톤 변경 (한 파일에 모음)
 
 ```scss
-// theme.scss — 한 파일에 모음
-.app-theme {
-  // 색상
+// app-theme.scss — 한 파일에 색·폰트·미세 구조 다 담음
+:root {
+  // 브랜드 컬러 (오렌지 톤)
   --color-primary: #ff7518;
+  --color-primary-hover: #e5660f;
+  --color-primary-dark: #c73e07;
+  --color-primary-dark-hover: #a83306;
+  --color-primary-rgb: 255, 117, 24;
   --color-primary-bg: #fff4eb;
 
+  // semantic
+  --color-danger: #dc2626;
+  --color-success: #15803d;
+
+  // 텍스트 톤 (살짝 더 진하게)
+  --color-text-primary: #1f2937;
+  --color-text-heading: #0f172a;
+}
+
+.app-theme {
   // 폰트
   font-family: 'Spoqa Han Sans Neo', sans-serif;
 
   // 컴포넌트 미세 조정
-  .ui-button { font-weight: 600; }
-  .ui-accordion-item { border-color: #eee; }
+  .ui-button { font-weight: 600; letter-spacing: 0.01em; }
+  .ui-accordion-item { border-bottom-color: #eee; }
 }
 ```
 
-CSS 변수 + 부모 클래스 조합으로 대부분의 브랜드 차이는 한 파일 안에 끝낸다.
+### 4-2. 다크 모드 후크 (`data-theme="dark"`)
 
-## 5. 안 되는 것 (의도된 한계)
+```html
+<!-- 컨슈머 root -->
+<html data-theme="light">
+```
+
+```scss
+// 라이트 (기본 :root는 이미 라이브러리가 설정)
+:root {
+  --color-bg-elevated: #ffffff;
+  --color-background: #f4f7f9;
+  --color-text-primary: #4d5462;
+  --color-text-heading: #1e2124;
+  --color-border: #dce4e9;
+  --color-border-light: #ecf0f3;
+}
+
+// 다크
+[data-theme="dark"] {
+  --color-bg-elevated: #1f2026;
+  --color-background: #1a1b1f;
+  --color-surface: #25272d;
+
+  --color-text-primary: #d4d3ca;
+  --color-text-heading: #f5f4ed;
+  --color-text-secondary: #8a8a82;
+  --color-text-muted: #6b6d75;
+
+  --color-border: #2a2c33;
+  --color-border-light: #25272d;
+
+  // primary는 다크에서 살짝 더 밝게 (가독성)
+  --color-primary: #6b8fe8;
+  --color-primary-hover: #88a3eb;
+}
+```
+
+```ts
+// 토글 트리거 (Pinia/composable 자유)
+document.documentElement.dataset.theme =
+  document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'
+```
+
+### 4-3. 컴포넌트별 디테일 override (Accordion 시각 차별화)
+
+```scss
+.app-theme {
+  // 더 굵은 좌측 인디케이터 + 부드러운 둥글기
+  .ui-accordion-item {
+    border-radius: 8px;
+    margin-bottom: 4px;
+    background: var(--color-surface);
+  }
+  .ui-accordion-trigger {
+    padding: 18px 22px;
+    font-weight: 700;
+  }
+  .ui-accordion-trigger[data-state='open'] {
+    background: var(--color-primary-bg);
+  }
+  .ui-accordion-chevron {
+    color: var(--color-primary);
+  }
+}
+```
+
+## 5. 컴포넌트별 CSS 변수 활용 매트릭스
+
+어떤 컴포넌트가 어떤 변수에 반응하는지. **primary 한 톤만 바꿔도 거의 모든 핵심 컴포넌트에 일괄 반영**.
+
+<table>
+  <thead>
+    <tr><th>컴포넌트</th><th>주로 사용하는 변수</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>UiButton</strong></td><td><code>--color-primary</code> · <code>-hover</code> · <code>-dark</code> · <code>--color-danger</code></td></tr>
+    <tr><td><strong>UiInput · UiSelect · UiTextarea</strong></td><td><code>--color-primary</code> (focus ring/border) · <code>--color-border</code> · <code>--color-text-disabled</code> (placeholder) · <code>--color-danger</code> (error)</td></tr>
+    <tr><td><strong>UiCheckbox · UiRadio · UiToggle</strong></td><td><code>--color-primary</code> · <code>-hover</code> · <code>--color-border</code></td></tr>
+    <tr><td><strong>UiTab</strong></td><td><code>--color-primary</code> (active indicator) · <code>--color-text-dark</code></td></tr>
+    <tr><td><strong>UiPagination</strong></td><td><code>--color-primary</code> · <code>-hover</code> · <code>--color-border</code></td></tr>
+    <tr><td><strong>UiBadge</strong></td><td><code>--color-primary-rgb</code> · <code>--color-success</code> · <code>--color-warning</code> · <code>--color-danger</code> · <code>--color-info</code> · <code>--color-background</code> (default tint)</td></tr>
+    <tr><td><strong>UiToast</strong></td><td><code>--color-success</code> · <code>--color-warning</code> · <code>--color-danger</code> · <code>--color-info</code> · <code>--color-text-disabled</code> (close 버튼)</td></tr>
+    <tr><td><strong>UiModal · UiDropdownMenu · UiSelect (Portal)</strong></td><td><code>--color-bg-elevated</code> · <code>--color-border</code></td></tr>
+    <tr><td><strong>UiTable</strong></td><td><code>--color-primary-rgb</code> (row hover/selected) · <code>--color-bg-elevated</code> · <code>--color-border</code> · <code>--color-text-muted</code> (header)</td></tr>
+    <tr><td><strong>UiDatePicker · UiDateRangePicker</strong></td><td><code>--color-primary</code> · <code>--color-text-disabled</code> (placeholder) · <code>--color-border</code></td></tr>
+    <tr><td><strong>UiAccordion</strong></td><td><code>--color-primary</code> (open trigger) · <code>--color-border</code> · <code>--color-text-secondary</code></td></tr>
+  </tbody>
+</table>
+
+## 6. 트러블슈팅
+
+<table>
+  <thead>
+    <tr><th>증상</th><th>원인</th><th>해결</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CSS 변수 덮어쓰기가 안 먹힘</td>
+      <td>컨슈머 SCSS가 <code>ispark-ui/style.css</code>보다 먼저 로드됨</td>
+      <td>main entry에서 ispark-ui 먼저, 컨슈머 다음</td>
+    </tr>
+    <tr>
+      <td>구조 override(<code>.ui-button</code>)가 무시됨</td>
+      <td>scoped hash와 specificity 동률 + 라이브러리가 뒤에 로드됨</td>
+      <td>부모 클래스 추가 (<code>.app-theme .ui-button</code>) + import 순서 확인</td>
+    </tr>
+    <tr>
+      <td>Nuxt에서 일부 페이지만 적용 안 됨</td>
+      <td>Nuxt가 페이지별 CSS chunk 분리 → 컨슈머 CSS가 페이지 chunk 안에 들어가 라이브러리 글로벌보다 늦게 inject</td>
+      <td><code>nuxt.config.ts</code>의 <code>css</code> 배열에 <code>['ispark-ui/style.css', '~/assets/css/app-theme.scss']</code> 순서로 명시</td>
+    </tr>
+    <tr>
+      <td><code>--color-primary-rgb</code>를 안 바꾸니 tint 배경(Table hover, Badge)이 안 따라옴</td>
+      <td>tint는 <code>rgba(var(--color-primary-rgb), 0.x)</code> 패턴이라 RGB 값을 별도로 지정해야 함</td>
+      <td>primary 색 hex의 RGB 값을 <code>255, 117, 24</code> 형태로 명시</td>
+    </tr>
+    <tr>
+      <td>Portal 컴포넌트(Modal, Dropdown, Select)에만 override 안 먹음</td>
+      <td>Portal로 <code>body</code> 끝에 렌더 → <code>.app-theme</code> 자식이 아니라서 부모 클래스 selector 실패</td>
+      <td>CSS 변수는 OK (<code>:root</code> 상속). 구조 override는 <code>body</code> 또는 <code>:where(html)</code> 같은 글로벌 selector로</td>
+    </tr>
+    <tr>
+      <td>SCSS <code>$color-*</code> 변수 직접 import해서 쓰고 싶음</td>
+      <td>라이브러리 SCSS 소스는 빌드 시점에 컴파일됨 — 외부 export 안 함</td>
+      <td>현재는 CSS 변수만 사용. SCSS API 노출은 로드맵에 있음</td>
+    </tr>
+  </tbody>
+</table>
+
+## 7. 안 되는 것 (의도된 한계)
 
 - **`<style scoped>` 내부의 미세 디테일**까지는 못 건드림. 예: `.ui-accordion-content`의 `animation` 이름. 필요하면 같은 keyframe을 부모 스코프에서 재정의.
 - **컴포넌트 props로 노출되지 않은 동작**. 디자인 정책상 막아둔 것은 라이브러리에 요청.
 - **`!important`는 마지막 수단**. 일단 부모 클래스 specificity로 해결되면 그쪽이 깨끗하다.
 
-## 다음 단계
+## 8. 다음 단계
+
+- **디자인 토큰 export** — 현재 TS로 `Size`, `Shape`, `SelectSize` 등 prop 타입은 export 중. 향후 컬러/spacing 토큰도 TS 객체로 export 검토.
+- **SCSS API** — `@use '@leechanyong/ispark-ui/styles' as ispark;` 형태로 `$color-primary`, `$spacing-md` 등을 직접 import할 수 있게 검토 중. 현 시점은 CSS 변수만.
+- **다크 모드 빌트인** — 현재 `[data-theme="dark"]` 패턴은 컨슈머 작성. 향후 라이브러리 차원에서 dark preset 옵션 제공 검토.
+
+## 참고
 
 - <a target="_top" href="/?path=/docs/get-started-install--docs">Install</a> — 설치·기본 사용
-- <a target="_top" href="/?path=/docs/get-started-philosophy--docs">Philosophy</a> — 한 스토리, 세 가지 역할
 - <a target="_top" href="/?path=/docs/get-started-stack--docs">Stack</a> — 패키지·명령어
-- <a target="_top" href="/?path=/docs/get-started-migration--docs">Migration</a> — 무엇이 옮겨졌나
+- <a target="_top" href="/?path=/docs/get-started-philosophy--docs">Philosophy</a> — 한 스토리, 세 가지 역할
+- <a target="_top" href="/?path=/docs/get-started-migration--docs">Migration</a> — 마이그레이션 정책·현황
