@@ -41,13 +41,13 @@ size/shape는 \`src/styles/tokens/_size.scss\`, \`_shape.scss\` 공용 토큰 �
 
 이 컴포넌트는 **자동 테스트 17개**로 동작이 보장됩니다.
 
-**동작 계약** — 클릭 emit, disabled/loading 차단
-**안전성** — type 기본값 button (form submit 방지), type="reset" 제거
-**접근성** — iconOnly + ariaLabel 시 aria-label 적용
-**확장성 (polymorphic)** — as="a" + href, disabled 시 aria-disabled+tabindex
-**보안** — as="a" + target="\\_blank" 시 rel="noopener noreferrer" 자동 부여
-**shape** — rounded(기본) / pill / circle 클래스 적용
-**iconSize** — 미지정 시 size 따라감, override 가능
+- **동작 계약** — 클릭 emit, disabled/loading 차단
+- **안전성** — type 기본값 button (form submit 방지), type="reset" 제거
+- **접근성** — iconOnly + ariaLabel 시 aria-label 적용
+- **확장성 (polymorphic)** — as="a" + href, disabled 시 aria-disabled+tabindex
+- **보안** — as="a" + target="\\_blank" 시 rel="noopener noreferrer" 자동 부여
+- **shape** — rounded(기본) / pill / circle 클래스 적용
+- **iconSize** — 미지정 시 size 따라감, override 가능
 
 > 테스트 코드: \`src/components/ui/UiButton.test.ts\`
         `,

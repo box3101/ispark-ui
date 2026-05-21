@@ -57,11 +57,11 @@ size/shape는 \`src/styles/tokens/_size.scss\`, \`_shape.scss\` 공용 토큰 �
 
 \`npm test\` 자동 테스트 (\`src/components/ui/UiInput.test.ts\`).
 
-**동작 계약** — input emit / enter 이벤트
-**숫자 정책** — numberOnly / allowDecimal / decimals / 다중 점 처리
-**type / 상태** — search / password / disabled / desc
-**shape & iconSize** — pill 클래스 적용, iconSize override
-**size auth** — 로그인 폼 토큰 적용
+- **동작 계약** — input emit / enter 이벤트
+- **숫자 정책** — numberOnly / allowDecimal / decimals / 다중 점 처리
+- **type / 상태** — search / password / disabled / desc
+- **shape & iconSize** — pill 클래스 적용, iconSize override
+- **size auth** — 로그인 폼 토큰 적용
         `,
       },
     },
