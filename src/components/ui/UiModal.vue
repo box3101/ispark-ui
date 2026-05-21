@@ -153,7 +153,7 @@ const contentStyle = computed(() => {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
-  background: #fff;
+  background: var(--color-bg-elevated);
   border-radius: $shape-rounded;
   box-shadow: $shadow-md;
   z-index: $z-modal + 1;
@@ -309,5 +309,16 @@ const contentStyle = computed(() => {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+// 모션 감소 선호 시 — overlay/content animation 즉시 표시 (transform/opacity 없이)
+@media (prefers-reduced-motion: reduce) {
+  .ui-modal-overlay,
+  .ui-modal-content {
+    &[data-state='open'],
+    &[data-state='closed'] {
+      animation: none;
+    }
+  }
 }
 </style>

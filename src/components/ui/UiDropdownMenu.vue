@@ -1,7 +1,13 @@
 <template>
   <DropdownMenuRoot v-model:open="openState">
+    <!--
+      as-child는 첫 자식을 Radix trigger로 사용한다.
+      openOnHover=true일 때만 hover bridge용 span wrapper 필요 — 일반 사용(클릭 토글)에선
+      사용자가 넘긴 button을 그대로 trigger로 사용해 aria-haspopup/expanded와 focus를 정확히 전달.
+    -->
     <DropdownMenuTrigger as-child>
       <span
+        v-if="openOnHover"
         class="ui-dropdown-trigger-wrap"
         :style="hoverBridgeStyle"
         @mouseenter="onTriggerMouseEnter"
@@ -9,6 +15,10 @@
       >
         <slot name="trigger" />
       </span>
+      <slot
+        v-else
+        name="trigger"
+      />
     </DropdownMenuTrigger>
 
     <DropdownMenuPortal>

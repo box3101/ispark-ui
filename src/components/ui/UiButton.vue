@@ -16,7 +16,7 @@
       },
     ]"
     :type="as === 'button' ? type : undefined"
-    :href="as === 'a' ? href : undefined"
+    :href="as === 'a' ? safeHref : undefined"
     :target="as === 'a' ? target : undefined"
     :rel="as === 'a' && target === '_blank' ? 'noopener noreferrer' : undefined"
     :disabled="as === 'button' && (disabled || loading) ? true : undefined"
@@ -57,8 +57,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import type { Size, Shape } from '@/design-tokens'
+
+// XSS 방어 — href에 위험한 URL scheme 차단 (javascript:, data:, vbscript:, file:)
+// 안전 스킴(http(s)/mailto/tel/sms/상대 경로/해시 등)은 그대로 통과
+const DANGEROUS_SCHEME_RE = /^\s*(?:javascript|data|vbscript|file):/i
+const sanitizeHref = (raw?: string): string | undefined => {
+  if (!raw) return undefined
+  const trimmed = raw.trim()
+  if (DANGEROUS_SCHEME_RE.test(trimmed)) {
+    if (import.meta.env.DEV) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[UiButton] 차단된 위험 URL scheme: "${trimmed.slice(0, 40)}…" → href 비움 (XSS 방어)`,
+      )
+    }
+    return undefined
+  }
+  return trimmed
+}
 
 interface Props {
   /**
@@ -154,6 +172,9 @@ if (import.meta.env.DEV) {
     }
   })
 }
+
+// href XSS sanitize — computed로 reactive (props.href 변경 시 자동 재계산)
+const safeHref = computed(() => sanitizeHref(props.href))
 
 // disabled/loading 시 click 이벤트 방어
 const onClick = (e: MouseEvent) => {
@@ -516,6 +537,13 @@ defineExpose({
 @keyframes ui-button-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+// 사용자가 모션 감소 선호 시 — spinner 회전 매우 천천히 (정지 시 의도 전달 불가)
+@media (prefers-reduced-motion: reduce) {
+  .ui-button-spinner {
+    animation-duration: 3s; // 5배 느림 — 정지 대신 최소 시각 신호 유지
   }
 }
 </style>

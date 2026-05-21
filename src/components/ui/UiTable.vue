@@ -71,13 +71,17 @@
           </td>
         </tr>
 
-        <!-- 데이터 행 -->
+        <!-- 데이터 행 — clickable일 때 키보드(Enter/Space)도 지원 (button 역할) -->
         <tr
           v-for="(row, rowIdx) in displayedData"
           v-else
           :key="rowIdx"
           :class="{ 'is-clickable': clickable, 'is-selected': isRowSelected(row) }"
+          :tabindex="clickable ? 0 : undefined"
+          :role="clickable ? 'button' : undefined"
+          :aria-pressed="clickable && isRowSelected(row) ? 'true' : undefined"
           @click="clickable && onRowClick(row, rowIdx)"
+          @keydown="clickable && onRowKeydown($event, row, rowIdx)"
         >
           <td
             v-for="(col, colIdx) in columns"
@@ -131,9 +135,13 @@ export interface UiTableProps<TRow extends Record<string, unknown> = Record<stri
   clickable?: boolean
   /** 테이블 크기: 'md'(기본) | 'sm'(컴팩트) */
   size?: 'md' | 'sm'
-  /** 선택 행 강조용: row[selectedRowKey] === selectedRowValue 일 때 is-selected 클래스 적용 */
+  /**
+   * 선택 행 강조용: `row[selectedRowKey] === selectedRowValue` 일 때 `is-selected` 적용.
+   * Controlled 모드 활성화 조건: `selectedRowKey`가 truthy + `selectedRowValue !== undefined`.
+   * `0`, `''`, `false` 같은 falsy 값도 정상 선택 가능 (=== 비교).
+   */
   selectedRowKey?: string
-  selectedRowValue?: string
+  selectedRowValue?: unknown
 }
 
 const props = withDefaults(defineProps<UiTableProps<TRow>>(), {
@@ -155,7 +163,8 @@ const props = withDefaults(defineProps<UiTableProps<TRow>>(), {
 const internalSelectedRow = ref<TRow | null>(null) as Ref<TRow | null>
 
 const hasControlledSelection = computed(
-  () => !!props.selectedRowKey && !!props.selectedRowValue,
+  // selectedRowValue=0, '', false도 정상 controlled로 인식 — undefined만 uncontrolled
+  () => !!props.selectedRowKey && props.selectedRowValue !== undefined,
 )
 
 const isRowSelected = (row: TRow) => {
@@ -246,6 +255,14 @@ watch(
 const emit = defineEmits<{
   'row-click': [row: TRow, index: number]
 }>()
+
+// 키보드 활성화 — Enter/Space로 row-click 발생 (Space는 페이지 스크롤 방지)
+const onRowKeydown = (e: KeyboardEvent, row: TRow, index: number) => {
+  if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+    e.preventDefault()
+    onRowClick(row, index)
+  }
+}
 
 const onRowClick = (row: TRow, index: number) => {
   // Uncontrolled 모드에서만 내부 selection 업데이트
@@ -342,6 +359,12 @@ watch(
         td:first-child {
           cursor: default;
         }
+
+        // 키보드 포커스 시 행 강조 — Button/Select와 동일한 outline ring 패턴
+        &:focus-visible {
+          outline: 2px solid var(--color-primary);
+          outline-offset: -2px;
+        }
       }
 
       &.is-selected td {
@@ -356,7 +379,7 @@ watch(
     td {
       height: 42px;
       padding: 0 12px;
-      background: #fff;
+      background: var(--color-bg-elevated);
       border-bottom: 1px solid $color-border-light;
       @include typo($body-medium);
       color: $color-text-primary;

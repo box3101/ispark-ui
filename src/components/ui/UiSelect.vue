@@ -196,10 +196,18 @@ if (import.meta.env.DEV) {
       // eslint-disable-next-line no-console
       console.warn('[UiSelect] options 배열이 비어 있습니다.')
     }
-    if (props.required && !props.label && !props.labelHidden) {
+    // labelHidden은 "시각적 숨김 + SR 노출"이므로 label이 있어야 의미가 있음
+    if (props.labelHidden && !props.label) {
       // eslint-disable-next-line no-console
       console.warn(
-        '[UiSelect] required=true인데 label이 없습니다. 스크린리더가 필수 항목임을 인지할 수 없습니다. label prop 또는 labelHidden을 사용하세요.',
+        '[UiSelect] labelHidden=true인데 label prop이 없습니다. 숨길 라벨 자체가 없어 접근 가능 이름이 비어있게 됩니다.',
+      )
+    }
+    // required 필수 필드는 접근 가능 이름이 반드시 필요 — label 없이는 SR이 필드 정체를 알 수 없음
+    if (props.required && !props.label) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        '[UiSelect] required=true인데 label이 없습니다. 스크린리더가 필수 항목임을 인지할 수 없습니다. label prop을 반드시 지정하세요 (시각적으로 숨기려면 labelHidden=true와 함께).',
       )
     }
     const seen = new Set<string>()
@@ -285,7 +293,7 @@ defineExpose({
   justify-content: space-between;
   width: 100%;
   gap: 4px;
-  background-color: #fff;
+  background-color: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
   color: var(--color-text-primary);
   cursor: pointer;
@@ -369,7 +377,7 @@ defineExpose({
   max-height: 240px;
   overflow-y: auto;
   padding: $spacing-xs 0;
-  background: #fff;
+  background: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
   border-radius: $shape-rounded;
   box-shadow: $shadow-md;

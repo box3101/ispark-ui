@@ -37,9 +37,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useId } from 'vue'
+import { computed, inject, useId, watchEffect } from 'vue'
 
 type RadioValue = string | number | boolean
+
+// UiRadioGroup 등 부모가 provide할 수 있는 그룹 name 키 — 같은 키를 공유하는 라디오들이
+// 네이티브 radio group(브라우저 상호배제 + 화살표 키 그룹 이동)으로 동작.
+const RADIO_GROUP_NAME = Symbol('ui-radio-group-name')
 
 interface Props {
   /** 그룹 공유 v-model 값. 이 라디오의 value와 일치하면 checked */
@@ -73,9 +77,24 @@ const emit = defineEmits<{
 
 const uid = useId()
 const resolvedId = computed(() => props.id || `ui-radio-${uid}`)
-// name 미지정 시 그룹은 fall back 자동 — 사용자가 명시하지 않으면 각 라디오가 독립 그룹
-// 같은 v-model을 공유하는 라디오들은 같은 name을 명시하거나 외부 RadioGroup wrapper 패턴 사용 권장
-const resolvedName = computed(() => props.name || `ui-radio-group-${uid}`)
+
+// 그룹 name 우선순위: props.name > 부모 provide > 인스턴스별 fallback
+// 인스턴스별 fallback이면 native group으로 동작하지 않으므로 dev 환경에서 안내.
+const injectedGroupName = inject<string | undefined>(RADIO_GROUP_NAME, undefined)
+const resolvedName = computed(() => props.name || injectedGroupName || `ui-radio-${uid}`)
+
+if (import.meta.env.DEV) {
+  watchEffect(() => {
+    if (!props.name && !injectedGroupName) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        '[UiRadio] name prop 또는 부모의 provide("ui-radio-group-name", "공유이름")이 없습니다. ' +
+        '같은 v-model을 공유해도 native radio group으로 동작하지 않아 화살표 키 그룹 이동 + 브라우저 상호배제가 끊깁니다. ' +
+        '같은 그룹의 모든 UiRadio에 동일한 name을 명시하세요.',
+      )
+    }
+  })
+}
 
 const isChecked = computed(() => props.modelValue === props.value)
 

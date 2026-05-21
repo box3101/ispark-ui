@@ -44,20 +44,28 @@
     "build-storybook": "storybook build",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:storybook": "test-storybook --url http://localhost:6006",
+    "test:storybook:ci": "concurrently -k -s first -n SB,TEST -c magenta,blue \"http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && test-storybook --url http://localhost:6006\"",
+    "test:all": "npm run test && npm run build-storybook && npm run test:storybook:ci",
     "typecheck": "vue-tsc --noEmit",
     "prepare": "npm run build",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
+    "@internationalized/date": "^3.5.0",
     "radix-vue": "^1.9.0",
     "vue": "^3.5.0"
   },
   "devDependencies": {
+    "@internationalized/date": "^3.12.1",
     "@storybook/addon-essentials": "^8.6.14",
     "@storybook/test": "^8.6.14",
+    "@storybook/test-runner": "^0.19.0",
     "@storybook/vue3-vite": "^8.6.14",
     "@testing-library/vue": "^8.1.0",
     "@vitejs/plugin-vue": "^5.2.1",
+    "concurrently": "^9.0.0",
+    "http-server": "^14.1.1",
     "jsdom": "^25.0.1",
     "radix-vue": "^1.9.0",
     "sass-embedded": "^1.83.4",
@@ -67,9 +75,7 @@
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^2.1.8",
     "vue": "^3.5.13",
-    "vue-tsc": "^2.2.0"
-  },
-  "dependencies": {
-    "@internationalized/date": "^3.12.1"
+    "vue-tsc": "^2.2.0",
+    "wait-on": "^8.0.1"
   }
 }

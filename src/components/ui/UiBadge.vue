@@ -142,8 +142,8 @@ const badgeStyle = computed((): Record<string, string> => {
 
   // ===== Variant — 시맨틱 5종 (light tint 패턴) =====
   &.variant-default {
-    background: #f4f7f9;
-    color: #5c6677;
+    background: var(--color-background);
+    color: var(--color-text-dark);
   }
 
   &.variant-primary {

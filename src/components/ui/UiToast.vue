@@ -232,4 +232,17 @@ const toastsByPlacement = computed(() => (placement: ToastPlacement) =>
 .ui-toast-container .toast-move {
   transition: transform 250ms ease;
 }
+
+// 모션 감소 선호 시 — 페이드/translate/move 모두 즉시 (opacity만 유지해 등장 인지)
+@media (prefers-reduced-motion: reduce) {
+  .ui-toast-container .toast-enter-from,
+  .ui-toast-container .toast-leave-to {
+    transform: none;
+  }
+  .ui-toast-container .toast-enter-active,
+  .ui-toast-container .toast-leave-active,
+  .ui-toast-container .toast-move {
+    transition-duration: 0ms;
+  }
+}
 </style>

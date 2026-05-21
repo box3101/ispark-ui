@@ -142,25 +142,37 @@
             </button>
           </div>
 
+          <!-- WAI-ARIA grid 패턴: rows(4) × cols(3), 각 셀에 aria-selected, 화살표 키 이동 -->
           <div
             class="ui-datepicker-month-grid"
             role="grid"
             :aria-label="`${calendarPlaceholder?.year}년 월 선택`"
+            @keydown="onMonthGridKeydown"
           >
-            <button
-              v-for="m in monthGridValues"
-              :key="m"
-              type="button"
-              role="gridcell"
-              class="ui-datepicker-month-cell"
-              :disabled="disabled || isMonthOutOfRange(calendarPlaceholder?.year ?? now.getFullYear(), m)"
-              :class="{
-                'is-selected': isMonthCellSelected(calendarPlaceholder?.year ?? now.getFullYear(), m),
-              }"
-              @click="onSelectMonth(m)"
+            <div
+              v-for="(monthRow, rowIdx) in monthGridRows"
+              :key="rowIdx"
+              role="row"
+              class="ui-datepicker-month-grid-row"
             >
-              {{ m }}월
-            </button>
+              <button
+                v-for="m in monthRow"
+                :key="m"
+                ref="monthCellRefs"
+                type="button"
+                role="gridcell"
+                :aria-selected="isMonthCellSelected(calendarPlaceholder?.year ?? now.getFullYear(), m)"
+                :data-month="m"
+                class="ui-datepicker-month-cell"
+                :disabled="disabled || isMonthOutOfRange(calendarPlaceholder?.year ?? now.getFullYear(), m)"
+                :class="{
+                  'is-selected': isMonthCellSelected(calendarPlaceholder?.year ?? now.getFullYear(), m),
+                }"
+                @click="onSelectMonth(m)"
+              >
+                {{ m }}월
+              </button>
+            </div>
           </div>
         </div>
 
@@ -277,22 +289,35 @@
       class="ui-datepicker-time"
       :class="[`size-dp-${size}`, { 'is-disabled': disabled }]"
     >
+      <!-- 시(hour) — accessible name + 모바일 숫자 키패드 -->
       <input
         :value="timeHourDisplay"
         class="ui-datepicker-time-input"
+        type="text"
+        inputmode="numeric"
+        pattern="[0-9]*"
         maxlength="2"
         placeholder="00"
+        aria-label="시"
         :disabled="disabled"
         @focus="onTimeFieldFocus"
         @blur="onTimeBlur($event, 'hour')"
         @keydown="onTimeKeydown($event, 'hour')"
       />
-      <span class="ui-datepicker-time-sep">:</span>
+      <span
+        class="ui-datepicker-time-sep"
+        aria-hidden="true"
+      >:</span>
+      <!-- 분(minute) -->
       <input
         :value="timeMinuteDisplay"
         class="ui-datepicker-time-input"
+        type="text"
+        inputmode="numeric"
+        pattern="[0-9]*"
         maxlength="2"
         placeholder="00"
+        aria-label="분"
         :disabled="disabled"
         @focus="onTimeFieldFocus"
         @blur="onTimeBlur($event, 'minute')"
@@ -359,8 +384,15 @@ const emit = defineEmits<{
   'update:modelValue': [value: DateValue | undefined]
 }>()
 
-/** date/datetime → day, month → month (입력 세그먼트에서 일 숨김) — radix-vue DatePickerRoot Granularity 타입에 month 미기재 */
-const pickerGranularity = computed(() => (props.type === 'month' ? 'month' : 'day') as never)
+/**
+ * date/datetime → day, month → month (입력 세그먼트에서 일 숨김).
+ * radix-vue DatePickerRoot.Granularity는 'day' | 'hour' | 'minute' | 'second' union.
+ * 'month'는 라이브러리 타입에 없지만 런타임에선 동작 (캘린더 입력 처리). 명시적 union으로 좁힘.
+ */
+type DatePickerGranularity = 'day' | 'hour' | 'minute' | 'second' | 'month'
+const pickerGranularity = computed<DatePickerGranularity>(() =>
+  props.type === 'month' ? 'month' : 'day',
+)
 
 /** month 타입만 팝업 open 제어(월 선택 후 닫기) */
 const monthPickerOpen = ref(false)
@@ -371,7 +403,51 @@ const onRootOpenUpdate = (open: boolean) => {
   }
 }
 
-const monthGridValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const
+// 4행 × 3열로 grouping — role="row" 구조와 화살표 키 이동 기준
+const monthGridRows: ReadonlyArray<ReadonlyArray<number>> = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+  [10, 11, 12],
+]
+
+// month cell button refs — 화살표 키로 focus 이동 시 직접 접근
+const monthCellRefs = ref<HTMLButtonElement[]>([])
+
+// WAI-ARIA grid 화살표 키 네비게이션 (Left/Right ±1, Up/Down ±3, Home/End 행 양끝)
+const onMonthGridKeydown = (e: KeyboardEvent) => {
+  const target = e.target as HTMLElement | null
+  const currentMonth = Number(target?.dataset.month)
+  if (!currentMonth || currentMonth < 1 || currentMonth > 12) return
+  let next: number | null = null
+  switch (e.key) {
+    case 'ArrowLeft':
+      next = currentMonth - 1
+      break
+    case 'ArrowRight':
+      next = currentMonth + 1
+      break
+    case 'ArrowUp':
+      next = currentMonth - 3
+      break
+    case 'ArrowDown':
+      next = currentMonth + 3
+      break
+    case 'Home':
+      // 같은 행의 첫 cell — col = (m-1) % 3, rowStart = m - col
+      next = currentMonth - ((currentMonth - 1) % 3)
+      break
+    case 'End':
+      next = currentMonth - ((currentMonth - 1) % 3) + 2
+      break
+    default:
+      return
+  }
+  if (next === null || next < 1 || next > 12) return
+  e.preventDefault()
+  // refs는 row × col flatten 순서 = m-1 인덱스
+  monthCellRefs.value[next - 1]?.focus()
+}
 
 /** 해당 연·월이 min/max와 겹치는 날이 하나도 없으면 비활성 */
 const isMonthOutOfRange = (year: number, month: number) => {

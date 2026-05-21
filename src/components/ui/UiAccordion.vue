@@ -1,10 +1,62 @@
 <template>
+  <!-- radix-vue AccordionRoot의 union(single/multiple) 타입은 분기 필요 — type별 컴포넌트 분리 -->
   <AccordionRoot
+    v-if="type === 'multiple'"
     class="ui-accordion"
     :class="[`size-${size}`, { 'is-disabled': disabled }]"
-    :type="type as any"
-    :model-value="modelValue as any"
-    :default-value="defaultValue as any"
+    type="multiple"
+    :model-value="modelValueArray"
+    :default-value="defaultValueArray"
+    :disabled="disabled"
+    @update:model-value="onUpdate"
+  >
+    <slot v-if="!items?.length" />
+    <template v-else>
+      <AccordionItem
+        v-for="item in items"
+        :key="item.value"
+        :value="item.value"
+        :disabled="item.disabled"
+        class="ui-accordion-item"
+      >
+        <AccordionHeader class="ui-accordion-header">
+          <AccordionTrigger class="ui-accordion-trigger">
+            <span class="ui-accordion-title">
+              <slot name="header" :item="item">{{ item.title }}</slot>
+            </span>
+            <svg
+              class="ui-accordion-chevron"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M4 6l4 4 4-4"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </AccordionTrigger>
+        </AccordionHeader>
+        <AccordionContent class="ui-accordion-content">
+          <div class="ui-accordion-content-inner">
+            <slot name="content" :item="item">{{ item.content }}</slot>
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+    </template>
+  </AccordionRoot>
+  <AccordionRoot
+    v-else
+    class="ui-accordion"
+    :class="[`size-${size}`, { 'is-disabled': disabled }]"
+    type="single"
+    :model-value="modelValueString"
+    :default-value="defaultValueString"
     :collapsible="collapsible"
     :disabled="disabled"
     @update:model-value="onUpdate"
@@ -61,6 +113,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed, watchEffect } from 'vue'
 import {
   AccordionContent,
   AccordionHeader,
@@ -97,7 +150,7 @@ interface Props {
   size?: 'sm' | 'md' | 'lg'
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   items: () => [],
   type: 'single',
   modelValue: undefined,
@@ -111,6 +164,39 @@ const emit = defineEmits<{
   'update:modelValue': [value: string | string[] | undefined]
   change: [value: string | string[] | undefined]
 }>()
+
+// type별로 modelValue/defaultValue 타입을 좁혀 radix-vue AccordionRoot의 union에 정확히 매핑.
+// (이전엔 as any 우회. 이제 unsafe cast 없이 type-safe하게 분리)
+const modelValueString = computed<string | undefined>(() =>
+  typeof props.modelValue === 'string' ? props.modelValue : undefined,
+)
+const modelValueArray = computed<string[] | undefined>(() =>
+  Array.isArray(props.modelValue) ? props.modelValue : undefined,
+)
+const defaultValueString = computed<string | undefined>(() =>
+  typeof props.defaultValue === 'string' ? props.defaultValue : undefined,
+)
+const defaultValueArray = computed<string[] | undefined>(() =>
+  Array.isArray(props.defaultValue) ? props.defaultValue : undefined,
+)
+
+// dev 환경에서 type ↔ modelValue 미스매치 경고 (discriminated union 위반)
+if (import.meta.env.DEV) {
+  watchEffect(() => {
+    if (props.type === 'single' && Array.isArray(props.modelValue)) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        '[UiAccordion] type="single"인데 modelValue가 배열입니다. string이어야 합니다.',
+      )
+    }
+    if (props.type === 'multiple' && typeof props.modelValue === 'string') {
+      // eslint-disable-next-line no-console
+      console.warn(
+        '[UiAccordion] type="multiple"인데 modelValue가 문자열입니다. string[] 이어야 합니다.',
+      )
+    }
+  })
+}
 
 const onUpdate = (val: string | string[] | undefined) => {
   emit('update:modelValue', val)

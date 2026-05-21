@@ -48,11 +48,12 @@ export default defineConfig({
     },
     rollupOptions: {
       // peerDependencies는 번들 제외 (소비 앱과 중복 방지)
-      external: ['vue', 'radix-vue'],
+      external: ['vue', 'radix-vue', /^@internationalized\/date/],
       output: {
         globals: {
           vue: 'Vue',
           'radix-vue': 'RadixVue',
+          '@internationalized/date': 'InternationalizedDate',
         },
         // CSS 단일 파일로 (consumer가 ./style.css로 import)
         assetFileNames: (assetInfo) => {
