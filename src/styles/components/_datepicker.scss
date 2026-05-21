@@ -38,14 +38,20 @@
 
 .ui-datepicker-segment {
   display: inline;
-  padding: 1px 2px;
-  border-radius: 2px;
+  padding: 1px 3px;
+  border-radius: 3px;
   color: $color-text-primary;
   font-weight: $font-weight-medium;
   outline: none;
+  transition: background-color $transition-fast, color $transition-fast;
 
-  &:focus { background: var(--color-primary); color: #fff; }
-  &[data-placeholder] { color: #aebccb; }
+  // focus — primary 진한 배경 + 흰 글씨는 시각적 충격이 큼 (특히 첫 segment 자동 focus 시 박스처럼 튐).
+  // light primary tint + primary 텍스트로 자연스럽게.
+  &:focus {
+    background: rgba(var(--color-primary-rgb, 60, 105, 219), 0.14);
+    color: var(--color-primary);
+  }
+  &[data-placeholder] { color: $color-text-disabled; }
 }
 
 .ui-datepicker-literal {

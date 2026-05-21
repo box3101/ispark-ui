@@ -871,20 +871,19 @@
   .sbdocs .docs-story svg {
     color: #8a8a82;
   }
-  /* "Show code" 토글 버튼 — 가독성 위해 더 진한 다크 chip */
-  .sbdocs .docs-story > div > button,
+  /* "Show code" 토글 버튼 — 가독성 위해 더 진한 다크 chip.
+     selector를 docblock-code-toggle / docblock-source 안에 한정 (컴포넌트 데모 안 button에 영향 X) */
   .sbdocs .docblock-code-toggle,
   .sbdocs .docblock-code-toggle button,
-  .sbdocs button[type="button"][aria-expanded] {
+  .sbdocs .docblock-source > button {
     background: #2a2c33 !important;
     color: #eaeae3 !important;
     border: 1px solid #3a3d44 !important;
     border-radius: 6px !important;
     font-weight: 500;
   }
-  .sbdocs .docs-story > div > button:hover,
   .sbdocs .docblock-code-toggle:hover,
-  .sbdocs button[type="button"][aria-expanded]:hover {
+  .sbdocs .docblock-source > button:hover {
     background: rgba(217, 119, 87, 0.2) !important;
     color: #f5f4ed !important;
     border-color: rgba(217, 119, 87, 0.5) !important;
