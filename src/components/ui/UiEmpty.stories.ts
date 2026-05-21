@@ -28,8 +28,9 @@ ispark-ui 표준 빈 상태(Empty State) 컴포넌트. 데이터가 없거나, �
 | **페이지/패널 (넓은 영역)** | icon + title + description (+ action) | 시각적 인지 명확 |
 | **카드/섹션 (중간 영역)** | icon + title | description은 길이 따라 |
 | **모달/좁은 영역** | title only | icon은 공간 낭비 |
-| **UiTable 빈 행 (인라인)** | \`UiTable\`의 \`emptyText\` prop | UiEmpty 외부 렌더 불필요 |
-| **UiTable 빈 상태 전체 교체** | \`v-if="data.length===0"\` + 외부 \`UiEmpty\` | 아이콘/액션 필요 시 |
+| **UiTable 빈 행 (텍스트만)** | \`UiTable\`의 \`emptyText\` prop | 내부에서 UiEmpty의 title로 전달 |
+| **UiTable 빈 행 (아이콘+설명)** | \`UiTable\`의 \`emptyText\` + \`emptyIcon\` + \`emptyDescription\` | 추가 prop 전달, 외부 렌더 불필요 |
+| **UiTable 빈 상태 완전 커스텀** | \`UiTable\`의 \`#empty\` 슬롯 | 액션 버튼 등 자유 마크업 |
 
 ## Copy 가이드
 - **Title**: 12자 이내, 상태 명사형 ("검색 결과가 없습니다.", "등록된 항목이 없습니다.")
@@ -230,8 +231,9 @@ export const CompactModal: Story = {
   }),
 }
 
-// UiTable과 통합 — data.length === 0 시 emptyText 대신 외부 UiEmpty 렌더
-// CLAUDE.md 정책: '넓은 영역 / 아이콘 강조 시 UiEmpty 우선'
+// UiTable과 통합 (대안 패턴) — 테이블 자체를 숨기고 외부 UiEmpty 렌더
+// 권장: UiTable의 emptyIcon/emptyText/emptyDescription 또는 #empty 슬롯 사용
+// (이 예제는 테이블 frame 자체를 숨기고 싶을 때만)
 export const TableEmpty: Story = {
   args: {
     icon: 'icon-search',

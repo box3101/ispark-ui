@@ -213,7 +213,6 @@ export const Playground: Story = {
             <i :class="['icon-' + args.iconRight]" />
           </template>
         </UiInput>
-        <p style="margin-top: 8px; font-size: 12px; color: #6f7a93;">value: "{{ value }}"</p>
       </div>
     `,
   }),
@@ -323,7 +322,6 @@ export const NumberOnly: Story = {
       <div style="display: flex; flex-direction: column; gap: 16px; max-width: 360px;">
         <div>
           <UiInput v-model="intValue" number-only placeholder="정수만" />
-          <p style="margin-top: 4px; font-size: 12px; color: #6f7a93;">value: "{{ intValue }}"</p>
         </div>
         <div>
           <UiInput v-model="decimalValue" number-only allow-decimal placeholder="소수 허용" desc="temperature 같은 0~1 값" />

@@ -121,11 +121,27 @@ interface TableColumn {
     },
     emptyText: {
       control: 'text',
-      description: '`data`가 빈 배열일 때 표시할 메시지. 빈 상태 UI 전체를 교체하려면 컴포넌트 바깥에서 `UiEmpty` 사용 권장.',
+      description: '`data`가 빈 배열일 때 내부 `UiEmpty`의 title로 전달되는 메시지. 빈 상태 UI 전체를 교체하려면 `#empty` slot 사용.',
       table: {
         category: 'Behavior',
         type: { summary: 'string' },
         defaultValue: { summary: "'데이터가 없습니다.'" },
+      },
+    },
+    emptyIcon: {
+      control: 'text',
+      description: '빈 상태 아이콘 클래스. 내부 `UiEmpty`의 icon prop으로 전달 (예: `icon-search`).',
+      table: {
+        category: 'Behavior',
+        type: { summary: 'string' },
+      },
+    },
+    emptyDescription: {
+      control: 'text',
+      description: '빈 상태 보조 설명. 내부 `UiEmpty`의 description prop으로 전달.',
+      table: {
+        category: 'Behavior',
+        type: { summary: 'string' },
       },
     },
 
@@ -151,7 +167,7 @@ interface TableColumn {
     onRowClick: {
       name: 'row-click',
       action: 'row-click',
-      description: '행 클릭 시 emit. payload: `(row: Record<string, any>, index: number)`. `clickable: true`일 때만 발생.',
+      description: '행 클릭 시 emit. payload: `(row: TRow, index: number)` — `TRow`는 `data` 배열의 원소 타입. `clickable: true`일 때만 발생.',
       table: {
         category: 'Events',
         type: { summary: '(row, index) => void' },
@@ -409,6 +425,46 @@ export const EmptyTextCustom: Story = {
     const canvas = within(canvasElement)
     await expect(canvas.getByText('조회 결과가 없습니다. 검색 조건을 변경해주세요.')).toBeTruthy()
   },
+}
+
+// 빈 상태에 아이콘 + 보조 설명 추가 — UiEmpty의 모든 prop을 활용
+export const EmptyWithIcon: Story = {
+  args: {
+    columns: baseColumns,
+    data: [],
+    emptyIcon: 'icon-search',
+    emptyText: '검색 결과가 없습니다.',
+    emptyDescription: '검색어를 변경하거나 필터를 초기화해보세요.',
+  },
+  render: (args) => ({
+    components: { UiTable },
+    setup: () => ({ args }),
+    template: '<UiTable v-bind="args" />',
+  }),
+}
+
+// #empty slot — 빈 상태 UI 전체를 커스텀
+export const EmptySlot: Story = {
+  args: {
+    columns: baseColumns,
+    data: [],
+  },
+  render: (args) => ({
+    components: { UiTable },
+    setup: () => ({ args }),
+    template: `
+      <UiTable v-bind="args">
+        <template #empty>
+          <div style="padding: 32px; text-align: center; color: #6b7280;">
+            <p style="margin-bottom: 8px; font-weight: 600;">데이터가 아직 없어요</p>
+            <button style="padding: 6px 14px; border: 1px solid #dce4e9; border-radius: 6px; background: #fff; cursor: pointer;">
+              첫 항목 추가하기
+            </button>
+          </div>
+        </template>
+      </UiTable>
+    `,
+  }),
 }
 
 // clickable=true 시 row-click payload 확인용 인터랙티브 데모

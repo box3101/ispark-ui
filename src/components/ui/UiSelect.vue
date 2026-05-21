@@ -93,7 +93,7 @@ import {
   SelectValue,
   SelectViewport,
 } from 'radix-vue'
-import type { InputSize } from '@/design-tokens'
+import type { SelectSize } from '@/design-tokens'
 
 export interface SelectOption {
   label: string
@@ -113,7 +113,7 @@ interface Props {
   id?: string
   // === 기존 ===
   disabled?: boolean
-  size?: InputSize
+  size?: SelectSize
   shape?: 'rounded' | 'pill'
   // === 에러/설명 ===
   error?: boolean
@@ -145,7 +145,7 @@ const emit = defineEmits<{
 }>()
 
 // id 자동 생성 (Vue 3.5+ useId — SSR 안전)
-const uid = Math.random().toString(36).slice(2, 11)
+const uid = useId()
 const resolvedId = computed(() => props.id || `ui-select-${uid}`)
 
 const descId = computed(() => (props.desc ? `${resolvedId.value}-desc` : undefined))
@@ -243,11 +243,11 @@ defineExpose({
 
 .ui-select-label {
   display: block;
-  font-size: 13px;
-  font-weight: 500;
+  // UiInput과 동일 패턴 — body-small + medium weight
+  @include typo($body-small);
+  font-weight: $font-weight-medium;
   color: var(--color-text-primary);
   margin-bottom: 4px;
-  line-height: 1.5;
 
   &.is-hidden {
     position: absolute;
@@ -265,22 +265,18 @@ defineExpose({
 .ui-select-required {
   color: var(--color-danger);
   margin-left: 2px;
-  font-weight: 600;
+  font-weight: $font-weight-semibold;
 }
 
 .ui-select-desc {
   margin-top: 4px;
-  @include typo($body-small);
-  color: var(--color-text-secondary);
-  line-height: 1.5;
+  @include typo($body-small, var(--color-text-secondary));
 }
 
 .ui-select-error {
   margin-top: 4px;
-  @include typo($body-small);
-  color: var(--color-danger);
-  line-height: 1.5;
-  font-weight: 500;
+  @include typo($body-small, var(--color-danger));
+  font-weight: $font-weight-medium;
 }
 
 .ui-select-trigger {
@@ -297,7 +293,8 @@ defineExpose({
   transition: border-color $transition-base;
 
   &[data-placeholder] {
-    color: #aebccb;
+    // 폼 전체 placeholder 톤 통일 — Input/Textarea와 동일 토큰
+    color: $color-text-disabled;
   }
 
   @include desktop-hover {
@@ -321,7 +318,8 @@ defineExpose({
   }
 
   // ===== size — 공용 토큰 =====
-  @each $key in (sm md lg auth) {
+  // xs(24px)는 인라인/캘린더 헤더 등 좁은 영역용 (예: UiDatePicker 내부 셀렉트)
+  @each $key in (xs sm md lg auth) {
     $vals: map.get($sizes, $key);
     &.size-#{$key} {
       height:    map.get($vals, height);

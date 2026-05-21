@@ -57,7 +57,7 @@ const emit = defineEmits<{
   change: [value: boolean]
 }>()
 
-const uid = Math.random().toString(36).slice(2, 11)
+const uid = useId()
 const resolvedId = computed(() => props.id || `ui-toggle-${uid}`)
 
 const onClick = () => {
@@ -105,9 +105,10 @@ const onClick = () => {
   height: 20px;
   border: none;
   border-radius: 9999px;
-  background: $color-border;
+  background: var(--color-border);
   cursor: pointer;
-  transition: background 0.2s ease;
+  // 모션 토큰 — Button/Input과 동일 ($transition-base)
+  transition: background-color $transition-base;
   flex-shrink: 0;
   padding: 0;
 
@@ -134,7 +135,8 @@ const onClick = () => {
     height: 16px;
     border-radius: 9999px;
     background: #fff;
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    // 위치 이동은 약간 더 부드러운 토큰 ($transition-slow = 300ms) — toggle thumb의 '딸깍' 느낌 보존
+    transition: transform $transition-slow;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
   }
 

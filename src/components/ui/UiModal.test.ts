@@ -51,8 +51,14 @@ describe('UiModal', () => {
   })
 
   // 4. closeOnEscape=false 시 ESC 막기
-  // jsdom에서 radix-vue ESC 이벤트 dispatch 시점 한계 가능 — Storybook play로 보충
-  it.skip('closeOnEscape=false 시 ESC 닫히지 않음', async () => {
+  // jsdom 환경에서 radix-vue의 escape key 핸들러가 document/dialog 어느 쪽 dispatch도 받지 못함
+  // (DismissableLayer 내부 keydown listener가 jsdom 이벤트 전파 모델과 호환 안 됨)
+  //
+  // 실제 검증 위치:
+  //   - UiModal.stories.ts `StrictNoEscape` play: open=true 상태에서 ESC → dialog 유지 + update:open(false) 미호출 확인 (line ~290)
+  //
+  // CI 통합: Phase 2의 @storybook/test-runner 도입 시 자동 회귀 검증
+  it.skip('closeOnEscape=false 시 ESC 닫히지 않음 (Storybook StrictNoEscape play로 검증)', async () => {
     const onUpdate = vi.fn()
     render(UiModal, {
       props: {

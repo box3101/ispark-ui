@@ -29,11 +29,26 @@ import { Meta } from '@storybook/blocks'
 
 ## 정책 외 추가 구현분
 
-원본 사용 빈도는 낮거나 0이지만 실사용 요구로 라이브러리화한 컴포넌트.
+원본 `team_agent_front` 사용 빈도가 10 미만이지만 별도 사유로 라이브러리화한 컴포넌트. 측정 시점: 2026-05-21.
 
-- **Radix-vue 래퍼** · UiTooltip, UiDropdownMenu, UiDatePicker, UiDateRangePicker, UiAccordion
-- **유틸리티 / 폼 보조** · UiPagination, UiTab, UiRadio
-- **알림 인프라** · UiToast + `openToast()` composable
+<table>
+  <thead>
+    <tr><th>컴포넌트</th><th style={{ textAlign: 'right' }}>사용</th><th>분류</th><th>추가 사유</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>UiDropdownMenu</td><td style={{ textAlign: 'right' }}>7</td><td>Radix 래퍼</td><td>접근성(키보드/포커스 트랩) 복잡도 — 모든 프로젝트 공통 인프라</td></tr>
+    <tr><td>UiTab</td><td style={{ textAlign: 'right' }}>7</td><td>유틸</td><td>요청 기준선(5+) 충족, 타 프로젝트 재사용 예상</td></tr>
+    <tr><td>UiTooltip</td><td style={{ textAlign: 'right' }}>5</td><td>Radix 래퍼</td><td>Radix-vue 의존 + 디자인 토큰 통일 필요</td></tr>
+    <tr><td>UiDatePicker</td><td style={{ textAlign: 'right' }}>5</td><td>Radix 래퍼</td><td>`@internationalized/date` 의존성 캡슐화</td></tr>
+    <tr><td>UiPagination</td><td style={{ textAlign: 'right' }}>5</td><td>유틸</td><td>요청 기준선(5+) 충족</td></tr>
+    <tr><td>UiToast</td><td style={{ textAlign: 'right' }}>1</td><td>인프라</td><td>`openToast()` composable + 전역 큐 — 단일 인스턴스 보장 위해 라이브러리 레벨 필수</td></tr>
+    <tr><td>UiDateRangePicker</td><td style={{ textAlign: 'right' }}>0</td><td>Radix 래퍼</td><td>UiDatePicker 페어 — 단독 분리 시 두 픽커 간 토큰/동작 불일치 위험</td></tr>
+    <tr><td>UiAccordion</td><td style={{ textAlign: 'right' }}>0</td><td>Radix 래퍼</td><td>FAQ/설정 패널 등 신규 페이지에서 즉시 필요 예정 (디자인팀 확정)</td></tr>
+    <tr><td>UiRadio</td><td style={{ textAlign: 'right' }}>0</td><td>폼 보조</td><td>UiCheckbox/UiToggle와 동일 폼 컴포넌트 세트 — 누락 시 폼 패턴 비대칭</td></tr>
+  </tbody>
+</table>
+
+측정 방법: `cd C:/team_agent_front && grep -r --include="*.vue" -l "<UiName\b" . | grep -v "/ui/" | wc -l`
 
 ## 마이그레이션 정책
 

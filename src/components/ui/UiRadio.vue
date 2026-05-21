@@ -71,7 +71,7 @@ const emit = defineEmits<{
   change: [value: RadioValue]
 }>()
 
-const uid = Math.random().toString(36).slice(2, 11)
+const uid = useId()
 const resolvedId = computed(() => props.id || `ui-radio-${uid}`)
 // name 미지정 시 그룹은 fall back 자동 — 사용자가 명시하지 않으면 각 라디오가 독립 그룹
 // 같은 v-model을 공유하는 라디오들은 같은 name을 명시하거나 외부 RadioGroup wrapper 패턴 사용 권장
@@ -93,6 +93,18 @@ const onChange = () => {
   gap: 6px;
   cursor: pointer;
   user-select: none;
+
+  // hover — box border 강조 (Checkbox와 동일 패턴)
+  @media (hover: hover) {
+    &:hover:not(.is-disabled) .ui-radio-box {
+      border-color: var(--color-primary);
+    }
+  }
+
+  // active — 살짝 누름
+  &:active:not(.is-disabled) .ui-radio-box {
+    transform: scale(0.95);
+  }
 
   &.is-disabled {
     opacity: 0.5;
@@ -119,11 +131,12 @@ const onChange = () => {
   justify-content: center;
   width: 16px;
   height: 16px;
-  border: 1.5px solid #c6d2db;
+  border: 1.5px solid var(--color-border);
   border-radius: 50%;
   background: #fff;
   flex-shrink: 0;
-  transition: all 0.15s ease;
+  // 모션 토큰 — Button/Input과 동일 + active 시 transform
+  transition: border-color $transition-base, background-color $transition-base, transform $transition-fast;
 
   .is-checked & {
     border-color: var(--color-primary);

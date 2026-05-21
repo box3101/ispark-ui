@@ -98,7 +98,7 @@ const emit = defineEmits<{
   change: [value: boolean]
 }>()
 
-const uid = Math.random().toString(36).slice(2, 11)
+const uid = useId()
 const resolvedId = computed(() => props.id || `ui-checkbox-${uid}`)
 
 // indeterminate는 HTML attribute가 아닌 DOM property — :indeterminate 바인딩 X
@@ -127,6 +127,24 @@ const onChange = () => {
   cursor: pointer;
   user-select: none;
 
+  // hover — box border 강조 (Input과 동일 패턴)
+  @media (hover: hover) {
+    &:hover:not(.is-disabled) .ui-checkbox-box {
+      border-color: var(--color-primary);
+    }
+    // 체크된 상태에서 hover — 살짝 어둡게 (호버 인지)
+    &:hover:not(.is-disabled).is-checked .ui-checkbox-box,
+    &:hover:not(.is-disabled).is-indeterminate .ui-checkbox-box {
+      background: var(--color-primary-hover);
+      border-color: var(--color-primary-hover);
+    }
+  }
+
+  // active — 클릭 직전 살짝 누름 (스케일 미세 변환)
+  &:active:not(.is-disabled) .ui-checkbox-box {
+    transform: scale(0.95);
+  }
+
   &.is-disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -153,11 +171,12 @@ const onChange = () => {
   justify-content: center;
   width: 16px;
   height: 16px;
-  border: 1.5px solid #c6d2db;
-  border-radius: 4px;
+  border: 1.5px solid var(--color-border);
+  border-radius: $border-radius-sm;
   background: #fff;
   flex-shrink: 0;
-  transition: all 0.15s ease;
+  // 모션 토큰 — Button/Input과 동일 ($transition-base = 200ms ease) + active 시 transform
+  transition: border-color $transition-base, background-color $transition-base, transform $transition-fast;
   color: #fff;
 
   .is-checked &,

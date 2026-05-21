@@ -73,6 +73,23 @@
     color: #3c69db !important;
   }
 
+  /* ── 폴더/컴포넌트/문서 아이콘 — 노란/주황 기본색 → 브랜드 슬레이트 톤 ─── */
+  /* Storybook 8.6 사이드바 아이콘 selector는 svg[type="..."] (data-nodetype 아님).
+     기본은 폴더/컴포넌트 #FF8300(주황). 비선택 상태만 슬레이트로, 선택 상태는 위에서 primary로 별도 처리. */
+  .sidebar-container svg[type="document"],
+  .sidebar-container svg[type="group"],
+  .sidebar-container svg[type="component"],
+  .sidebar-container svg[type="story"] {
+    color: #94a3b8 !important; /* slate-400 — 차분한 그레이로 통일 */
+  }
+  /* 선택 상태의 아이콘은 primary 톤 유지 */
+  .sidebar-container a[data-selected="true"] svg[type="document"],
+  .sidebar-container a[data-selected="true"] svg[type="story"],
+  .sidebar-container button[data-selected="true"] svg[type="group"],
+  .sidebar-container button[data-selected="true"] svg[type="component"] {
+    color: #3c69db !important;
+  }
+
   /* ── 검색바 — 둥글기 + placeholder 톤다운 ─────────────────── */
   .sidebar-container input[type="search"],
   .search-field input,

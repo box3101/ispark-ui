@@ -199,8 +199,9 @@ defineExpose({
   white-space: nowrap;
   letter-spacing: -0.02em;
   text-decoration: none; // a 태그 underline 제거
-  font-weight: 700;
-  line-height: 1.5;
+  // 타이포 프리셋 — font-weight/line-height 통일 (font-size는 size 블록에서 별도 지정)
+  font-weight: $font-weight-bold;
+  line-height: $line-height-base;
 
   &:focus-visible {
     outline: 2px solid var(--color-primary);

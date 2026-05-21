@@ -60,14 +60,23 @@ export const Default: Story = {
     components: { UiModal },
     setup: () => {
       const open = ref(false)
-      return { args, open }
+      // v-bind="args"의 onUpdate:open이 v-model:open과 충돌하지 않도록 명시적 핸들러로 통합.
+      // Actions 패널과 play 함수의 spy 둘 다 동작하도록 args의 핸들러를 직접 호출.
+      const onUpdateOpen = (v: boolean) => {
+        open.value = v
+        ;(args['onUpdate:open'] as ((v: boolean) => void) | undefined)?.(v)
+      }
+      const onClose = () => {
+        ;(args.onClose as (() => void) | undefined)?.()
+      }
+      return { args, open, onUpdateOpen, onClose }
     },
     template: `
       <div>
         <button type="button" @click="open = true" style="padding: 8px 16px; cursor: pointer;">
           모달 열기
         </button>
-        <UiModal v-bind="args" v-model:open="open">
+        <UiModal v-bind="args" :open="open" @update:open="onUpdateOpen" @close="onClose">
           <div>
             <h2 style="margin: 0 0 12px;">Default Modal</h2>
             <p>radix-vue Dialog 기반 빈 골격. ESC / overlay 클릭으로 닫힘 (radix 기본).</p>
@@ -83,8 +92,8 @@ export const Default: Story = {
     // Portal 이라 screen 사용 — DialogContent에 role=dialog
     const dialog = await screen.findByRole('dialog')
     await expect(dialog).toBeTruthy()
-    await expect(args['onUpdate:open']).toHaveBeenCalledWith(true)
-    // ESC 키로 닫기
+    // trigger 클릭은 외부 ref 변경(@click="open = true")이라 모달에서 update:open emit 안 됨.
+    // 모달의 update:open + close emit은 사용자가 모달을 "닫는" 액션(ESC/overlay/X) 시만 발생.
     await userEvent.keyboard('{Escape}')
     await expect(args['onUpdate:open']).toHaveBeenCalledWith(false)
     await expect(args.onClose).toHaveBeenCalled()

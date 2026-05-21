@@ -39,12 +39,16 @@
           </DatePickerInput>
         </template>
 
-        <DatePickerTrigger class="ui-datepicker-trigger">
+        <DatePickerTrigger
+          class="ui-datepicker-trigger"
+          :aria-label="triggerAriaLabel"
+        >
           <svg
             width="16"
             height="16"
             viewBox="0 0 16 16"
             fill="none"
+            aria-hidden="true"
           >
             <rect
               x="2"
@@ -92,6 +96,7 @@
                 height="16"
                 viewBox="0 0 16 16"
                 fill="none"
+                aria-hidden="true"
               >
                 <path
                   d="M10 4l-4 4 4 4"
@@ -124,6 +129,7 @@
                 height="16"
                 viewBox="0 0 16 16"
                 fill="none"
+                aria-hidden="true"
               >
                 <path
                   d="M6 4l4 4-4 4"
@@ -164,12 +170,16 @@
           class="ui-datepicker-calendar"
         >
           <div class="ui-datepicker-header">
-            <DatePickerPrev class="ui-datepicker-nav">
+            <DatePickerPrev
+              class="ui-datepicker-nav"
+              aria-label="이전 달"
+            >
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 16 16"
                 fill="none"
+                aria-hidden="true"
               >
                 <path
                   d="M10 4l-4 4 4 4"
@@ -198,12 +208,16 @@
               />
             </div>
 
-            <DatePickerNext class="ui-datepicker-nav">
+            <DatePickerNext
+              class="ui-datepicker-nav"
+              aria-label="다음 달"
+            >
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 16 16"
                 fill="none"
+                aria-hidden="true"
               >
                 <path
                   d="M6 4l4 4-4 4"
@@ -318,6 +332,8 @@ interface Props {
   locale?: string
   minValue?: DateValue
   maxValue?: DateValue
+  /** 트리거 버튼 aria-label — 미지정 시 type 기반 기본값 ("날짜 선택" / "날짜·시간 선택" / "월 선택") */
+  triggerLabel?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -328,6 +344,15 @@ const props = withDefaults(defineProps<Props>(), {
   locale: 'ko-KR',
   minValue: undefined,
   maxValue: undefined,
+  triggerLabel: undefined,
+})
+
+/** 트리거 aria-label — 스크린리더가 SVG 아이콘만 있는 버튼 의미를 인지하도록 */
+const triggerAriaLabel = computed(() => {
+  if (props.triggerLabel) return props.triggerLabel
+  if (props.type === 'datetime') return '날짜·시간 선택'
+  if (props.type === 'month') return '월 선택'
+  return '날짜 선택'
 })
 
 const emit = defineEmits<{

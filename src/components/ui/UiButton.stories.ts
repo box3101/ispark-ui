@@ -226,16 +226,104 @@ export const Playground: Story = {
   },
 }
 
-// ===== 2. AllVariants — 4종 시멘틱 한눈에 비교 =====
+// ===== 2. AllVariants — variant × size × state 매트릭스로 디자인 시스템 깊이 보여주기 =====
 export const AllVariants: Story = {
   render: () => ({
     components: { UiButton },
     template: `
-      <div style="display: flex; gap: 12px; align-items: center;">
-        <UiButton variant="primary">Primary</UiButton>
-        <UiButton variant="secondary">Secondary</UiButton>
-        <UiButton variant="ghost">Ghost</UiButton>
-        <UiButton variant="danger">Danger</UiButton>
+      <div style="display: flex; flex-direction: column; gap: 28px; font-family: inherit;">
+        <!-- 행 헤더 + 4 variants × 4 size 그리드 -->
+        <section>
+          <h4 style="margin: 0 0 12px; font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.06em;">
+            Variant × Size
+          </h4>
+          <div style="display: grid; grid-template-columns: 80px repeat(4, auto); gap: 12px 14px; align-items: center;">
+            <span></span>
+            <span style="font-size: 12px; color: #6b7280;">xs · 24</span>
+            <span style="font-size: 12px; color: #6b7280;">sm · 28</span>
+            <span style="font-size: 12px; color: #6b7280;">md · 32</span>
+            <span style="font-size: 12px; color: #6b7280;">lg · 40</span>
+
+            <span style="font-size: 12px; color: #6b7280;">primary</span>
+            <UiButton variant="primary" size="xs">Primary</UiButton>
+            <UiButton variant="primary" size="sm">Primary</UiButton>
+            <UiButton variant="primary" size="md">Primary</UiButton>
+            <UiButton variant="primary" size="lg">Primary</UiButton>
+
+            <span style="font-size: 12px; color: #6b7280;">secondary</span>
+            <UiButton variant="secondary" size="xs">Secondary</UiButton>
+            <UiButton variant="secondary" size="sm">Secondary</UiButton>
+            <UiButton variant="secondary" size="md">Secondary</UiButton>
+            <UiButton variant="secondary" size="lg">Secondary</UiButton>
+
+            <span style="font-size: 12px; color: #6b7280;">ghost</span>
+            <UiButton variant="ghost" size="xs">Ghost</UiButton>
+            <UiButton variant="ghost" size="sm">Ghost</UiButton>
+            <UiButton variant="ghost" size="md">Ghost</UiButton>
+            <UiButton variant="ghost" size="lg">Ghost</UiButton>
+
+            <span style="font-size: 12px; color: #6b7280;">danger</span>
+            <UiButton variant="danger" size="xs">Danger</UiButton>
+            <UiButton variant="danger" size="sm">Danger</UiButton>
+            <UiButton variant="danger" size="md">Danger</UiButton>
+            <UiButton variant="danger" size="lg">Danger</UiButton>
+          </div>
+        </section>
+
+        <!-- State 매트릭스: variant × (default/disabled/loading) -->
+        <section>
+          <h4 style="margin: 0 0 12px; font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.06em;">
+            State (md size)
+          </h4>
+          <div style="display: grid; grid-template-columns: 80px repeat(3, auto); gap: 12px 14px; align-items: center;">
+            <span></span>
+            <span style="font-size: 12px; color: #6b7280;">default</span>
+            <span style="font-size: 12px; color: #6b7280;">disabled</span>
+            <span style="font-size: 12px; color: #6b7280;">loading</span>
+
+            <span style="font-size: 12px; color: #6b7280;">primary</span>
+            <UiButton variant="primary">Save</UiButton>
+            <UiButton variant="primary" disabled>Save</UiButton>
+            <UiButton variant="primary" loading>Saving…</UiButton>
+
+            <span style="font-size: 12px; color: #6b7280;">secondary</span>
+            <UiButton variant="secondary">Cancel</UiButton>
+            <UiButton variant="secondary" disabled>Cancel</UiButton>
+            <UiButton variant="secondary" loading>Cancel</UiButton>
+
+            <span style="font-size: 12px; color: #6b7280;">ghost</span>
+            <UiButton variant="ghost">Edit</UiButton>
+            <UiButton variant="ghost" disabled>Edit</UiButton>
+            <UiButton variant="ghost" loading>Edit</UiButton>
+
+            <span style="font-size: 12px; color: #6b7280;">danger</span>
+            <UiButton variant="danger">Delete</UiButton>
+            <UiButton variant="danger" disabled>Delete</UiButton>
+            <UiButton variant="danger" loading>Deleting…</UiButton>
+          </div>
+        </section>
+
+        <!-- 폭/iconOnly 변형 -->
+        <section>
+          <h4 style="margin: 0 0 12px; font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.06em;">
+            Layout
+          </h4>
+          <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px;">
+            <UiButton variant="primary" fullWidth>fullWidth — 부모 100%</UiButton>
+            <div style="display: flex; gap: 8px;">
+              <UiButton variant="secondary" iconOnly aria-label="검색">
+                <template #icon-left><i class="icon-search size-16" /></template>
+              </UiButton>
+              <UiButton variant="ghost" iconOnly aria-label="설정">
+                <template #icon-left><i class="icon-setting size-16" /></template>
+              </UiButton>
+              <UiButton variant="primary">
+                <template #icon-left><i class="icon-plus size-16 icon-white" /></template>
+                새로 만들기
+              </UiButton>
+            </div>
+          </div>
+        </section>
       </div>
     `,
   }),

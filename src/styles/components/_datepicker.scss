@@ -231,7 +231,8 @@
   color: $color-text-primary;
   cursor: pointer;
   outline: none;
-  transition: all $transition-fast;
+  // 모션 토큰 — 캘린더 셀은 빠른 hover 반응 ($transition-fast). 대상 명시 (all 지양)
+  transition: background-color $transition-fast, color $transition-fast;
 
   &:hover { background: $color-background; }
 

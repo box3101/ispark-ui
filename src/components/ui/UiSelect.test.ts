@@ -59,8 +59,16 @@ describe('UiSelect', () => {
   })
 
   // 4. update:modelValue와 change 둘 다 동일한 값으로 emit
-  // jsdom에서 radix-vue Portal 트리거 시점 한계 — Storybook play 함수가 실 검증
-  it.skip('옵션 선택 시 update:modelValue와 change 동시 emit', async () => {
+  // jsdom 환경에서 radix-vue SelectPortal이 SelectItem을 mount하지 않아 단위 테스트 불가
+  // (trigger 클릭 후에도 [role="option"] 셀렉터로 찾을 수 없음 — Portal mount 시점 한계)
+  //
+  // 실제 검증 위치:
+  //   - UiSelect.stories.ts `Default` play: onChange/onUpdate:modelValue 동시 호출 + payload 동일 확인 (line ~273)
+  //   - UiSelect.stories.ts `NumericValue` play: number 타입 round-trip (line ~331)
+  //   - Storybook UI에서 직접 동작 확인 가능
+  //
+  // CI 통합: Phase 2의 @storybook/test-runner 도입 시 자동 회귀 검증
+  it.skip('옵션 선택 시 update:modelValue와 change 동시 emit (Storybook play로 검증)', async () => {
     const onUpdate = vi.fn()
     const onChange = vi.fn()
     const { container } = render(UiSelect, {

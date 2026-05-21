@@ -55,13 +55,19 @@
       </thead>
 
       <tbody>
-        <!-- 빈 상태 -->
+        <!-- 빈 상태 — #empty 슬롯 우선, 기본은 UiEmpty 컴포넌트 사용 -->
         <tr v-if="!data || data.length === 0">
           <td
             :colspan="columns.length"
             class="ui-table-empty"
           >
-            {{ emptyText }}
+            <slot name="empty">
+              <UiEmpty
+                :icon="emptyIcon"
+                :title="emptyText"
+                :description="emptyDescription"
+              />
+            </slot>
           </td>
         </tr>
 
@@ -94,8 +100,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="TRow extends Record<string, unknown> = Record<string, unknown>">
 import { ref, computed, watch } from 'vue'
+import type { Ref } from 'vue'
+import UiEmpty from './UiEmpty.vue'
 
 // 테이블 컬럼 정의 (라이브러리 외부에서도 import 가능)
 export interface TableColumn {
@@ -108,12 +116,18 @@ export interface TableColumn {
   sortType?: 'auto' | 'string' | 'number' | 'date'
 }
 
-interface Props {
+// 라이브러리 사용자에게도 export — rollupTypes 단계에서 default export가 참조하므로 public 필요
+export interface UiTableProps<TRow extends Record<string, unknown> = Record<string, unknown>> {
   columns: TableColumn[]
-  data: Record<string, any>[]
+  data: TRow[]
   stickyHeader?: boolean
   maxHeight?: string
+  /** 빈 상태 텍스트 — UiEmpty의 title로 전달 */
   emptyText?: string
+  /** 빈 상태 아이콘 (예: 'icon-search') — UiEmpty의 icon으로 전달 */
+  emptyIcon?: string
+  /** 빈 상태 보조 설명 — UiEmpty의 description으로 전달 */
+  emptyDescription?: string
   clickable?: boolean
   /** 테이블 크기: 'md'(기본) | 'sm'(컴팩트) */
   size?: 'md' | 'sm'
@@ -122,10 +136,12 @@ interface Props {
   selectedRowValue?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<UiTableProps<TRow>>(), {
   stickyHeader: false,
   maxHeight: undefined,
   emptyText: '데이터가 없습니다.',
+  emptyIcon: undefined,
+  emptyDescription: undefined,
   clickable: false,
   size: 'md',
   selectedRowKey: undefined,
@@ -136,13 +152,13 @@ const props = withDefaults(defineProps<Props>(), {
 //   1) Controlled: selectedRowKey + selectedRowValue 둘 다 값 있음 → 부모가 관리
 //   2) Uncontrolled: 둘 중 하나라도 비면 → 컴포넌트가 마지막 클릭 행 자체 추적
 //      (clickable=true + 행 클릭 시 자동 is-selected)
-const internalSelectedRow = ref<Record<string, any> | null>(null)
+const internalSelectedRow = ref<TRow | null>(null) as Ref<TRow | null>
 
 const hasControlledSelection = computed(
   () => !!props.selectedRowKey && !!props.selectedRowValue,
 )
 
-const isRowSelected = (row: Record<string, any>) => {
+const isRowSelected = (row: TRow) => {
   if (hasControlledSelection.value) {
     return row[props.selectedRowKey!] === props.selectedRowValue
   }
@@ -228,10 +244,10 @@ watch(
 )
 
 const emit = defineEmits<{
-  'row-click': [row: Record<string, any>, index: number]
+  'row-click': [row: TRow, index: number]
 }>()
 
-const onRowClick = (row: Record<string, any>, index: number) => {
+const onRowClick = (row: TRow, index: number) => {
   // Uncontrolled 모드에서만 내부 selection 업데이트
   if (!hasControlledSelection.value) {
     internalSelectedRow.value = row

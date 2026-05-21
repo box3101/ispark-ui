@@ -16,12 +16,12 @@
   .sbdocs code, .sbdocs pre, .sbdocs kbd {
     font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   }
-  .sbdocs a { color: #3c69db; }
+  .sbdocs a { color: var(--color-primary, #3c69db); }
   .sbdocs.sbdocs-content h2 {
     font-weight: 650;
     font-size: 21px;
     letter-spacing: -0.01em;
-    color: #1a1f2b;
+    color: var(--color-text-heading, #1a1f2b);
     margin: 40px 0 14px;
   }
   .sbdocs.sbdocs-content p,
@@ -37,21 +37,22 @@
     text-align: left;
     font-weight: 600;
     font-size: 13px;
-    color: #6b7280;
+    color: var(--color-text-secondary, #6b7280);
     padding: 9px 12px;
     border: 0;
-    border-bottom: 2px solid #e6e8ec;
+    border-bottom: 2px solid var(--color-border, #e6e8ec);
     background: none;
   }
   .sbdocs table:not(.docblock-argstable) td {
     padding: 9px 12px;
     border: 0;
-    border-bottom: 1px solid #eef0f3;
+    border-bottom: 1px solid var(--color-border-light, #eef0f3);
     vertical-align: top;
   }
 
   /* ═════════════════════════════════════════════════════════════
      Introduction 페이지 — shadcn/Radix 톤 풀-브랜드 랜딩
+     색상은 모두 :root CSS 변수 사용 (main.scss → src/styles/utils/_variables.scss)
      ═════════════════════════════════════════════════════════════ */
 
   /* ── Hero ──────────────────────────────────────────────────── */
@@ -61,13 +62,13 @@
     align-items: flex-start;
     padding: 8px 0 56px;
     margin-bottom: 56px;
-    border-bottom: 1px solid #eef0f3;
+    border-bottom: 1px solid var(--color-border-light, #eef0f3);
   }
   .sbdocs .ispark-hero__mark {
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    background: #3c69db;
+    background: var(--color-primary, #3c69db);
     color: #fff;
     display: flex;
     align-items: center;
@@ -81,7 +82,7 @@
     font-size: 48px;
     font-weight: 700;
     letter-spacing: -0.03em;
-    color: #1a1f2b;
+    color: var(--color-text-heading, #1a1f2b);
     margin: 0 0 14px;
     line-height: 1.1;
     padding: 0;
@@ -89,14 +90,14 @@
   }
   .sbdocs .ispark-hero__tag {
     font-size: 20px;
-    color: #1a1f2b;
+    color: var(--color-text-heading, #1a1f2b);
     margin: 0 0 6px;
     font-weight: 500;
     line-height: 1.5;
   }
   .sbdocs .ispark-hero__sub {
     font-size: 15px;
-    color: #6b7280;
+    color: var(--color-text-secondary, #6b7280);
     margin: 0 0 28px;
     line-height: 1.6;
     max-width: 560px;
@@ -115,25 +116,25 @@
     font-weight: 600;
     border-radius: 8px;
     text-decoration: none !important;
-    transition: all 150ms ease;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
     border: 1px solid transparent;
     line-height: 1;
   }
   .sbdocs .ispark-btn--primary {
-    background: #3c69db;
+    background: var(--color-primary, #3c69db);
     color: #fff !important;
   }
   .sbdocs .ispark-btn--primary:hover {
-    background: #2d52b8;
+    background: var(--color-primary-hover, #2d52b8);
   }
   .sbdocs .ispark-btn--secondary {
     background: #fff;
-    color: #1a1f2b !important;
-    border-color: #d6dae0;
+    color: var(--color-text-heading, #1a1f2b) !important;
+    border-color: var(--color-border, #d6dae0);
   }
   .sbdocs .ispark-btn--secondary:hover {
-    background: #f7f8fa;
-    border-color: #b9c0c9;
+    background: var(--color-surface, #f7f8fa);
+    border-color: var(--color-text-disabled, #b9c0c9);
   }
 
   /* ── Section ──────────────────────────────────────────────── */
@@ -146,7 +147,7 @@
   .sbdocs .ispark-section__title {
     font-size: 22px;
     font-weight: 700;
-    color: #1a1f2b;
+    color: var(--color-text-heading, #1a1f2b);
     margin: 0 0 4px;
     letter-spacing: -0.01em;
     border: 0;
@@ -154,7 +155,7 @@
   }
   .sbdocs .ispark-section__desc {
     font-size: 13px;
-    color: #6b7280;
+    color: var(--color-text-secondary, #6b7280);
     margin: 0;
   }
 
@@ -167,16 +168,16 @@
   .sbdocs a.ispark-card {
     display: flex;
     flex-direction: column;
-    border: 1px solid #eef0f3;
+    border: 1px solid var(--color-border-light, #eef0f3);
     border-radius: 12px;
     background: #fff;
     overflow: hidden;
     text-decoration: none !important;
-    color: #1a1f2b !important;
+    color: var(--color-text-heading, #1a1f2b) !important;
     transition: border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
   }
   .sbdocs a.ispark-card:hover {
-    border-color: #c5cbd6;
+    border-color: var(--color-border, #c5cbd6);
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(20, 30, 60, 0.06);
   }
@@ -185,8 +186,8 @@
     display: block;
     min-height: 160px;
     padding: 0;
-    background: #fafbfc;
-    border-bottom: 1px solid #eef0f3;
+    background: var(--color-surface, #fafbfc);
+    border-bottom: 1px solid var(--color-border-light, #eef0f3);
     overflow: hidden;
   }
   .sbdocs .ispark-card__frame {
@@ -211,22 +212,22 @@
   .sbdocs .ispark-card__meta strong {
     font-size: 14px;
     font-weight: 600;
-    color: #1a1f2b;
+    color: var(--color-text-heading, #1a1f2b);
   }
   .sbdocs .ispark-card__meta span {
     font-size: 12px;
-    color: #6b7280;
+    color: var(--color-text-secondary, #6b7280);
   }
 
   /* ── Footer Links ─────────────────────────────────────────── */
   .sbdocs .ispark-foot {
     margin-top: 64px;
     padding: 28px 0 16px;
-    border-top: 1px solid #eef0f3;
+    border-top: 1px solid var(--color-border-light, #eef0f3);
   }
   .sbdocs .ispark-foot__lead {
     font-size: 11px;
-    color: #6b7280;
+    color: var(--color-text-secondary, #6b7280);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     margin: 0 0 12px;
@@ -243,7 +244,7 @@
   }
   .sbdocs ul.ispark-foot__links a {
     font-size: 14px;
-    color: #3c69db;
+    color: var(--color-primary, #3c69db);
     text-decoration: none;
   }
   .sbdocs ul.ispark-foot__links a:hover {

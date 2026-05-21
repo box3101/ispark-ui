@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import { expect, fn, screen, userEvent, within } from '@storybook/test'
 import { ref } from 'vue'
 import UiSelect from './UiSelect.vue'
-import { INPUT_SIZES } from '@/design-tokens'
+import { SELECT_SIZES } from '@/design-tokens'
 
 const meta = {
   title: 'Components/Form/UiSelect',
@@ -133,11 +133,11 @@ interface SelectOption {
     // ===== Appearance =====
     size: {
       control: 'inline-radio',
-      options: INPUT_SIZES,
-      description: '`sm`(28px) / `md`(32px · 기본) / `lg`(40px) / `auth`(44px · 로그인 화면 전용) — 공용 토큰 `InputSize`.',
+      options: SELECT_SIZES,
+      description: '`xs`(24px · 인라인/캘린더 헤더) / `sm`(28px) / `md`(32px · 기본) / `lg`(40px) / `auth`(44px · 로그인 화면 전용) — 공용 토큰 `SelectSize`.',
       table: {
         category: 'Appearance',
-        type: { summary: 'InputSize' },
+        type: { summary: 'SelectSize' },
         defaultValue: { summary: "'md'" },
       },
     },
@@ -267,9 +267,16 @@ export const Default: Story = {
     await userEvent.click(trigger)
     await expect(trigger.getAttribute('aria-expanded')).toBe('true')
 
-    // Portal은 body 직속 → screen 사용 필수
-    const optB = await screen.findByRole('option', { name: '옵션 B' })
-    await userEvent.click(optB)
+    // Portal mount 보장
+    await screen.findByRole('option', { name: '옵션 A' })
+
+    // 클릭 대신 keyboard(ArrowDown + Enter) 사용 — radix-vue가 pointer click 후 trigger ref로 focus 복귀할 때
+    // Storybook play instrumenter 타이밍과 겹쳐 "Cannot read properties of null (reading 'focus')" 콘솔 에러 발생.
+    // keyboard 경로는 radix가 내부에서 focus 관리를 다르게 처리해 race를 회피한다.
+    // radix가 trigger open 시 첫 옵션(A)을 자동 highlight → ArrowDown 1번이면 B로 이동
+    await userEvent.keyboard('{ArrowDown}')  // A → B
+    await userEvent.keyboard('{Enter}')      // B 선택 + 자동 닫힘
+
     await expect(args.onChange).toHaveBeenCalledWith('b')
     await expect(args['onUpdate:modelValue']).toHaveBeenCalledWith('b')
 

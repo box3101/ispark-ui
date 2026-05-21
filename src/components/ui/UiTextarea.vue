@@ -140,7 +140,7 @@ const emit = defineEmits<{
   'update:modelValue': [value: string]
 }>()
 
-const uid = Math.random().toString(36).slice(2, 11)
+const uid = useId()
 const resolvedId = computed(() => props.id || `ui-textarea-${uid}`)
 const errorId = computed(() => (props.errorMessage ? `${resolvedId.value}-error` : undefined))
 const descId = computed(() => (props.desc && !props.errorMessage ? `${resolvedId.value}-desc` : undefined))
@@ -201,6 +201,8 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
+@use 'sass:map';
+
 .ui-textarea-outer {
   display: flex;
   flex-direction: column;
@@ -226,7 +228,7 @@ defineExpose({
 }
 
 .ui-textarea-required {
-  color: #b91c1c;
+  color: var(--color-danger);
   margin-left: 2px;
 }
 
@@ -237,20 +239,20 @@ defineExpose({
 
 .ui-textarea {
   font-family: inherit;
-  font-weight: $font-weight-normal;
-  color: $color-text-primary;
+  color: var(--color-text-primary);
   background-color: #fff;
   resize: none;
-  padding: 6px 8px;
+  // Input과 동일한 가로 패딩 토큰 사용 — size별 padding 토큰을 size 블록에서 적용
+  padding: $spacing-sm map.get($sizes, 'md', padding-x);
   width: 100%;
   min-height: 84px;
-  line-height: $line-height-base;
   display: block;
   border: 0;
   outline: none;
-  transition: border-color 0.15s ease;
+  @include typo($body-medium);
+  transition: border-color $transition-base, outline-color $transition-base;
 
-  // ===== Radius =====
+  // ===== Radius — 공용 shape 토큰과 정렬 =====
   &.radius-sm {
     border-radius: $border-radius-sm;
   }
@@ -261,44 +263,49 @@ defineExpose({
     border-radius: $border-radius-lg;
   }
 
-  // ===== Size — font-size 차등 (높이는 콘텐츠 기반) =====
-  &.size-sm {
-    font-size: $font-size-sm;
-    min-height: 64px;
+  // ===== Size — 공용 size 토큰의 font·padding-x 사용 (Input과 일관) =====
+  // 높이는 콘텐츠 기반 (min-height만 지정)
+  @each $key in (sm md lg) {
+    $vals: map.get($sizes, $key);
+    &.size-#{$key} {
+      font-size: map.get($vals, font);
+      padding: $spacing-sm map.get($vals, padding-x);
+    }
   }
-  &.size-md {
-    font-size: $font-size-base;
-    min-height: 84px;
-  }
-  &.size-lg {
-    font-size: $font-size-lg;
-    min-height: 104px;
-  }
+  &.size-sm { min-height: 64px; }
+  &.size-md { min-height: 84px; }
+  &.size-lg { min-height: 104px; }
 
   &::placeholder {
-    color: #aebccb;
+    // UiInput과 동일 토큰 — WCAG AA 대비(~5.2:1) 보장
+    color: var(--color-text-disabled);
+    opacity: 1; // Firefox 기본 opacity 0.5 무시
   }
 
   &:disabled {
-    color: $color-text-disabled;
-    background: #f4f7f9;
+    color: var(--color-text-disabled);
+    background: var(--color-background);
     cursor: not-allowed;
   }
 
   &[readonly] {
-    background: #f8fafc;
+    background: var(--color-surface);
   }
 
   // border 모드 — 외부 wrap 없이 단독으로 쓸 때
   &.has-border {
-    border: 1px solid #c6d2db;
+    border: 1px solid var(--color-border);
 
     &:hover:not(:disabled):not([readonly]) {
       border-color: var(--color-primary);
     }
 
-    &:focus:not(:disabled):not([readonly]) {
+    &:focus:not(:disabled):not([readonly]),
+    &:focus-visible:not(:disabled):not([readonly]) {
       border-color: var(--color-primary);
+      // Input/Button/Select와 동일한 outline ring — 폼 키보드 포커스 통일
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
     }
   }
 
@@ -307,7 +314,12 @@ defineExpose({
     &.has-border,
     &.has-border:hover,
     &.has-border:focus {
-      border-color: #b91c1c;
+      border-color: var(--color-danger);
+    }
+    // 포커스 ring도 danger 색으로
+    &.has-border:focus,
+    &.has-border:focus-visible {
+      outline-color: var(--color-danger);
     }
   }
 

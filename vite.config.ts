@@ -47,11 +47,12 @@ export default defineConfig({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      // peerDependencies는 번들 제외
-      external: ['vue'],
+      // peerDependencies는 번들 제외 (소비 앱과 중복 방지)
+      external: ['vue', 'radix-vue'],
       output: {
         globals: {
           vue: 'Vue',
+          'radix-vue': 'RadixVue',
         },
         // CSS 단일 파일로 (consumer가 ./style.css로 import)
         assetFileNames: (assetInfo) => {

@@ -80,9 +80,10 @@
         aria-label="입력 삭제"
         @click="onClearClick"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="10" fill="#949494"/>
-          <path d="M8.5 8.5L15.5 15.5M15.5 8.5L8.5 15.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- circle은 currentColor (부모 .is-clear 토큰), X는 흰색 대비 유지 -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" fill="currentColor"/>
+          <path d="M8.5 8.5L15.5 15.5M15.5 8.5L8.5 15.5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
 
@@ -323,7 +324,7 @@ const outerStyle = computed<StyleValue | undefined>(() => (attrs.style as StyleV
 
 // id 자동 생성 (Vue 3.5+ useId — SSR 안전, 인스턴스별 unique).
 // 외부에서 id prop을 안 주면 label/aria 연결을 위해 내부 id 사용.
-const uid = Math.random().toString(36).slice(2, 11)
+const uid = useId()
 const resolvedId = computed(() => props.id || `ui-input-${uid}`)
 
 // desc id — input의 aria-describedby로 연결
@@ -337,11 +338,18 @@ const isError = computed(() => props.error || !!props.errorMessage)
 // aria-describedby 우선순위: errorMessage > desc
 const ariaDescribedby = computed(() => errorId.value || descId.value)
 // aria-invalid: error 상태에서만 'true'. 외부에서 attrs로 명시한 값도 존중.
-const ariaInvalid = computed(() => {
+// HTML attr 타입에 맞춰 Booleanish | 'grammar' | 'spelling' | undefined로 좁힘.
+type AriaInvalid = boolean | 'true' | 'false' | 'grammar' | 'spelling' | undefined
+const ariaInvalid = computed<AriaInvalid>(() => {
   if (isError.value) return 'true'
   const fromAttrs = attrs['aria-invalid']
-  if (fromAttrs !== undefined && fromAttrs !== null) return String(fromAttrs)
-  return undefined
+  if (fromAttrs === undefined || fromAttrs === null) return undefined
+  // attrs는 unknown — 알려진 값만 통과시키고 그 외엔 truthy → 'true' 폴백
+  if (typeof fromAttrs === 'boolean') return fromAttrs
+  if (fromAttrs === 'true' || fromAttrs === 'false' || fromAttrs === 'grammar' || fromAttrs === 'spelling') {
+    return fromAttrs
+  }
+  return fromAttrs ? 'true' : 'false'
 })
 
 // inputmode — numberOnly + allow* 조합에 따라 모바일 키보드 결정
@@ -567,11 +575,11 @@ defineExpose({
 // ===== label =====
 .ui-input-label {
   display: block;
-  font-size: 13px;
-  font-weight: 500;
+  // 타이포 프리셋 — body-small + medium weight (13px 직접값 대체, 토큰은 12/14 갭이라 small medium으로 가까운 톤)
+  @include typo($body-small);
+  font-weight: $font-weight-medium;
   color: var(--color-text-primary);
   margin-bottom: 4px;
-  line-height: 1.5;
 
   // labelHidden — 시각적 숨김 + 스크린리더는 인지
   &.is-hidden {
@@ -608,6 +616,9 @@ defineExpose({
 
   &.is-focused:not(.is-disabled) {
     border-color: var(--color-primary);
+    // Button/Select와 동일한 outline ring — 키보드 포커스 시각 통일
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
   }
 
   // ===== size — 공용 토큰 (height/padding-x/font + 자동 icon size) =====
@@ -691,7 +702,9 @@ defineExpose({
   outline: none;
 
   &::placeholder {
-    color: #aebccb;
+    // 디자인 토큰 사용 — 28px sm에서도 WCAG AA 대비(약 5.2:1) 보장
+    color: $color-text-disabled;
+    opacity: 1; // Firefox 기본 opacity 0.5 무시
   }
 
   &:disabled {
@@ -736,28 +749,27 @@ defineExpose({
   }
 
   &.is-clear {
-    opacity: 0.5;
-    transition: opacity $transition-base;
+    // circle 배경색 — disabled 토큰으로 톤 통일 (이전 하드코딩 #949494 대체)
+    color: var(--color-text-disabled, #{$color-text-disabled});
+    opacity: 0.7;
+    transition: opacity $transition-base, color $transition-base;
 
     &:hover {
       opacity: 1;
+      color: var(--color-text-secondary, #{$color-text-secondary});
     }
   }
 }
 
 .ui-input-desc {
   margin-top: 4px;
-  @include typo($body-small);
-  color: var(--color-text-secondary);
-  line-height: 1.5;
+  @include typo($body-small, var(--color-text-secondary));
 }
 
 // ===== 에러 메시지 (errorMessage prop) — desc보다 우선 표시 =====
 .ui-input-error {
   margin-top: 4px;
-  @include typo($body-small);
-  color: var(--color-danger);
-  line-height: 1.5;
-  font-weight: 500;
+  @include typo($body-small, var(--color-danger));
+  font-weight: $font-weight-medium;
 }
 </style>

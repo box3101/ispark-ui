@@ -61,12 +61,16 @@
           </DateRangePickerInput>
         </template>
 
-        <DateRangePickerTrigger class="ui-datepicker-trigger">
+        <DateRangePickerTrigger
+          class="ui-datepicker-trigger"
+          aria-label="기간 선택"
+        >
           <svg
             width="16"
             height="16"
             viewBox="0 0 16 16"
             fill="none"
+            aria-hidden="true"
           >
             <rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5" />
             <path d="M2 7h12" stroke="currentColor" stroke-width="1.5" />
@@ -84,8 +88,11 @@
           class="ui-datepicker-calendar"
         >
           <div class="ui-datepicker-header">
-            <DateRangePickerPrev class="ui-datepicker-nav">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <DateRangePickerPrev
+              class="ui-datepicker-nav"
+              aria-label="이전 달"
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                 <path d="M10 4l-4 4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </DateRangePickerPrev>
@@ -107,8 +114,11 @@
               />
             </div>
 
-            <DateRangePickerNext class="ui-datepicker-nav">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <DateRangePickerNext
+              class="ui-datepicker-nav"
+              aria-label="다음 달"
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                 <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </DateRangePickerNext>

@@ -9,7 +9,7 @@
 |---|---|
 | **타입** | UI 컴포넌트 라이브러리 (앱 아님) |
 | **빌드** | Vite + Vue3 + TypeScript |
-| **문서/플레이그라운드** | Storybook 9 (CSF3 + play 함수) |
+| **문서/플레이그라운드** | Storybook 8.6 (CSF3 + play 함수) |
 | **테스트** | Vitest + @testing-library/vue + composeStories |
 | **스타일** | SCSS (글로벌 변수/믹스인) + CSS Variables (테마) |
 

@@ -26,38 +26,39 @@
             fill="none"
             aria-hidden="true"
           >
+            <!-- 모든 색상은 currentColor — 부모 .ui-toast의 type 클래스가 color 토큰 지정 -->
             <template v-if="toast.type === 'success'">
-              <circle cx="10" cy="10" r="9" fill="#22c55e" opacity="0.12" />
-              <circle cx="10" cy="10" r="9" stroke="#22c55e" stroke-width="1.2" fill="none" />
+              <circle cx="10" cy="10" r="9" fill="currentColor" opacity="0.12" />
+              <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.2" fill="none" />
               <path
                 d="M6.5 10.5L9 13L13.5 7.5"
-                stroke="#22c55e"
+                stroke="currentColor"
                 stroke-width="1.5"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               />
             </template>
             <template v-else-if="toast.type === 'error'">
-              <circle cx="10" cy="10" r="9" fill="#ef4444" opacity="0.12" />
-              <circle cx="10" cy="10" r="9" stroke="#ef4444" stroke-width="1.2" fill="none" />
+              <circle cx="10" cy="10" r="9" fill="currentColor" opacity="0.12" />
+              <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.2" fill="none" />
               <path
                 d="M7.5 7.5L12.5 12.5M12.5 7.5L7.5 12.5"
-                stroke="#ef4444"
+                stroke="currentColor"
                 stroke-width="1.5"
                 stroke-linecap="round"
               />
             </template>
             <template v-else-if="toast.type === 'warning'">
-              <circle cx="10" cy="10" r="9" fill="#f59e0b" opacity="0.12" />
-              <circle cx="10" cy="10" r="9" stroke="#f59e0b" stroke-width="1.2" fill="none" />
-              <path d="M10 6.5V11" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" />
-              <circle cx="10" cy="13.5" r="0.75" fill="#f59e0b" />
+              <circle cx="10" cy="10" r="9" fill="currentColor" opacity="0.12" />
+              <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.2" fill="none" />
+              <path d="M10 6.5V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              <circle cx="10" cy="13.5" r="0.75" fill="currentColor" />
             </template>
             <template v-else>
-              <circle cx="10" cy="10" r="9" fill="#3b82f6" opacity="0.12" />
-              <circle cx="10" cy="10" r="9" stroke="#3b82f6" stroke-width="1.2" fill="none" />
-              <circle cx="10" cy="6.5" r="0.75" fill="#3b82f6" />
-              <path d="M10 9V13.5" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" />
+              <circle cx="10" cy="10" r="9" fill="currentColor" opacity="0.12" />
+              <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.2" fill="none" />
+              <circle cx="10" cy="6.5" r="0.75" fill="currentColor" />
+              <path d="M10 9V13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
             </template>
           </svg>
 
@@ -150,10 +151,23 @@ const toastsByPlacement = computed(() => (placement: ToastPlacement) =>
   box-shadow: $shadow-lg;
   pointer-events: auto;
 
-  &.type-success { border-left: 3px solid $color-success; }
-  &.type-error { border-left: 3px solid $color-error; }
-  &.type-warning { border-left: 3px solid $color-warning; }
-  &.type-info { border-left: 3px solid $color-info; }
+  // 타입별 좌측 보더 + 아이콘 색상 통합 (svg는 currentColor 상속)
+  &.type-success {
+    border-left: 3px solid $color-success;
+    .ui-toast-icon { color: $color-success; }
+  }
+  &.type-error {
+    border-left: 3px solid $color-error;
+    .ui-toast-icon { color: $color-error; }
+  }
+  &.type-warning {
+    border-left: 3px solid $color-warning;
+    .ui-toast-icon { color: $color-warning; }
+  }
+  &.type-info {
+    border-left: 3px solid $color-info;
+    .ui-toast-icon { color: $color-info; }
+  }
 }
 
 .ui-toast-icon {
