@@ -2,7 +2,7 @@
   <span
     class="ui-badge"
     :class="[
-      `variant-${variant}`,
+      `variant-${effectiveVariant}`,
       `size-${size}`,
       { 'is-icon-only': iconOnly },
     ]"
@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
 
 export type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
 export type BadgeSize = 'xs' | 'sm' | 'md' | 'lg'
@@ -92,6 +92,29 @@ const badgeStyle = computed((): Record<string, string> => {
     backgroundColor: bg || '',
   }
 })
+
+// 사용자가 colorHex를 명시했으나 invalid면 variant prop을 시각적으로 무시하고 default로 폴백.
+// (이전: variant 그대로 사용 → 'success' 시 의도하지 않은 초록 폴백)
+const isInvalidHexProvided = computed(() => {
+  const raw = (props.colorHex ?? '').trim()
+  return raw.length > 0 && !normalizeHex(raw)
+})
+
+const effectiveVariant = computed<BadgeVariant>(() =>
+  isInvalidHexProvided.value ? 'default' : props.variant,
+)
+
+// dev 환경 경고
+if (import.meta.env.DEV) {
+  watchEffect(() => {
+    if (isInvalidHexProvided.value) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[UiBadge] colorHex 형식이 올바르지 않습니다: "${props.colorHex}". 6자리/3자리 hex(#RRGGBB or #RGB)만 허용. 안전을 위해 variant를 'default'로 폴백합니다.`,
+      )
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>

@@ -13,6 +13,16 @@
 
     <div class="ui-pagination-controls">
       <button
+        v-if="showFirstLast"
+        type="button"
+        class="ui-pagination-btn ui-pagination-btn--edge"
+        :disabled="modelValue <= 1"
+        aria-label="처음 페이지"
+        @click="onPageChange(1)"
+      >
+        <span aria-hidden="true">«</span>
+      </button>
+      <button
         type="button"
         class="ui-pagination-btn"
         :disabled="modelValue <= 1"
@@ -55,6 +65,16 @@
       >
         {{ nextLabel }}
       </button>
+      <button
+        v-if="showFirstLast"
+        type="button"
+        class="ui-pagination-btn ui-pagination-btn--edge"
+        :disabled="modelValue >= totalPages"
+        aria-label="마지막 페이지"
+        @click="onPageChange(totalPages)"
+      >
+        <span aria-hidden="true">»</span>
+      </button>
     </div>
 
     <span
@@ -84,6 +104,8 @@ interface Props {
   showTotal?: boolean
   /** 우측 'n-m / total' 표시. 기본 true */
   showRange?: boolean
+  /** 양 끝 처음/마지막 페이지 «/» 버튼 표시. 페이지 많은 케이스 권장. 기본 false */
+  showFirstLast?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -93,6 +115,7 @@ const props = withDefaults(defineProps<Props>(), {
   nextLabel: '다음',
   showTotal: true,
   showRange: true,
+  showFirstLast: false,
 })
 
 const emit = defineEmits<{
@@ -186,7 +209,8 @@ const onPageChange = (page: number) => {
   cursor: pointer;
   transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
 
-  &:hover:not(:disabled) {
+  // hover는 active 아닌 경우에만 primary border/text로 (active hover invisible 방지)
+  &:hover:not(:disabled):not(.is-active) {
     border-color: var(--color-primary);
     color: var(--color-primary);
   }
@@ -202,6 +226,14 @@ const onPageChange = (page: number) => {
   }
 }
 
+// edge(« ») 버튼은 살짝 좁고 텍스트 톤 다운
+.ui-pagination-btn--edge {
+  min-width: 32px;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
 .ui-pagination-page {
   min-width: 32px;
   padding: 0;
@@ -211,6 +243,13 @@ const onPageChange = (page: number) => {
     border-color: var(--color-primary);
     color: #fff;
     font-weight: 600;
+  }
+
+  // active 상태에서 hover — 흰색 텍스트 유지, 배경만 살짝 더 진하게 (invisible fix)
+  &.is-active:hover:not(:disabled) {
+    background: var(--color-primary-hover, var(--color-primary));
+    border-color: var(--color-primary-hover, var(--color-primary));
+    color: #fff;
   }
 }
 

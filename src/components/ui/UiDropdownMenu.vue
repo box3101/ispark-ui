@@ -1,24 +1,35 @@
 <template>
-  <DropdownMenuRoot v-model:open="openState">
+  <!--
+    modal=false (hover 모드 한정): radix가 open 시 trigger에 pointer-events:none을 강제하면
+    mouseleave→close→mouseenter→open 깜빡임 루프 발생. modal=false면 trigger pointer hover 유지.
+  -->
+  <DropdownMenuRoot
+    v-model:open="openState"
+    :modal="openOnHover ? false : undefined"
+  >
     <!--
       as-child는 첫 자식을 Radix trigger로 사용한다.
-      openOnHover=true일 때만 hover bridge용 span wrapper 필요 — 일반 사용(클릭 토글)에선
-      사용자가 넘긴 button을 그대로 trigger로 사용해 aria-haspopup/expanded와 focus를 정확히 전달.
+      일반(click) 모드: trigger 그대로 slot 전달 → aria-haspopup/expanded/focus 정확.
+      hover 모드: trigger 외부 wrap div에서 hover 추적. trigger 자체에 hover 두면 open 시
+      radix가 trigger에 pointer-events:none을 강제로 적용 → mouseleave 발화 → close → 재오픈
+      깜빡임 사이클 발생. wrap div는 radix가 건드리지 않아 안전.
     -->
-    <DropdownMenuTrigger as-child>
-      <span
-        v-if="openOnHover"
-        class="ui-dropdown-trigger-wrap"
-        :style="hoverBridgeStyle"
-        @mouseenter="onTriggerMouseEnter"
-        @mouseleave="onTriggerMouseLeave"
-      >
+    <div
+      v-if="openOnHover"
+      class="ui-dropdown-hover-wrap"
+      :style="hoverBridgeStyle"
+      @mouseenter="onTriggerMouseEnter"
+      @mouseleave="onTriggerMouseLeave"
+    >
+      <DropdownMenuTrigger as-child>
         <slot name="trigger" />
-      </span>
-      <slot
-        v-else
-        name="trigger"
-      />
+      </DropdownMenuTrigger>
+    </div>
+    <DropdownMenuTrigger
+      v-else
+      as-child
+    >
+      <slot name="trigger" />
     </DropdownMenuTrigger>
 
     <DropdownMenuPortal>
@@ -100,7 +111,7 @@ interface Props {
   collisionPadding?: number
   /** 트리거 hover 시 자동 오픈 */
   openOnHover?: boolean
-  /** hover 해제 후 닫힘 지연 ms */
+  /** hover 해제 후 닫힘 지연 ms. 너무 짧으면 trigger→content 이동 중 깜빡임 발생. 기본 300 */
   hoverCloseDelay?: number
   /** 포털 콘텐츠에 추가 클래스 (글로벌 SCSS override 진입점) */
   contentClass?: string
@@ -114,7 +125,7 @@ const props = withDefaults(defineProps<Props>(), {
   sideOffset: 5,
   collisionPadding: 8,
   openOnHover: false,
-  hoverCloseDelay: 200,
+  hoverCloseDelay: 300,
   contentClass: '',
 })
 
@@ -125,10 +136,11 @@ const effectiveSideOffset = computed(() =>
   props.openOnHover ? 0 : props.sideOffset,
 )
 
-// trigger-wrap padding은 hover 영역 확장 fallback(여전히 안전)
+// hover wrap div의 hover 영역 확장 — trigger와 content 사이 gap을 wrap padding으로 흡수
+// (mouse가 빈 영역 거쳐 close 발화하는 것 방지)
 const hoverBridgeStyle = computed<Record<string, string>>(() => {
-  if (!props.openOnHover) return { display: 'inline-block' }
-  const pad = `${props.sideOffset + 2}px`
+  if (!props.openOnHover) return {}
+  const pad = `${props.sideOffset + 4}px`
   const sideMap: Record<NonNullable<Props['side']>, string> = {
     top: 'paddingTop',
     bottom: 'paddingBottom',
@@ -213,6 +225,33 @@ watch(openState, (v) => emit('update:open', v))
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
   z-index: $z-dropdown;
 
+  // openOnHover hover bridge — trigger와 content 사이 invisible overlay로 mouse leave 방지
+  // (side별로 trigger 방향에 두께 14px의 hover-friendly zone)
+  &[data-side='bottom']::before {
+    content: '';
+    position: absolute;
+    inset: -14px 0 auto 0;
+    height: 14px;
+  }
+  &[data-side='top']::before {
+    content: '';
+    position: absolute;
+    inset: auto 0 -14px 0;
+    height: 14px;
+  }
+  &[data-side='right']::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 -14px;
+    width: 14px;
+  }
+  &[data-side='left']::before {
+    content: '';
+    position: absolute;
+    inset: 0 -14px 0 auto;
+    width: 14px;
+  }
+
   // radix data-state 기반 진입/퇴장
   &[data-state='open'] {
     animation: ui-dropdown-in 0.15s ease;
@@ -220,7 +259,6 @@ watch(openState, (v) => emit('update:open', v))
   &[data-state='closed'] {
     animation: ui-dropdown-out 0.1s ease forwards;
   }
-
 }
 
 .ui-dropdown-title {

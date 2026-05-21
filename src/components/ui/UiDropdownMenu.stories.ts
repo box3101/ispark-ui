@@ -167,7 +167,7 @@ export const OpenOnHover: Story = {
   args: {
     items: baseItems,
     openOnHover: true,
-    hoverCloseDelay: 120,
+    hoverCloseDelay: 300,
     side: 'right',
     align: 'start',
   },

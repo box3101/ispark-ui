@@ -156,22 +156,17 @@ const onKeydown = (e: KeyboardEvent) => {
   display: flex;
   align-items: center;
 
-  // align variants
-  .ui-tab.align-center & {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0 16px;
-  }
+  // align variants — justify-content로 탭 자체를 정렬 (이전: max-width만 적용해 inner는 가운데지만 탭은 좌측에 붙음)
   .ui-tab.align-left & {
-    padding: 0;
+    justify-content: flex-start;
+  }
+  .ui-tab.align-center & {
+    justify-content: center;
   }
   .ui-tab.align-right & {
-    padding: 0;
     justify-content: flex-end;
   }
   .ui-tab.align-stretch & {
-    padding: 0;
-
     .ui-tab-item {
       flex: 1;
       justify-content: center;

@@ -253,6 +253,8 @@ const contentStyle = computed(() => {
   display: inline-flex;
   align-items: center;
   gap: $spacing-xs;
+  // title 없을 때(sr-only)도 항상 우측 정렬 — space-between이 자식 1개로 인식되어 좌측 정렬되는 버그 방지
+  margin-left: auto;
 }
 
 .ui-modal-fullscreen-toggle {

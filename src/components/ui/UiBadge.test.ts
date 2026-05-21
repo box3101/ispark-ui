@@ -40,8 +40,9 @@ describe('UiBadge', () => {
     expect(el.style.backgroundColor).toBe('rgba(170, 187, 204, 0.2)')
   })
 
-  // 4. 잘못된 colorHex — inline style 미적용 (variant fallback)
-  it('잘못된 colorHex는 inline style 미적용', () => {
+  // 4. 잘못된 colorHex — inline style 미적용 + variant 'default'로 안전 폴백
+  // (이전: variant 그대로 사용 → 의도하지 않은 success/danger 색 노출 위험)
+  it('잘못된 colorHex는 inline style 미적용 + variant default 강제 폴백', () => {
     const { container } = render(UiBadge, {
       props: { colorHex: 'not-a-color', variant: 'success' },
       slots: { default: 'x' },
@@ -49,7 +50,9 @@ describe('UiBadge', () => {
     const el = container.querySelector('.ui-badge') as HTMLElement
     expect(el.style.color).toBe('')
     expect(el.style.backgroundColor).toBe('')
-    expect(el.classList.contains('variant-success')).toBe(true)
+    // 안전을 위해 variant는 default로 폴백 (사용자가 명시한 success는 무시)
+    expect(el.classList.contains('variant-success')).toBe(false)
+    expect(el.classList.contains('variant-default')).toBe(true)
   })
 
   // 5. iconOnly — default 슬롯 미렌더, is-icon-only 클래스

@@ -1,4 +1,4 @@
-<!-- Manager UI (사이드바/툴바) 전용 폰트 + 디테일 폴리시 -->
+<!-- Manager UI (사이드바/툴바) 전용 폰트 + 디테일 폴리시 — Claude 톤 warm dark -->
 <link rel="stylesheet" as="style" crossorigin
   href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
 
@@ -21,13 +21,13 @@
     font-size: 11px;
   }
 
-  /* ── 선택 상태: 풀-블루 → 연한 primary 톤 + 좌측 인디케이터 ─── */
+  /* ── 선택 상태: warm orange tint + 좌측 인디케이터 ─── */
   .sidebar-container a[data-selected="true"],
   .sidebar-container button[data-selected="true"],
   [id^="storybook-explorer-tree"] a[data-selected="true"],
   [id^="storybook-explorer-tree"] button[data-selected="true"] {
-    background: rgba(60, 105, 219, 0.10) !important;
-    color: #3c69db !important;
+    background: rgba(217, 119, 87, 0.12) !important;
+    color: #e89976 !important;
     font-weight: 600 !important;
     position: relative;
   }
@@ -41,23 +41,24 @@
     top: 4px;
     bottom: 4px;
     width: 2px;
-    background: #3c69db;
+    background: #d97757;
     border-radius: 0 2px 2px 0;
+    box-shadow: 0 0 8px rgba(217, 119, 87, 0.5);
   }
-  /* 선택 상태 내부 텍스트(span 포함)도 primary 색으로 통일 */
+  /* 선택 상태 내부 텍스트(span 포함)도 warm orange로 통일 */
   .sidebar-container a[data-selected="true"] *,
   .sidebar-container button[data-selected="true"] *,
   [id^="storybook-explorer-tree"] a[data-selected="true"] *,
   [id^="storybook-explorer-tree"] button[data-selected="true"] * {
-    color: #3c69db !important;
+    color: #e89976 !important;
   }
 
-  /* ── 호버 상태 — 부드러운 그레이 ──────────────────────────── */
+  /* ── 호버 상태 — warm tint 살짝 ──────────────────────────── */
   .sidebar-container a:not([data-selected="true"]):hover,
   .sidebar-container button:not([data-selected="true"]):hover,
   [id^="storybook-explorer-tree"] a:not([data-selected="true"]):hover,
   [id^="storybook-explorer-tree"] button:not([data-selected="true"]):hover {
-    background: rgba(60, 105, 219, 0.04) !important;
+    background: rgba(234, 234, 227, 0.04) !important;
   }
 
   /* ── 트리 아이콘(격자 등) 톤다운 ───────────────────────────── */
@@ -65,29 +66,27 @@
   .sidebar-container button:not([data-selected="true"]) > svg,
   [id^="storybook-explorer-tree"] a:not([data-selected="true"]) svg,
   [id^="storybook-explorer-tree"] button:not([data-selected="true"]) > svg {
-    opacity: 0.5;
+    opacity: 0.55;
   }
   .sidebar-container a[data-selected="true"] svg,
   [id^="storybook-explorer-tree"] a[data-selected="true"] svg {
     opacity: 1;
-    color: #3c69db !important;
+    color: #e89976 !important;
   }
 
-  /* ── 폴더/컴포넌트/문서 아이콘 — 노란/주황 기본색 → 브랜드 슬레이트 톤 ─── */
-  /* Storybook 8.6 사이드바 아이콘 selector는 svg[type="..."] (data-nodetype 아님).
-     기본은 폴더/컴포넌트 #FF8300(주황). 비선택 상태만 슬레이트로, 선택 상태는 위에서 primary로 별도 처리. */
+  /* ── 폴더/컴포넌트/문서 아이콘 — Storybook 기본 주황 → 다크에 어울리는 톤 ─── */
   .sidebar-container svg[type="document"],
   .sidebar-container svg[type="group"],
   .sidebar-container svg[type="component"],
   .sidebar-container svg[type="story"] {
-    color: #94a3b8 !important; /* slate-400 — 차분한 그레이로 통일 */
+    color: #6b6d75 !important; /* 다크 배경 위 차분한 그레이 */
   }
-  /* 선택 상태의 아이콘은 primary 톤 유지 */
+  /* 선택 상태의 아이콘은 warm orange */
   .sidebar-container a[data-selected="true"] svg[type="document"],
   .sidebar-container a[data-selected="true"] svg[type="story"],
   .sidebar-container button[data-selected="true"] svg[type="group"],
   .sidebar-container button[data-selected="true"] svg[type="component"] {
-    color: #3c69db !important;
+    color: #e89976 !important;
   }
 
   /* ── 검색바 — 둥글기 + placeholder 톤다운 ─────────────────── */
@@ -97,6 +96,12 @@
     border-radius: 8px !important;
   }
   .sidebar-container input::placeholder {
-    color: #9ca3af !important;
+    color: #6b6d75 !important;
+  }
+
+  /* ── Brand title — 살짝 강조 ─────────────────────────────── */
+  .sidebar-container [class*="Heading"],
+  .sidebar-container [class*="brand"] {
+    letter-spacing: -0.01em;
   }
 </style>
