@@ -57,6 +57,21 @@ src/components/ui/
 - play 함수가 길어지면 → E2E 신호 → Playwright로 이전 고려
 - `@storybook/test`의 `fn()`은 `jest.fn()` 대체, play/Vitest 공용
 
+## MDX 문서 작성 규칙
+
+Storybook MDX 페이지(`src/**/*.mdx`)는 GFM 파이프 테이블 파싱이 비활성되어 있다. 파이프 `|---|` 사용 시 표가 한 줄 paragraph로 합쳐져 raw text로 렌더된다.
+
+- **표**: JSX `<table>` 사용 (Stack / Philosophy / Theming / Install / Migration 모두 동일 패턴)
+  ```mdx
+  <table>
+    <thead><tr><th>제목</th><th>내용</th></tr></thead>
+    <tbody><tr><td>...</td><td>...</td></tr></tbody>
+  </table>
+  ```
+- **다른 Storybook 페이지 링크**: JSX `<a target="_top" href="/?path=/docs/...--docs">`
+  - 마크다운 `[..]()`는 `target="_top"`이 없어 iframe 안에서 navigation 실패 → 클릭해도 동작 안 함
+- **외부 링크**: `<a target="_blank" rel="noopener noreferrer">`
+
 ## 폴더 구조
 
 ```
