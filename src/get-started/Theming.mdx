@@ -99,13 +99,7 @@ import './app-theme.scss'
 
 Vue/Nuxt 진입점, Vite `main.ts`, 또는 글로벌 CSS 등록 순서를 확인할 것.
 
-## 4. 안 되는 것 (의도된 한계)
-
-- **`<style scoped>` 내부의 미세 디테일**까지는 못 건드림. 예: `.ui-accordion-content`의 `animation` 이름. 필요하면 같은 keyframe을 부모 스코프에서 재정의.
-- **컴포넌트 props로 노출되지 않은 동작**. 디자인 정책상 막아둔 것은 라이브러리에 요청.
-- **`!important`는 마지막 수단**. 일단 부모 클래스 specificity로 해결되면 그쪽이 깨끗하다.
-
-## 5. 권장 패턴 — `.app-theme` 하나면 충분
+## 4. 권장 패턴 — `.app-theme` 하나면 충분
 
 ```scss
 // theme.scss — 한 파일에 모음
@@ -124,3 +118,16 @@ Vue/Nuxt 진입점, Vite `main.ts`, 또는 글로벌 CSS 등록 순서를 확인
 ```
 
 CSS 변수 + 부모 클래스 조합으로 대부분의 브랜드 차이는 한 파일 안에 끝낸다.
+
+## 5. 안 되는 것 (의도된 한계)
+
+- **`<style scoped>` 내부의 미세 디테일**까지는 못 건드림. 예: `.ui-accordion-content`의 `animation` 이름. 필요하면 같은 keyframe을 부모 스코프에서 재정의.
+- **컴포넌트 props로 노출되지 않은 동작**. 디자인 정책상 막아둔 것은 라이브러리에 요청.
+- **`!important`는 마지막 수단**. 일단 부모 클래스 specificity로 해결되면 그쪽이 깨끗하다.
+
+## 다음 단계
+
+- <a target="_top" href="/?path=/docs/get-started-install--docs">Install</a> — 설치·기본 사용
+- <a target="_top" href="/?path=/docs/get-started-philosophy--docs">Philosophy</a> — 한 스토리, 세 가지 역할
+- <a target="_top" href="/?path=/docs/get-started-stack--docs">Stack</a> — 패키지·명령어
+- <a target="_top" href="/?path=/docs/get-started-migration--docs">Migration</a> — 무엇이 옮겨졌나

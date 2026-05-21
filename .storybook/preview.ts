@@ -13,6 +13,30 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    // 사이드바 정렬 — 알파벳 대신 읽기 흐름 순서
+    options: {
+      storySort: {
+        order: [
+          'Get Started',
+          [
+            'Introduction',
+            'Install',
+            'Philosophy',
+            'Stack',
+            'Theming',
+            'Migration',
+          ],
+          'Components',
+          [
+            'Form',
+            'Display',
+            'Feedback',
+            'Overlay',
+            'Navigation',
+          ],
+        ],
+      },
+    },
   },
   // Vitest의 setProjectAnnotations에서 재사용됨
   tags: ['autodocs'],

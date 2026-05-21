@@ -4,6 +4,20 @@ import { Meta } from '@storybook/blocks'
 
 # 마이그레이션 정책 · 구현 현황
 
+`team_agent_front`에서 어떤 컴포넌트를 어떤 기준으로 떼어왔는지. 정책을 먼저 보고, 그 결과로서의 현황을 본다.
+
+## 마이그레이션 정책
+
+라이브러리는 적게, 강하게. 실제로 쓰이는 것만 옮긴다.
+
+`team_agent_front` 사용 빈도 10회 이상만 마이그레이션 대상이다. 그 아래는 원본에 두고, 요청이 오면 다시 검토한다. 새로 추가할 때는:
+
+1. 사용처 10곳 이상 확인
+2. variant·size 정리 적용 (UiButton: 8→4, 6→3)
+3. PR description에 사유 명시
+
+측정 방법: `cd C:/team_agent_front && grep -r --include="*.vue" -l "<UiName\b" . | grep -v "/ui/" | wc -l`
+
 ## 구현 현황
 
 핵심 10개와 UiTable까지 완료했다. 사이드바 **Components**에서 각 스토리와 자동 문서를 본다.
@@ -48,20 +62,15 @@ import { Meta } from '@storybook/blocks'
   </tbody>
 </table>
 
-측정 방법: `cd C:/team_agent_front && grep -r --include="*.vue" -l "<UiName\b" . | grep -v "/ui/" | wc -l`
-
-## 마이그레이션 정책
-
-라이브러리는 적게, 강하게. 실제로 쓰이는 것만 옮긴다.
-
-`team_agent_front` 사용 빈도 10회 이상만 마이그레이션 대상이다. 그 아래는 원본에 두고, 요청이 오면 다시 검토한다. 새로 추가할 때는:
-
-1. 사용처 10곳 이상 확인
-2. variant·size 정리 적용 (UiButton: 8→4, 6→3)
-3. PR description에 사유 명시
-
 ## 참고
 
 - `CLAUDE.md` · 프로젝트 정체성·구조·규칙 인덱스
 - `.claude/rules/` · 컴포넌트·SCSS·네이밍·컨벤션 세부 규칙
 - 원본 프로젝트 · `C:\team_agent_front`
+
+## 다음 단계
+
+- <a target="_top" href="/?path=/docs/get-started-install--docs">Install</a> — 설치·기본 사용
+- <a target="_top" href="/?path=/docs/get-started-philosophy--docs">Philosophy</a> — 한 스토리, 세 가지 역할
+- <a target="_top" href="/?path=/docs/get-started-stack--docs">Stack</a> — 패키지·명령어
+- <a target="_top" href="/?path=/docs/get-started-theming--docs">Theming</a> — 색상·구조 커스터마이즈
