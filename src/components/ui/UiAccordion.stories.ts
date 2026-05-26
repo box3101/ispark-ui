@@ -13,6 +13,7 @@ const meta = {
     onChange: fn(),
   },
   parameters: {
+    layout: 'padded',
     docs: {
       description: {
         component: `

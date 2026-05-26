@@ -1,7 +1,7 @@
 import { addons } from '@storybook/manager-api'
 import { create } from '@storybook/theming/create'
 
-// Storybook manager(사이드바/툴바) — Claude.ai 톤 warm dark
+// Storybook manager(사이드바/툴바) — warm dark 테마
 const theme = create({
   base: 'dark',
 
@@ -10,7 +10,7 @@ const theme = create({
   brandUrl: '/',
   brandTarget: '_self',
 
-  // 컬러 토큰 — Claude warm orange accent
+  // 컬러 토큰 — warm orange accent
   colorPrimary: '#d97757',
   colorSecondary: '#d97757',
 

@@ -258,10 +258,10 @@
   }
 
   /* ═════════════════════════════════════════════════════════════
-     Claude 톤 hero — 다크 배경 + 따뜻한 액센트 글로우 + 큰 타이포
+     Hero — 다크 배경 + 큰 타이포
      ═════════════════════════════════════════════════════════════ */
 
-  .sbdocs .ispark-claude {
+  .sbdocs .ispark-hero {
     position: relative;
     margin: -32px -32px 56px;
     padding: 88px 48px 96px;
@@ -269,47 +269,15 @@
     color: #eaeae3;
     border-radius: 14px;
     overflow: hidden;
-    isolation: isolate;
   }
 
-  /* 배경 글로우 — 따뜻한 오렌지 + 보라 미세 톤 */
-  .sbdocs .ispark-claude__bg {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-  }
-  .sbdocs .ispark-claude__glow {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(110px);
-    opacity: 0.35;
-    will-change: opacity;
-  }
-  .sbdocs .ispark-claude__glow--a {
-    width: 600px;
-    height: 600px;
-    top: -240px;
-    right: -180px;
-    background: radial-gradient(circle at center, #d97757 0%, rgba(217, 119, 87, 0.6) 25%, transparent 70%);
-  }
-  .sbdocs .ispark-claude__glow--b {
-    width: 460px;
-    height: 460px;
-    bottom: -220px;
-    left: -160px;
-    background: radial-gradient(circle at center, #6b5b95 0%, rgba(107, 91, 149, 0.45) 25%, transparent 70%);
-    opacity: 0.22;
-  }
-
-  .sbdocs .ispark-claude__inner {
+  .sbdocs .ispark-hero__inner {
     position: relative;
-    z-index: 1;
     max-width: 880px;
   }
 
   /* Top bar — 크럼 + 카테고리 라벨 한 줄 통합 */
-  .sbdocs .ispark-claude__topbar {
+  .sbdocs .ispark-hero__topbar {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -318,7 +286,7 @@
   }
 
   /* Crumb */
-  .sbdocs .ispark-claude__crumb {
+  .sbdocs .ispark-hero__crumb {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -329,34 +297,32 @@
     font-family: "JetBrains Mono", ui-monospace, monospace;
     font-size: 12px;
     color: rgba(234, 234, 227, 0.7);
-    backdrop-filter: blur(8px);
   }
-  .sbdocs .ispark-claude__mark {
+  .sbdocs .ispark-hero__mark {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 20px;
     height: 20px;
-    background: linear-gradient(135deg, #d97757 0%, #c4633e 100%);
+    background: #d97757;
     color: #fff;
     font-size: 11px;
     border-radius: 5px;
     line-height: 1;
-    box-shadow: 0 0 12px rgba(217, 119, 87, 0.5);
   }
-  .sbdocs .ispark-claude__ver {
+  .sbdocs .ispark-hero__ver {
     color: rgba(234, 234, 227, 0.55);
   }
-  .sbdocs .ispark-claude__dot {
+  .sbdocs .ispark-hero__dot {
     color: rgba(234, 234, 227, 0.35);
   }
 
   /* Vue 3 chip */
-  .sbdocs .ispark-claude__pill {
+  .sbdocs .ispark-hero__pill {
     display: inline-flex;
     align-items: center;
     padding: 3px 9px;
-    background: linear-gradient(135deg, rgba(217, 119, 87, 0.18) 0%, rgba(196, 99, 62, 0.18) 100%);
+    background: rgba(217, 119, 87, 0.12);
     border: 1px solid rgba(217, 119, 87, 0.32);
     border-radius: 999px;
     color: #e89976;
@@ -367,7 +333,7 @@
     text-transform: uppercase;
     line-height: 1.4;
   }
-  .sbdocs .ispark-claude__eyebrow-text {
+  .sbdocs .ispark-hero__eyebrow-text {
     font-family: "JetBrains Mono", ui-monospace, monospace;
     font-size: 12px;
     color: rgba(234, 234, 227, 0.55);
@@ -378,7 +344,7 @@
 
   /* Headline — 큰 임팩트 (2줄 split). 자간/행간 완화로 한글 자모 분리 자연스럽게.
      Storybook 기본 .sbdocs.sbdocs-content h1 보다 강한 특이도 필요 → !important + 특이도 강화 */
-  .sbdocs.sbdocs-content .ispark-claude__headline {
+  .sbdocs.sbdocs-content .ispark-hero__headline {
     margin: 0 0 28px !important;
     padding: 0 !important;
     border: 0 !important;
@@ -389,61 +355,57 @@
     color: #f5f4ed !important;
     word-break: keep-all;
   }
-  .sbdocs .ispark-claude__line {
+  .sbdocs .ispark-hero__line {
     display: inline;
   }
-  .sbdocs .ispark-claude__line--accent {
-    background: linear-gradient(120deg, #d97757 0%, #e89976 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
+  .sbdocs .ispark-hero__line--accent {
+    color: #d97757;
   }
   @media (max-width: 960px) {
-    .sbdocs.sbdocs-content .ispark-claude__headline {
+    .sbdocs.sbdocs-content .ispark-hero__headline {
       font-size: 48px !important;
     }
   }
   @media (max-width: 720px) {
-    .sbdocs .ispark-claude {
+    .sbdocs .ispark-hero {
       margin: -32px -16px 40px;
       padding: 56px 28px 64px;
     }
-    .sbdocs.sbdocs-content .ispark-claude__headline {
+    .sbdocs.sbdocs-content .ispark-hero__headline {
       font-size: 40px !important;
     }
   }
 
   /* Lede */
-  .sbdocs .ispark-claude__lede {
+  .sbdocs .ispark-hero__lede {
     margin: 0 0 36px;
     max-width: 560px;
     font-size: 16px;
     line-height: 1.7;
     color: rgba(234, 234, 227, 0.75);
   }
-  .sbdocs .ispark-claude__lede strong {
+  .sbdocs .ispark-hero__lede strong {
     color: #f5f4ed;
     font-weight: 600;
   }
-  .sbdocs .ispark-claude__lede code {
+  .sbdocs .ispark-hero__lede code {
     padding: 2px 7px;
-    background: rgba(217, 119, 87, 0.12);
-    border: 1px solid rgba(217, 119, 87, 0.2);
+    background: rgba(234, 234, 227, 0.08);
+    border: 1px solid rgba(234, 234, 227, 0.12);
     border-radius: 5px;
     font-family: "JetBrains Mono", ui-monospace, monospace;
     font-size: 13.5px;
-    color: #e89976;
+    color: rgba(234, 234, 227, 0.85);
   }
 
   /* CTA */
-  .sbdocs .ispark-claude__cta {
+  .sbdocs .ispark-hero__cta {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
     margin-bottom: 36px;
   }
-  .sbdocs .ispark-claude__btn {
+  .sbdocs .ispark-hero__btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -458,28 +420,28 @@
     line-height: 1;
     letter-spacing: -0.01em;
   }
-  .sbdocs .ispark-claude__btn--primary {
-    background: linear-gradient(135deg, #d97757 0%, #c4633e 100%);
+  .sbdocs .ispark-hero__btn--primary {
+    background: #d97757;
     color: #fff !important;
-    box-shadow: 0 4px 18px rgba(217, 119, 87, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
   }
-  .sbdocs .ispark-claude__btn--primary:hover {
+  .sbdocs .ispark-hero__btn--primary:hover {
+    background: #c4633e;
     transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(217, 119, 87, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.22);
   }
-  .sbdocs .ispark-claude__btn--ghost {
+  .sbdocs .ispark-hero__btn--ghost {
     background: rgba(234, 234, 227, 0.05);
     color: #eaeae3 !important;
     border-color: rgba(234, 234, 227, 0.14);
-    backdrop-filter: blur(8px);
   }
-  .sbdocs .ispark-claude__btn--ghost:hover {
-    background: rgba(234, 234, 227, 0.1);
-    border-color: rgba(234, 234, 227, 0.24);
+  .sbdocs .ispark-hero__btn--ghost:hover {
+    background: rgba(234, 234, 227, 0.12);
+    border-color: rgba(234, 234, 227, 0.35);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   }
 
   /* Meta strip — 신뢰감 (tech stack + test 통과) */
-  .sbdocs .ispark-claude__meta {
+  .sbdocs .ispark-hero__meta {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -490,25 +452,25 @@
     padding-top: 28px;
     border-top: 1px solid rgba(234, 234, 227, 0.08);
   }
-  .sbdocs .ispark-claude__meta strong {
+  .sbdocs .ispark-hero__meta strong {
     color: #f5f4ed;
     font-weight: 600;
   }
-  .sbdocs .ispark-claude__meta .ispark-claude__dot {
+  .sbdocs .ispark-hero__meta .ispark-hero__dot {
     color: rgba(234, 234, 227, 0.25);
   }
 
   /* prefers-reduced-motion — 글로우/hover transform 비활성 */
   @media (prefers-reduced-motion: reduce) {
-    .sbdocs .ispark-claude__btn,
-    .sbdocs .ispark-claude__btn--primary:hover {
+    .sbdocs .ispark-hero__btn,
+    .sbdocs .ispark-hero__btn--primary:hover {
       transform: none;
       transition: none;
     }
   }
 
   /* ═════════════════════════════════════════════════════════════
-     Docs 본문 다크 톤 (Claude 톤 통일)
+     Docs 본문 다크 톤
      - sbdocs 배경/타이포 다크로 override
      - 컴포넌트 데모 iframe은 라이트 유지 (라이브러리 자체는 light mode)
      ═════════════════════════════════════════════════════════════ */
@@ -530,7 +492,7 @@
     margin: 0 auto !important;
   }
   /* Introduction의 hero는 폭 제한 예외 (full-width hero) */
-  .sbdocs.sbdocs-content > .ispark-claude {
+  .sbdocs.sbdocs-content > .ispark-hero {
     max-width: none;
   }
 
@@ -657,7 +619,7 @@
   /* 실제 컴포넌트 렌더 영역 — 흰색 대신 warm cream (다크 페이지와 충돌 완화)
      라이트 디자인 컴포넌트는 유지하되, 카드 표면은 따뜻한 cream 톤으로 통일 */
   .sbdocs .innerZoomElementWrapper {
-    background: #f7f4ec !important;
+    background: transparent !important;
     border-radius: 8px;
     margin: 12px;
   }
@@ -688,7 +650,7 @@
     box-shadow: 0 8px 24px rgba(217, 119, 87, 0.12) !important;
   }
   .sbdocs .ispark-card__demo {
-    background: #fafbfc !important; /* 카드 내부 컴포넌트 데모는 라이트 */
+    background: #26282f !important;
     border-bottom-color: #2a2c33 !important;
   }
   .sbdocs .ispark-card__meta strong {
@@ -1077,38 +1039,45 @@
   }
 
   /* P8 — Hero topbar/lede/meta 다듬기 */
-  .sbdocs .ispark-claude__topbar {
+  .sbdocs .ispark-hero__topbar {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 12px;
     margin-bottom: 24px;
   }
-  .sbdocs .ispark-claude__topbar .ispark-claude__crumb {
+  .sbdocs .ispark-hero__topbar .ispark-hero__crumb {
     margin-bottom: 0;
   }
-  .sbdocs .ispark-claude__lede strong {
+  .sbdocs .ispark-hero__lede strong {
     color: #f5f4ed !important;
     font-weight: 600;
   }
-  .sbdocs .ispark-claude__meta {
+  .sbdocs .ispark-hero__meta {
     margin-top: 4px;
   }
 
-  /* P9 — 컴포넌트 카드 spacing 정렬 */
+  /* P9 — 컴포넌트 카드 */
   html body .sbdocs a.ispark-card {
     background: #1f2026 !important;
     border-color: #2a2c33 !important;
+    border-top: 2px solid transparent !important;
     border-radius: 12px !important;
+    transition: border-color 200ms ease,
+                transform 250ms cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 250ms cubic-bezier(0.22, 1, 0.36, 1) !important;
   }
   html body .sbdocs a.ispark-card:hover {
-    border-color: #d97757 !important;
-    box-shadow: 0 8px 24px rgba(217, 119, 87, 0.12) !important;
+    border-color: #2a2c33 !important;
+    border-top-color: #d97757 !important;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25) !important;
   }
   html body .sbdocs .ispark-card__demo {
-    background: #f7f4ec !important;
+    background: #26282f !important;
     border-bottom-color: #2a2c33 !important;
     min-height: 160px;
+    border-radius: 12px 12px 0 0;
   }
   html body .sbdocs .ispark-card__meta {
     padding: 14px 16px 16px !important;
@@ -1136,6 +1105,6 @@
     font-size: 13px !important;
   }
   html body .sbdocs .ispark-grid {
-    gap: 14px !important;
+    gap: 20px !important;
   }
 </style>

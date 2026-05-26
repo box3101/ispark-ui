@@ -13,6 +13,7 @@ const meta = {
     onRowClick: fn(),
   },
   parameters: {
+    layout: 'padded',
     docs: {
       description: {
         component: `
