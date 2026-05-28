@@ -31,7 +31,7 @@ ispark-ui 표준 멀티라인 입력 컴포넌트. 자동 높이 조절(autoResi
 - **\`showCounter\`** \`boolean\` — \`maxLength\`와 함께 사용 시 우하단 'n / max' 카운터
 - **\`size\`** \`'sm' | 'md' | 'lg'\` — font-size + min-height
 - **\`radius\`** \`'sm' | 'base' | 'lg'\` — 4/6/8px
-- **\`border\`** \`boolean\` — 테두리 표시 (단독 사용 시 true 권장)
+- **\`border\`** \`boolean\` — 테두리 표시 (기본 true)
 - **\`spellcheck\`** \`boolean\` — 브라우저 맞춤법 밑줄 (기본 true)
 
 ## API — 폼 필드 (UiInput 일관성)
@@ -74,7 +74,7 @@ ispark-ui 표준 멀티라인 입력 컴포넌트. 자동 높이 조절(autoResi
     },
     border: {
       control: 'boolean',
-      table: { category: 'Appearance', defaultValue: { summary: 'false' } },
+      table: { category: 'Appearance', defaultValue: { summary: 'true' } },
     },
     autoResize: {
       control: 'boolean',

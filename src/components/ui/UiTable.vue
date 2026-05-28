@@ -29,8 +29,19 @@
               :sort-order="getSortOrder(col.key)"
               :on-sort="() => onSortColumn(col)"
             >
+              <!-- 필터 드롭다운 -->
+              <div v-if="isColumnFilterable(col)" class="ui-table-filter">
+                <span class="ui-table-filter-label">{{ col.label }}</span>
+                <UiSelect
+                  :model-value="getFilterValue(col.key)"
+                  :options="col.filterOptions!"
+                  size="xs"
+                  @change="(val: string | number) => onFilterChange(col, val)"
+                />
+              </div>
+              <!-- 정렬 버튼 -->
               <button
-                v-if="isColumnSortable(col)"
+                v-else-if="isColumnSortable(col)"
                 type="button"
                 class="ui-table-sort-btn"
                 @click="onSortColumn(col)"
@@ -108,6 +119,13 @@
 import { ref, computed, watch } from 'vue'
 import type { Ref } from 'vue'
 import UiEmpty from './UiEmpty.vue'
+import UiSelect from './UiSelect.vue'
+
+// 필터 옵션 타입
+export interface TableFilterOption {
+  label: string
+  value: string
+}
 
 // 테이블 컬럼 정의 (라이브러리 외부에서도 import 가능)
 export interface TableColumn {
@@ -118,6 +136,10 @@ export interface TableColumn {
   headerAlign?: 'left' | 'center' | 'right'
   sortable?: boolean
   sortType?: 'auto' | 'string' | 'number' | 'date'
+  /** 컬럼 헤더에 필터 드롭다운 표시 */
+  filterable?: boolean
+  /** 필터 옵션 목록 — 첫 번째 항목(value='')을 '전체'로 사용 */
+  filterOptions?: TableFilterOption[]
 }
 
 // 라이브러리 사용자에게도 export — rollupTypes 단계에서 default export가 참조하므로 public 필요
@@ -222,7 +244,14 @@ const getComparableValue = (value: unknown, sortType: TableColumn['sortType']) =
 }
 
 const displayedData = computed(() => {
-  const rows = [...props.data]
+  // 1) 필터링
+  let rows = [...props.data]
+  const filters = filterState.value
+  for (const [key, val] of Object.entries(filters)) {
+    if (val) rows = rows.filter((row) => String(row[key]) === val)
+  }
+
+  // 2) 정렬
   const { key, order } = sortState.value
   if (!key || !order) return rows
   const col = props.columns.find((item) => item.key === key)
@@ -254,7 +283,28 @@ watch(
 
 const emit = defineEmits<{
   'row-click': [row: TRow, index: number]
+  'filter-change': [filters: Record<string, string>]
 }>()
+
+// ===== 필터 =====
+const filterState = ref<Record<string, string>>({}) as Ref<Record<string, string>>
+
+const isColumnFilterable = (col: TableColumn) =>
+  col.filterable === true && col.filterOptions && col.filterOptions.length > 0
+
+const getFilterValue = (key: string) => filterState.value[key] ?? ''
+
+const onFilterChange = (col: TableColumn, val: string | number) => {
+  const v = String(val)
+  if (v === '') {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+    delete filterState.value[col.key]
+  } else {
+    filterState.value[col.key] = v
+  }
+  // 새 객체로 emit (외부에서 watch 가능)
+  emit('filter-change', { ...filterState.value })
+}
 
 // 키보드 활성화 — Enter/Space로 row-click 발생 (Space는 페이지 스크롤 방지)
 const onRowKeydown = (e: KeyboardEvent, row: TRow, index: number) => {
@@ -356,10 +406,6 @@ watch(
           cursor: pointer;
         }
 
-        td:first-child {
-          cursor: default;
-        }
-
         // 키보드 포커스 시 행 강조 — Button/Select와 동일한 outline ring 패턴
         &:focus-visible {
           outline: 2px solid var(--color-primary);
@@ -423,6 +469,17 @@ watch(
   &.is-desc {
     transform: rotate(180deg);
   }
+}
+
+// 필터
+.ui-table-filter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.ui-table-filter-label {
+  white-space: nowrap;
+  font-size: inherit;
 }
 
 // 빈 상태

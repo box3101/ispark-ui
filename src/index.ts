@@ -11,7 +11,7 @@ export { default as UiSelect } from './components/ui/UiSelect.vue'
 export type { SelectOption } from './components/ui/UiSelect.vue'
 export { default as UiModal } from './components/ui/UiModal.vue'
 export { default as UiTable } from './components/ui/UiTable.vue'
-export type { TableColumn } from './components/ui/UiTable.vue'
+export type { TableColumn, TableFilterOption } from './components/ui/UiTable.vue'
 export { default as UiEmpty } from './components/ui/UiEmpty.vue'
 export { default as UiBadge } from './components/ui/UiBadge.vue'
 export type { BadgeVariant, BadgeSize } from './components/ui/UiBadge.vue'
@@ -32,7 +32,13 @@ export { default as UiDatePicker } from './components/ui/UiDatePicker.vue'
 export { default as UiDateRangePicker } from './components/ui/UiDateRangePicker.vue'
 export type { DateRange } from './components/ui/UiDateRangePicker.vue'
 export { default as UiAccordion } from './components/ui/UiAccordion.vue'
+export { default as UiDrawer } from './components/ui/UiDrawer.vue'
 export type { AccordionItemDef } from './components/ui/UiAccordion.vue'
+
+// Confirm 컴포넌트 + composable — openConfirm()으로 Promise<boolean> 반환
+export { default as UiConfirm } from './components/ui/UiConfirm.vue'
+export { openConfirm } from './composables/useConfirm'
+export type { ConfirmOptions } from './composables/useConfirm'
 
 // Toast composable — 어디서든 openToast() 호출
 export { openToast, closeToast } from './composables/useToast'

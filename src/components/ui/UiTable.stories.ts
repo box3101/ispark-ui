@@ -571,6 +571,67 @@ export const SelectedRow: Story = {
   }),
 }
 
+// 헤더 필터 — filterable + filterOptions로 컬럼별 드롭다운 필터
+export const Filterable: Story = {
+  args: {
+    columns: [
+      { key: 'title', label: '제목', width: '300px', align: 'left' },
+      {
+        key: 'status', label: '상태', width: '150px',
+        filterable: true,
+        filterOptions: [
+          { label: '전체', value: '' },
+          { label: '할 일', value: 'todo' },
+          { label: '진행중', value: 'doing' },
+          { label: '완료', value: 'done' },
+        ],
+      },
+      {
+        key: 'priority', label: '우선순위', width: '160px',
+        filterable: true,
+        filterOptions: [
+          { label: '전체', value: '' },
+          { label: '높음', value: 'high' },
+          { label: '보통', value: 'mid' },
+          { label: '낮음', value: 'low' },
+        ],
+      },
+      { key: 'assignee', label: '담당자', width: '120px' },
+    ],
+    data: [
+      { title: 'KPI 보드 버튼 노출 수정', status: 'done', priority: 'high', assignee: '이찬용' },
+      { title: '합의 상태 아이콘 표시', status: 'done', priority: 'high', assignee: '이찬용' },
+      { title: '평가 점수 소수점 반올림', status: 'doing', priority: 'mid', assignee: '홍다래' },
+      { title: '가중치 100% 초과 차단', status: 'doing', priority: 'high', assignee: '이찬용' },
+      { title: '피드백 알림 발송', status: 'todo', priority: 'mid', assignee: '박현지' },
+      { title: '부서별 달성률 차트', status: 'todo', priority: 'mid', assignee: '홍다래' },
+      { title: '목표 드래그앤드롭', status: 'todo', priority: 'low', assignee: '이찬용' },
+      { title: '자기평가 미작성 차단', status: 'todo', priority: 'high', assignee: '김정의' },
+    ],
+    size: 'sm',
+  },
+  render: (args) => ({
+    components: { UiTable, UiBadge },
+    setup: () => ({ args }),
+    template: `
+      <UiTable v-bind="args">
+        <template #cell-status="{ value }">
+          <UiBadge
+            :variant="value === 'done' ? 'success' : value === 'doing' ? 'primary' : 'default'"
+            size="sm"
+          >{{ value === 'done' ? '완료' : value === 'doing' ? '진행중' : '할 일' }}</UiBadge>
+        </template>
+        <template #cell-priority="{ value }">
+          <UiBadge
+            :variant="value === 'high' ? 'danger' : value === 'mid' ? 'warning' : 'default'"
+            size="sm"
+          >{{ value === 'high' ? '높음' : value === 'mid' ? '보통' : '낮음' }}</UiBadge>
+        </template>
+      </UiTable>
+    `,
+  }),
+}
+
 export const Sortable: Story = {
   args: {
     columns: [

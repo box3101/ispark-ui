@@ -330,9 +330,9 @@ defineExpose({
   @each $key in (xs sm md lg auth) {
     $vals: map.get($sizes, $key);
     &.size-#{$key} {
-      height:    map.get($vals, height);
-      font-size: map.get($vals, font);
-      padding:   0 map.get($vals, padding-x);
+      min-height: map.get($vals, height);
+      font-size:  map.get($vals, font);
+      padding:    4px map.get($vals, padding-x);
 
       .ui-select-icon {
         width:  map.get($vals, icon);
@@ -372,6 +372,11 @@ defineExpose({
 </style>
 
 <style lang="scss">
+// Radix-vue가 popper wrapper에 inline z-index를 넣으므로 !important로 오버라이드
+[data-radix-popper-content-wrapper]:has(.ui-select-content) {
+  z-index: 1100 !important;
+}
+
 .ui-select-content {
   min-width: var(--radix-select-trigger-width);
   max-height: 240px;
@@ -381,8 +386,8 @@ defineExpose({
   border: 1px solid var(--color-border);
   border-radius: $shape-rounded;
   box-shadow: $shadow-md;
-  // modal/popover 안에서 열릴 때도 보이도록 — toast 바로 아래
-  z-index: calc(#{$z-toast} - 10);
+  // modal/drawer/popover 안에서 열릴 때도 보이도록
+  z-index: 1100;
 }
 
 .ui-select-item {

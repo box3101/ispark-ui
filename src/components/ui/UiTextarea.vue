@@ -123,7 +123,7 @@ const props = withDefaults(defineProps<Props>(), {
   maxLength: undefined,
   maxRows: 10,
   radius: 'base',
-  border: false,
+  border: true,
   size: 'md',
   spellcheck: true,
   label: '',
