@@ -29,6 +29,8 @@ const preview: Preview = {
             'Theming',
             'Migration',
           ],
+          'Icons',
+          ['Gallery'],
           'Components',
           [
             'Form',
