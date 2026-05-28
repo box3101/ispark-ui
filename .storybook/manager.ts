@@ -7,7 +7,7 @@ const theme = create({
 
   // 브랜드 영역 (좌상단)
   brandTitle: 'ispark-ui',
-  brandUrl: '/',
+  brandUrl: './?path=/docs/get-started-introduction--docs',
   brandTarget: '_self',
 
   // 컬러 토큰 — warm orange accent
