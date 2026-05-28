@@ -51,7 +51,7 @@ const iconComponent = computed(() => {
 
 const resolvedSize = computed(() => {
   if (typeof props.size === 'number') return props.size
-  return SIZE_MAP[props.size] ?? Number(props.size) || 24
+  return SIZE_MAP[props.size] ?? (Number(props.size) || 24)
 })
 
 const colorClass = computed(() => {
