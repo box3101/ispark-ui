@@ -146,6 +146,17 @@ interface TableColumn {
       },
     },
 
+    // ===== Appearance (continued) =====
+    bordered: {
+      control: 'boolean',
+      description: '컬럼 세로 구분선 표시 여부. `false`로 설정하면 세로선 제거 + 패딩 확대 + 호버 강화.',
+      table: {
+        category: 'Appearance',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
+    },
+
     // ===== Selection =====
     selectedRowKey: {
       control: 'text',
@@ -684,5 +695,29 @@ export const Sortable: Story = {
     await expect(scoreTh.getAttribute('aria-sort')).toBe('none')
 
     // 비정렬 컬럼은 aria-sort 속성 자체가 없어야 함 — 같은 스토리에는 sortable 3개뿐이므로 검증 생략
+  },
+}
+
+// bordered=false — 세로 구분선 제거, 패딩 확대, 호버 강화
+export const Borderless: Story = {
+  args: {
+    columns: baseColumns,
+    data: baseData,
+    bordered: false,
+    clickable: true,
+  },
+  render: (args) => ({
+    components: { UiTable },
+    setup: () => ({ args }),
+    template: '<UiTable v-bind="args" />',
+  }),
+  play: async ({ canvasElement }) => {
+    const wrap = canvasElement.querySelector('.ui-table-wrap')!
+    await expect(wrap.classList.contains('is-borderless')).toBe(true)
+
+    // 세로 구분선 없음 확인
+    const firstTh = canvasElement.querySelector('thead th')!
+    const thStyle = getComputedStyle(firstTh)
+    await expect(thStyle.borderRightStyle).toBe('none')
   },
 }

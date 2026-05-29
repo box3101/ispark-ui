@@ -1,7 +1,7 @@
 <template>
   <div
     class="ui-table-wrap"
-    :class="[{ 'is-scrollable': !!maxHeight }, size === 'sm' ? 'is-sm' : '']"
+    :class="[{ 'is-scrollable': !!maxHeight, 'is-borderless': !bordered }, size === 'sm' ? 'is-sm' : '']"
     :style="maxHeight ? { maxHeight } : undefined"
   >
     <table class="ui-table">
@@ -164,6 +164,8 @@ export interface UiTableProps<TRow extends Record<string, unknown> = Record<stri
    */
   selectedRowKey?: string
   selectedRowValue?: unknown
+  /** 컬럼 세로 구분선 표시 여부 (기본: true) */
+  bordered?: boolean
 }
 
 const props = withDefaults(defineProps<UiTableProps<TRow>>(), {
@@ -176,6 +178,7 @@ const props = withDefaults(defineProps<UiTableProps<TRow>>(), {
   size: 'md',
   selectedRowKey: undefined,
   selectedRowValue: undefined,
+  bordered: true,
 })
 
 // 선택 행 추적 — 두 가지 모드
@@ -378,7 +381,8 @@ watch(
       padding: 0 12px;
       background: $color-background;
       @include typo($body-medium-bold);
-      color: $color-text-muted;
+      font-weight: 500;
+      color: $color-text-dark;
       white-space: nowrap;
       vertical-align: middle;
 
@@ -398,7 +402,7 @@ watch(
       // row-click이 clickable=true일 때만 발생하는 것과 시맨틱 일치.
       // selected 행(primary 0.08)과 같은 색조 0.04로 톤 일관성 확보.
       &.is-clickable:hover td {
-        background: rgba(var(--color-primary-rgb, 59, 130, 246), 0.04);
+        background: rgba(var(--color-primary-rgb, 59, 130, 246), 0.07);
       }
 
       &.is-clickable {
@@ -438,12 +442,6 @@ watch(
     }
   }
 
-  // 첫 번째 셀(체크박스 등) 가운데 정렬
-  th:first-child,
-  td:first-child {
-    text-align: center;
-    vertical-align: middle;
-  }
 }
 
 .ui-table-sort-btn {
@@ -490,36 +488,68 @@ watch(
   @include typo($body-medium);
 }
 
+// ===== borderless (세로 구분선 제거) =====
+.ui-table-wrap.is-borderless {
+  .ui-table {
+    thead th {
+      padding: 0 16px;
+      border-right: none;
+    }
+
+    tbody td {
+      padding: 0 16px;
+      border-right: none;
+    }
+
+    // 호버 강화 — 세로선 없을 때 행 구분을 위해 bordered(0.07)보다 한 단계 강하게
+    tbody tr.is-clickable:hover td {
+      background: rgba(var(--color-primary-rgb, 59, 130, 246), 0.09);
+    }
+  }
+}
+
 // ===== sm 사이즈 (컴팩트) =====
 .ui-table-wrap.is-sm {
   .ui-table {
     thead th {
       height: auto;
-      padding: 6px 8px;
+      padding: 6px 12px;
       @include typo($body-medium-bold);
       font-weight: 500;
-      color: #4d5462;
-      background: #f4f7f9;
-      border-right-color: #dce4e9;
+      color: $color-text-primary;
+      background: $color-background;
+      border-right-color: $color-border;
     }
 
     tbody td {
       height: 28px;
       padding: 0 12px;
       @include typo($body-medium);
-      color: #4d5462;
-      border-bottom-color: #ecf0f3;
+      color: $color-text-primary;
+      border-bottom-color: $color-border-light;
 
       &:not(:last-of-type) {
-        border-right-color: #ecf0f3;
+        border-right-color: $color-border-light;
       }
     }
   }
 
   // 헤더/바디 상하 구분선
   .ui-table thead th {
-    border-top: 1px solid #dce4e9;
-    border-bottom: 1px solid #dce4e9;
+    border-top: 1px solid $color-border;
+    border-bottom: 1px solid $color-border;
+  }
+
+  // sm + borderless 조합
+  &.is-borderless .ui-table {
+    thead th {
+      padding: 6px 12px;
+      border-right: none;
+    }
+
+    tbody td {
+      border-right: none;
+    }
   }
 }
 </style>
