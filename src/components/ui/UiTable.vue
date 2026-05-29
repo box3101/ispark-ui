@@ -7,7 +7,7 @@
     <table class="ui-table">
       <colgroup>
         <col
-          v-for="col in columns"
+          v-for="col in visibleColumns"
           :key="col.key"
           :style="col.width ? { width: col.width } : undefined"
         />
@@ -16,9 +16,9 @@
       <thead :class="{ 'is-sticky': stickyHeader }">
         <tr>
           <th
-            v-for="(col, idx) in columns"
+            v-for="(col, idx) in visibleColumns"
             :key="col.key"
-            :class="{ 'is-last': idx === columns.length - 1, 'is-sortable': isColumnSortable(col) }"
+            :class="{ 'is-last': idx === visibleColumns.length - 1, 'is-sortable': isColumnSortable(col) }"
             :style="{ textAlign: col.headerAlign || 'center' }"
             :aria-sort="getAriaSort(col)"
           >
@@ -69,7 +69,7 @@
         <!-- 빈 상태 — #empty 슬롯 우선, 기본은 UiEmpty 컴포넌트 사용 -->
         <tr v-if="!data || data.length === 0">
           <td
-            :colspan="columns.length"
+            :colspan="visibleColumns.length"
             class="ui-table-empty"
           >
             <slot name="empty">
@@ -95,9 +95,9 @@
           @keydown="clickable && onRowKeydown($event, row, rowIdx)"
         >
           <td
-            v-for="(col, colIdx) in columns"
+            v-for="(col, colIdx) in visibleColumns"
             :key="col.key"
-            :class="{ 'is-last': colIdx === columns.length - 1 }"
+            :class="{ 'is-last': colIdx === visibleColumns.length - 1 }"
             :style="{ textAlign: col.align || 'center' }"
           >
             <slot
@@ -116,7 +116,7 @@
 </template>
 
 <script setup lang="ts" generic="TRow extends Record<string, unknown> = Record<string, unknown>">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import type { Ref } from 'vue'
 import UiEmpty from './UiEmpty.vue'
 import UiSelect from './UiSelect.vue'
@@ -140,6 +140,8 @@ export interface TableColumn {
   filterable?: boolean
   /** 필터 옵션 목록 — 첫 번째 항목(value='')을 '전체'로 사용 */
   filterOptions?: TableFilterOption[]
+  /** 뷰포트가 이 px 이하일 때 칼럼 숨김 */
+  hideBelow?: number
 }
 
 // 라이브러리 사용자에게도 export — rollupTypes 단계에서 default export가 참조하므로 public 필요
@@ -180,6 +182,27 @@ const props = withDefaults(defineProps<UiTableProps<TRow>>(), {
   selectedRowValue: undefined,
   bordered: true,
 })
+
+// ===== 반응형 칼럼 숨김 =====
+const windowWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 9999)
+
+let resizeTimer: ReturnType<typeof setTimeout> | null = null
+function onResize() {
+  if (resizeTimer) clearTimeout(resizeTimer)
+  resizeTimer = setTimeout(() => {
+    windowWidth.value = window.innerWidth
+  }, 150)
+}
+
+onMounted(() => window.addEventListener('resize', onResize))
+onUnmounted(() => {
+  window.removeEventListener('resize', onResize)
+  if (resizeTimer) clearTimeout(resizeTimer)
+})
+
+const visibleColumns = computed(() =>
+  props.columns.filter(col => !col.hideBelow || windowWidth.value > col.hideBelow),
+)
 
 // 선택 행 추적 — 두 가지 모드
 //   1) Controlled: selectedRowKey + selectedRowValue 둘 다 값 있음 → 부모가 관리

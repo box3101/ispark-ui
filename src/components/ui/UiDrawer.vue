@@ -95,8 +95,7 @@ const isDragging = ref(false)
 
 const drawerStyle = computed(() => ({
   width: currentWidth.value ? `${currentWidth.value}px` : props.width,
-  minWidth: props.minWidth,
-  maxWidth: props.maxWidth,
+  maxWidth: props.maxWidth ? `min(${props.maxWidth}, 100vw)` : '100vw',
 }))
 
 function close() {
@@ -169,6 +168,7 @@ onUnmounted(() => {
   position: fixed;
   top: 0;
   height: 100vh;
+  max-width: 100%;
   background: #fff;
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
   z-index: 1000;
