@@ -1,9 +1,18 @@
 <template>
   <div
+    ref="wrapRef"
     class="ui-table-wrap"
-    :class="[{ 'is-scrollable': !!maxHeight, 'is-borderless': !bordered }, size === 'sm' ? 'is-sm' : '']"
+    :class="[{ 'is-scrollable': !!maxHeight, 'is-borderless': !bordered, 'is-overflowing': isOverflowing }, size === 'sm' ? 'is-sm' : '']"
     :style="maxHeight ? { maxHeight } : undefined"
+    @scroll="onWrapScroll"
   >
+    <!-- 가로 스크롤 힌트 -->
+    <Transition name="scroll-hint-fade">
+      <div v-if="isOverflowing && !scrollDismissed" class="ui-table-scroll-hint">
+        ← 스크롤하여 더 보기 →
+      </div>
+    </Transition>
+
     <table class="ui-table">
       <colgroup>
         <col
@@ -183,6 +192,24 @@ const props = withDefaults(defineProps<UiTableProps<TRow>>(), {
   bordered: true,
 })
 
+// ===== 가로 스크롤 힌트 =====
+const wrapRef = ref<HTMLElement | null>(null)
+const isOverflowing = ref(false)
+const scrollDismissed = ref(false)
+
+function checkOverflow() {
+  if (!wrapRef.value) return
+  isOverflowing.value = wrapRef.value.scrollWidth > wrapRef.value.clientWidth
+}
+
+function onWrapScroll() {
+  if (!scrollDismissed.value && isOverflowing.value) {
+    scrollDismissed.value = true
+  }
+}
+
+let resizeObserver: ResizeObserver | null = null
+
 // ===== 반응형 칼럼 숨김 =====
 const windowWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 9999)
 
@@ -194,10 +221,23 @@ function onResize() {
   }, 150)
 }
 
-onMounted(() => window.addEventListener('resize', onResize))
+onMounted(() => {
+  window.addEventListener('resize', onResize)
+  // 가로 스크롤 감지
+  if (wrapRef.value) {
+    resizeObserver = new ResizeObserver(() => {
+      checkOverflow()
+      // 사이즈 변하면 다시 보여줄 수 있음
+      if (!isOverflowing.value) scrollDismissed.value = false
+    })
+    resizeObserver.observe(wrapRef.value)
+    checkOverflow()
+  }
+})
 onUnmounted(() => {
   window.removeEventListener('resize', onResize)
   if (resizeTimer) clearTimeout(resizeTimer)
+  resizeObserver?.disconnect()
 })
 
 const visibleColumns = computed(() =>
@@ -348,11 +388,13 @@ const onRowClick = (row: TRow, index: number) => {
   emit('row-click', row, index)
 }
 
-// data가 새로 주입되면 (reference 변경) uncontrolled selection 리셋
+// data가 새로 주입되면 (reference 변경) uncontrolled selection 리셋 + overflow 재체크
 watch(
   () => props.data,
   () => {
     if (!hasControlledSelection.value) internalSelectedRow.value = null
+    // 데이터 변경 후 DOM 업데이트 뒤 overflow 재체크
+    setTimeout(checkOverflow, 50)
   },
 )
 </script>
@@ -529,6 +571,29 @@ watch(
       background: rgba(var(--color-primary-rgb, 59, 130, 246), 0.09);
     }
   }
+}
+
+// ===== 가로 스크롤 힌트 =====
+.ui-table-scroll-hint {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: $color-text-disabled;
+  background: linear-gradient(180deg, rgba($color-background, 0.95) 0%, rgba($color-background, 0) 100%);
+  pointer-events: none;
+}
+
+.scroll-hint-fade-enter-active,
+.scroll-hint-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.scroll-hint-fade-enter-from,
+.scroll-hint-fade-leave-to {
+  opacity: 0;
 }
 
 // ===== sm 사이즈 (컴팩트) =====
