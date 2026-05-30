@@ -13,7 +13,7 @@
       </div>
     </Transition>
 
-    <table class="ui-table">
+    <table class="ui-table" :style="tableMinWidth ? { minWidth: tableMinWidth } : undefined">
       <colgroup>
         <col
           v-for="col in visibleColumns"
@@ -243,6 +243,20 @@ onUnmounted(() => {
 const visibleColumns = computed(() =>
   props.columns.filter(col => !col.hideBelow || windowWidth.value > col.hideBelow),
 )
+
+// 컬럼 width 합계 → table min-width (px 단위 컬럼만 합산)
+const tableMinWidth = computed(() => {
+  let total = 0
+  let hasWidth = false
+  for (const col of visibleColumns.value) {
+    if (col.width) {
+      const px = parseInt(col.width)
+      if (!isNaN(px)) { total += px; hasWidth = true }
+    }
+  }
+  // width 지정 컬럼이 있으면 min-width 설정, 없으면 auto
+  return hasWidth && total > 0 ? `${total}px` : undefined
+})
 
 // 선택 행 추적 — 두 가지 모드
 //   1) Controlled: selectedRowKey + selectedRowValue 둘 다 값 있음 → 부모가 관리
