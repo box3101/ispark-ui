@@ -220,7 +220,7 @@ watch(openState, (v) => emit('update:open', v))
   position: relative; // ::before 절대 배치 기준
   min-width: 140px;
   border-radius: $border-radius-base;
-  background: #fff;
+  background: var(--color-bg-elevated);
   border: 1px solid rgba(45, 49, 57, 0.2);
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
   z-index: $z-dropdown;

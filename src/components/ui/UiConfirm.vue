@@ -71,7 +71,7 @@ function onConfirm() {
   left: 50%;
   transform: translate(-50%, -50%);
   width: min(400px, calc(100vw - 40px));
-  background: #fff;
+  background: var(--color-bg-elevated);
   border-radius: $border-radius-lg;
   box-shadow: $shadow-lg;
   padding: $spacing-lg;

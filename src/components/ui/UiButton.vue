@@ -368,7 +368,7 @@ defineExpose({
   }
 
   &.variant-secondary {
-    background-color: #fff;
+    background-color: var(--color-bg-elevated);
     border-color: var(--color-border);
     color: var(--color-text-primary);
 
@@ -416,7 +416,7 @@ defineExpose({
   }
 
   &.variant-outline {
-    background-color: #fff;
+    background-color: var(--color-bg-elevated);
     border-color: var(--color-border);
     color: #2d3139;
 

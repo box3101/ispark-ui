@@ -605,7 +605,7 @@ defineExpose({
   display: inline-flex;
   align-items: center;
   width: 100%;
-  background-color: #fff;
+  background-color: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
   overflow: hidden;
   transition: border-color $transition-base;
@@ -716,7 +716,7 @@ defineExpose({
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
   &:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0 1000px #fff inset;
+    -webkit-box-shadow: 0 0 0 1000px var(--color-bg-elevated) inset;
     -webkit-text-fill-color: var(--color-text-primary);
     transition: background-color 5000s ease-in-out 0s;
   }

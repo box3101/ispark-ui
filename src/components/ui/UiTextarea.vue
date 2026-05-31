@@ -240,7 +240,7 @@ defineExpose({
 .ui-textarea {
   font-family: inherit;
   color: var(--color-text-primary);
-  background-color: #fff;
+  background-color: var(--color-bg-elevated);
   resize: none;
   // Input과 동일한 가로 패딩 토큰 사용 — size별 padding 토큰을 size 블록에서 적용
   padding: $spacing-sm map.get($sizes, 'md', padding-x);

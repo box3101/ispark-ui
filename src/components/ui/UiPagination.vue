@@ -203,7 +203,7 @@ const onPageChange = (page: number) => {
   padding: 0 10px;
   border: 1px solid $color-border;
   border-radius: $border-radius-base;
-  background: #fff;
+  background: var(--color-bg-elevated);
   @include typo($body-small);
   color: $color-text-primary;
   cursor: pointer;
