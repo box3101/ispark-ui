@@ -80,7 +80,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import UiIcon from './UiIcon.vue'
-import { openToast } from '../../composables/useToast'
+import { openConfirm } from '../../composables/useConfirm'
 
 type SizePreset = 'default' | 'half' | 'full'
 
@@ -201,22 +201,25 @@ function close() {
   emit('update:open', false)
 }
 
-function onOverlayClick() {
-  if (!props.closeOnOverlayClick) return
-  if (isDirty.value) {
-    openToast({ message: '수정 중인 내용이 있습니다. X 버튼으로 닫아주세요.', type: 'warning' })
-    return
-  }
-  close()
+async function confirmClose(): Promise<boolean> {
+  if (!isDirty.value) return true
+  return openConfirm({
+    title: '변경사항 확인',
+    message: '수정 중인 내용이 있습니다. 닫으시겠습니까?',
+    confirmText: '닫기',
+    cancelText: '취소',
+    variant: 'danger',
+  })
 }
 
-function onEscape() {
+async function onOverlayClick() {
+  if (!props.closeOnOverlayClick) return
+  if (await confirmClose()) close()
+}
+
+async function onEscape() {
   if (!props.closeOnEscape) return
-  if (isDirty.value) {
-    openToast({ message: '수정 중인 내용이 있습니다. X 버튼으로 닫아주세요.', type: 'warning' })
-    return
-  }
-  close()
+  if (await confirmClose()) close()
 }
 
 /** Drawer 내부 input/textarea/select 변경 감지 (캡처링으로 네이티브 이벤트 잡기) */
