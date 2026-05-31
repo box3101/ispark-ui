@@ -35,6 +35,9 @@ export { default as UiDateRangePicker } from './components/ui/UiDateRangePicker.
 export type { DateRange } from './components/ui/UiDateRangePicker.vue'
 export { default as UiAccordion } from './components/ui/UiAccordion.vue'
 export { default as UiDrawer } from './components/ui/UiDrawer.vue'
+export { default as UiFileList } from './components/ui/UiFileList.vue'
+export type { FileItem } from './components/ui/UiFileList.vue'
+export { default as UiFileUpload } from './components/ui/UiFileUpload.vue'
 export type { AccordionItemDef } from './components/ui/UiAccordion.vue'
 
 // Confirm 컴포넌트 + composable — openConfirm()으로 Promise<boolean> 반환
