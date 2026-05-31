@@ -80,6 +80,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import UiIcon from './UiIcon.vue'
+import { openToast } from '../../composables/useToast'
 
 type SizePreset = 'default' | 'half' | 'full'
 
@@ -98,6 +99,8 @@ interface Props {
   showResize?: boolean
   /** 전체화면 버튼 표시 */
   showFullscreen?: boolean
+  /** localStorage 저장 키 — 지정 시 프리셋 크기 기억 */
+  persistKey?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -123,7 +126,21 @@ const drawerRef = ref<HTMLElement | null>(null)
 const currentWidth = ref<number | null>(null)
 const isDragging = ref(false)
 const isMobile = ref(false)
-const sizePreset = ref<SizePreset>('default')
+const STORAGE_PREFIX = 'ui-drawer-preset:'
+
+/** localStorage에서 저장된 프리셋 복원 */
+function loadPreset(): SizePreset {
+  if (!props.persistKey) return 'default'
+  try {
+    const saved = localStorage.getItem(STORAGE_PREFIX + props.persistKey)
+    if (saved === 'half' || saved === 'full') return saved
+  } catch { /* localStorage 접근 불가 시 무시 */ }
+  return 'default'
+}
+
+const sizePreset = ref<SizePreset>(loadPreset())
+/** 내부 input/textarea/select 변경 감지 — 수정 중 여부 자동 추적 */
+const isDirty = ref(false)
 /** 열기 전 포커스되어 있던 요소 — 닫힐 때 복원 */
 let previousActiveElement: HTMLElement | null = null
 
@@ -160,6 +177,16 @@ const drawerStyle = computed(() => {
 function togglePreset(preset: SizePreset) {
   sizePreset.value = sizePreset.value === preset ? 'default' : preset
   currentWidth.value = null
+  // localStorage 저장
+  if (props.persistKey) {
+    try {
+      if (sizePreset.value === 'default') {
+        localStorage.removeItem(STORAGE_PREFIX + props.persistKey)
+      } else {
+        localStorage.setItem(STORAGE_PREFIX + props.persistKey, sizePreset.value)
+      }
+    } catch { /* localStorage 접근 불가 시 무시 */ }
+  }
 }
 
 function close() {
@@ -167,11 +194,36 @@ function close() {
 }
 
 function onOverlayClick() {
-  if (props.closeOnOverlayClick) close()
+  if (!props.closeOnOverlayClick) return
+  if (isDirty.value) {
+    openToast({ message: '수정 중인 내용이 있습니다. X 버튼으로 닫아주세요.', type: 'warning' })
+    return
+  }
+  close()
 }
 
 function onEscape() {
-  if (props.closeOnEscape) close()
+  if (!props.closeOnEscape) return
+  if (isDirty.value) {
+    openToast({ message: '수정 중인 내용이 있습니다. X 버튼으로 닫아주세요.', type: 'warning' })
+    return
+  }
+  close()
+}
+
+/** Drawer 내부 input/textarea/select 변경 감지 (캡처링으로 네이티브 이벤트 잡기) */
+function onInputCapture() {
+  isDirty.value = true
+}
+
+function attachInputListener() {
+  drawerRef.value?.addEventListener('input', onInputCapture, true)
+  drawerRef.value?.addEventListener('change', onInputCapture, true)
+}
+
+function detachInputListener() {
+  drawerRef.value?.removeEventListener('input', onInputCapture, true)
+  drawerRef.value?.removeEventListener('change', onInputCapture, true)
 }
 
 /** Tab 키 focus-trap — Drawer 안에서만 포커스 순환 */
@@ -203,10 +255,12 @@ function onTabKeyDown(e: KeyboardEvent) {
 // 열릴 때 포커스 + body 스크롤 잠금
 watch(() => props.open, (val) => {
   if (val) {
-    // 열기 전 포커스 저장
+    // 열기 전 포커스 저장 + dirty 초기화
+    isDirty.value = false
     previousActiveElement = document.activeElement as HTMLElement | null
     document.body.style.overflow = 'hidden'
     requestAnimationFrame(() => {
+      attachInputListener()
       // 첫 포커스 가능 요소로 이동 (없으면 drawer 자체)
       const firstFocusable = drawerRef.value?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR)
       if (firstFocusable) {
@@ -216,9 +270,11 @@ watch(() => props.open, (val) => {
       }
     })
   } else {
+    detachInputListener()
     document.body.style.overflow = ''
     currentWidth.value = null
-    sizePreset.value = 'default'
+    // persistKey 없으면 초기화, 있으면 유지 (다음에 열 때 복원)
+    if (!props.persistKey) sizePreset.value = 'default'
     // 닫힐 때 이전 포커스 복원
     requestAnimationFrame(() => {
       previousActiveElement?.focus()
