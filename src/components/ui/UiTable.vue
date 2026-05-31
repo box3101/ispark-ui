@@ -125,7 +125,7 @@
 </template>
 
 <script setup lang="ts" generic="TRow extends Record<string, unknown> = Record<string, unknown>">
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import type { Ref } from 'vue'
 import UiEmpty from './UiEmpty.vue'
 import UiSelect from './UiSelect.vue'
@@ -408,7 +408,7 @@ watch(
   () => {
     if (!hasControlledSelection.value) internalSelectedRow.value = null
     // 데이터 변경 후 DOM 업데이트 뒤 overflow 재체크
-    setTimeout(checkOverflow, 50)
+    nextTick(checkOverflow)
   },
 )
 </script>

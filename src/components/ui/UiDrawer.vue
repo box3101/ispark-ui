@@ -16,7 +16,9 @@
         :style="drawerStyle"
         role="dialog"
         aria-modal="true"
+        tabindex="-1"
         @keydown.escape="onEscape"
+        @keydown.tab="onTabKeyDown"
       >
         <!-- 리사이즈 핸들 -->
         <div
@@ -77,7 +79,7 @@ const props = withDefaults(defineProps<Props>(), {
   title: '',
   width: '420px',
   minWidth: '320px',
-  maxWidth: '80vw',
+  maxWidth: '100vw',
   position: 'right',
   overlay: true,
   closeOnOverlayClick: true,
@@ -92,11 +94,26 @@ const emit = defineEmits<{
 const drawerRef = ref<HTMLElement | null>(null)
 const currentWidth = ref<number | null>(null)
 const isDragging = ref(false)
+const isMobile = ref(false)
+/** 열기 전 포커스되어 있던 요소 — 닫힐 때 복원 */
+let previousActiveElement: HTMLElement | null = null
 
-const drawerStyle = computed(() => ({
-  width: currentWidth.value ? `${currentWidth.value}px` : props.width,
-  maxWidth: props.maxWidth ? `min(${props.maxWidth}, 100vw)` : '100vw',
-}))
+const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
+function checkMobile() {
+  isMobile.value = window.innerWidth <= 640
+}
+
+const drawerStyle = computed(() => {
+  // 모바일: 전체 너비
+  if (isMobile.value) {
+    return { width: '100%', maxWidth: '100vw' }
+  }
+  return {
+    width: currentWidth.value ? `${currentWidth.value}px` : props.width,
+    maxWidth: props.maxWidth ? `min(${props.maxWidth}, 100vw)` : '100vw',
+  }
+})
 
 function close() {
   emit('update:open', false)
@@ -110,16 +127,55 @@ function onEscape() {
   if (props.closeOnEscape) close()
 }
 
+/** Tab 키 focus-trap — Drawer 안에서만 포커스 순환 */
+function onTabKeyDown(e: KeyboardEvent) {
+  if (!drawerRef.value) return
+  const focusable = Array.from(
+    drawerRef.value.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+  )
+  if (focusable.length === 0) return
+
+  const first = focusable[0]
+  const last = focusable[focusable.length - 1]
+
+  if (e.shiftKey) {
+    // Shift+Tab: 첫 번째에서 → 마지막으로
+    if (document.activeElement === first || document.activeElement === drawerRef.value) {
+      e.preventDefault()
+      last.focus()
+    }
+  } else {
+    // Tab: 마지막에서 → 첫 번째로
+    if (document.activeElement === last) {
+      e.preventDefault()
+      first.focus()
+    }
+  }
+}
+
 // 열릴 때 포커스 + body 스크롤 잠금
 watch(() => props.open, (val) => {
   if (val) {
+    // 열기 전 포커스 저장
+    previousActiveElement = document.activeElement as HTMLElement | null
     document.body.style.overflow = 'hidden'
     requestAnimationFrame(() => {
-      drawerRef.value?.focus()
+      // 첫 포커스 가능 요소로 이동 (없으면 drawer 자체)
+      const firstFocusable = drawerRef.value?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR)
+      if (firstFocusable) {
+        firstFocusable.focus()
+      } else {
+        drawerRef.value?.focus()
+      }
     })
   } else {
     document.body.style.overflow = ''
     currentWidth.value = null
+    // 닫힐 때 이전 포커스 복원
+    requestAnimationFrame(() => {
+      previousActiveElement?.focus()
+      previousActiveElement = null
+    })
   }
 })
 
@@ -150,9 +206,16 @@ function onResizeStart(e: MouseEvent) {
   document.addEventListener('mouseup', onMouseUp)
 }
 
-// 컴포넌트 언마운트 시 body 스크롤 복원
+// 모바일 감지
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+
+// 컴포넌트 언마운트 시 body 스크롤 복원 + 리스너 제거
 onUnmounted(() => {
   document.body.style.overflow = ''
+  window.removeEventListener('resize', checkMobile)
 })
 </script>
 
@@ -161,7 +224,7 @@ onUnmounted(() => {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.3);
-  z-index: 999;
+  z-index: $z-overlay;
 }
 
 .ui-drawer {
@@ -169,15 +232,21 @@ onUnmounted(() => {
   top: 0;
   height: 100vh;
   max-width: 100%;
-  background: #fff;
+  background: $color-bg-elevated;
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  z-index: $z-modal;
   display: flex;
   flex-direction: column;
   outline: none;
 
   &.position-right { right: 0; }
   &.position-left { left: 0; }
+
+  // 모바일: 전체 너비로 열기
+  @media (max-width: 640px) {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 }
 
 .ui-drawer-resize-handle {
@@ -203,14 +272,14 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: 20px 24px 16px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid $color-border;
   flex-shrink: 0;
 }
 
 .ui-drawer-title {
   font-size: 16px;
   font-weight: 700;
-  color: #1f2937;
+  color: $color-text-heading;
   margin: 0;
 }
 
@@ -224,12 +293,12 @@ onUnmounted(() => {
   background: none;
   border-radius: 6px;
   cursor: pointer;
-  color: #9ca3af;
-  transition: background 0.15s, color 0.15s;
+  color: $color-text-muted;
+  transition: background $transition-fast, color $transition-fast;
 
   &:hover {
-    background: #f3f4f6;
-    color: #374151;
+    background: $color-border-light;
+    color: $color-text-dark;
   }
 }
 
@@ -242,7 +311,7 @@ onUnmounted(() => {
 .ui-drawer-footer {
   flex-shrink: 0;
   padding: 16px 24px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid $color-border;
 }
 
 // 오버레이 애니메이션
