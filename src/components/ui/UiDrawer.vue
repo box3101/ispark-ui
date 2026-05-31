@@ -99,7 +99,7 @@ interface Props {
   showResize?: boolean
   /** 전체화면 버튼 표시 */
   showFullscreen?: boolean
-  /** localStorage 저장 키 — 지정 시 프리셋 크기 기억 */
+  /** localStorage 저장 키 — 미지정 시 title 자동 사용 */
   persistKey?: string
 }
 
@@ -128,11 +128,18 @@ const isDragging = ref(false)
 const isMobile = ref(false)
 const STORAGE_PREFIX = 'ui-drawer-preset:'
 
+/** 저장 키 — persistKey 우선, 없으면 title 사용 */
+function getStorageKey(): string | null {
+  const key = props.persistKey || props.title
+  return key ? STORAGE_PREFIX + key : null
+}
+
 /** localStorage에서 저장된 프리셋 복원 */
 function loadPreset(): SizePreset {
-  if (!props.persistKey) return 'default'
+  const key = getStorageKey()
+  if (!key) return 'default'
   try {
-    const saved = localStorage.getItem(STORAGE_PREFIX + props.persistKey)
+    const saved = localStorage.getItem(key)
     if (saved === 'half' || saved === 'full') return saved
   } catch { /* localStorage 접근 불가 시 무시 */ }
   return 'default'
@@ -178,12 +185,13 @@ function togglePreset(preset: SizePreset) {
   sizePreset.value = sizePreset.value === preset ? 'default' : preset
   currentWidth.value = null
   // localStorage 저장
-  if (props.persistKey) {
+  const key = getStorageKey()
+  if (key) {
     try {
       if (sizePreset.value === 'default') {
-        localStorage.removeItem(STORAGE_PREFIX + props.persistKey)
+        localStorage.removeItem(key)
       } else {
-        localStorage.setItem(STORAGE_PREFIX + props.persistKey, sizePreset.value)
+        localStorage.setItem(key, sizePreset.value)
       }
     } catch { /* localStorage 접근 불가 시 무시 */ }
   }
@@ -255,8 +263,9 @@ function onTabKeyDown(e: KeyboardEvent) {
 // 열릴 때 포커스 + body 스크롤 잠금
 watch(() => props.open, (val) => {
   if (val) {
-    // 열기 전 포커스 저장 + dirty 초기화
+    // 열기 전 포커스 저장 + dirty 초기화 + 프리셋 복원
     isDirty.value = false
+    sizePreset.value = loadPreset()
     previousActiveElement = document.activeElement as HTMLElement | null
     document.body.style.overflow = 'hidden'
     requestAnimationFrame(() => {
@@ -273,8 +282,8 @@ watch(() => props.open, (val) => {
     detachInputListener()
     document.body.style.overflow = ''
     currentWidth.value = null
-    // persistKey 없으면 초기화, 있으면 유지 (다음에 열 때 복원)
-    if (!props.persistKey) sizePreset.value = 'default'
+    // 저장 키 있으면 유지 (다음에 열 때 복원), 없으면 초기화
+    if (!getStorageKey()) sizePreset.value = 'default'
     // 닫힐 때 이전 포커스 복원
     requestAnimationFrame(() => {
       previousActiveElement?.focus()
