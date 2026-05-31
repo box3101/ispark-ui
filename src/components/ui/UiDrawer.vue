@@ -33,45 +33,15 @@
           <slot name="header">
             <h3 class="ui-drawer-title">{{ title }}</h3>
           </slot>
-          <div class="ui-drawer-header-actions">
-            <!-- 프리셋 크기 버튼 -->
-            <template v-if="showResize && !isMobile">
-              <button
-                class="ui-drawer-action-btn"
-                :class="{ 'is-active': sizePreset === 'third' }"
-                aria-label="1/3 너비"
-                @click="togglePreset('third')"
-              >
-                <UiIcon name="panel-right" :size="16" />
-              </button>
-              <button
-                class="ui-drawer-action-btn"
-                :class="{ 'is-active': sizePreset === 'twoThirds' }"
-                aria-label="2/3 너비"
-                @click="togglePreset('twoThirds')"
-              >
-                <UiIcon name="panel-left" :size="16" />
-              </button>
-            </template>
-            <!-- 전체화면 버튼 -->
-            <button
-              v-if="showFullscreen && !isMobile"
-              class="ui-drawer-action-btn"
-              :class="{ 'is-active': sizePreset === 'full' }"
-              :aria-label="sizePreset === 'full' ? '축소' : '전체화면'"
-              @click="togglePreset('full')"
-            >
-              <UiIcon :name="sizePreset === 'full' ? 'minimize' : 'maximize'" :size="16" />
-            </button>
-            <!-- 닫기 버튼 -->
-            <button
-              class="ui-drawer-close"
-              aria-label="닫기"
-              @click="close"
-            >
-              <UiIcon name="x" :size="18" />
-            </button>
-          </div>
+          <button
+            class="ui-drawer-close"
+            aria-label="닫기"
+            @click="close"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </button>
         </header>
 
         <!-- 본문 (스크롤) -->
@@ -90,9 +60,6 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
-import UiIcon from './UiIcon.vue'
-
-type SizePreset = 'default' | 'third' | 'twoThirds' | 'full'
 
 interface Props {
   open?: boolean
@@ -105,10 +72,6 @@ interface Props {
   closeOnOverlayClick?: boolean
   closeOnEscape?: boolean
   resizable?: boolean
-  /** 1/3, 2/3 프리셋 크기 버튼 표시 */
-  showResize?: boolean
-  /** 전체화면 버튼 표시 */
-  showFullscreen?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -122,8 +85,6 @@ const props = withDefaults(defineProps<Props>(), {
   closeOnOverlayClick: true,
   closeOnEscape: true,
   resizable: true,
-  showResize: false,
-  showFullscreen: false,
 })
 
 const emit = defineEmits<{
@@ -134,7 +95,6 @@ const drawerRef = ref<HTMLElement | null>(null)
 const currentWidth = ref<number | null>(null)
 const isDragging = ref(false)
 const isMobile = ref(false)
-const sizePreset = ref<SizePreset>('default')
 /** 열기 전 포커스되어 있던 요소 — 닫힐 때 복원 */
 let previousActiveElement: HTMLElement | null = null
 
@@ -144,44 +104,16 @@ function checkMobile() {
   isMobile.value = window.innerWidth <= 640
 }
 
-/** 프리셋 크기 매핑 */
-const PRESET_WIDTHS: Record<SizePreset, string | null> = {
-  default: null,  // props.width 사용
-  third: '33vw',
-  twoThirds: '66vw',
-  full: '100vw',
-}
-
 const drawerStyle = computed(() => {
   // 모바일: 전체 너비
   if (isMobile.value) {
     return { width: '100%', maxWidth: '100vw' }
-  }
-  // 프리셋 크기 적용 (드래그 리사이즈보다 우선)
-  const presetWidth = PRESET_WIDTHS[sizePreset.value]
-  if (presetWidth) {
-    return {
-      width: presetWidth,
-      maxWidth: '100vw',
-      transition: 'width 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-    }
   }
   return {
     width: currentWidth.value ? `${currentWidth.value}px` : props.width,
     maxWidth: props.maxWidth ? `min(${props.maxWidth}, 100vw)` : '100vw',
   }
 })
-
-/** 프리셋 토글 — 같은 버튼 다시 누르면 기본으로 복귀 */
-function togglePreset(preset: SizePreset) {
-  if (sizePreset.value === preset) {
-    sizePreset.value = 'default'
-  } else {
-    sizePreset.value = preset
-  }
-  // 프리셋 전환 시 드래그 리사이즈 값 초기화
-  currentWidth.value = null
-}
 
 function close() {
   emit('update:open', false)
@@ -239,7 +171,6 @@ watch(() => props.open, (val) => {
   } else {
     document.body.style.overflow = ''
     currentWidth.value = null
-    sizePreset.value = 'default'
     // 닫힐 때 이전 포커스 복원
     requestAnimationFrame(() => {
       previousActiveElement?.focus()
@@ -311,11 +242,6 @@ onUnmounted(() => {
   &.position-right { right: 0; }
   &.position-left { left: 0; }
 
-  // 전체화면일 때 그림자 제거
-  &[style*="width: 100vw"] {
-    box-shadow: none;
-  }
-
   // 모바일: 전체 너비로 열기
   @media (max-width: 640px) {
     width: 100% !important;
@@ -355,37 +281,6 @@ onUnmounted(() => {
   font-weight: 700;
   color: $color-text-heading;
   margin: 0;
-}
-
-.ui-drawer-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
-}
-
-.ui-drawer-action-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border: none;
-  background: none;
-  border-radius: 4px;
-  cursor: pointer;
-  color: $color-text-muted;
-  transition: background $transition-fast, color $transition-fast;
-
-  &:hover {
-    background: $color-border-light;
-    color: $color-text-dark;
-  }
-
-  &.is-active {
-    background: var(--color-primary-bg, #eff3ff);
-    color: var(--color-primary);
-  }
 }
 
 .ui-drawer-close {
