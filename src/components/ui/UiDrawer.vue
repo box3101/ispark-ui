@@ -122,8 +122,8 @@ const props = withDefaults(defineProps<Props>(), {
   closeOnOverlayClick: true,
   closeOnEscape: true,
   resizable: true,
-  showResize: true,
-  showFullscreen: true,
+  showResize: false,
+  showFullscreen: false,
 })
 
 const emit = defineEmits<{
