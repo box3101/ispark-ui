@@ -20,7 +20,7 @@
   border: 1px solid #c6d2db;
   border-radius: $border-radius-base;
   transition: border-color $transition-base;
-  cursor: text;
+  cursor: pointer;
 
   &:hover:not(.is-disabled) { border-color: var(--color-primary); }
   &:focus-within:not(.is-disabled) { border-color: var(--color-primary); }

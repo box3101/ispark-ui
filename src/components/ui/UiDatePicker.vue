@@ -18,6 +18,7 @@
         v-slot="{ segments }"
         class="ui-datepicker-field"
         :class="[`size-dp-${size}`, { 'is-disabled': disabled }]"
+        @click="onFieldClick"
       >
         <template
           v-for="item in segments"
@@ -393,6 +394,18 @@ type DatePickerGranularity = 'day' | 'hour' | 'minute' | 'second' | 'month'
 const pickerGranularity = computed<DatePickerGranularity>(() =>
   props.type === 'month' ? 'month' : 'day',
 )
+
+// 필드 클릭 시 달력 팝업 열기 (트리거 버튼 클릭 프록시)
+const onFieldClick = (e: MouseEvent) => {
+  if (props.disabled) return
+  // 트리거 버튼 자체 클릭이면 무시 (중복 방지)
+  const target = e.target as HTMLElement
+  if (target.closest('.ui-datepicker-trigger')) return
+  // 트리거 버튼 찾아서 클릭
+  const field = (e.currentTarget as HTMLElement)
+  const trigger = field.querySelector('.ui-datepicker-trigger') as HTMLElement | null
+  trigger?.click()
+}
 
 /** month 타입만 팝업 open 제어(월 선택 후 닫기) */
 const monthPickerOpen = ref(false)
