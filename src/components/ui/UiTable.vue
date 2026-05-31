@@ -225,12 +225,13 @@ onMounted(() => {
   window.addEventListener('resize', onResize)
   // 가로 스크롤 감지
   if (wrapRef.value) {
-    resizeObserver = new ResizeObserver(() => {
-      checkOverflow()
-      // 사이즈 변하면 다시 보여줄 수 있음
-      if (!isOverflowing.value) scrollDismissed.value = false
-    })
-    resizeObserver.observe(wrapRef.value)
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        checkOverflow()
+        if (!isOverflowing.value) scrollDismissed.value = false
+      })
+      resizeObserver.observe(wrapRef.value)
+    }
     checkOverflow()
   }
 })
