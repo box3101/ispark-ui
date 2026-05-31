@@ -34,6 +34,15 @@
             <h3 class="ui-drawer-title">{{ title }}</h3>
           </slot>
           <div class="ui-drawer-header-actions">
+            <button
+              v-if="showFullscreen && !isMobile"
+              class="ui-drawer-action-btn"
+              :class="{ 'is-active': sizePreset === 'full' }"
+              :aria-label="sizePreset === 'full' ? '축소' : '전체화면'"
+              @click="togglePreset('full')"
+            >
+              <UiIcon :name="sizePreset === 'full' ? 'minimize' : 'maximize'" :size="16" />
+            </button>
             <template v-if="showResize && !isMobile">
               <button
                 class="ui-drawer-action-btn"
@@ -44,15 +53,6 @@
                 <UiIcon name="panel-right" :size="16" />
               </button>
             </template>
-            <button
-              v-if="showFullscreen && !isMobile"
-              class="ui-drawer-action-btn"
-              :class="{ 'is-active': sizePreset === 'full' }"
-              :aria-label="sizePreset === 'full' ? '축소' : '전체화면'"
-              @click="togglePreset('full')"
-            >
-              <UiIcon :name="sizePreset === 'full' ? 'minimize' : 'maximize'" :size="16" />
-            </button>
             <button
               class="ui-drawer-close"
               aria-label="닫기"
