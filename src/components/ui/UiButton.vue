@@ -84,17 +84,10 @@ interface Props {
    */
   variant?:
     | 'primary'
-    | 'primary-dark'
-    | 'primary-line'
     | 'secondary'
-    | 'line-secondary'
     | 'outline'
     | 'ghost'
-    | 'dark'
     | 'danger'
-    | 'success'
-    | 'warning'
-    | 'info'
   /**
    * 사이즈 — xs(24px) / sm(28px) / md(32px·기본) / lg(40px)
    */
@@ -422,37 +415,6 @@ defineExpose({
     }
   }
 
-  // ===== 확장 variant (v0.6+) — team_agent_front 사용처 호환용 =====
-
-  &.variant-primary-dark {
-    background-color: var(--color-primary-dark);
-    color: #fff;
-
-    @include desktop-hover {
-      background-color: var(--color-primary-dark-hover);
-    }
-  }
-
-  &.variant-primary-line {
-    background-color: #fff;
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-
-    @include desktop-hover {
-      background-color: var(--color-background);
-    }
-  }
-
-  &.variant-line-secondary {
-    background-color: #fff;
-    border-color: #64748b;
-    color: #64748b;
-
-    @include desktop-hover {
-      background-color: var(--color-background);
-    }
-  }
-
   &.variant-outline {
     background-color: #fff;
     border-color: var(--color-border);
@@ -461,42 +423,6 @@ defineExpose({
     @include desktop-hover {
       border-color: var(--color-primary);
       color: var(--color-primary);
-    }
-  }
-
-  &.variant-dark {
-    background-color: #58616a;
-    color: #fff;
-
-    @include desktop-hover {
-      background-color: #4a5259;
-    }
-  }
-
-  &.variant-success {
-    background-color: var(--color-success);
-    color: #fff;
-
-    @include desktop-hover {
-      background-color: var(--color-success-hover);
-    }
-  }
-
-  &.variant-warning {
-    background-color: var(--color-warning);
-    color: #fff;
-
-    @include desktop-hover {
-      background-color: var(--color-warning-hover);
-    }
-  }
-
-  &.variant-info {
-    background-color: var(--color-info);
-    color: #fff;
-
-    @include desktop-hover {
-      background-color: var(--color-info-hover);
     }
   }
 
