@@ -36664,7 +36664,7 @@ const J01 = {
       ], 2))), 128))
     ])) : q("", !0);
   }
-}), Oa1 = /* @__PURE__ */ J(pa1, [["__scopeId", "data-v-4b0efc84"]]), ua1 = ["accept", "disabled"], Ma1 = /* @__PURE__ */ Z({
+}), Oa1 = /* @__PURE__ */ J(pa1, [["__scopeId", "data-v-658a909f"]]), ua1 = ["accept", "disabled"], Ma1 = /* @__PURE__ */ Z({
   __name: "UiFileUpload",
   props: {
     loading: { type: Boolean, default: !1 },
