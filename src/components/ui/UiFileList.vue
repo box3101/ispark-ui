@@ -79,14 +79,14 @@ function isImage(mimetype: string) {
 .ui-file-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: $spacing-sm;
 }
 
 .ui-file-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px;
+  gap: $spacing-sm;
+  padding: $spacing-sm;
   background: $color-border-light;
   border-radius: $border-radius-base;
 
@@ -114,8 +114,8 @@ function isImage(mimetype: string) {
 .ui-file-item__info {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
+  gap: $spacing-sm;
+  padding: $spacing-sm 10px;
 }
 
 .ui-file-item__icon {
@@ -153,7 +153,7 @@ function isImage(mimetype: string) {
   transition: background $transition-fast, color $transition-fast;
 
   &:hover {
-    background: #fee2e2;
+    background: rgba($color-danger, 0.08);
     color: $color-danger;
   }
 }
