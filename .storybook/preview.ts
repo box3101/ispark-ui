@@ -38,6 +38,7 @@ const preview: Preview = {
             'Feedback',
             'Overlay',
             'Navigation',
+            'Data',
           ],
         ],
       },
