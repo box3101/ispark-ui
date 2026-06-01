@@ -1,4 +1,4 @@
-import{j as t,M as i}from"./index-DvwJHbgp.js";import{useMDXComponents as r}from"./index-C5CaePZb.js";import"./iframe-C-CBBENT.js";import"./index-8_2S3kac.js";import"./index-DrFu-skq.js";function n(e){const s={code:"code",h1:"h1",h2:"h2",li:"li",p:"p",pre:"pre",strong:"strong",ul:"ul",...r(),...e.components};return t.jsxs(t.Fragment,{children:[t.jsx(i,{title:"Get Started/Philosophy"}),`
+import{j as t,M as i}from"./index-BHMKMgKN.js";import{useMDXComponents as r}from"./index-BYsBzsiC.js";import"./iframe-B9VwwiXa.js";import"./index-8_2S3kac.js";import"./index-DrFu-skq.js";function n(e){const s={code:"code",h1:"h1",h2:"h2",li:"li",p:"p",pre:"pre",strong:"strong",ul:"ul",...r(),...e.components};return t.jsxs(t.Fragment,{children:[t.jsx(i,{title:"Get Started/Philosophy"}),`
 `,t.jsx(s.h1,{id:"철학",children:"철학"}),`
 `,t.jsxs(s.p,{children:["라이브러리를 설계할 때 두 가지를 지킨다 — ",t.jsx(s.strong,{children:"중복을 만들지 않는다"}),", ",t.jsx(s.strong,{children:"세 파일 세트로 관리한다"}),". 아래는 그 두 원칙이 왜 그렇게 정해졌는지에 대한 설명."]}),`
 `,t.jsx(s.h2,{id:"한-스토리-세-가지-역할",children:"한 스토리, 세 가지 역할"}),`

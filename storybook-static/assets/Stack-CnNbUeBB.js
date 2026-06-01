@@ -1,4 +1,4 @@
-import{j as e,M as d}from"./index-DvwJHbgp.js";import{useMDXComponents as t}from"./index-C5CaePZb.js";import"./iframe-C-CBBENT.js";import"./index-8_2S3kac.js";import"./index-DrFu-skq.js";function r(n){const s={code:"code",h1:"h1",h2:"h2",li:"li",p:"p",pre:"pre",strong:"strong",ul:"ul",...t(),...n.components};return e.jsxs(e.Fragment,{children:[e.jsx(d,{title:"Get Started/Stack"}),`
+import{j as e,M as d}from"./index-BHMKMgKN.js";import{useMDXComponents as t}from"./index-BYsBzsiC.js";import"./iframe-B9VwwiXa.js";import"./index-8_2S3kac.js";import"./index-DrFu-skq.js";function r(n){const s={code:"code",h1:"h1",h2:"h2",li:"li",p:"p",pre:"pre",strong:"strong",ul:"ul",...t(),...n.components};return e.jsxs(e.Fragment,{children:[e.jsx(d,{title:"Get Started/Stack"}),`
 `,e.jsx(s.h1,{id:"스택--패키지--명령어",children:"스택 · 패키지 · 명령어"}),`
 `,e.jsx(s.p,{children:"ispark-ui가 어떤 패키지 위에서 어떻게 굴러가는지 한눈에. Phase 1은 7개, Phase 2는 필요할 때만 늘린다."}),`
 `,e.jsx(s.h2,{id:"패키지-최소로-시작",children:"패키지: 최소로 시작"}),`

@@ -1,4 +1,4 @@
-import{j as e,M as s}from"./index-DvwJHbgp.js";import{useMDXComponents as t}from"./index-C5CaePZb.js";import"./iframe-C-CBBENT.js";import"./index-8_2S3kac.js";import"./index-DrFu-skq.js";function i(r){const n={blockquote:"blockquote",code:"code",h1:"h1",h2:"h2",li:"li",p:"p",pre:"pre",strong:"strong",ul:"ul",...t(),...r.components};return e.jsxs(e.Fragment,{children:[e.jsx(s,{title:"Get Started/Install"}),`
+import{j as e,M as s}from"./index-BHMKMgKN.js";import{useMDXComponents as t}from"./index-BYsBzsiC.js";import"./iframe-B9VwwiXa.js";import"./index-8_2S3kac.js";import"./index-DrFu-skq.js";function i(r){const n={blockquote:"blockquote",code:"code",h1:"h1",h2:"h2",li:"li",p:"p",pre:"pre",strong:"strong",ul:"ul",...t(),...r.components};return e.jsxs(e.Fragment,{children:[e.jsx(s,{title:"Get Started/Install"}),`
 `,e.jsx(n.h1,{id:"설치",children:"설치"}),`
 `,e.jsx(n.p,{children:"Vue 3 프로젝트에 ispark-ui를 붙이는 최소 3단계. peer dependency를 별도로 설치하는 이유는 Vue·radix-vue·date 패키지를 컨슈머 측 버전에 맞추기 위함이다."}),`
 `,e.jsx(n.h2,{id:"1-패키지-설치",children:"1. 패키지 설치"}),`

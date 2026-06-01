@@ -1,4 +1,4 @@
-import{j as t,M as n}from"./index-DvwJHbgp.js";import{useMDXComponents as s}from"./index-C5CaePZb.js";import"./iframe-C-CBBENT.js";import"./index-8_2S3kac.js";import"./index-DrFu-skq.js";function d(i){const e={code:"code",h1:"h1",h2:"h2",li:"li",ol:"ol",p:"p",strong:"strong",ul:"ul",...s(),...i.components};return t.jsxs(t.Fragment,{children:[t.jsx(n,{title:"Get Started/Migration"}),`
+import{j as t,M as n}from"./index-BHMKMgKN.js";import{useMDXComponents as s}from"./index-BYsBzsiC.js";import"./iframe-B9VwwiXa.js";import"./index-8_2S3kac.js";import"./index-DrFu-skq.js";function d(i){const e={code:"code",h1:"h1",h2:"h2",li:"li",ol:"ol",p:"p",strong:"strong",ul:"ul",...s(),...i.components};return t.jsxs(t.Fragment,{children:[t.jsx(n,{title:"Get Started/Migration"}),`
 `,t.jsx(e.h1,{id:"마이그레이션-정책--구현-현황",children:"마이그레이션 정책 · 구현 현황"}),`
 `,t.jsxs(e.p,{children:[t.jsx(e.code,{children:"team_agent_front"}),"에서 어떤 컴포넌트를 어떤 기준으로 떼어왔는지. 정책을 먼저 보고, 그 결과로서의 현황을 본다."]}),`
 `,t.jsx(e.h2,{id:"마이그레이션-정책",children:"마이그레이션 정책"}),`
