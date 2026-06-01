@@ -1,0 +1,1 @@
+const o={parameters:{layout:"centered",controls:{matchers:{color:/(background|color)$/i,date:/Date$/i}},options:{storySort:{order:["Get Started",["Introduction","Install","Philosophy","Stack","Theming","Migration"],"Icons",["Gallery"],"Components",["Form","Display","Feedback","Overlay","Navigation"]]}}},tags:["autodocs"]};export{o as default};
