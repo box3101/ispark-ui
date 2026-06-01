@@ -16,19 +16,19 @@
   .sbdocs code, .sbdocs pre, .sbdocs kbd {
     font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   }
-  .sbdocs a { color: var(--color-primary, #3c69db); }
+  .sbdocs a { color: #d97757; }
+  .sbdocs a:hover { color: #c4633e; }
   .sbdocs.sbdocs-content h2 {
     font-weight: 650;
     font-size: 21px;
     letter-spacing: -0.01em;
-    color: var(--color-text-heading, #1a1f2b);
+    color: #1a1f2b;
     margin: 40px 0 14px;
   }
   .sbdocs.sbdocs-content p,
   .sbdocs.sbdocs-content li { line-height: 1.75; }
 
-  /* 마크다운 본문 표만 — .sbdocs.sbdocs-content 직계 자식 table로 범위 한정
-     (스토리 내부 UiTable 등 컴포넌트 table에 leak 방지) */
+  /* 마크다운 본문 표 */
   .sbdocs.sbdocs-content > table {
     border-collapse: collapse;
     width: 100%;
@@ -38,22 +38,21 @@
     text-align: left;
     font-weight: 600;
     font-size: 13px;
-    color: var(--color-text-secondary, #6b7280);
+    color: #6b7280;
     padding: 9px 12px;
     border: 0;
-    border-bottom: 2px solid var(--color-border, #e6e8ec);
+    border-bottom: 2px solid #e6e8ec;
     background: none;
   }
   .sbdocs.sbdocs-content > table td {
     padding: 9px 12px;
     border: 0;
-    border-bottom: 1px solid var(--color-border-light, #eef0f3);
+    border-bottom: 1px solid #eef0f3;
     vertical-align: top;
   }
-  /* 마크다운 표 짝수 행 zebra stripe — 라이트 흰색 → 다크 미세 elevated */
   .sbdocs.sbdocs-content > table tr:nth-of-type(even),
   .sbdocs.sbdocs-content > table tr:nth-of-type(even) td {
-    background-color: rgba(234, 234, 227, 0.03) !important;
+    background-color: #f8f9fa !important;
   }
 
   /* ── Section ──────────────────────────────────────────────── */
@@ -66,7 +65,7 @@
   .sbdocs .ispark-section__title {
     font-size: 22px;
     font-weight: 700;
-    color: var(--color-text-heading, #1a1f2b);
+    color: #1a1f2b;
     margin: 0 0 4px;
     letter-spacing: -0.01em;
     border: 0;
@@ -74,7 +73,7 @@
   }
   .sbdocs .ispark-section__desc {
     font-size: 13px;
-    color: var(--color-text-secondary, #6b7280);
+    color: #6b7280;
     margin: 0;
   }
 
@@ -87,26 +86,26 @@
   .sbdocs a.ispark-card {
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--color-border-light, #eef0f3);
+    border: 1px solid #e6e8ec;
     border-radius: 12px;
     background: #fff;
     overflow: hidden;
     text-decoration: none !important;
-    color: var(--color-text-heading, #1a1f2b) !important;
+    color: #1a1f2b !important;
     transition: border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
   }
   .sbdocs a.ispark-card:hover {
-    border-color: var(--color-border, #c5cbd6);
+    border-color: #d97757;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(20, 30, 60, 0.06);
+    box-shadow: 0 6px 16px rgba(217, 119, 87, 0.1);
   }
   .sbdocs .ispark-card__demo {
     position: relative;
     display: block;
     min-height: 160px;
     padding: 0;
-    background: var(--color-surface, #fafbfc);
-    border-bottom: 1px solid var(--color-border-light, #eef0f3);
+    background: #f8f9fa;
+    border-bottom: 1px solid #eef0f3;
     overflow: hidden;
   }
   .sbdocs .ispark-card__frame {
@@ -116,7 +115,6 @@
     background: transparent;
     display: block;
   }
-  /* iframe 위 투명 shield — 카드 클릭은 wrapper a가 받고, iframe 안 play 함수는 영향 없음 */
   .sbdocs .ispark-card__shield {
     position: absolute;
     inset: 0;
@@ -131,22 +129,22 @@
   .sbdocs .ispark-card__meta strong {
     font-size: 14px;
     font-weight: 600;
-    color: var(--color-text-heading, #1a1f2b);
+    color: #1a1f2b;
   }
   .sbdocs .ispark-card__meta span {
     font-size: 12px;
-    color: var(--color-text-secondary, #6b7280);
+    color: #6b7280;
   }
 
   /* ── Footer Links ─────────────────────────────────────────── */
   .sbdocs .ispark-foot {
     margin-top: 64px;
     padding: 28px 0 16px;
-    border-top: 1px solid var(--color-border-light, #eef0f3);
+    border-top: 1px solid #eef0f3;
   }
   .sbdocs .ispark-foot__lead {
     font-size: 11px;
-    color: var(--color-text-secondary, #6b7280);
+    color: #6b7280;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     margin: 0 0 12px;
@@ -163,7 +161,7 @@
   }
   .sbdocs ul.ispark-foot__links a {
     font-size: 14px;
-    color: var(--color-primary, #3c69db);
+    color: #d97757;
     text-decoration: none;
   }
   .sbdocs ul.ispark-foot__links a:hover {
@@ -171,17 +169,18 @@
   }
 
   /* ═════════════════════════════════════════════════════════════
-     Hero — 다크 배경 + 큰 타이포
+     Hero — 라이트 테마
      ═════════════════════════════════════════════════════════════ */
 
   .sbdocs .ispark-hero {
     position: relative;
-    margin: -32px -32px 56px;
-    padding: 88px 48px 96px;
-    background: #1a1b1f;
-    color: #eaeae3;
+    margin: -32px -32px 48px;
+    padding: 48px 48px 44px;
+    background: linear-gradient(180deg, #f8f5f2 0%, #ffffff 100%);
+    color: #1a1f2b;
     border-radius: 14px;
     overflow: hidden;
+    border: 1px solid #eee8e3;
   }
 
   .sbdocs .ispark-hero__inner {
@@ -189,27 +188,25 @@
     max-width: 880px;
   }
 
-  /* Top bar — 크럼 + 카테고리 라벨 한 줄 통합 */
   .sbdocs .ispark-hero__topbar {
     display: flex;
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 32px;
+    margin-bottom: 20px;
   }
 
-  /* Crumb */
   .sbdocs .ispark-hero__crumb {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     padding: 6px 12px 6px 8px;
-    background: rgba(234, 234, 227, 0.06);
-    border: 1px solid rgba(234, 234, 227, 0.08);
+    background: rgba(217, 119, 87, 0.06);
+    border: 1px solid rgba(217, 119, 87, 0.12);
     border-radius: 999px;
     font-family: "JetBrains Mono", ui-monospace, monospace;
     font-size: 12px;
-    color: rgba(234, 234, 227, 0.7);
+    color: #6b7280;
   }
   .sbdocs .ispark-hero__mark {
     display: inline-flex;
@@ -224,21 +221,20 @@
     line-height: 1;
   }
   .sbdocs .ispark-hero__ver {
-    color: rgba(234, 234, 227, 0.55);
+    color: #9ca3af;
   }
   .sbdocs .ispark-hero__dot {
-    color: rgba(234, 234, 227, 0.35);
+    color: #d1d5db;
   }
 
-  /* Vue 3 chip */
   .sbdocs .ispark-hero__pill {
     display: inline-flex;
     align-items: center;
     padding: 3px 9px;
-    background: rgba(217, 119, 87, 0.12);
-    border: 1px solid rgba(217, 119, 87, 0.32);
+    background: rgba(217, 119, 87, 0.08);
+    border: 1px solid rgba(217, 119, 87, 0.25);
     border-radius: 999px;
-    color: #e89976;
+    color: #c4633e;
     font-family: "JetBrains Mono", ui-monospace, monospace;
     font-size: 11px;
     font-weight: 600;
@@ -249,24 +245,23 @@
   .sbdocs .ispark-hero__eyebrow-text {
     font-family: "JetBrains Mono", ui-monospace, monospace;
     font-size: 12px;
-    color: rgba(234, 234, 227, 0.55);
+    color: #9ca3af;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     font-weight: 500;
   }
 
-  /* Headline — 큰 임팩트 (2줄 split). 자간/행간 완화로 한글 자모 분리 자연스럽게.
-     Storybook 기본 .sbdocs.sbdocs-content h1 보다 강한 특이도 필요 → !important + 특이도 강화 */
-  .sbdocs.sbdocs-content .ispark-hero__headline {
-    margin: 0 0 28px !important;
+  /* headline — div 기반 + !important (Storybook 완전 override) */
+  html body .sbdocs .ispark-hero__headline {
+    margin: 0 0 16px !important;
     padding: 0 !important;
     border: 0 !important;
-    font-size: 64px !important;
-    font-weight: 600 !important;
-    line-height: 1.12 !important;
-    letter-spacing: -0.024em !important;
-    color: #f5f4ed !important;
-    word-break: keep-all;
+    font-size: 48px !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.02em !important;
+    color: #1a1f2b !important;
+    word-break: keep-all !important;
   }
   .sbdocs .ispark-hero__line {
     display: inline;
@@ -275,105 +270,95 @@
     color: #d97757;
   }
   @media (max-width: 960px) {
-    .sbdocs.sbdocs-content .ispark-hero__headline {
-      font-size: 48px !important;
+    .sbdocs .ispark-hero__headline {
+      font-size: 40px;
     }
   }
   @media (max-width: 720px) {
     .sbdocs .ispark-hero {
-      margin: -32px -16px 40px;
-      padding: 56px 28px 64px;
+      margin: -32px -16px 36px;
+      padding: 36px 24px 32px;
     }
-    .sbdocs.sbdocs-content .ispark-hero__headline {
-      font-size: 40px !important;
+    .sbdocs .ispark-hero__headline {
+      font-size: 32px;
     }
   }
 
-  /* Lede */
-  .sbdocs .ispark-hero__lede {
-    margin: 0 0 36px;
-    max-width: 560px;
-    font-size: 16px;
-    line-height: 1.7;
-    color: rgba(234, 234, 227, 0.75);
+  html body .sbdocs .ispark-hero__lede {
+    margin: 0 0 24px !important;
+    max-width: 600px !important;
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+    color: #4b5563 !important;
   }
-  .sbdocs .ispark-hero__lede strong {
-    color: #f5f4ed;
-    font-weight: 600;
-  }
-  .sbdocs .ispark-hero__lede code {
-    padding: 2px 7px;
-    background: rgba(234, 234, 227, 0.08);
-    border: 1px solid rgba(234, 234, 227, 0.12);
-    border-radius: 5px;
-    font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 13.5px;
-    color: rgba(234, 234, 227, 0.85);
+  html body .sbdocs .ispark-hero__lede strong {
+    color: #1a1f2b !important;
+    font-weight: 600 !important;
   }
 
-  /* CTA */
   .sbdocs .ispark-hero__cta {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 36px;
+    margin-bottom: 24px;
   }
-  .sbdocs .ispark-hero__btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 26px;
-    font-family: inherit;
-    font-size: 15.5px;
-    font-weight: 600;
-    border-radius: 10px;
+  html body .sbdocs .ispark-hero__btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 10px 20px !important;
+    font-family: inherit !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
     text-decoration: none !important;
     transition: transform 150ms ease, background 200ms ease, border-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
-    border: 1px solid transparent;
-    line-height: 1;
-    letter-spacing: -0.01em;
+    border: 1px solid transparent !important;
+    line-height: 1 !important;
+    letter-spacing: -0.01em !important;
+    height: auto !important;
+    min-height: 0 !important;
   }
-  .sbdocs .ispark-hero__btn--primary {
-    background: #d97757;
+  html body .sbdocs .ispark-hero__btn--primary {
+    background: #d97757 !important;
     color: #fff !important;
   }
-  .sbdocs .ispark-hero__btn--primary:hover {
-    background: #c4633e;
+  html body .sbdocs .ispark-hero__btn--primary:hover {
+    background: #c4633e !important;
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(217, 119, 87, 0.3);
   }
-  .sbdocs .ispark-hero__btn--ghost {
-    background: rgba(234, 234, 227, 0.05);
-    color: #eaeae3 !important;
-    border-color: rgba(234, 234, 227, 0.14);
+  html body .sbdocs .ispark-hero__btn--ghost {
+    background: #ffffff !important;
+    color: #4b5563 !important;
+    border-color: #e0e3e8 !important;
   }
-  .sbdocs .ispark-hero__btn--ghost:hover {
-    background: rgba(234, 234, 227, 0.12);
-    border-color: rgba(234, 234, 227, 0.35);
+  html body .sbdocs .ispark-hero__btn--ghost:hover {
+    background: #f8f9fa !important;
+    border-color: #d1d5db !important;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
 
-  /* Meta strip — 신뢰감 (tech stack + test 통과) */
   .sbdocs .ispark-hero__meta {
     display: flex;
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
     font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 13px;
-    color: rgba(234, 234, 227, 0.6);
-    padding-top: 28px;
-    border-top: 1px solid rgba(234, 234, 227, 0.08);
+    font-size: 12px;
+    color: #9ca3af;
+    padding-top: 20px;
+    border-top: 1px solid #eef0f3;
   }
   .sbdocs .ispark-hero__meta strong {
-    color: #f5f4ed;
+    color: #1a1f2b;
     font-weight: 600;
   }
   .sbdocs .ispark-hero__meta .ispark-hero__dot {
-    color: rgba(234, 234, 227, 0.25);
+    color: #d1d5db;
   }
 
-  /* prefers-reduced-motion — 글로우/hover transform 비활성 */
   @media (prefers-reduced-motion: reduce) {
     .sbdocs .ispark-hero__btn,
     .sbdocs .ispark-hero__btn--primary:hover {
@@ -383,20 +368,61 @@
   }
 
   /* ═════════════════════════════════════════════════════════════
-     Docs 본문 다크 톤
-     - sbdocs 배경/타이포 다크로 override
-     - 컴포넌트 데모 iframe은 라이트 유지 (라이브러리 자체는 light mode)
+     Hero 격리 — 범용 링크/code 스타일이 Hero를 침범하지 않도록
+     specificity 강화 (html body 접두사)
      ═════════════════════════════════════════════════════════════ */
 
-  /* docs 루트 배경 */
-  .sb-show-main,
-  .sbdocs-wrapper,
-  .sbdocs.sbdocs-page {
-    background: #1a1b1f !important;
-    color: #eaeae3 !important;
+  /* Hero 내부 버튼 — 범용 링크색 침범 차단 */
+  html body .sbdocs .ispark-hero a.ispark-hero__btn--primary,
+  html body .sbdocs .ispark-hero a.ispark-hero__btn--primary:hover {
+    color: #fff !important;
+    text-decoration: none !important;
+  }
+  html body .sbdocs .ispark-hero a.ispark-hero__btn--ghost {
+    color: #4b5563 !important;
+    text-decoration: none !important;
+  }
+  html body .sbdocs .ispark-hero a.ispark-hero__btn--ghost:hover {
+    color: #1a1f2b !important;
+    text-decoration: none !important;
   }
 
-  /* 가독성 — 본문 폭 제한 (책 같은 시선 이동) */
+  /* Hero 내부 code — 범용 인라인 code 침범 차단 (라이트 톤) */
+  html body .sbdocs .ispark-hero code,
+  html body .sbdocs .ispark-hero .ispark-hero__lede code {
+    background: #f3f4f6 !important;
+    color: #c4633e !important;
+    border: 1px solid #e5e7eb !important;
+  }
+
+  /* Hero 내부 텍스트 — 범용 텍스트색 침범 차단 */
+  html body .sbdocs .ispark-hero p,
+  html body .sbdocs .ispark-hero span {
+    color: inherit;
+  }
+  html body .sbdocs .ispark-hero .ispark-hero__lede {
+    color: #6b7280 !important;
+  }
+  html body .sbdocs .ispark-hero .ispark-hero__lede strong {
+    color: #1a1f2b !important;
+  }
+  html body .sbdocs .ispark-hero .ispark-hero__meta {
+    color: #9ca3af !important;
+  }
+  html body .sbdocs .ispark-hero .ispark-hero__meta strong {
+    color: #1a1f2b !important;
+  }
+  html body .sbdocs .ispark-hero .ispark-hero__line--accent {
+    color: #d97757 !important;
+  }
+  html body .sbdocs .ispark-hero .ispark-hero__headline {
+    color: #1a1f2b !important;
+  }
+
+  /* ═════════════════════════════════════════════════════════════
+     Docs 본문 — 라이트 테마
+     ═════════════════════════════════════════════════════════════ */
+
   .sbdocs.sbdocs-wrapper {
     padding: 64px 24px !important;
   }
@@ -404,38 +430,11 @@
     max-width: 960px !important;
     margin: 0 auto !important;
   }
-  /* Introduction의 hero는 폭 제한 예외 (full-width hero) */
   .sbdocs.sbdocs-content > .ispark-hero {
     max-width: none;
   }
 
-  /* 모든 sbdocs 텍스트 기본색 */
-  .sbdocs,
-  .sbdocs h1, .sbdocs h2, .sbdocs h3, .sbdocs h4,
-  .sbdocs p, .sbdocs li, .sbdocs td, .sbdocs th,
-  .sbdocs strong, .sbdocs em {
-    color: #eaeae3;
-  }
-
-  /* 헤딩 톤 — heading은 살짝 더 밝게 */
-  .sbdocs.sbdocs-content h1,
-  .sbdocs.sbdocs-content h2,
-  .sbdocs.sbdocs-content h3 {
-    color: #f5f4ed !important;
-    border-color: #2a2c33 !important;
-  }
-  .sbdocs.sbdocs-content h2 {
-    color: #f5f4ed !important;
-  }
-
-  /* 본문 muted 텍스트 — 다크에서 충분한 대비 */
-  .sbdocs p,
-  .sbdocs.sbdocs-content p,
-  .sbdocs.sbdocs-content li {
-    color: #d4d3ca;
-  }
-
-  /* 인라인 code — 다크 친화 뉴트럴 톤 (orange 액센트는 진짜 강조만 남김) */
+  /* 인라인 code */
   .sbdocs code,
   .sbdocs p code,
   .sbdocs li code,
@@ -443,182 +442,65 @@
   .sbdocs th code,
   .sbdocs strong code,
   .sbdocs.sbdocs-content code {
-    background: #2a2c33 !important;
-    color: #d4d3ca !important;
-    border: 1px solid #3a3d44 !important;
+    background: #f3f4f6 !important;
+    color: #c4633e !important;
+    border: 1px solid #e5e7eb !important;
     padding: 2px 8px;
     border-radius: 5px;
     font-family: "JetBrains Mono", ui-monospace, monospace;
     font-size: 0.93em;
     font-weight: 500;
   }
-  /* strong 안의 code는 한 단계 더 밝게 (강조) */
   .sbdocs strong code,
   .sbdocs.sbdocs-content b code {
-    color: #f5f4ed !important;
+    color: #b5472a !important;
     font-weight: 600;
   }
 
   /* pre code block */
   .sbdocs pre {
-    background: #0f1014 !important;
-    border: 1px solid #2a2c33;
+    background: #1a1b1f !important;
+    border: 1px solid #e5e7eb;
     border-radius: 8px;
   }
   .sbdocs :is(pre, pre code) {
     background: transparent !important;
-    color: #eaeae3 !important;
+    color: #f5f4ed !important;
     border: 0;
     padding: 0;
   }
 
-  /* 표 — 다크 보더 (마크다운 본문 표에만, 컴포넌트 table에 leak 방지) */
-  .sbdocs.sbdocs-content > table th {
-    color: #8a8a82 !important;
-    border-bottom-color: #2a2c33 !important;
-  }
-  .sbdocs.sbdocs-content > table td {
-    color: #b8b8b0 !important;
-    border-bottom-color: #2a2c33 !important;
-  }
-
-  /* 링크 — warm accent */
-  .sbdocs a {
+  /* 링크 */
+  html body .sbdocs a {
     color: #d97757 !important;
+    transition: color 150ms ease;
   }
-  .sbdocs a:hover {
-    color: #e89976 !important;
+  html body .sbdocs a:hover {
+    color: #b5472a !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
   }
-
-  /* hr — divider 톤다운 */
-  .sbdocs hr {
-    border-color: #2a2c33 !important;
-  }
-
-  /* ArgTypes 표 (Storybook 내장) 다크 톤 */
-  .sbdocs .docblock-argstable {
-    background: transparent !important;
-  }
-  .sbdocs .docblock-argstable thead {
-    background: transparent !important;
-  }
-  .sbdocs .docblock-argstable th,
-  .sbdocs .docblock-argstable td {
-    background: transparent !important;
-    border-bottom: 1px solid #2a2c33 !important;
-    color: #b8b8b0 !important;
-  }
-  .sbdocs .docblock-argstable th {
-    color: #8a8a82 !important;
-  }
-  .sbdocs .docblock-argstable td code,
-  .sbdocs .docblock-argstable th code {
-    background: rgba(217, 119, 87, 0.1) !important;
-    color: #e89976 !important;
-  }
-
-  /* Source code preview (Show code) */
-  .sbdocs .docblock-source {
-    background: #0f1014 !important;
-    border: 1px solid #2a2c33 !important;
-  }
-
-  /* Story preview wrapper — 컴포넌트는 라이트 배경 유지하되 wrapper 다크 */
-  .sbdocs .docs-story,
-  .sbdocs .docblock-preview-wrapper,
-  .sbdocs .docblock-argstable-toolbar {
-    background: transparent !important;
-  }
-  /* 실제 컴포넌트 렌더 영역 — 흰색 대신 warm cream (다크 페이지와 충돌 완화)
-     라이트 디자인 컴포넌트는 유지하되, 카드 표면은 따뜻한 cream 톤으로 통일 */
-  .sbdocs .innerZoomElementWrapper {
-    background: transparent !important;
-    border-radius: 8px;
-    margin: 12px;
-  }
-  /* Storybook 기본 css가 inner element에 'border: 10px solid transparent !important' 강제.
-     emotion이 동적 inject되어 같은 specificity면 emotion이 이김. specificity 4단계로 강화. */
-  html body .sb-show-main .sbdocs-preview .docs-story .innerZoomElementWrapper > *,
-  html body .sbdocs-preview .innerZoomElementWrapper > * {
-    border: 0 !important;
-  }
-
-  /* ── 기존 ispark-* (Hero / Section / Card grid) 다크 override ──── */
-
-  .sbdocs .ispark-section__title {
-    color: #f5f4ed !important;
-  }
-  .sbdocs .ispark-section__desc {
-    color: #8a8a82 !important;
-  }
-
-  /* Card — 살짝 elevated dark surface */
-  .sbdocs a.ispark-card {
-    background: #1f2026 !important;
-    border-color: #2a2c33 !important;
-    color: #eaeae3 !important;
-  }
-  .sbdocs a.ispark-card:hover {
-    border-color: #d97757 !important;
-    box-shadow: 0 8px 24px rgba(217, 119, 87, 0.12) !important;
-  }
-  .sbdocs .ispark-card__demo {
-    background: #26282f !important;
-    border-bottom-color: #2a2c33 !important;
-  }
-  .sbdocs .ispark-card__meta strong {
-    color: #f5f4ed !important;
-  }
-  .sbdocs .ispark-card__meta span {
-    color: #8a8a82 !important;
-  }
-
-  /* Footer links 다크 */
-  .sbdocs .ispark-foot {
-    border-top-color: #2a2c33 !important;
-  }
-  .sbdocs .ispark-foot__lead {
-    color: #8a8a82 !important;
-  }
-  .sbdocs ul.ispark-foot__links a {
-    color: #d97757 !important;
-  }
-
-  /* 이전 light 톤 ispark-hero는 더 이상 안 쓰지만 fallback */
-  .sbdocs .ispark-hero {
-    border-bottom-color: #2a2c33 !important;
-  }
-  .sbdocs .ispark-hero__brand,
-  .sbdocs .ispark-hero__tag {
-    color: #f5f4ed !important;
-  }
-  .sbdocs .ispark-hero__sub {
-    color: #b8b8b0 !important;
-  }
-  .sbdocs .ispark-btn--secondary {
-    background: rgba(234, 234, 227, 0.05) !important;
-    color: #eaeae3 !important;
-    border-color: rgba(234, 234, 227, 0.14) !important;
-  }
-  .sbdocs .ispark-btn--secondary:hover {
-    background: rgba(234, 234, 227, 0.1) !important;
+  html body .sbdocs a:focus-visible {
+    outline: 2px solid #d97757;
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 
   /* ═════════════════════════════════════════════════════════════
-     Code Block — Prism.js token 색 다크 친화
+     Code Block — Prism.js token (코드블록 내부는 다크 유지)
      ═════════════════════════════════════════════════════════════ */
   .sbdocs pre[class*="language-"],
   .sbdocs :is(pre, pre code)[class*="language-"],
   .sbdocs code[class*="language-"],
   .sbdocs pre,
   .sbdocs :is(pre, pre code) {
-    background: #0f1014 !important;
+    background: #1a1b1f !important;
     color: #f5f4ed !important;
     text-shadow: none !important;
     font-size: 14px !important;
     line-height: 1.65 !important;
   }
-  /* code block 안 모든 텍스트 기본 흰색 — specificity 강화 (html body로 시작) */
   html body .sbdocs pre,
   html body .sbdocs :is(pre, pre code),
   html body .sbdocs :is(pre, pre code) span,
@@ -626,7 +508,6 @@
   html body .sbdocs .docblock-source pre code span {
     color: #f5f4ed !important;
   }
-  /* Prism token class 별로도 강화 (분류 안 되는 token까지 흰색) */
   html body .sbdocs :is(pre, pre code) .token,
   html body .sbdocs :is(pre, pre code) .token.plain,
   html body .sbdocs :is(pre, pre code) .token.literal-property,
@@ -639,12 +520,11 @@
   html body .sbdocs :is(pre, pre code) .token.namespace {
     color: #f5f4ed !important;
   }
-  /* Prism token 색 — html body 시작으로 specificity 강화 (Storybook 기본 prism theme override) */
   html body .sbdocs :is(pre, pre code) .token.comment,
   html body .sbdocs :is(pre, pre code) .token.prolog,
   html body .sbdocs :is(pre, pre code) .token.doctype,
   html body .sbdocs :is(pre, pre code) .token.cdata {
-    color: #95a888 !important; /* 더 밝은 muted green (가독성 ↑) */
+    color: #95a888 !important;
     font-style: italic;
   }
   html body .sbdocs :is(pre, pre code) .token.punctuation {
@@ -657,24 +537,24 @@
   html body .sbdocs :is(pre, pre code) .token.operator,
   html body .sbdocs :is(pre, pre code) .token.keyword.module,
   html body .sbdocs :is(pre, pre code) .token.keyword.control-flow {
-    color: #f5b48e !important; /* 밝은 warm orange — 진한 보라/주황 대신 well-visible */
+    color: #f5b48e !important;
   }
   html body .sbdocs :is(pre, pre code) .token.string,
   html body .sbdocs :is(pre, pre code) .token.char,
   html body .sbdocs :is(pre, pre code) .token.builtin,
   html body .sbdocs :is(pre, pre code) .token.inserted,
   html body .sbdocs :is(pre, pre code) .token.string-property {
-    color: #b8d99a !important; /* 잘 보이는 light green — 진한 빨강 대신 */
+    color: #b8d99a !important;
   }
   html body .sbdocs :is(pre, pre code) .token.function,
   html body .sbdocs :is(pre, pre code) .token.class-name,
   html body .sbdocs :is(pre, pre code) .token.maybe-class-name {
-    color: #f5d0a0 !important; /* 더 밝은 warm yellow */
+    color: #f5d0a0 !important;
   }
   html body .sbdocs :is(pre, pre code) .token.property,
   html body .sbdocs :is(pre, pre code) .token.tag,
   html body .sbdocs :is(pre, pre code) .token.attr-name {
-    color: #f5f4ed !important; /* 흰색 */
+    color: #f5f4ed !important;
   }
   html body .sbdocs :is(pre, pre code) .token.number {
     color: #d8b6e3 !important;
@@ -685,16 +565,16 @@
     color: #f5f4ed !important;
   }
 
-  /* Copy 버튼 (pre 우상단) — 다크 ghost */
+  /* Copy 버튼 */
   .sbdocs pre + button,
   .sbdocs pre ~ button,
   .docs-story pre button,
   .sbdocs .prismjs button,
   .sbdocs button[title="Copy"],
   .sbdocs button[aria-label="Copy"] {
-    background: rgba(234, 234, 227, 0.06) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
     color: #eaeae3 !important;
-    border: 1px solid rgba(234, 234, 227, 0.16) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
     backdrop-filter: blur(8px);
   }
   .sbdocs pre + button:hover,
@@ -702,76 +582,60 @@
   .docs-story pre button:hover,
   .sbdocs button[title="Copy"]:hover,
   .sbdocs button[aria-label="Copy"]:hover {
-    background: rgba(217, 119, 87, 0.14) !important;
-    border-color: rgba(217, 119, 87, 0.32) !important;
+    background: rgba(217, 119, 87, 0.2) !important;
+    border-color: rgba(217, 119, 87, 0.4) !important;
     color: #e89976 !important;
   }
 
   /* ═════════════════════════════════════════════════════════════
-     Story Preview wrapper + Show code toggle 다크
+     Story Preview wrapper
      ═════════════════════════════════════════════════════════════ */
 
-  /* Canvas/Story preview 외곽 wrapper — 다크 elevated + 비율 균형 */
   .sbdocs .docs-story,
   .sbdocs .sb-story,
   .sbdocs .docblock-story,
   .sbdocs .docblock-code-block {
-    background: #1f2026 !important;
-    border-color: #2a2c33 !important;
-    min-height: 220px;
+    background: #ffffff !important;
+    border-color: #e6e8ec !important;
   }
-  /* 컴포넌트 자체를 wrapper 가운데로 (min-height는 제거 — 작은 컴포넌트도 자연 크기 유지) */
-  .sbdocs .docs-story [class*="css-"][class*="xzp052"],
-  .sbdocs .docs-story > div:nth-child(2),
-  .sbdocs .docs-story .innerZoomElementWrapper {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-  }
-  /* 핵심: .sbdocs-preview가 흰 배경 + 1px border라 다크 카드 둘레로 흰 outline이 보임.
-     iframe 안 Storybook이 light theme 기본이라 직접 override 필요. */
+
   .sbdocs.sbdocs-preview,
   .sbdocs-preview {
-    background: #1f2026 !important;
-    border: 1px solid #2a2c33 !important;
+    background: #ffffff !important;
+    border: 1px solid #e6e8ec !important;
     box-shadow: none !important;
   }
-  /* Storybook이 만드는 zoom/source toolbar 영역 */
-  .sbdocs .docs-story > div:first-child,
+
   .sbdocs .docblock-source {
-    background: transparent !important;
-    border-color: #2a2c33 !important;
+    background: #1a1b1f !important;
+    border: 1px solid #e5e7eb !important;
   }
-  /* zoom 컨트롤 아이콘 (확대/축소/리셋) 톤 */
-  .sbdocs .docs-story svg {
-    color: #8a8a82;
-  }
-  /* "Show code" 토글 버튼 — 가독성 위해 더 진한 다크 chip.
-     selector를 docblock-code-toggle / docblock-source 안에 한정 (컴포넌트 데모 안 button에 영향 X) */
+
+  /* "Show code" 토글 버튼 */
   .sbdocs .docblock-code-toggle,
   .sbdocs .docblock-code-toggle button,
   .sbdocs .docblock-source > button {
-    background: #2a2c33 !important;
-    color: #eaeae3 !important;
-    border: 1px solid #3a3d44 !important;
+    background: #f3f4f6 !important;
+    color: #4b5563 !important;
+    border: 1px solid #e5e7eb !important;
     border-radius: 6px !important;
     font-weight: 500;
   }
   .sbdocs .docblock-code-toggle:hover,
   .sbdocs .docblock-source > button:hover {
-    background: rgba(217, 119, 87, 0.2) !important;
-    color: #f5f4ed !important;
-    border-color: rgba(217, 119, 87, 0.5) !important;
+    background: rgba(217, 119, 87, 0.08) !important;
+    color: #c4633e !important;
+    border-color: rgba(217, 119, 87, 0.4) !important;
   }
 
   /* ═════════════════════════════════════════════════════════════
-     ArgTypes 표 — 헤더/셀/Control 입력 모두 다크
+     ArgTypes 표 — 라이트 톤
      ═════════════════════════════════════════════════════════════ */
 
   .sbdocs .docblock-argstable-body tr,
   .sbdocs .docblock-argstable-body td {
     background: transparent !important;
-    color: #eaeae3 !important;
+    color: #2d3142 !important;
     padding: 16px 14px !important;
     vertical-align: top !important;
     line-height: 1.7;
@@ -779,125 +643,89 @@
   .sbdocs .docblock-argstable-body tr:hover td {
     background: rgba(217, 119, 87, 0.04) !important;
   }
-  /* 행 사이 미세 구분선 — 한 행씩 시각 분리 */
   .sbdocs .docblock-argstable-body tr {
-    border-bottom: 1px solid #25272d !important;
+    border-bottom: 1px solid #eef0f3 !important;
   }
-  /* Description 텍스트 자체 대비 강화 */
   .sbdocs .docblock-argstable-body td span,
   .sbdocs .docblock-argstable-body td div {
-    color: #d4d3ca !important;
+    color: #4b5563 !important;
   }
-  /* ArgTypes Description의 옵션 enum chip (.css-o1d7ko 같은 emotion class).
-     Storybook이 라이트 톤(흰 배경 + 어두운 텍스트)으로 chip 렌더 → 다크 카드 위에서 충돌.
-     hash class에 의존하지 않도록 모든 chip 패턴(td 안의 small span/div)을 잡아 다크 톤으로.
-     색은 뉴트럴 light — orange 액센트는 진짜 강조에만. */
+
+  /* ArgTypes chip */
   .sbdocs .docblock-argstable-body td > div > span,
   .sbdocs .docblock-argstable-body td > div > div,
-  .sbdocs .docblock-argstable-body td [class*="css-"][class*="o1d7ko"],
   .sbdocs .docblock-argstable-body td span[class^="css-"]:not([class*="sbdocs"]) {
-    background-color: #2a2c33 !important;
-    color: #d4d3ca !important;
-    border: 1px solid #3a3d44 !important;
+    background-color: #f3f4f6 !important;
+    color: #4b5563 !important;
+    border: 1px solid #e5e7eb !important;
     border-radius: 4px !important;
   }
-  /* Description 컬럼의 chip 컨테이너 — flex-wrap + gap으로 한국어 설명과 chip 그룹 자연 분리 */
+
   .sbdocs .docblock-argstable-body td:nth-child(2) > div {
     display: flex !important;
     flex-wrap: wrap !important;
     gap: 6px !important;
     align-items: center;
   }
-  /* 한국어 설명 라인은 100% 폭 차지 (chip 위 별도 줄) */
   .sbdocs .docblock-argstable-body td:nth-child(2) > div > span:first-child {
     flex-basis: 100%;
     margin-bottom: 4px;
     background: transparent !important;
     border: 0 !important;
-    color: #d4d3ca !important;
+    color: #4b5563 !important;
     padding: 0 !important;
   }
-  /* Default 컬럼 chip (보통 'primary' 'md' 같은 default value) — 살짝 강조 */
-  .sbdocs .docblock-argstable-body td:nth-child(3) span,
-  .sbdocs .docblock-argstable-body td:nth-child(3) div {
-    background-color: transparent !important;
-    color: #eaeae3 !important;
-  }
-  /* Name 컬럼은 좀 더 밝게 */
+
+  /* Name 컬럼 */
   .sbdocs .docblock-argstable-body tr td:first-child {
-    color: #f5f4ed !important;
+    color: #1a1f2b !important;
   }
   .sbdocs .docblock-argstable-body tr td:first-child * {
-    color: #f5f4ed !important;
+    color: #1a1f2b !important;
     font-weight: 600;
   }
-  /* Control 컬럼의 input/select/textarea 다크 */
+
+  /* Control 입력 */
   .sbdocs .docblock-argstable input,
   .sbdocs .docblock-argstable select,
   .sbdocs .docblock-argstable textarea,
   .sbdocs .docblock-argstable [role="combobox"] {
-    background: #26282f !important;
-    color: #eaeae3 !important;
-    border: 1px solid #33363f !important;
+    background: #f9fafb !important;
+    color: #2d3142 !important;
+    border: 1px solid #e0e3e8 !important;
     border-radius: 6px;
   }
   .sbdocs .docblock-argstable input::placeholder,
   .sbdocs .docblock-argstable textarea::placeholder {
-    color: #6b6d75 !important;
+    color: #9ca3af !important;
   }
-  /* radio — accent로 warm orange */
   .sbdocs .docblock-argstable input[type="radio"],
   .sbdocs .docblock-argstable input[type="checkbox"] {
     accent-color: #d97757;
   }
-  /* Control 컬럼 우측 Reset(↺) 아이콘 버튼 톤 */
-  .sbdocs .docblock-argstable button {
-    background: rgba(234, 234, 227, 0.05) !important;
-    color: #8a8a82 !important;
-    border: 1px solid rgba(234, 234, 227, 0.12) !important;
-  }
-  .sbdocs .docblock-argstable button:hover {
-    color: #eaeae3 !important;
-    border-color: rgba(217, 119, 87, 0.32) !important;
-  }
-  /* PROPS / EVENTS / DATA 같은 sectionheader */
-  .sbdocs .docblock-argstable th {
-    background: transparent !important;
-    color: #8a8a82 !important;
-    border-bottom-color: #2a2c33 !important;
-  }
 
-  /* ArgTypes section header row (PROPS/EVENTS) — 라벨과 토글 정렬 깨짐 보정 */
+  /* ArgTypes section header */
   .sbdocs .docblock-argstable tr[class*="ArgsTableSection"],
   .sbdocs .docblock-argstable tr[class*="SectionRow"],
   .sbdocs .docblock-argstable tr td[colspan] {
     background: rgba(217, 119, 87, 0.05) !important;
-    color: #e89976 !important;
+    color: #c4633e !important;
     font-family: "JetBrains Mono", ui-monospace, monospace;
     font-size: 11px;
     letter-spacing: 0.08em;
     font-weight: 600;
     text-transform: uppercase;
-    border-top: 1px solid #2a2c33 !important;
-    border-bottom: 1px solid #2a2c33 !important;
-  }
-  /* Hide props items 토글 텍스트 정렬 */
-  .sbdocs .docblock-argstable tr[class*="ArgsTableSection"] button,
-  .sbdocs .docblock-argstable tr[class*="SectionRow"] button {
-    background: transparent !important;
-    border: 0 !important;
-    color: rgba(234, 234, 227, 0.5) !important;
-    font-size: 10.5px;
-    text-transform: none;
-    letter-spacing: 0;
-    padding: 0 8px !important;
-  }
-  .sbdocs .docblock-argstable tr[class*="ArgsTableSection"] button:hover,
-  .sbdocs .docblock-argstable tr[class*="SectionRow"] button:hover {
-    color: #e89976 !important;
+    border-top: 1px solid #eef0f3 !important;
+    border-bottom: 1px solid #eef0f3 !important;
   }
 
-  /* ── 핵심 props bullet list 줄간격/spacing 정상화 ─────────── */
+  .sbdocs .docblock-argstable th {
+    background: transparent !important;
+    color: #6b7280 !important;
+    border-bottom-color: #e6e8ec !important;
+  }
+
+  /* ── bullet list 줄간격 ─────────── */
   .sbdocs.sbdocs-content ul li,
   .sbdocs.sbdocs-content ol li {
     line-height: 1.85;
@@ -907,117 +735,25 @@
   .sbdocs.sbdocs-content ol li > code {
     margin: 0 1px;
   }
-  /* 중첩 ul 줄간격 살짝 더 좁게 */
   .sbdocs.sbdocs-content ul ul li {
     line-height: 1.75;
   }
 
-  /* ═════════════════════════════════════════════════════════════
-     P6/P7/P8/P9 디테일 — scrollbar, 링크 hover, Hero, 카드 spacing
-     ═════════════════════════════════════════════════════════════ */
-
-  /* P7 — 링크 hover 명확 (orange + underline) */
-  html body .sbdocs a {
-    color: #d97757 !important;
-    transition: color 150ms ease;
-  }
-  html body .sbdocs a:hover {
-    color: #f5b48e !important;
-    text-decoration: underline !important;
-    text-underline-offset: 3px;
-    text-decoration-thickness: 1px;
-  }
-  html body .sbdocs a:focus-visible {
-    outline: 2px solid #d97757;
-    outline-offset: 3px;
-    border-radius: 2px;
-  }
-
-  /* P6 — Scrollbar 다크 톤 */
+  /* ── Scrollbar — 라이트 톤 ─── */
   .sbdocs ::-webkit-scrollbar,
   .sb-show-main ::-webkit-scrollbar { width: 10px; height: 10px; }
   .sbdocs ::-webkit-scrollbar-track,
-  .sb-show-main ::-webkit-scrollbar-track { background: #1a1b1f; }
+  .sb-show-main ::-webkit-scrollbar-track { background: #f8f9fa; }
   .sbdocs ::-webkit-scrollbar-thumb,
   .sb-show-main ::-webkit-scrollbar-thumb {
-    background: #2a2c33;
+    background: #d1d5db;
     border-radius: 5px;
-    border: 2px solid #1a1b1f;
+    border: 2px solid #f8f9fa;
   }
   .sbdocs ::-webkit-scrollbar-thumb:hover,
-  .sb-show-main ::-webkit-scrollbar-thumb:hover { background: #3a3d44; }
+  .sb-show-main ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
   .sbdocs, .sb-show-main {
-    scrollbar-color: #2a2c33 #1a1b1f;
+    scrollbar-color: #d1d5db #f8f9fa;
     scrollbar-width: thin;
-  }
-
-  /* P8 — Hero topbar/lede/meta 다듬기 */
-  .sbdocs .ispark-hero__topbar {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-  .sbdocs .ispark-hero__topbar .ispark-hero__crumb {
-    margin-bottom: 0;
-  }
-  .sbdocs .ispark-hero__lede strong {
-    color: #f5f4ed !important;
-    font-weight: 600;
-  }
-  .sbdocs .ispark-hero__meta {
-    margin-top: 4px;
-  }
-
-  /* P9 — 컴포넌트 카드 */
-  html body .sbdocs a.ispark-card {
-    background: #1f2026 !important;
-    border-color: #2a2c33 !important;
-    border-top: 2px solid transparent !important;
-    border-radius: 12px !important;
-    transition: border-color 200ms ease,
-                transform 250ms cubic-bezier(0.22, 1, 0.36, 1),
-                box-shadow 250ms cubic-bezier(0.22, 1, 0.36, 1) !important;
-  }
-  html body .sbdocs a.ispark-card:hover {
-    border-color: #2a2c33 !important;
-    border-top-color: #d97757 !important;
-    transform: translateY(-3px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25) !important;
-  }
-  html body .sbdocs .ispark-card__demo {
-    background: #26282f !important;
-    border-bottom-color: #2a2c33 !important;
-    min-height: 160px;
-    border-radius: 12px 12px 0 0;
-  }
-  html body .sbdocs .ispark-card__meta {
-    padding: 14px 16px 16px !important;
-    gap: 4px !important;
-  }
-  html body .sbdocs .ispark-card__meta strong {
-    color: #f5f4ed !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-  }
-  html body .sbdocs .ispark-card__meta span {
-    color: #8a8a82 !important;
-    font-size: 12px !important;
-  }
-  html body .sbdocs .ispark-section {
-    margin-bottom: 48px !important;
-  }
-  html body .sbdocs .ispark-section__title {
-    color: #f5f4ed !important;
-    font-size: 18px !important;
-    font-weight: 700 !important;
-  }
-  html body .sbdocs .ispark-section__desc {
-    color: #8a8a82 !important;
-    font-size: 13px !important;
-  }
-  html body .sbdocs .ispark-grid {
-    gap: 20px !important;
   }
 </style>

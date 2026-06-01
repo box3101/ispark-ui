@@ -16,10 +16,10 @@ import { Meta } from '@storybook/blocks'
       <span className="ispark-hero__pill">Vue 3</span>
       <span className="ispark-hero__eyebrow-text">Design System</span>
     </div>
-    <h1 className="ispark-hero__headline">
+    <div className="ispark-hero__headline">
       <span className="ispark-hero__line">디자인 시스템,</span>{' '}
       <span className="ispark-hero__line ispark-hero__line--accent">적게 강하게.</span>
-    </h1>
+    </div>
     <p className="ispark-hero__lede">
       <strong>21개 컴포넌트</strong>가 <strong>단일 토큰</strong>을 공유합니다 — <code>team_agent_front</code>에서 떼어낸 재사용 컴포넌트.
     </p>
@@ -202,6 +202,12 @@ import { Meta } from '@storybook/blocks'
       </div>
       <div className="ispark-card__meta"><strong>UiDropdownMenu</strong><span>컨텍스트 메뉴</span></div>
     </a>
+    <a target="_top" className="ispark-card" href="./?path=/docs/components-overlay-uidrawer--docs">
+      <div className="ispark-card__demo">
+        <iframe className="ispark-card__frame" loading="lazy" title="UiDrawer preview" src="iframe.html?id=components-overlay-uidrawer--default&viewMode=story" /><div className="ispark-card__shield" />
+      </div>
+      <div className="ispark-card__meta"><strong>UiDrawer</strong><span>슬라이드 패널 · NEW</span></div>
+    </a>
   </div>
 </div>
 
@@ -218,6 +224,29 @@ import { Meta } from '@storybook/blocks'
         <iframe className="ispark-card__frame" loading="lazy" title="UiTab preview" src="iframe.html?id=components-navigation-uitab--playground&viewMode=story" /><div className="ispark-card__shield" />
       </div>
       <div className="ispark-card__meta"><strong>UiTab</strong><span>탭 전환</span></div>
+    </a>
+  </div>
+</div>
+
+{/* ── Data ───────────────────────────────────────────────────── */}
+
+<div className="ispark-section">
+  <div className="ispark-section__head">
+    <div className="ispark-section__title">Data</div>
+    <p className="ispark-section__desc">파일·데이터 처리</p>
+  </div>
+  <div className="ispark-grid">
+    <a target="_top" className="ispark-card" href="./?path=/docs/components-data-uifileupload--docs">
+      <div className="ispark-card__demo">
+        <iframe className="ispark-card__frame" loading="lazy" title="UiFileUpload preview" src="iframe.html?id=components-data-uifileupload--playground&viewMode=story" /><div className="ispark-card__shield" />
+      </div>
+      <div className="ispark-card__meta"><strong>UiFileUpload</strong><span>파일 업로드 · NEW</span></div>
+    </a>
+    <a target="_top" className="ispark-card" href="./?path=/docs/components-data-uifilelist--docs">
+      <div className="ispark-card__demo">
+        <iframe className="ispark-card__frame" loading="lazy" title="UiFileList preview" src="iframe.html?id=components-data-uifilelist--default&viewMode=story" /><div className="ispark-card__shield" />
+      </div>
+      <div className="ispark-card__meta"><strong>UiFileList</strong><span>파일 목록 · NEW</span></div>
     </a>
   </div>
 </div>

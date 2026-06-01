@@ -1,4 +1,4 @@
-<!-- Manager UI (사이드바/툴바) 전용 폰트 + 디테일 폴리시 — warm dark -->
+<!-- Manager UI (사이드바/툴바) 전용 폰트 + 디테일 폴리시 — warm light -->
 <link rel="stylesheet" as="style" crossorigin
   href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
 
@@ -14,7 +14,7 @@
       BlinkMacSystemFont, system-ui, sans-serif !important;
   }
 
-  /* ── 그룹 헤더(루트) — letter-spacing 살짝, 톤다운 ──────────── */
+  /* ── 그룹 헤더(루트) — letter-spacing 살짝 ──────────── */
   .sidebar-container button[data-nodetype="root"],
   [id^="storybook-explorer-tree"] button[data-nodetype="root"] {
     letter-spacing: 0.04em;
@@ -26,8 +26,8 @@
   .sidebar-container button[data-selected="true"],
   [id^="storybook-explorer-tree"] a[data-selected="true"],
   [id^="storybook-explorer-tree"] button[data-selected="true"] {
-    background: rgba(217, 119, 87, 0.12) !important;
-    color: #e89976 !important;
+    background: rgba(217, 119, 87, 0.08) !important;
+    color: #c4633e !important;
     font-weight: 600 !important;
     position: relative;
   }
@@ -43,63 +43,62 @@
     width: 2px;
     background: #d97757;
     border-radius: 0 2px 2px 0;
-    box-shadow: 0 0 8px rgba(217, 119, 87, 0.5);
   }
   /* 선택 상태 내부 텍스트(span 포함)도 warm orange로 통일 */
   .sidebar-container a[data-selected="true"] *,
   .sidebar-container button[data-selected="true"] *,
   [id^="storybook-explorer-tree"] a[data-selected="true"] *,
   [id^="storybook-explorer-tree"] button[data-selected="true"] * {
-    color: #e89976 !important;
+    color: #c4633e !important;
   }
 
-  /* ── 호버 상태 — warm tint 살짝 ──────────────────────────── */
+  /* ── 호버 상태 ──────────────────────────── */
   .sidebar-container a:not([data-selected="true"]):hover,
   .sidebar-container button:not([data-selected="true"]):hover,
   [id^="storybook-explorer-tree"] a:not([data-selected="true"]):hover,
   [id^="storybook-explorer-tree"] button:not([data-selected="true"]):hover {
-    background: rgba(234, 234, 227, 0.04) !important;
+    background: rgba(0, 0, 0, 0.04) !important;
   }
 
-  /* ── 트리 아이콘(격자 등) 톤다운 ───────────────────────────── */
+  /* ── 트리 아이콘 톤다운 ───────────────────────────── */
   .sidebar-container a:not([data-selected="true"]) svg,
   .sidebar-container button:not([data-selected="true"]) > svg,
   [id^="storybook-explorer-tree"] a:not([data-selected="true"]) svg,
   [id^="storybook-explorer-tree"] button:not([data-selected="true"]) > svg {
-    opacity: 0.55;
+    opacity: 0.5;
   }
   .sidebar-container a[data-selected="true"] svg,
   [id^="storybook-explorer-tree"] a[data-selected="true"] svg {
     opacity: 1;
-    color: #e89976 !important;
+    color: #c4633e !important;
   }
 
-  /* ── 폴더/컴포넌트/문서 아이콘 — Storybook 기본 주황 → 다크에 어울리는 톤 ─── */
+  /* ── 폴더/컴포넌트/문서 아이콘 ─── */
   .sidebar-container svg[type="document"],
   .sidebar-container svg[type="group"],
   .sidebar-container svg[type="component"],
   .sidebar-container svg[type="story"] {
-    color: #6b6d75 !important; /* 다크 배경 위 차분한 그레이 */
+    color: #9ca3af !important;
   }
   /* 선택 상태의 아이콘은 warm orange */
   .sidebar-container a[data-selected="true"] svg[type="document"],
   .sidebar-container a[data-selected="true"] svg[type="story"],
   .sidebar-container button[data-selected="true"] svg[type="group"],
   .sidebar-container button[data-selected="true"] svg[type="component"] {
-    color: #e89976 !important;
+    color: #c4633e !important;
   }
 
-  /* ── 검색바 — 둥글기 + placeholder 톤다운 ─────────────────── */
+  /* ── 검색바 ─────────────────── */
   .sidebar-container input[type="search"],
   .search-field input,
   .sidebar-container [class*="search"] input {
     border-radius: 8px !important;
   }
   .sidebar-container input::placeholder {
-    color: #6b6d75 !important;
+    color: #9ca3af !important;
   }
 
-  /* ── Brand title — 살짝 강조 ─────────────────────────────── */
+  /* ── Brand title ─────────────────────────────── */
   .sidebar-container [class*="Heading"],
   .sidebar-container [class*="brand"] {
     letter-spacing: -0.01em;
