@@ -1139,100 +1139,157 @@
   }
 
   /* ═════════════════════════════════════════════════════════════
-     ArgTypes 표 — 라이트 톤
+     ArgTypes 표 — 깔끔한 라이트
      ═════════════════════════════════════════════════════════════ */
 
-  .sbdocs .docblock-argstable-body tr,
-  .sbdocs .docblock-argstable-body td {
+  /* 표 전체 — 그림자/배경 제거 */
+  html body .sbdocs .docblock-argstable {
     background: transparent !important;
-    color: #2d3142 !important;
-    padding: 16px 14px !important;
+    box-shadow: none !important;
+    border: 1px solid #e6e8ec !important;
+    border-radius: 8px !important;
+    overflow: hidden;
+  }
+
+  /* 헤더 */
+  html body .sbdocs .docblock-argstable th {
+    background: #f8f9fa !important;
+    color: #6b7280 !important;
+    border-bottom: 1px solid #e6e8ec !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    padding: 10px 14px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  /* 행 */
+  html body .sbdocs .docblock-argstable-body tr {
+    border-bottom: 1px solid #f0f1f3 !important;
+  }
+  html body .sbdocs .docblock-argstable-body tr:last-child {
+    border-bottom: 0 !important;
+  }
+  html body .sbdocs .docblock-argstable-body tr,
+  html body .sbdocs .docblock-argstable-body td {
+    background: #fff !important;
+    color: #374151 !important;
+    padding: 12px 14px !important;
     vertical-align: top !important;
-    line-height: 1.7;
+    line-height: 1.6;
   }
-  .sbdocs .docblock-argstable-body tr:hover td {
-    background: rgba(217, 119, 87, 0.04) !important;
-  }
-  .sbdocs .docblock-argstable-body tr {
-    border-bottom: 1px solid #eef0f3 !important;
-  }
-  .sbdocs .docblock-argstable-body td span,
-  .sbdocs .docblock-argstable-body td div {
-    color: #4b5563 !important;
+  html body .sbdocs .docblock-argstable-body tr:hover td {
+    background: #fafbfc !important;
   }
 
-  /* ArgTypes chip */
-  .sbdocs .docblock-argstable-body td > div > span,
-  .sbdocs .docblock-argstable-body td > div > div,
-  .sbdocs .docblock-argstable-body td span[class^="css-"]:not([class*="sbdocs"]) {
-    background-color: #f3f4f6 !important;
-    color: #4b5563 !important;
-    border: 1px solid #e5e7eb !important;
-    border-radius: 4px !important;
+  /* Name 컬럼 — prop 이름 강조 */
+  html body .sbdocs .docblock-argstable-body tr td:first-child {
+    color: #1a1f2b !important;
+  }
+  html body .sbdocs .docblock-argstable-body tr td:first-child * {
+    color: #1a1f2b !important;
+    font-weight: 600;
   }
 
-  .sbdocs .docblock-argstable-body td:nth-child(2) > div {
+  /* Description 컬럼 텍스트 */
+  html body .sbdocs .docblock-argstable-body td span,
+  html body .sbdocs .docblock-argstable-body td div {
+    color: #6b7280 !important;
+  }
+
+  /* Description 레이아웃 */
+  html body .sbdocs .docblock-argstable-body td:nth-child(2) > div {
     display: flex !important;
     flex-wrap: wrap !important;
-    gap: 6px !important;
+    gap: 4px !important;
     align-items: center;
   }
-  .sbdocs .docblock-argstable-body td:nth-child(2) > div > span:first-child {
+  /* 설명 텍스트는 별도 줄 */
+  html body .sbdocs .docblock-argstable-body td:nth-child(2) > div > span:first-child {
     flex-basis: 100%;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
     background: transparent !important;
     border: 0 !important;
-    color: #4b5563 !important;
+    color: #6b7280 !important;
     padding: 0 !important;
+    font-size: 13px !important;
   }
 
-  /* Name 컬럼 */
-  .sbdocs .docblock-argstable-body tr td:first-child {
-    color: #1a1f2b !important;
-  }
-  .sbdocs .docblock-argstable-body tr td:first-child * {
-    color: #1a1f2b !important;
-    font-weight: 600;
-  }
-
-  /* Control 입력 */
-  .sbdocs .docblock-argstable input,
-  .sbdocs .docblock-argstable select,
-  .sbdocs .docblock-argstable textarea,
-  .sbdocs .docblock-argstable [role="combobox"] {
-    background: #f9fafb !important;
-    color: #2d3142 !important;
-    border: 1px solid #e0e3e8 !important;
-    border-radius: 6px;
-  }
-  .sbdocs .docblock-argstable input::placeholder,
-  .sbdocs .docblock-argstable textarea::placeholder {
+  /* Enum chip — 미니멀하게 (배경 거의 없이, 테두리만 살짝) */
+  html body .sbdocs .docblock-argstable-body td > div > span,
+  html body .sbdocs .docblock-argstable-body td > div > div,
+  html body .sbdocs .docblock-argstable-body td span[class^="css-"]:not([class*="sbdocs"]) {
+    background-color: transparent !important;
     color: #9ca3af !important;
-  }
-  .sbdocs .docblock-argstable input[type="radio"],
-  .sbdocs .docblock-argstable input[type="checkbox"] {
-    accent-color: #d97757;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 4px !important;
+    font-size: 11px !important;
+    padding: 1px 6px !important;
+    font-family: "JetBrains Mono", ui-monospace, monospace !important;
   }
 
-  /* ArgTypes section header */
-  .sbdocs .docblock-argstable tr[class*="ArgsTableSection"],
-  .sbdocs .docblock-argstable tr[class*="SectionRow"],
-  .sbdocs .docblock-argstable tr td[colspan] {
-    background: rgba(217, 119, 87, 0.05) !important;
-    color: #c4633e !important;
+  /* Default 컬럼 — 값 강조 */
+  html body .sbdocs .docblock-argstable-body td:nth-child(3) span,
+  html body .sbdocs .docblock-argstable-body td:nth-child(3) div {
+    color: #374151 !important;
+    background: transparent !important;
+  }
+
+  /* Control 입력 — 그림자 없이 깔끔하게 */
+  html body .sbdocs .docblock-argstable input,
+  html body .sbdocs .docblock-argstable select,
+  html body .sbdocs .docblock-argstable textarea,
+  html body .sbdocs .docblock-argstable [role="combobox"] {
+    background: #fff !important;
+    color: #374151 !important;
+    border: 1px solid #e0e3e8 !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+    outline: none !important;
+    font-size: 13px !important;
+  }
+  html body .sbdocs .docblock-argstable input:focus,
+  html body .sbdocs .docblock-argstable select:focus,
+  html body .sbdocs .docblock-argstable textarea:focus {
+    border-color: #d97757 !important;
+    box-shadow: 0 0 0 1px rgba(217, 119, 87, 0.2) !important;
+  }
+  html body .sbdocs .docblock-argstable input::placeholder,
+  html body .sbdocs .docblock-argstable textarea::placeholder {
+    color: #c5cbd6 !important;
+  }
+  html body .sbdocs .docblock-argstable input[type="radio"],
+  html body .sbdocs .docblock-argstable input[type="checkbox"] {
+    accent-color: #d97757;
+    box-shadow: none !important;
+  }
+
+  /* Reset/Action 버튼 — 미니멀 */
+  html body .sbdocs .docblock-argstable button {
+    background: transparent !important;
+    color: #9ca3af !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: none !important;
+    border-radius: 4px !important;
+  }
+  html body .sbdocs .docblock-argstable button:hover {
+    color: #d97757 !important;
+    border-color: #d97757 !important;
+  }
+
+  /* Section header (PROPS / EVENTS) */
+  html body .sbdocs .docblock-argstable tr[class*="ArgsTableSection"],
+  html body .sbdocs .docblock-argstable tr[class*="SectionRow"],
+  html body .sbdocs .docblock-argstable tr td[colspan] {
+    background: #f8f9fa !important;
+    color: #9ca3af !important;
     font-family: "JetBrains Mono", ui-monospace, monospace;
     font-size: 11px;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     font-weight: 600;
     text-transform: uppercase;
-    border-top: 1px solid #eef0f3 !important;
-    border-bottom: 1px solid #eef0f3 !important;
-  }
-
-  .sbdocs .docblock-argstable th {
-    background: transparent !important;
-    color: #6b7280 !important;
-    border-bottom-color: #e6e8ec !important;
+    border-top: 1px solid #e6e8ec !important;
+    border-bottom: 1px solid #e6e8ec !important;
   }
 
   /* ── bullet list 줄간격 ─────────── */
