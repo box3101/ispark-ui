@@ -921,6 +921,12 @@ declare interface Props_22 {
     disabled?: boolean;
 }
 
+declare interface Props_23 {
+    modelValue?: string;
+    editable?: boolean;
+    placeholder?: string;
+}
+
 declare interface Props_3 {
     modelValue?: string | number;
     options: SelectOption[];
@@ -1160,6 +1166,18 @@ export declare const UiLoading: DefineComponent<Props_8, {}, {}, {}, {}, Compone
 text: string;
 overlay: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
+
+export declare const UiMarkdownEditor: DefineComponent<Props_23, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+"update:modelValue": (value: string) => any;
+}, string, PublicProps, Readonly<Props_23> & Readonly<{
+"onUpdate:modelValue"?: ((value: string) => any) | undefined;
+}>, {
+modelValue: string;
+placeholder: string;
+editable: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, false, {
+sourceRef: HTMLTextAreaElement;
+}, HTMLDivElement>;
 
 export declare const UiModal: __VLS_WithTemplateSlots_3<typeof __VLS_component_3, __VLS_TemplateResult_3["slots"]>;
 
