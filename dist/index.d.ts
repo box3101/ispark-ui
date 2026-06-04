@@ -128,6 +128,7 @@ numberOnly: boolean;
 allowDecimal: boolean;
 allowNegative: boolean;
 decimals: number;
+useComma: boolean;
 clearable: boolean;
 showPasswordToggle: boolean;
 searchAriaLabel: string;
@@ -868,6 +869,12 @@ declare interface Props_2 {
      * 입력 즉시 초과 자릿수 제거. 예: `decimals=2` → "0.123" 입력 시 "0.12"로 자동 보정.
      */
     decimals?: number;
+    /**
+     * 천 단위 콤마 — `numberOnly=true`일 때 자동 적용.
+     * 입력/표시 시 "1,234,567" 형태로 포맷. emit 값은 숫자(콤마 제거).
+     * 기본값: `numberOnly=true`이면 자동 true.
+     */
+    useComma?: boolean;
     /**
      * 입력값 삭제 버튼 — 값이 비어있지 않고 disabled/readonly 아닐 때 우측 X 표시.
      * 클릭 시 값 비움 + input re-focus + `clear` 이벤트 발생.

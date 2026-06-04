@@ -54,7 +54,7 @@
         :type="resolvedType"
         :role="type === 'search' ? 'searchbox' : undefined"
         :inputmode="inputMode"
-        :value="modelValue"
+        :value="displayValue"
         :placeholder="placeholder"
         :disabled="disabled"
         :readonly="readonly"
@@ -236,6 +236,12 @@ interface Props {
    */
   decimals?: number
   /**
+   * 천 단위 콤마 — `numberOnly=true`일 때 자동 적용.
+   * 입력/표시 시 "1,234,567" 형태로 포맷. emit 값은 숫자(콤마 제거).
+   * 기본값: `numberOnly=true`이면 자동 true.
+   */
+  useComma?: boolean
+  /**
    * 입력값 삭제 버튼 — 값이 비어있지 않고 disabled/readonly 아닐 때 우측 X 표시.
    * 클릭 시 값 비움 + input re-focus + `clear` 이벤트 발생.
    */
@@ -276,6 +282,7 @@ const props = withDefaults(defineProps<Props>(), {
   allowDecimal: false,
   allowNegative: false,
   decimals: undefined,
+  useComma: undefined,
   clearable: false,
   showPasswordToggle: false,
   searchAriaLabel: '검색',
@@ -366,14 +373,38 @@ const validDecimals = computed(() => {
   return undefined
 })
 
+// 콤마 활성 여부 — useComma 명시 안 하면 numberOnly일 때 자동 true
+const isCommaEnabled = computed(() => {
+  if (props.useComma !== undefined) return props.useComma
+  return props.numberOnly
+})
+
+// 콤마 포맷 유틸
+const addCommas = (val: string): string => {
+  if (!val || val === '-') return val
+  const parts = val.split('.')
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return parts.join('.')
+}
+
+const removeCommas = (val: string): string => val.replace(/,/g, '')
+
+// 표시용 값 — 콤마 포맷 적용
+const displayValue = computed(() => {
+  if (!isCommaEnabled.value) return props.modelValue
+  const raw = String(props.modelValue ?? '')
+  return addCommas(raw)
+})
+
 // emit 값 타입 정합 — modelValue가 number면 number로 emit
 const emitValue = (raw: string): string | number => {
+  const cleaned = removeCommas(raw)
   if (typeof props.modelValue === 'number') {
-    if (raw === '' || raw === '-') return raw
-    const n = parseFloat(raw)
+    if (cleaned === '' || cleaned === '-') return cleaned
+    const n = parseFloat(cleaned)
     if (!Number.isNaN(n)) return n
   }
-  return raw
+  return cleaned
 }
 
 // dev 환경 — props 검증 / 사용성 안내
@@ -483,20 +514,49 @@ const onBlur = (e: FocusEvent) => {
   isFocused.value = false
   const input = e.target as HTMLInputElement
   if (!props.numberOnly) return
-  if (props.min === undefined && props.max === undefined && props.step === undefined) return
 
-  const next = applyNumericConstraints(input.value)
-  if (next !== input.value) {
-    input.value = next
+  const raw = removeCommas(input.value)
+
+  if (props.min !== undefined || props.max !== undefined || props.step !== undefined) {
+    const next = applyNumericConstraints(raw)
+    if (isCommaEnabled.value) {
+      input.value = addCommas(next)
+    } else if (next !== input.value) {
+      input.value = next
+    }
     emit('update:modelValue', emitValue(next))
+  } else if (isCommaEnabled.value) {
+    // min/max/step 없어도 blur 시 콤마 포맷 정리
+    const cleaned = stripNonNumeric(raw)
+    input.value = addCommas(cleaned)
+    emit('update:modelValue', emitValue(cleaned))
   }
 }
 
 // 입력값 동기화 — IME 안전성 위해 syncValue 함수로 분리
 const syncValue = (input: HTMLInputElement) => {
   if (props.numberOnly) {
-    const cleaned = stripNonNumeric(input.value)
-    if (cleaned !== input.value) {
+    const raw = removeCommas(input.value)
+    const cleaned = stripNonNumeric(raw)
+    // 콤마 포맷 적용 후 DOM에 반영
+    if (isCommaEnabled.value) {
+      const formatted = addCommas(cleaned)
+      if (input.value !== formatted) {
+        // 커서 위치 보정
+        const cursorPos = input.selectionStart ?? 0
+        const beforeCommas = input.value.slice(0, cursorPos).replace(/,/g, '').length
+        input.value = formatted
+        // 콤마 개수 차이만큼 커서 보정
+        let newPos = 0
+        let count = 0
+        for (let i = 0; i < formatted.length; i++) {
+          if (formatted[i] !== ',') count++
+          if (count > beforeCommas) break
+          newPos = i + 1
+        }
+        input.setSelectionRange(newPos, newPos)
+      }
+    } else if (cleaned !== input.value) {
       input.value = cleaned
     }
     emit('update:modelValue', emitValue(cleaned))
