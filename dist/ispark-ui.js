@@ -36422,7 +36422,8 @@ const ume = {
     resizable: { type: Boolean, default: !0 },
     showResize: { type: Boolean, default: !0 },
     showFullscreen: { type: Boolean, default: !0 },
-    persistKey: {}
+    persistKey: {},
+    confirmBeforeClose: { type: Boolean, default: !0 }
   },
   emits: ["update:open"],
   setup(t, { emit: e }) {
@@ -36472,13 +36473,13 @@ const ume = {
       o("update:open", !1);
     }
     async function b() {
-      return h.value ? lme({
+      return !n.confirmBeforeClose || !h.value ? !0 : lme({
         title: "변경사항 확인",
         message: "수정 중인 내용이 있습니다. 닫으시겠습니까?",
         confirmText: "닫기",
         cancelText: "취소",
         variant: "danger"
-      }) : !0;
+      });
     }
     async function v() {
       n.closeOnOverlayClick && await b() && g();
@@ -36618,7 +36619,7 @@ const ume = {
       }, 8, ["name"])
     ]));
   }
-}), mCe = /* @__PURE__ */ Ge(gme, [["__scopeId", "data-v-8e56c21e"]]), bme = {
+}), mCe = /* @__PURE__ */ Ge(gme, [["__scopeId", "data-v-e100c6b2"]]), bme = {
   key: 0,
   class: "ui-file-list"
 }, Mme = ["href"], vme = ["src", "alt"], xme = { class: "ui-file-item__info" }, _me = { class: "ui-file-item__name" }, wme = ["onClick"], Cme = ["href"], Lme = ["onClick"], Sme = /* @__PURE__ */ Le({

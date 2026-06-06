@@ -101,6 +101,8 @@ interface Props {
   showFullscreen?: boolean
   /** localStorage 저장 키 — 미지정 시 title 자동 사용 */
   persistKey?: string
+  /** 닫기 전 변경사항 확인 모달 표시 여부 (기본: true) */
+  confirmBeforeClose?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -116,6 +118,7 @@ const props = withDefaults(defineProps<Props>(), {
   resizable: true,
   showResize: true,
   showFullscreen: true,
+  confirmBeforeClose: true,
 })
 
 const emit = defineEmits<{
@@ -202,7 +205,7 @@ function close() {
 }
 
 async function confirmClose(): Promise<boolean> {
-  if (!isDirty.value) return true
+  if (!props.confirmBeforeClose || !isDirty.value) return true
   return openConfirm({
     title: '변경사항 확인',
     message: '수정 중인 내용이 있습니다. 닫으시겠습니까?',

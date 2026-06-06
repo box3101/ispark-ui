@@ -85,6 +85,7 @@ maxWidth: string;
 minWidth: string;
 resizable: boolean;
 showResize: boolean;
+confirmBeforeClose: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {
 drawerRef: HTMLElement;
 }, any>;
@@ -906,6 +907,8 @@ declare interface Props_20 {
     showFullscreen?: boolean;
     /** localStorage 저장 키 — 미지정 시 title 자동 사용 */
     persistKey?: string;
+    /** 닫기 전 변경사항 확인 모달 표시 여부 (기본: true) */
+    confirmBeforeClose?: boolean;
 }
 
 declare interface Props_21 {
