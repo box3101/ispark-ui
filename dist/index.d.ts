@@ -673,6 +673,8 @@ declare interface Props_12 {
     id?: string;
     /** maxLength 지정 시 우하단 'n / max' 카운터 표시. 기본 false */
     showCounter?: boolean;
+    /** 우상단 전체보기 버튼 표시. 기본 true */
+    expandable?: boolean;
 }
 
 declare interface Props_13 {
@@ -1324,8 +1326,10 @@ maxRows: number;
 radius: "sm" | "base" | "lg";
 spellcheck: boolean;
 showCounter: boolean;
+expandable: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {
 textareaRef: HTMLTextAreaElement;
+expandTextareaRef: HTMLTextAreaElement;
 }, HTMLDivElement>;
 
 export declare const UiToast: DefineComponent<    {}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
