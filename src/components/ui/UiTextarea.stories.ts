@@ -33,6 +33,7 @@ ispark-ui 표준 멀티라인 입력 컴포넌트. 자동 높이 조절(autoResi
 - **\`radius\`** \`'sm' | 'base' | 'lg'\` — 4/6/8px
 - **\`border\`** \`boolean\` — 테두리 표시 (기본 true)
 - **\`spellcheck\`** \`boolean\` — 브라우저 맞춤법 밑줄 (기본 true)
+- **\`expandable\`** \`boolean\` — 우상단 전체보기 버튼 (기본 true). 클릭 시 모달로 큰 textarea 편집
 
 ## API — 폼 필드 (UiInput 일관성)
 - **\`label\`** \`string\` — 라벨 텍스트. \`<label htmlFor>\` ↔ textarea id 자동 매칭
@@ -95,6 +96,10 @@ ispark-ui 표준 멀티라인 입력 컴포넌트. 자동 높이 조절(autoResi
     showCounter: {
       control: 'boolean',
       table: { category: 'Behavior', defaultValue: { summary: 'false' } },
+    },
+    expandable: {
+      control: 'boolean',
+      table: { category: 'Behavior', defaultValue: { summary: 'true' } },
     },
     disabled: {
       control: 'boolean',
@@ -276,6 +281,45 @@ export const AllSizes: Story = {
         <UiTextarea v-model="v3" size="lg" border label="lg" />
       </div>
     `,
+  }),
+}
+
+// 전체보기 (expandable) — 기본 true
+export const Expandable: Story = {
+  args: {
+    label: '상세 설명',
+    placeholder: '내용을 입력하세요... (우상단 아이콘으로 전체보기)',
+    border: true,
+    expandable: true,
+    rows: 3,
+    maxRows: 5,
+  },
+  render: (args) => ({
+    components: { UiTextarea },
+    setup: () => {
+      const value = ref('이 텍스트는 전체보기로 확대해서 편집할 수 있습니다.\n\n우상단의 확대 아이콘을 클릭하거나, textarea 위에 마우스를 올려보세요.\n\n모달에서 수정한 내용은 실시간으로 반영됩니다.\n\nESC 또는 배경 클릭으로 닫을 수 있습니다.')
+      return { args, value }
+    },
+    template: '<UiTextarea v-bind="args" v-model="value" />',
+  }),
+}
+
+// 전체보기 비활성화
+export const ExpandDisabled: Story = {
+  args: {
+    label: '짧은 메모',
+    placeholder: '전체보기 없는 textarea',
+    border: true,
+    expandable: false,
+    rows: 2,
+  },
+  render: (args) => ({
+    components: { UiTextarea },
+    setup: () => {
+      const value = ref('')
+      return { args, value }
+    },
+    template: '<UiTextarea v-bind="args" v-model="value" />',
   }),
 }
 
