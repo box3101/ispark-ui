@@ -580,7 +580,7 @@ const sB = {
     size: { default: "md" },
     showClose: { type: Boolean, default: !0 },
     showOverlay: { type: Boolean, default: !0 },
-    showFullscreen: { type: Boolean, default: !1 },
+    showFullscreen: { type: Boolean, default: !0 },
     closeOnOverlayClick: { type: Boolean, default: !0 },
     closeOnEscape: { type: Boolean, default: !0 },
     customClass: { default: "" },
