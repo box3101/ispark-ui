@@ -69,36 +69,28 @@
       </span>
     </div>
 
-    <!-- 전체보기 모달 -->
-    <Teleport to="body">
-      <Transition name="ui-textarea-modal">
-        <div v-if="expandOpen" class="ui-textarea-modal-overlay" @click.self="closeExpand">
-          <div class="ui-textarea-modal-content">
-            <div class="ui-textarea-modal-header">
-              <span class="ui-textarea-modal-title">{{ label || '전체보기' }}</span>
-              <button type="button" class="ui-textarea-modal-close" aria-label="닫기" @click="closeExpand">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                </svg>
-              </button>
-            </div>
-            <textarea
-              ref="expandTextareaRef"
-              class="ui-textarea-modal-textarea"
-              :value="modelValue"
-              :placeholder="placeholder"
-              :readonly="readonly"
-              :maxlength="maxLength"
-              :spellcheck="spellcheck"
-              @input="onExpandInput"
-            />
-            <div v-if="showCounter && maxLength" class="ui-textarea-modal-counter">
-              {{ modelValue.length }} / {{ maxLength }}
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
+    <!-- 전체보기 모달 (UiModal 활용) -->
+    <UiModal
+      :open="expandOpen"
+      :title="label || '전체보기'"
+      size="lg"
+      show-fullscreen
+      @update:open="expandOpen = $event"
+    >
+      <textarea
+        ref="expandTextareaRef"
+        class="ui-textarea-modal-textarea"
+        :value="modelValue"
+        :placeholder="placeholder"
+        :readonly="readonly"
+        :maxlength="maxLength"
+        :spellcheck="spellcheck"
+        @input="onExpandInput"
+      />
+      <div v-if="showCounter && maxLength" class="ui-textarea-modal-counter">
+        {{ modelValue.length }} / {{ maxLength }}
+      </div>
+    </UiModal>
 
     <!-- 에러 메시지 (있으면 desc 대신 노출) -->
     <p
@@ -122,6 +114,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, nextTick, useId } from 'vue'
+import UiModal from './UiModal.vue'
 
 interface Props {
   modelValue?: string
@@ -198,27 +191,13 @@ const textareaRef = ref<HTMLTextAreaElement | null>(null)
 const expandTextareaRef = ref<HTMLTextAreaElement | null>(null)
 const expandOpen = ref(false)
 
-const closeExpand = () => {
-  expandOpen.value = false
-}
-
 const onExpandInput = (event: Event) => {
   const target = event.target as HTMLTextAreaElement
   emit('update:modelValue', target.value)
 }
 
-// ESC로 모달 닫기
-const onExpandKeydown = (e: KeyboardEvent) => {
-  if (e.key === 'Escape') closeExpand()
-}
-
 watch(expandOpen, (open) => {
-  if (open) {
-    document.addEventListener('keydown', onExpandKeydown)
-    nextTick(() => expandTextareaRef.value?.focus())
-  } else {
-    document.removeEventListener('keydown', onExpandKeydown)
-  }
+  if (open) nextTick(() => expandTextareaRef.value?.focus())
 })
 
 const getLineHeight = (): number => {
@@ -455,61 +434,7 @@ defineExpose({
   padding-right: 32px;
 }
 
-// 전체보기 모달
-.ui-textarea-modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-
-.ui-textarea-modal-content {
-  background: var(--color-bg-elevated, #fff);
-  border-radius: 12px;
-  width: 100%;
-  max-width: 720px;
-  max-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-}
-
-.ui-textarea-modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--color-border, #e5e7eb);
-}
-
-.ui-textarea-modal-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--color-text-primary, #1f2937);
-}
-
-.ui-textarea-modal-close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: none;
-  border-radius: 6px;
-  color: var(--color-text-muted, #9ca3af);
-  cursor: pointer;
-
-  &:hover {
-    background: var(--color-surface, #f3f4f6);
-    color: var(--color-text-primary, #374151);
-  }
-}
-
+// 전체보기 모달 내 textarea
 .ui-textarea-modal-textarea {
   flex: 1;
   min-height: 300px;
@@ -536,12 +461,6 @@ defineExpose({
   color: var(--color-text-muted, #9ca3af);
   border-top: 1px solid var(--color-border, #e5e7eb);
 }
-
-// 모달 트랜지션
-.ui-textarea-modal-enter-active { transition: opacity 0.2s ease; }
-.ui-textarea-modal-leave-active { transition: opacity 0.15s ease; }
-.ui-textarea-modal-enter-from,
-.ui-textarea-modal-leave-to { opacity: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   .ui-textarea {
