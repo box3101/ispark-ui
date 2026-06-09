@@ -437,12 +437,13 @@ defineExpose({
 // 전체보기 모달 내 textarea
 .ui-textarea-modal-textarea {
   flex: 1;
+  width: 100%;
   min-height: 300px;
-  max-height: calc(80vh - 100px);
   padding: 16px;
   border: none;
   outline: none;
   resize: none;
+  box-sizing: border-box;
   font-family: inherit;
   font-size: 14px;
   line-height: 1.7;
