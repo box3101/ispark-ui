@@ -40,6 +40,8 @@ export type { FileItem } from './components/ui/UiFileList.vue'
 export { default as UiFileUpload } from './components/ui/UiFileUpload.vue'
 export { default as UiMarkdownEditor } from './components/ui/UiMarkdownEditor.vue'
 export type { AccordionItemDef } from './components/ui/UiAccordion.vue'
+export { default as UiCalendarMonth } from './components/ui/UiCalendarMonth.vue'
+export type { CalendarMonthEvent, CalendarEventSpan } from './components/ui/UiCalendarMonth.vue'
 
 // Confirm 컴포넌트 + composable — openConfirm()으로 Promise<boolean> 반환
 export { default as UiConfirm } from './components/ui/UiConfirm.vue'
