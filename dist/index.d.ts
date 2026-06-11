@@ -1,6 +1,4 @@
 import { AllowedComponentProps } from 'vue';
-import { CalendarEventSpan } from './components/ui/UiCalendarMonth.vue';
-import { CalendarMonthEvent } from './components/ui/UiCalendarMonth.vue';
 import { ComponentCustomProps } from 'vue';
 import { ComponentOptionsMixin } from 'vue';
 import { ComponentProvideOptions } from 'vue';
@@ -11,7 +9,6 @@ import { Ref } from 'vue';
 import { RendererElement } from 'vue';
 import { RendererNode } from 'vue';
 import { ShallowUnwrapRef } from 'vue';
-import { default as UiCalendarMonth } from './components/ui/UiCalendarMonth.vue';
 import { VNode } from 'vue';
 import { VNodeProps } from 'vue';
 
@@ -425,6 +422,12 @@ declare type __VLS_WithTemplateSlots_12<T, S> = T & {
     };
 };
 
+declare type __VLS_WithTemplateSlots_13<T, S> = T & {
+    new (): {
+        $slots: S;
+    };
+};
+
 declare type __VLS_WithTemplateSlots_2<T, S> = T & {
     new (): {
         $slots: S;
@@ -488,9 +491,26 @@ export declare type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
 
 export declare type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
 
-export { CalendarEventSpan }
+/** 막대 위치 — 단일/여러 날 일정의 시작·중간·끝 */
+export declare type CalendarEventSpan = 'single' | 'start' | 'middle' | 'end';
 
-export { CalendarMonthEvent }
+/** 캘린더 일정(정규화 모델). end 없으면 단일일, 있으면 여러 날 막대로 표시 */
+export declare interface CalendarMonthEvent {
+    /** 고유 id — 여러 소스를 합칠 땐 'todo-5'처럼 충돌 없는 값 권장 */
+    id: string | number;
+    /** 시작일 'YYYY-MM-DD' */
+    start: string;
+    /** 종료일 'YYYY-MM-DD' (없거나 start보다 빠르면 단일일 취급) */
+    end?: string | null;
+    /** 막대 라벨 */
+    title: string;
+    /** 막대 색 (기본 var(--color-primary)) */
+    color?: string;
+    /** 하루종일 여부 (표시는 consumer 자유, meta로 전달) */
+    allDay?: boolean;
+    /** 도메인 데이터 passthrough — #event 슬롯에서 활용 */
+    meta?: unknown;
+}
 
 /** 토스트 수동 닫기 */
 export declare function closeToast(id: number): void;
@@ -1115,7 +1135,71 @@ export declare const UiBadgeGroup: __VLS_WithTemplateSlots_6<typeof __VLS_compon
 
 export declare const UiButton: __VLS_WithTemplateSlots<typeof __VLS_component, __VLS_TemplateResult["slots"]>;
 
-export { UiCalendarMonth }
+export declare const UiCalendarMonth: __VLS_WithTemplateSlots_13<DefineComponent<    {
+/** 표시할 연도 */
+year: number;
+/** 표시할 월 (1-12) */
+month: number;
+/** 일정 목록 */
+events?: CalendarMonthEvent[];
+/** 선택된 날짜 'YYYY-MM-DD' */
+selectedDate?: string;
+/** 오늘 날짜 'YYYY-MM-DD' — 미지정 시 실제 오늘 (테스트/스토리에서 주입) */
+today?: string;
+/** 한 칸에 표시할 최대 레인 수 (초과분은 +N) */
+maxLanes?: number;
+/** 좌우 스와이프로 월 전환 */
+swipeable?: boolean;
+/** 요일 헤더 표시 */
+showWeekdays?: boolean;
+}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+"update:year": (year: number) => any;
+"update:month": (month: number) => any;
+"change-month": (value: {
+year: number;
+month: number;
+}) => any;
+"select-date": (date: string) => any;
+"select-event": (event: CalendarMonthEvent) => any;
+}, string, PublicProps, Readonly<{
+/** 표시할 연도 */
+year: number;
+/** 표시할 월 (1-12) */
+month: number;
+/** 일정 목록 */
+events?: CalendarMonthEvent[];
+/** 선택된 날짜 'YYYY-MM-DD' */
+selectedDate?: string;
+/** 오늘 날짜 'YYYY-MM-DD' — 미지정 시 실제 오늘 (테스트/스토리에서 주입) */
+today?: string;
+/** 한 칸에 표시할 최대 레인 수 (초과분은 +N) */
+maxLanes?: number;
+/** 좌우 스와이프로 월 전환 */
+swipeable?: boolean;
+/** 요일 헤더 표시 */
+showWeekdays?: boolean;
+}> & Readonly<{
+"onUpdate:year"?: ((year: number) => any) | undefined;
+"onUpdate:month"?: ((month: number) => any) | undefined;
+"onChange-month"?: ((value: {
+year: number;
+month: number;
+}) => any) | undefined;
+"onSelect-date"?: ((date: string) => any) | undefined;
+"onSelect-event"?: ((event: CalendarMonthEvent) => any) | undefined;
+}>, {
+events: CalendarMonthEvent[];
+selectedDate: string;
+today: string;
+maxLanes: number;
+swipeable: boolean;
+showWeekdays: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>, {
+    event?(_: {
+        event: CalendarMonthEvent;
+        span: CalendarEventSpan;
+    }): any;
+}>;
 
 export declare const UiCheckbox: __VLS_WithTemplateSlots_7<typeof __VLS_component_7, __VLS_TemplateResult_7["slots"]>;
 

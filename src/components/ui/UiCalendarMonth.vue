@@ -24,33 +24,35 @@ export interface CalendarMonthEvent {
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 
-interface Props {
-  /** 표시할 연도 */
-  year: number
-  /** 표시할 월 (1-12) */
-  month: number
-  /** 일정 목록 */
-  events?: CalendarMonthEvent[]
-  /** 선택된 날짜 'YYYY-MM-DD' */
-  selectedDate?: string
-  /** 오늘 날짜 'YYYY-MM-DD' — 미지정 시 실제 오늘 (테스트/스토리에서 주입) */
-  today?: string
-  /** 한 칸에 표시할 최대 레인 수 (초과분은 +N) */
-  maxLanes?: number
-  /** 좌우 스와이프로 월 전환 */
-  swipeable?: boolean
-  /** 요일 헤더 표시 */
-  showWeekdays?: boolean
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  events: () => [],
-  selectedDate: undefined,
-  today: undefined,
-  maxLanes: 3,
-  swipeable: true,
-  showWeekdays: true,
-})
+// 인라인 타입(named interface 미사용) — dts 생성 시 비공개 이름 노출(TS4082) 방지
+const props = withDefaults(
+  defineProps<{
+    /** 표시할 연도 */
+    year: number
+    /** 표시할 월 (1-12) */
+    month: number
+    /** 일정 목록 */
+    events?: CalendarMonthEvent[]
+    /** 선택된 날짜 'YYYY-MM-DD' */
+    selectedDate?: string
+    /** 오늘 날짜 'YYYY-MM-DD' — 미지정 시 실제 오늘 (테스트/스토리에서 주입) */
+    today?: string
+    /** 한 칸에 표시할 최대 레인 수 (초과분은 +N) */
+    maxLanes?: number
+    /** 좌우 스와이프로 월 전환 */
+    swipeable?: boolean
+    /** 요일 헤더 표시 */
+    showWeekdays?: boolean
+  }>(),
+  {
+    events: () => [],
+    selectedDate: undefined,
+    today: undefined,
+    maxLanes: 3,
+    swipeable: true,
+    showWeekdays: true,
+  },
+)
 
 const emit = defineEmits<{
   'update:year': [year: number]

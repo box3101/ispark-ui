@@ -75113,7 +75113,7 @@ const Iwe = { class: "ui-markdown-toolbar" }, Awe = { class: "ui-markdown-toolba
       ], 4)
     ], 36));
   }
-}), OCe = /* @__PURE__ */ Ke(nCe, [["__scopeId", "data-v-ad67ff34"]]), oCe = ["innerHTML"], aCe = { class: "ui-confirm-actions" }, iCe = /* @__PURE__ */ Ie({
+}), OCe = /* @__PURE__ */ Ke(nCe, [["__scopeId", "data-v-b49ec5c5"]]), oCe = ["innerHTML"], aCe = { class: "ui-confirm-actions" }, iCe = /* @__PURE__ */ Ie({
   __name: "UiConfirm",
   setup(t) {
     const { confirmState: e } = pme();
