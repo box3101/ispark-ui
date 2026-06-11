@@ -145,7 +145,7 @@ const toastsByPlacement = computed(() => (placement: ToastPlacement) =>
   min-width: 280px;
   max-width: min(440px, calc(100vw - 40px));
   padding: $spacing-md $spacing-lg;
-  background: #fff;
+  background: var(--color-bg-elevated);
   border: 1px solid $color-border;
   border-radius: $border-radius-lg;
   box-shadow: $shadow-lg;

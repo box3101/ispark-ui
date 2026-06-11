@@ -1,13 +1,22 @@
 <template>
   <div
+    ref="wrapRef"
     class="ui-table-wrap"
-    :class="[{ 'is-scrollable': !!maxHeight }, size === 'sm' ? 'is-sm' : '']"
+    :class="[{ 'is-scrollable': !!maxHeight, 'is-borderless': !bordered, 'is-overflowing': isOverflowing }, size === 'sm' ? 'is-sm' : '']"
     :style="maxHeight ? { maxHeight } : undefined"
+    @scroll="onWrapScroll"
   >
-    <table class="ui-table">
+    <!-- 가로 스크롤 힌트 -->
+    <Transition name="scroll-hint-fade">
+      <div v-if="isOverflowing && !scrollDismissed" class="ui-table-scroll-hint">
+        ← 스크롤하여 더 보기 →
+      </div>
+    </Transition>
+
+    <table class="ui-table" :style="tableMinWidth ? { minWidth: tableMinWidth } : undefined">
       <colgroup>
         <col
-          v-for="col in columns"
+          v-for="col in visibleColumns"
           :key="col.key"
           :style="col.width ? { width: col.width } : undefined"
         />
@@ -16,9 +25,9 @@
       <thead :class="{ 'is-sticky': stickyHeader }">
         <tr>
           <th
-            v-for="(col, idx) in columns"
+            v-for="(col, idx) in visibleColumns"
             :key="col.key"
-            :class="{ 'is-last': idx === columns.length - 1, 'is-sortable': isColumnSortable(col) }"
+            :class="{ 'is-last': idx === visibleColumns.length - 1, 'is-sortable': isColumnSortable(col) }"
             :style="{ textAlign: col.headerAlign || 'center' }"
             :aria-sort="getAriaSort(col)"
           >
@@ -29,8 +38,19 @@
               :sort-order="getSortOrder(col.key)"
               :on-sort="() => onSortColumn(col)"
             >
+              <!-- 필터 드롭다운 -->
+              <div v-if="isColumnFilterable(col)" class="ui-table-filter">
+                <span class="ui-table-filter-label">{{ col.label }}</span>
+                <UiSelect
+                  :model-value="getFilterValue(col.key)"
+                  :options="col.filterOptions!"
+                  size="xs"
+                  @change="(val: string | number) => onFilterChange(col, val)"
+                />
+              </div>
+              <!-- 정렬 버튼 -->
               <button
-                v-if="isColumnSortable(col)"
+                v-else-if="isColumnSortable(col)"
                 type="button"
                 class="ui-table-sort-btn"
                 @click="onSortColumn(col)"
@@ -58,7 +78,7 @@
         <!-- 빈 상태 — #empty 슬롯 우선, 기본은 UiEmpty 컴포넌트 사용 -->
         <tr v-if="!data || data.length === 0">
           <td
-            :colspan="columns.length"
+            :colspan="visibleColumns.length"
             class="ui-table-empty"
           >
             <slot name="empty">
@@ -84,9 +104,9 @@
           @keydown="clickable && onRowKeydown($event, row, rowIdx)"
         >
           <td
-            v-for="(col, colIdx) in columns"
+            v-for="(col, colIdx) in visibleColumns"
             :key="col.key"
-            :class="{ 'is-last': colIdx === columns.length - 1 }"
+            :class="{ 'is-last': colIdx === visibleColumns.length - 1 }"
             :style="{ textAlign: col.align || 'center' }"
           >
             <slot
@@ -105,9 +125,16 @@
 </template>
 
 <script setup lang="ts" generic="TRow extends Record<string, unknown> = Record<string, unknown>">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import type { Ref } from 'vue'
 import UiEmpty from './UiEmpty.vue'
+import UiSelect from './UiSelect.vue'
+
+// 필터 옵션 타입
+export interface TableFilterOption {
+  label: string
+  value: string
+}
 
 // 테이블 컬럼 정의 (라이브러리 외부에서도 import 가능)
 export interface TableColumn {
@@ -118,6 +145,12 @@ export interface TableColumn {
   headerAlign?: 'left' | 'center' | 'right'
   sortable?: boolean
   sortType?: 'auto' | 'string' | 'number' | 'date'
+  /** 컬럼 헤더에 필터 드롭다운 표시 */
+  filterable?: boolean
+  /** 필터 옵션 목록 — 첫 번째 항목(value='')을 '전체'로 사용 */
+  filterOptions?: TableFilterOption[]
+  /** 뷰포트가 이 px 이하일 때 칼럼 숨김 */
+  hideBelow?: number
 }
 
 // 라이브러리 사용자에게도 export — rollupTypes 단계에서 default export가 참조하므로 public 필요
@@ -142,6 +175,8 @@ export interface UiTableProps<TRow extends Record<string, unknown> = Record<stri
    */
   selectedRowKey?: string
   selectedRowValue?: unknown
+  /** 컬럼 세로 구분선 표시 여부 (기본: true) */
+  bordered?: boolean
 }
 
 const props = withDefaults(defineProps<UiTableProps<TRow>>(), {
@@ -154,6 +189,74 @@ const props = withDefaults(defineProps<UiTableProps<TRow>>(), {
   size: 'md',
   selectedRowKey: undefined,
   selectedRowValue: undefined,
+  bordered: true,
+})
+
+// ===== 가로 스크롤 힌트 =====
+const wrapRef = ref<HTMLElement | null>(null)
+const isOverflowing = ref(false)
+const scrollDismissed = ref(false)
+
+function checkOverflow() {
+  if (!wrapRef.value) return
+  isOverflowing.value = wrapRef.value.scrollWidth > wrapRef.value.clientWidth
+}
+
+function onWrapScroll() {
+  if (!scrollDismissed.value && isOverflowing.value) {
+    scrollDismissed.value = true
+  }
+}
+
+let resizeObserver: ResizeObserver | null = null
+
+// ===== 반응형 칼럼 숨김 =====
+const windowWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 9999)
+
+let resizeTimer: ReturnType<typeof setTimeout> | null = null
+function onResize() {
+  if (resizeTimer) clearTimeout(resizeTimer)
+  resizeTimer = setTimeout(() => {
+    windowWidth.value = window.innerWidth
+  }, 150)
+}
+
+onMounted(() => {
+  window.addEventListener('resize', onResize)
+  // 가로 스크롤 감지
+  if (wrapRef.value) {
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        checkOverflow()
+        if (!isOverflowing.value) scrollDismissed.value = false
+      })
+      resizeObserver.observe(wrapRef.value)
+    }
+    checkOverflow()
+  }
+})
+onUnmounted(() => {
+  window.removeEventListener('resize', onResize)
+  if (resizeTimer) clearTimeout(resizeTimer)
+  resizeObserver?.disconnect()
+})
+
+const visibleColumns = computed(() =>
+  props.columns.filter(col => !col.hideBelow || windowWidth.value > col.hideBelow),
+)
+
+// 컬럼 width 합계 → table min-width (px 단위 컬럼만 합산)
+const tableMinWidth = computed(() => {
+  let total = 0
+  let hasWidth = false
+  for (const col of visibleColumns.value) {
+    if (col.width) {
+      const px = parseInt(col.width)
+      if (!isNaN(px)) { total += px; hasWidth = true }
+    }
+  }
+  // width 지정 컬럼이 있으면 min-width 설정, 없으면 auto
+  return hasWidth && total > 0 ? `${total}px` : undefined
 })
 
 // 선택 행 추적 — 두 가지 모드
@@ -222,7 +325,14 @@ const getComparableValue = (value: unknown, sortType: TableColumn['sortType']) =
 }
 
 const displayedData = computed(() => {
-  const rows = [...props.data]
+  // 1) 필터링
+  let rows = [...props.data]
+  const filters = filterState.value
+  for (const [key, val] of Object.entries(filters)) {
+    if (val) rows = rows.filter((row) => String(row[key]) === val)
+  }
+
+  // 2) 정렬
   const { key, order } = sortState.value
   if (!key || !order) return rows
   const col = props.columns.find((item) => item.key === key)
@@ -254,7 +364,28 @@ watch(
 
 const emit = defineEmits<{
   'row-click': [row: TRow, index: number]
+  'filter-change': [filters: Record<string, string>]
 }>()
+
+// ===== 필터 =====
+const filterState = ref<Record<string, string>>({}) as Ref<Record<string, string>>
+
+const isColumnFilterable = (col: TableColumn) =>
+  col.filterable === true && col.filterOptions && col.filterOptions.length > 0
+
+const getFilterValue = (key: string) => filterState.value[key] ?? ''
+
+const onFilterChange = (col: TableColumn, val: string | number) => {
+  const v = String(val)
+  if (v === '') {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+    delete filterState.value[col.key]
+  } else {
+    filterState.value[col.key] = v
+  }
+  // 새 객체로 emit (외부에서 watch 가능)
+  emit('filter-change', { ...filterState.value })
+}
 
 // 키보드 활성화 — Enter/Space로 row-click 발생 (Space는 페이지 스크롤 방지)
 const onRowKeydown = (e: KeyboardEvent, row: TRow, index: number) => {
@@ -272,11 +403,13 @@ const onRowClick = (row: TRow, index: number) => {
   emit('row-click', row, index)
 }
 
-// data가 새로 주입되면 (reference 변경) uncontrolled selection 리셋
+// data가 새로 주입되면 (reference 변경) uncontrolled selection 리셋 + overflow 재체크
 watch(
   () => props.data,
   () => {
     if (!hasControlledSelection.value) internalSelectedRow.value = null
+    // 데이터 변경 후 DOM 업데이트 뒤 overflow 재체크
+    nextTick(checkOverflow)
   },
 )
 </script>
@@ -328,7 +461,8 @@ watch(
       padding: 0 12px;
       background: $color-background;
       @include typo($body-medium-bold);
-      color: $color-text-muted;
+      font-weight: 500;
+      color: $color-text-dark;
       white-space: nowrap;
       vertical-align: middle;
 
@@ -348,16 +482,12 @@ watch(
       // row-click이 clickable=true일 때만 발생하는 것과 시맨틱 일치.
       // selected 행(primary 0.08)과 같은 색조 0.04로 톤 일관성 확보.
       &.is-clickable:hover td {
-        background: rgba(var(--color-primary-rgb, 59, 130, 246), 0.04);
+        background: rgba(var(--color-primary-rgb, 59, 130, 246), 0.07);
       }
 
       &.is-clickable {
         td {
           cursor: pointer;
-        }
-
-        td:first-child {
-          cursor: default;
         }
 
         // 키보드 포커스 시 행 강조 — Button/Select와 동일한 outline ring 패턴
@@ -392,12 +522,6 @@ watch(
     }
   }
 
-  // 첫 번째 셀(체크박스 등) 가운데 정렬
-  th:first-child,
-  td:first-child {
-    text-align: center;
-    vertical-align: middle;
-  }
 }
 
 .ui-table-sort-btn {
@@ -425,6 +549,17 @@ watch(
   }
 }
 
+// 필터
+.ui-table-filter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.ui-table-filter-label {
+  white-space: nowrap;
+  font-size: inherit;
+}
+
 // 빈 상태
 .ui-table-empty {
   height: 120px;
@@ -433,36 +568,91 @@ watch(
   @include typo($body-medium);
 }
 
+// ===== borderless (세로 구분선 제거) =====
+.ui-table-wrap.is-borderless {
+  .ui-table {
+    thead th {
+      padding: 0 16px;
+      border-right: none;
+    }
+
+    tbody td {
+      padding: 0 16px;
+      border-right: none;
+    }
+
+    // 호버 강화 — 세로선 없을 때 행 구분을 위해 bordered(0.07)보다 한 단계 강하게
+    tbody tr.is-clickable:hover td {
+      background: rgba(var(--color-primary-rgb, 59, 130, 246), 0.09);
+    }
+  }
+}
+
+// ===== 가로 스크롤 힌트 =====
+.ui-table-scroll-hint {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: $color-text-disabled;
+  background: linear-gradient(180deg, rgba($color-background, 0.95) 0%, rgba($color-background, 0) 100%);
+  pointer-events: none;
+}
+
+.scroll-hint-fade-enter-active,
+.scroll-hint-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.scroll-hint-fade-enter-from,
+.scroll-hint-fade-leave-to {
+  opacity: 0;
+}
+
 // ===== sm 사이즈 (컴팩트) =====
 .ui-table-wrap.is-sm {
   .ui-table {
     thead th {
       height: auto;
-      padding: 6px 8px;
+      padding: 6px 12px;
       @include typo($body-medium-bold);
       font-weight: 500;
-      color: #4d5462;
-      background: #f4f7f9;
-      border-right-color: #dce4e9;
+      color: $color-text-primary;
+      background: $color-background;
+      border-right-color: $color-border;
     }
 
     tbody td {
       height: 28px;
       padding: 0 12px;
       @include typo($body-medium);
-      color: #4d5462;
-      border-bottom-color: #ecf0f3;
+      color: $color-text-primary;
+      border-bottom-color: $color-border-light;
 
       &:not(:last-of-type) {
-        border-right-color: #ecf0f3;
+        border-right-color: $color-border-light;
       }
     }
   }
 
   // 헤더/바디 상하 구분선
   .ui-table thead th {
-    border-top: 1px solid #dce4e9;
-    border-bottom: 1px solid #dce4e9;
+    border-top: 1px solid $color-border;
+    border-bottom: 1px solid $color-border;
+  }
+
+  // sm + borderless 조합
+  &.is-borderless .ui-table {
+    thead th {
+      padding: 6px 12px;
+      border-right: none;
+    }
+
+    tbody td {
+      border-right: none;
+    }
   }
 }
 </style>

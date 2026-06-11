@@ -78,7 +78,7 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'md',
   showClose: true,
   showOverlay: true,
-  showFullscreen: false,
+  showFullscreen: true,
   closeOnOverlayClick: true,
   closeOnEscape: true,
   customClass: '',

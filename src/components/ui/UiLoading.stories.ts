@@ -12,6 +12,7 @@ const meta = {
   component: UiLoading,
   tags: ['autodocs'],
   parameters: {
+    layout: 'padded',
     docs: {
       description: {
         component: `
@@ -208,5 +209,14 @@ export const EmptyVsLoading: Story = {
         </div>
       </div>
     `,
+  }),
+}
+
+// Introduction 카드 미리보기용 — 컴팩트 크기로 스피너 + 텍스트 표시
+export const Showcase: Story = {
+  parameters: { layout: 'centered' },
+  render: () => ({
+    components: { UiLoading },
+    template: '<UiLoading style="min-height: 120px;" />',
   }),
 }

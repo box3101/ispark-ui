@@ -152,7 +152,7 @@ const onChange = () => {
   height: 16px;
   border: 1.5px solid var(--color-border);
   border-radius: 50%;
-  background: #fff;
+  background: var(--color-bg-elevated);
   flex-shrink: 0;
   // 모션 토큰 — Button/Input과 동일 + active 시 transform
   transition: border-color $transition-base, background-color $transition-base, transform $transition-fast;

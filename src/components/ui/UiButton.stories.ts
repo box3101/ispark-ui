@@ -59,20 +59,13 @@ size/shape는 \`src/styles/tokens/_size.scss\`, \`_shape.scss\` 공용 토큰 �
       control: 'select',
       options: [
         'primary',
-        'primary-dark',
-        'primary-line',
         'secondary',
-        'line-secondary',
         'outline',
         'ghost',
-        'dark',
         'danger',
-        'success',
-        'warning',
-        'info',
       ],
       description:
-        'variant 12종 — primary(강조) / primary-dark / primary-line / secondary / line-secondary / outline / ghost / dark / danger / success / warning / info',
+        'variant 5종 — primary(강조) / secondary(보조) / outline(테두리) / ghost(트리거) / danger(파괴)',
     },
     size: {
       control: 'inline-radio',
@@ -262,6 +255,12 @@ export const AllVariants: Story = {
             <UiButton variant="ghost" size="md">Ghost</UiButton>
             <UiButton variant="ghost" size="lg">Ghost</UiButton>
 
+            <span style="font-size: 12px; color: #6b7280;">outline</span>
+            <UiButton variant="outline" size="xs">Outline</UiButton>
+            <UiButton variant="outline" size="sm">Outline</UiButton>
+            <UiButton variant="outline" size="md">Outline</UiButton>
+            <UiButton variant="outline" size="lg">Outline</UiButton>
+
             <span style="font-size: 12px; color: #6b7280;">danger</span>
             <UiButton variant="danger" size="xs">Danger</UiButton>
             <UiButton variant="danger" size="sm">Danger</UiButton>
@@ -295,6 +294,11 @@ export const AllVariants: Story = {
             <UiButton variant="ghost">Edit</UiButton>
             <UiButton variant="ghost" disabled>Edit</UiButton>
             <UiButton variant="ghost" loading>Edit</UiButton>
+
+            <span style="font-size: 12px; color: #6b7280;">outline</span>
+            <UiButton variant="outline">Cancel</UiButton>
+            <UiButton variant="outline" disabled>Cancel</UiButton>
+            <UiButton variant="outline" loading>Cancel</UiButton>
 
             <span style="font-size: 12px; color: #6b7280;">danger</span>
             <UiButton variant="danger">Delete</UiButton>

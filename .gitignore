@@ -8,7 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
+# dist — GitHub 참조 소비자를 위해 포함
 dist-ssr
 *.local
 
@@ -26,11 +26,11 @@ dist-ssr
 # Storybook
 storybook-static
 
-# Build output (publish 전에만 생성)
-dist
+# Build output — dist는 GitHub 참조 소비자를 위해 포함
 
 # 환경 변수
 .env
 .env.local
 .npmrc
 .gstack/
+snapshot.txt

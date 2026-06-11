@@ -55,7 +55,7 @@ $font-size-base: 0.875rem; // 14px — 본문 기본
 $font-size-lg: 1rem; // 16px — 소제목
 $font-size-xl: 1.125rem; // 18px — 섹션 제목
 $font-size-2xl: 1.25rem; // 20px — 페이지 제목
-$font-weight-normal: 450;
+$font-weight-normal: 400;
 $font-weight-medium: 500;
 $font-weight-semibold: 600;
 $font-weight-bold: 700;
@@ -205,8 +205,9 @@ $shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
 $z-dropdown: 100;
 $z-sticky: 200;
 $z-overlay: 300;
-$z-modal: 400;
-$z-toast: 500;
+$z-drawer: 999;
+$z-modal: 1100;
+$z-toast: 1200;
 // ===================================
 // 트랜지션
 // ===================================

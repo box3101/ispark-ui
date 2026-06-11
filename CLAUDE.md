@@ -57,6 +57,23 @@ src/components/ui/
 - play 함수가 길어지면 → E2E 신호 → Playwright로 이전 고려
 - `@storybook/test`의 `fn()`은 `jest.fn()` 대체, play/Vitest 공용
 
+## Introduction 대시보드 동기화 규칙
+
+새 컴포넌트 스토리(`.stories.ts`)를 추가하면 **반드시** `src/Introduction.mdx`에도 카드를 추가한다.
+
+- 카드 위치: 스토리의 `title` 카테고리에 맞는 섹션 (Form / Display / Feedback / Overlay / Navigation / Data)
+- 카드 템플릿:
+  ```mdx
+  <a target="_top" className="ispark-card" href="./?path=/docs/{스토리-path}--docs">
+    <div className="ispark-card__demo">
+      <iframe className="ispark-card__frame" loading="lazy" title="{컴포넌트명} preview" src="iframe.html?id={스토리-id}--{playground|default|showcase}&viewMode=story" /><div className="ispark-card__shield" />
+    </div>
+    <div className="ispark-card__meta"><strong>{컴포넌트명}</strong><span>{설명} · {사용횟수 or NEW}</span></div>
+  </a>
+  ```
+- 새 카테고리가 필요하면 기존 섹션 패턴(`ispark-section` > `ispark-grid`)을 따라 섹션 추가
+- 스토리 삭제 시 대시보드 카드도 함께 삭제
+
 ## MDX 문서 작성 규칙
 
 Storybook MDX 페이지(`src/**/*.mdx`)는 GFM 파이프 테이블 파싱이 비활성되어 있다. 파이프 `|---|` 사용 시 표가 한 줄 paragraph로 합쳐져 raw text로 렌더된다.

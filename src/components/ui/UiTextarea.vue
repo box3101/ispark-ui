@@ -31,7 +31,7 @@
         :class="[
           `radius-${radius}`,
           `size-${size}`,
-          { 'has-border': border, 'is-error': isError, 'has-counter': showCounter },
+          { 'has-border': border, 'is-error': isError, 'has-counter': showCounter, 'has-expand': expandable },
         ]"
         :value="modelValue"
         :placeholder="placeholder"
@@ -46,6 +46,19 @@
         @input="onInput"
       />
 
+      <!-- 전체보기 버튼 -->
+      <button
+        v-if="expandable && !disabled"
+        type="button"
+        class="ui-textarea-expand"
+        aria-label="전체보기"
+        @click="expandOpen = true"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+
       <!-- 글자수 카운터 — maxLength 지정 + showCounter=true 시만 -->
       <span
         v-if="showCounter && maxLength"
@@ -55,6 +68,29 @@
         {{ modelValue.length }} / {{ maxLength }}
       </span>
     </div>
+
+    <!-- 전체보기 모달 (UiModal 활용) -->
+    <UiModal
+      :open="expandOpen"
+      :title="label || '전체보기'"
+      size="lg"
+      show-fullscreen
+      @update:open="expandOpen = $event"
+    >
+      <textarea
+        ref="expandTextareaRef"
+        class="ui-textarea-modal-textarea"
+        :value="modelValue"
+        :placeholder="placeholder"
+        :readonly="readonly"
+        :maxlength="maxLength"
+        :spellcheck="spellcheck"
+        @input="onExpandInput"
+      />
+      <div v-if="showCounter && maxLength" class="ui-textarea-modal-counter">
+        {{ modelValue.length }} / {{ maxLength }}
+      </div>
+    </UiModal>
 
     <!-- 에러 메시지 (있으면 desc 대신 노출) -->
     <p
@@ -78,6 +114,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, nextTick, useId } from 'vue'
+import UiModal from './UiModal.vue'
 
 interface Props {
   modelValue?: string
@@ -111,6 +148,8 @@ interface Props {
   id?: string
   /** maxLength 지정 시 우하단 'n / max' 카운터 표시. 기본 false */
   showCounter?: boolean
+  /** 우상단 전체보기 버튼 표시. 기본 true */
+  expandable?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -123,7 +162,7 @@ const props = withDefaults(defineProps<Props>(), {
   maxLength: undefined,
   maxRows: 10,
   radius: 'base',
-  border: false,
+  border: true,
   size: 'md',
   spellcheck: true,
   label: '',
@@ -134,6 +173,7 @@ const props = withDefaults(defineProps<Props>(), {
   desc: '',
   id: undefined,
   showCounter: false,
+  expandable: true,
 })
 
 const emit = defineEmits<{
@@ -148,6 +188,17 @@ const isError = computed(() => props.error || !!props.errorMessage)
 const describedBy = computed(() => errorId.value || descId.value)
 
 const textareaRef = ref<HTMLTextAreaElement | null>(null)
+const expandTextareaRef = ref<HTMLTextAreaElement | null>(null)
+const expandOpen = ref(false)
+
+const onExpandInput = (event: Event) => {
+  const target = event.target as HTMLTextAreaElement
+  emit('update:modelValue', target.value)
+}
+
+watch(expandOpen, (open) => {
+  if (open) nextTick(() => expandTextareaRef.value?.focus())
+})
 
 const getLineHeight = (): number => {
   const el = textareaRef.value
@@ -240,7 +291,7 @@ defineExpose({
 .ui-textarea {
   font-family: inherit;
   color: var(--color-text-primary);
-  background-color: #fff;
+  background-color: var(--color-bg-elevated);
   resize: none;
   // Input과 동일한 가로 패딩 토큰 사용 — size별 padding 토큰을 size 블록에서 적용
   padding: $spacing-sm map.get($sizes, 'md', padding-x);
@@ -347,6 +398,69 @@ defineExpose({
 .ui-textarea-desc {
   @include typo($body-xsmall);
   color: $color-text-muted;
+}
+
+// 전체보기 버튼
+.ui-textarea-expand {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: var(--color-bg-elevated, #fff);
+  border-radius: 4px;
+  color: var(--color-text-muted, #9ca3af);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s, color 0.15s;
+  z-index: 1;
+
+  &:hover {
+    background: var(--color-surface, #f3f4f6);
+    color: var(--color-text-primary, #374151);
+  }
+}
+
+.ui-textarea-wrap:hover .ui-textarea-expand,
+.ui-textarea-wrap:focus-within .ui-textarea-expand {
+  opacity: 1;
+}
+
+.ui-textarea.has-expand {
+  padding-right: 32px;
+}
+
+// 전체보기 모달 내 textarea
+.ui-textarea-modal-textarea {
+  flex: 1;
+  width: 100%;
+  min-height: 300px;
+  padding: 16px;
+  border: none;
+  outline: none;
+  resize: none;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--color-text-primary, #1f2937);
+  background: transparent;
+
+  &::placeholder {
+    color: var(--color-text-disabled, #9ca3af);
+  }
+}
+
+.ui-textarea-modal-counter {
+  padding: 8px 16px;
+  text-align: right;
+  font-size: 12px;
+  color: var(--color-text-muted, #9ca3af);
+  border-top: 1px solid var(--color-border, #e5e7eb);
 }
 
 @media (prefers-reduced-motion: reduce) {

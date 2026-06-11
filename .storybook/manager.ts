@@ -1,24 +1,24 @@
 import { addons } from '@storybook/manager-api'
 import { create } from '@storybook/theming/create'
 
-// Storybook manager(사이드바/툴바) — Claude.ai 톤 warm dark
+// Storybook manager(사이드바/툴바) — warm light 테마
 const theme = create({
-  base: 'dark',
+  base: 'light',
 
   // 브랜드 영역 (좌상단)
   brandTitle: 'ispark-ui',
-  brandUrl: '/',
+  brandUrl: './?path=/docs/get-started-introduction--docs',
   brandTarget: '_self',
 
-  // 컬러 토큰 — Claude warm orange accent
+  // 컬러 토큰 — warm orange accent
   colorPrimary: '#d97757',
   colorSecondary: '#d97757',
 
-  // 앱 배경 — 진한 warm dark + 살짝 elevated content
-  appBg: '#1a1b1f',
-  appContentBg: '#1f2026',
-  appPreviewBg: '#ffffff', // 컴포넌트 데모 iframe은 라이트 유지
-  appBorderColor: '#2a2c33',
+  // 앱 배경 — 깨끗한 라이트
+  appBg: '#f8f9fa',
+  appContentBg: '#ffffff',
+  appPreviewBg: '#ffffff',
+  appBorderColor: '#e6e8ec',
   appBorderRadius: 6,
 
   // 폰트
@@ -26,21 +26,21 @@ const theme = create({
     '"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
   fontCode: '"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
 
-  // 텍스트 — warm light + 뮤트
-  textColor: '#eaeae3',
-  textMutedColor: '#8a8a82',
-  textInverseColor: '#1a1b1f',
+  // 텍스트
+  textColor: '#2d3142',
+  textMutedColor: '#6b7280',
+  textInverseColor: '#ffffff',
 
   // 상단 탭바 (Canvas/Docs 탭)
-  barTextColor: '#8a8a82',
+  barTextColor: '#6b7280',
   barHoverColor: '#d97757',
   barSelectedColor: '#d97757',
-  barBg: '#1f2026',
+  barBg: '#ffffff',
 
   // 입력(검색바 포함)
-  inputBg: '#26282f',
-  inputBorder: '#33363f',
-  inputTextColor: '#eaeae3',
+  inputBg: '#f4f5f7',
+  inputBorder: '#e0e3e8',
+  inputTextColor: '#2d3142',
   inputBorderRadius: 8,
 })
 

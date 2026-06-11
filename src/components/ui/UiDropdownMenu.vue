@@ -1,11 +1,11 @@
 <template>
   <!--
-    modal=false (hover 모드 한정): radix가 open 시 trigger에 pointer-events:none을 강제하면
-    mouseleave→close→mouseenter→open 깜빡임 루프 발생. modal=false면 trigger pointer hover 유지.
+    modal=false: 드롭다운은 모달 스크롤 잠금이 불필요.
+    modal=true(기본값)면 body에 overflow:hidden + padding-right를 강제해 레이아웃 밀림 발생.
   -->
   <DropdownMenuRoot
     v-model:open="openState"
-    :modal="openOnHover ? false : undefined"
+    :modal="false"
   >
     <!--
       as-child는 첫 자식을 Radix trigger로 사용한다.
@@ -220,7 +220,7 @@ watch(openState, (v) => emit('update:open', v))
   position: relative; // ::before 절대 배치 기준
   min-width: 140px;
   border-radius: $border-radius-base;
-  background: #fff;
+  background: var(--color-bg-elevated);
   border: 1px solid rgba(45, 49, 57, 0.2);
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
   z-index: $z-dropdown;
