@@ -1,4 +1,6 @@
 import { AllowedComponentProps } from 'vue';
+import { CalendarEventSpan } from './components/ui/UiCalendarMonth.vue';
+import { CalendarMonthEvent } from './components/ui/UiCalendarMonth.vue';
 import { ComponentCustomProps } from 'vue';
 import { ComponentOptionsMixin } from 'vue';
 import { ComponentProvideOptions } from 'vue';
@@ -9,6 +11,7 @@ import { Ref } from 'vue';
 import { RendererElement } from 'vue';
 import { RendererNode } from 'vue';
 import { ShallowUnwrapRef } from 'vue';
+import { default as UiCalendarMonth } from './components/ui/UiCalendarMonth.vue';
 import { VNode } from 'vue';
 import { VNodeProps } from 'vue';
 
@@ -484,6 +487,10 @@ export declare interface AccordionItemDef {
 export declare type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
 
 export declare type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
+
+export { CalendarEventSpan }
+
+export { CalendarMonthEvent }
 
 /** 토스트 수동 닫기 */
 export declare function closeToast(id: number): void;
@@ -1107,6 +1114,8 @@ export declare const UiBadge: __VLS_WithTemplateSlots_5<typeof __VLS_component_5
 export declare const UiBadgeGroup: __VLS_WithTemplateSlots_6<typeof __VLS_component_6, __VLS_TemplateResult_6["slots"]>;
 
 export declare const UiButton: __VLS_WithTemplateSlots<typeof __VLS_component, __VLS_TemplateResult["slots"]>;
+
+export { UiCalendarMonth }
 
 export declare const UiCheckbox: __VLS_WithTemplateSlots_7<typeof __VLS_component_7, __VLS_TemplateResult_7["slots"]>;
 
