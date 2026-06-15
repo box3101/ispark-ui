@@ -106,6 +106,33 @@ export const SingleAndMultiDay: Story = {
   },
 }
 
+// 여러 주에 걸친 긴 막대 — 주 경계를 넘어가도 가로로 끊김 없이 이어짐
+// (주가 바뀌면 일요일 칸에 제목이 다시 표시된다)
+const MULTI_WEEK: CalendarMonthEvent[] = [
+  { id: 'a', start: '2026-06-13', end: '2026-06-20', title: '지영이 따기', color: '#22c55e' },
+  { id: 'b', start: '2026-06-14', end: '2026-06-26', title: '지영이 따기', color: '#22c55e' },
+  { id: 'c', start: '2026-06-21', end: '2026-06-26', title: '지영이 따기', color: '#22c55e' },
+  { id: 'd', start: '2026-06-12', title: '홍근선임 마지막 송별회', color: '#3b82f6' },
+  { id: 'e', start: '2026-06-16', title: '사랑니발치', color: '#3b82f6' },
+  { id: 'f', start: '2026-06-17', title: '하윤이 친구생일선물', color: '#3b82f6' },
+  { id: 'g', start: '2026-06-19', title: '성일이 집들이', color: '#22c55e' },
+  { id: 'h', start: '2026-06-20', title: '혜민이 조리원 퇴소', color: '#3b82f6' },
+]
+
+export const MultiWeekSpan: Story = {
+  name: '여러 주 걸친 긴 일정',
+  render: () => ({
+    components: { UiCalendarMonth },
+    setup: () => ({ events: MULTI_WEEK }),
+    template: '<div style="max-width:920px"><UiCalendarMonth :year="2026" :month="6" today="2026-06-15" :events="events" /></div>',
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    // 여러 주에 걸친 막대 — 주가 바뀔 때마다 일요일 칸에 제목이 다시 나타남
+    await expect(canvas.getAllByText('지영이 따기').length).toBeGreaterThan(1)
+  },
+}
+
 // 스와이프/전환 — v-model로 월 이동
 export const Navigable: Story = {
   render: () => ({
