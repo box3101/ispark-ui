@@ -149,6 +149,49 @@
   gap: $spacing-sm;
 }
 
+// ===== 기간 프리셋 칩 (UiDateRangePicker 전용) =====
+.ui-daterangepicker-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  // 칩이 한 줄로 펼쳐져 팝오버가 달력보다 넓어지는 것 방지 — 달력 너비(7×36)에 맞춰 줄바꿈
+  max-width: 252px;
+  padding-bottom: $spacing-sm;
+  margin-bottom: $spacing-sm;
+  border-bottom: 1px solid $color-border-light;
+}
+
+.ui-daterangepicker-preset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+  padding: 0 12px;
+  border: 1px solid $color-border;
+  border-radius: 9999px; // pill — $border-radius-full(100%)은 가로 긴 칩에서 타원이 됨
+  background: #fff;
+  color: $color-text-primary;
+  font-size: $font-size-sm;
+  line-height: 1;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  transition: background-color $transition-fast, border-color $transition-fast, color $transition-fast;
+
+  &:hover {
+    background: $color-background;
+    border-color: var(--color-primary);
+  }
+
+  &.is-active {
+    background: var(--color-primary-bg);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    font-weight: $font-weight-semibold;
+  }
+}
+
 .ui-datepicker-header {
   display: flex;
   align-items: center;

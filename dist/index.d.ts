@@ -63,10 +63,10 @@ openOnHover: boolean;
 hoverCloseDelay: number;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
-declare const __VLS_component_12: DefineComponent<Props_22, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+declare const __VLS_component_12: DefineComponent<Props_21, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 "update:modelValue": (value: string | string[] | undefined) => any;
 change: (value: string | string[] | undefined) => any;
-}, string, PublicProps, Readonly<Props_22> & Readonly<{
+}, string, PublicProps, Readonly<Props_21> & Readonly<{
 "onUpdate:modelValue"?: ((value: string | string[] | undefined) => any) | undefined;
 onChange?: ((value: string | string[] | undefined) => any) | undefined;
 }>, {
@@ -79,9 +79,9 @@ items: AccordionItemDef[];
 collapsible: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
-declare const __VLS_component_13: DefineComponent<Props_23, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+declare const __VLS_component_13: DefineComponent<Props_22, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 "update:open": (value: boolean) => any;
-}, string, PublicProps, Readonly<Props_23> & Readonly<{
+}, string, PublicProps, Readonly<Props_22> & Readonly<{
 "onUpdate:open"?: ((value: boolean) => any) | undefined;
 }>, {
 title: string;
@@ -236,6 +236,17 @@ declare type __VLS_Props = {
     color?: IconColor;
     /** Lucide 선 두께 (1~3) */
     strokeWidth?: number;
+};
+
+declare type __VLS_Props_2 = {
+    modelValue?: DateRange;
+    size?: 'xs' | 'sm' | 'md' | 'lg';
+    disabled?: boolean;
+    locale?: string;
+    minValue?: DateValue;
+    maxValue?: DateValue;
+    /** 팝오버 상단에 표시할 빠른 선택 프리셋 */
+    presets?: DateRangePreset[];
 };
 
 declare function __VLS_template(): {
@@ -557,6 +568,13 @@ export declare interface ConfirmOptions {
 export declare interface DateRange {
     start: DateValue | undefined;
     end: DateValue | undefined;
+}
+
+/** 빠른 선택 프리셋 — 날짜 계산은 사용하는 쪽에서 (오늘/이번주/이번달 등) */
+declare interface DateRangePreset {
+    label: string;
+    start: DateValue;
+    end: DateValue;
 }
 
 export declare interface DropdownMenuItemDef {
@@ -953,15 +971,6 @@ declare interface Props_20 {
 }
 
 declare interface Props_21 {
-    modelValue?: DateRange;
-    size?: 'xs' | 'sm' | 'md' | 'lg';
-    disabled?: boolean;
-    locale?: string;
-    minValue?: DateValue;
-    maxValue?: DateValue;
-}
-
-declare interface Props_22 {
     /** items 배열로 간단하게 렌더 (없으면 기본 슬롯 사용) */
     items?: AccordionItemDef[];
     /** single: 하나만 열림 / multiple: 여러 개 동시 열림 */
@@ -978,7 +987,7 @@ declare interface Props_22 {
     size?: 'sm' | 'md' | 'lg';
 }
 
-declare interface Props_23 {
+declare interface Props_22 {
     open?: boolean;
     title?: string;
     width?: string;
@@ -999,7 +1008,7 @@ declare interface Props_23 {
     confirmBeforeClose?: boolean;
 }
 
-declare interface Props_24 {
+declare interface Props_23 {
     /** 파일 목록 */
     files: FileItem[];
     /** 파일 URL 생성 함수 */
@@ -1008,7 +1017,7 @@ declare interface Props_24 {
     deletable?: boolean;
 }
 
-declare interface Props_25 {
+declare interface Props_24 {
     /** 업로드 중 상태 */
     loading?: boolean;
     /** 허용 파일 형식 (예: 'image/*', '.pdf,.doc') */
@@ -1019,7 +1028,7 @@ declare interface Props_25 {
     disabled?: boolean;
 }
 
-declare interface Props_26 {
+declare interface Props_25 {
     modelValue?: string;
     editable?: boolean;
     placeholder?: string;
@@ -1295,9 +1304,9 @@ maxValue: DateValue;
 monthCellRefs: HTMLButtonElement[];
 }, HTMLDivElement>;
 
-export declare const UiDateRangePicker: DefineComponent<Props_21, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+export declare const UiDateRangePicker: DefineComponent<__VLS_Props_2, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 "update:modelValue": (value: DateRange) => any;
-}, string, PublicProps, Readonly<Props_21> & Readonly<{
+}, string, PublicProps, Readonly<__VLS_Props_2> & Readonly<{
 "onUpdate:modelValue"?: ((value: DateRange) => any) | undefined;
 }>, {
 size: "xs" | "sm" | "md" | "lg";
@@ -1306,6 +1315,7 @@ modelValue: DateRange;
 locale: string;
 minValue: DateValue;
 maxValue: DateValue;
+presets: DateRangePreset[];
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 
 export declare const UiDrawer: __VLS_WithTemplateSlots_13<typeof __VLS_component_13, __VLS_TemplateResult_13["slots"]>;
@@ -1314,17 +1324,17 @@ export declare const UiDropdownMenu: __VLS_WithTemplateSlots_11<typeof __VLS_com
 
 export declare const UiEmpty: __VLS_WithTemplateSlots_4<typeof __VLS_component_4, __VLS_TemplateResult_4["slots"]>;
 
-export declare const UiFileList: DefineComponent<Props_24, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+export declare const UiFileList: DefineComponent<Props_23, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 delete: (file: FileItem) => any;
-}, string, PublicProps, Readonly<Props_24> & Readonly<{
+}, string, PublicProps, Readonly<Props_23> & Readonly<{
 onDelete?: ((file: FileItem) => any) | undefined;
 }>, {
 deletable: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
-export declare const UiFileUpload: DefineComponent<Props_25, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+export declare const UiFileUpload: DefineComponent<Props_24, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 upload: (file: File) => any;
-}, string, PublicProps, Readonly<Props_25> & Readonly<{
+}, string, PublicProps, Readonly<Props_24> & Readonly<{
 onUpload?: ((file: File) => any) | undefined;
 }>, {
 disabled: boolean;
@@ -1345,9 +1355,9 @@ text: string;
 overlay: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 
-export declare const UiMarkdownEditor: DefineComponent<Props_26, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+export declare const UiMarkdownEditor: DefineComponent<Props_25, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 "update:modelValue": (value: string) => any;
-}, string, PublicProps, Readonly<Props_26> & Readonly<{
+}, string, PublicProps, Readonly<Props_25> & Readonly<{
 "onUpdate:modelValue"?: ((value: string) => any) | undefined;
 }>, {
 modelValue: string;

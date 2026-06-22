@@ -84,6 +84,22 @@
         class="ui-datepicker-popover"
         :side-offset="4"
       >
+        <!-- 빠른 선택 프리셋 -->
+        <div
+          v-if="presets.length"
+          class="ui-daterangepicker-presets"
+        >
+          <DateRangePickerClose
+            v-for="preset in presets"
+            :key="preset.label"
+            class="ui-daterangepicker-preset"
+            :class="{ 'is-active': isPresetActive(preset) }"
+            @click="onPreset(preset)"
+          >
+            {{ preset.label }}
+          </DateRangePickerClose>
+        </div>
+
         <DateRangePickerCalendar
           v-slot="{ weekDays, grid }"
           class="ui-datepicker-calendar"
@@ -174,6 +190,7 @@ import {
   DateRangePickerCalendar,
   DateRangePickerCell,
   DateRangePickerCellTrigger,
+  DateRangePickerClose,
   DateRangePickerContent,
   DateRangePickerField,
   DateRangePickerGrid,
@@ -196,23 +213,34 @@ export interface DateRange {
   end: DateValue | undefined
 }
 
-interface Props {
-  modelValue?: DateRange
-  size?: 'xs' | 'sm' | 'md' | 'lg'
-  disabled?: boolean
-  locale?: string
-  minValue?: DateValue
-  maxValue?: DateValue
+/** 빠른 선택 프리셋 — 날짜 계산은 사용하는 쪽에서 (오늘/이번주/이번달 등) */
+export interface DateRangePreset {
+  label: string
+  start: DateValue
+  end: DateValue
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: () => ({ start: undefined, end: undefined }),
-  size: 'sm',
-  disabled: false,
-  locale: 'ko-KR',
-  minValue: undefined,
-  maxValue: undefined,
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue?: DateRange
+    size?: 'xs' | 'sm' | 'md' | 'lg'
+    disabled?: boolean
+    locale?: string
+    minValue?: DateValue
+    maxValue?: DateValue
+    /** 팝오버 상단에 표시할 빠른 선택 프리셋 */
+    presets?: DateRangePreset[]
+  }>(),
+  {
+    modelValue: () => ({ start: undefined, end: undefined }),
+    size: 'sm',
+    disabled: false,
+    locale: 'ko-KR',
+    minValue: undefined,
+    maxValue: undefined,
+    presets: () => [],
+  },
+)
 
 const emit = defineEmits<{
   'update:modelValue': [value: DateRange]
@@ -232,6 +260,18 @@ const onFieldClick = (e: MouseEvent) => {
   const field = e.currentTarget as HTMLElement
   const trigger = field.querySelector('.ui-datepicker-trigger') as HTMLElement | null
   trigger?.click()
+}
+
+// 프리셋 클릭 — 기간 적용 (팝오버는 DateRangePickerClose가 닫음)
+const onPreset = (preset: DateRangePreset) => {
+  emit('update:modelValue', { start: preset.start, end: preset.end })
+  calendarPlaceholder.value = new CalendarDate(preset.start.year, preset.start.month, 1)
+}
+
+// 현재 적용된 기간과 일치하는 프리셋 (활성 표시용)
+const isPresetActive = (preset: DateRangePreset) => {
+  const v = props.modelValue
+  return !!v?.start && !!v?.end && v.start.compare(preset.start) === 0 && v.end.compare(preset.end) === 0
 }
 
 // 캘린더 placeholder (보고 있는 월)
