@@ -12,6 +12,7 @@
         v-slot="{ segments }"
         class="ui-datepicker-field"
         :class="[`size-dp-${size}`, { 'is-disabled': disabled }]"
+        @click="onFieldClick"
       >
         <!-- 시작일 segments -->
         <template
@@ -221,6 +222,17 @@ const internalRange = computed({
   get: () => props.modelValue,
   set: (val: DateRange) => emit('update:modelValue', val),
 })
+
+// 필드(날짜 세그먼트 영역) 클릭 시에도 달력 열기 — 트리거 버튼 클릭 프록시
+const onFieldClick = (e: MouseEvent) => {
+  if (props.disabled) return
+  const target = e.target as HTMLElement
+  // 트리거 버튼 자체 클릭이면 무시 (중복 방지)
+  if (target.closest('.ui-datepicker-trigger')) return
+  const field = e.currentTarget as HTMLElement
+  const trigger = field.querySelector('.ui-datepicker-trigger') as HTMLElement | null
+  trigger?.click()
+}
 
 // 캘린더 placeholder (보고 있는 월)
 const now = new Date()

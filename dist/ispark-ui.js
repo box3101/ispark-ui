@@ -36264,31 +36264,35 @@ const lme = {
   setup(t, { emit: e }) {
     const n = t, o = e, a = H({
       get: () => n.modelValue,
-      set: (p) => o("update:modelValue", p)
-    }), i = /* @__PURE__ */ new Date(), r = ge(new Kt(i.getFullYear(), i.getMonth() + 1, 1)), s = H(() => {
-      var y;
-      const p = ((y = r.value) == null ? void 0 : y.year) ?? i.getFullYear(), f = [];
-      for (let k = p - 10; k <= p + 10; k++) f.push(k);
-      return f;
-    }), c = H(
-      () => s.value.map((p) => ({ label: String(p), value: String(p) }))
-    ), d = H(
-      () => Array.from({ length: 12 }, (p, f) => ({ label: `${f + 1}월`, value: String(f + 1) }))
-    ), u = (p) => {
+      set: (f) => o("update:modelValue", f)
+    }), i = (f) => {
+      if (n.disabled || f.target.closest(".ui-datepicker-trigger")) return;
+      const m = f.currentTarget.querySelector(".ui-datepicker-trigger");
+      m == null || m.click();
+    }, r = /* @__PURE__ */ new Date(), s = ge(new Kt(r.getFullYear(), r.getMonth() + 1, 1)), c = H(() => {
       var k;
-      const f = Number(p), y = ((k = r.value) == null ? void 0 : k.month) ?? 1;
-      r.value = new Kt(f, y, 1);
-    }, h = (p) => {
-      var k;
-      const f = Number(p), y = ((k = r.value) == null ? void 0 : k.year) ?? i.getFullYear();
-      r.value = new Kt(y, f, 1);
+      const f = ((k = s.value) == null ? void 0 : k.year) ?? r.getFullYear(), y = [];
+      for (let m = f - 10; m <= f + 10; m++) y.push(m);
+      return y;
+    }), d = H(
+      () => c.value.map((f) => ({ label: String(f), value: String(f) }))
+    ), u = H(
+      () => Array.from({ length: 12 }, (f, y) => ({ label: `${y + 1}월`, value: String(y + 1) }))
+    ), h = (f) => {
+      var m;
+      const y = Number(f), k = ((m = s.value) == null ? void 0 : m.month) ?? 1;
+      s.value = new Kt(y, k, 1);
+    }, p = (f) => {
+      var m;
+      const y = Number(f), k = ((m = s.value) == null ? void 0 : m.year) ?? r.getFullYear();
+      s.value = new Kt(k, y, 1);
     };
-    return (p, f) => (x(), L("div", _me, [
+    return (f, y) => (x(), L("div", _me, [
       K(B(YP), {
         modelValue: a.value,
-        "onUpdate:modelValue": f[0] || (f[0] = (y) => a.value = y),
-        placeholder: r.value,
-        "onUpdate:placeholder": f[1] || (f[1] = (y) => r.value = y),
+        "onUpdate:modelValue": y[0] || (y[0] = (k) => a.value = k),
+        placeholder: s.value,
+        "onUpdate:placeholder": y[1] || (y[1] = (k) => s.value = k),
         locale: t.locale,
         disabled: t.disabled,
         "min-value": t.minValue,
@@ -36296,56 +36300,57 @@ const lme = {
       }, {
         default: G(() => [
           K(B(QP), {
-            class: J(["ui-datepicker-field", [`size-dp-${t.size}`, { "is-disabled": t.disabled }]])
+            class: J(["ui-datepicker-field", [`size-dp-${t.size}`, { "is-disabled": t.disabled }]]),
+            onClick: i
           }, {
-            default: G(({ segments: y }) => [
-              (x(!0), L(ve, null, $e(y.start, (k) => (x(), L(ve, {
-                key: `s-${k.part}`
+            default: G(({ segments: k }) => [
+              (x(!0), L(ve, null, $e(k.start, (m) => (x(), L(ve, {
+                key: `s-${m.part}`
               }, [
-                k.part === "literal" ? (x(), we(B(x1), {
+                m.part === "literal" ? (x(), we(B(x1), {
                   key: 0,
                   type: "start",
-                  part: k.part,
+                  part: m.part,
                   class: "ui-datepicker-literal"
                 }, {
                   default: G(() => [
-                    Re(ee(k.value), 1)
+                    Re(ee(m.value), 1)
                   ]),
                   _: 2
                 }, 1032, ["part"])) : (x(), we(B(x1), {
                   key: 1,
                   type: "start",
-                  part: k.part,
+                  part: m.part,
                   class: "ui-datepicker-segment"
                 }, {
                   default: G(() => [
-                    Re(ee(k.value), 1)
+                    Re(ee(m.value), 1)
                   ]),
                   _: 2
                 }, 1032, ["part"]))
               ], 64))), 128)),
-              f[3] || (f[3] = C("span", { class: "ui-datepicker-range-sep" }, "~", -1)),
-              (x(!0), L(ve, null, $e(y.end, (k) => (x(), L(ve, {
-                key: `e-${k.part}`
+              y[3] || (y[3] = C("span", { class: "ui-datepicker-range-sep" }, "~", -1)),
+              (x(!0), L(ve, null, $e(k.end, (m) => (x(), L(ve, {
+                key: `e-${m.part}`
               }, [
-                k.part === "literal" ? (x(), we(B(x1), {
+                m.part === "literal" ? (x(), we(B(x1), {
                   key: 0,
                   type: "end",
-                  part: k.part,
+                  part: m.part,
                   class: "ui-datepicker-literal"
                 }, {
                   default: G(() => [
-                    Re(ee(k.value), 1)
+                    Re(ee(m.value), 1)
                   ]),
                   _: 2
                 }, 1032, ["part"])) : (x(), we(B(x1), {
                   key: 1,
                   type: "end",
-                  part: k.part,
+                  part: m.part,
                   class: "ui-datepicker-segment"
                 }, {
                   default: G(() => [
-                    Re(ee(k.value), 1)
+                    Re(ee(m.value), 1)
                   ]),
                   _: 2
                 }, 1032, ["part"]))
@@ -36354,7 +36359,7 @@ const lme = {
                 class: "ui-datepicker-trigger",
                 "aria-label": "기간 선택"
               }, {
-                default: G(() => [...f[2] || (f[2] = [
+                default: G(() => [...y[2] || (y[2] = [
                   C("svg", {
                     width: "16",
                     height: "16",
@@ -36395,15 +36400,15 @@ const lme = {
           }, {
             default: G(() => [
               K(B(nB), { class: "ui-datepicker-calendar" }, {
-                default: G(({ weekDays: y, grid: k }) => {
-                  var m, g;
+                default: G(({ weekDays: k, grid: m }) => {
+                  var g, b;
                   return [
                     C("div", wme, [
                       K(B(oB), {
                         class: "ui-datepicker-nav",
                         "aria-label": "이전 달"
                       }, {
-                        default: G(() => [...f[4] || (f[4] = [
+                        default: G(() => [...y[4] || (y[4] = [
                           C("svg", {
                             width: "16",
                             height: "16",
@@ -36425,24 +36430,24 @@ const lme = {
                       C("div", Cme, [
                         K(oc, {
                           class: "ui-datepicker-select",
-                          "model-value": String((m = r.value) == null ? void 0 : m.year),
-                          options: c.value,
-                          size: "xs",
-                          "onUpdate:modelValue": u
-                        }, null, 8, ["model-value", "options"]),
-                        K(oc, {
-                          class: "ui-datepicker-select",
-                          "model-value": String((g = r.value) == null ? void 0 : g.month),
+                          "model-value": String((g = s.value) == null ? void 0 : g.year),
                           options: d.value,
                           size: "xs",
                           "onUpdate:modelValue": h
+                        }, null, 8, ["model-value", "options"]),
+                        K(oc, {
+                          class: "ui-datepicker-select",
+                          "model-value": String((b = s.value) == null ? void 0 : b.month),
+                          options: u.value,
+                          size: "xs",
+                          "onUpdate:modelValue": p
                         }, null, 8, ["model-value", "options"])
                       ]),
                       K(B(aB), {
                         class: "ui-datepicker-nav",
                         "aria-label": "다음 달"
                       }, {
-                        default: G(() => [...f[5] || (f[5] = [
+                        default: G(() => [...y[5] || (y[5] = [
                           C("svg", {
                             width: "16",
                             height: "16",
@@ -36462,20 +36467,20 @@ const lme = {
                         _: 1
                       })
                     ]),
-                    (x(!0), L(ve, null, $e(k, (b) => (x(), we(B(iB), {
-                      key: b.value.toString()
+                    (x(!0), L(ve, null, $e(m, (v) => (x(), we(B(iB), {
+                      key: v.value.toString()
                     }, {
                       default: G(() => [
                         K(B(rB), null, {
                           default: G(() => [
                             K(B(GE), { class: "ui-datepicker-row" }, {
                               default: G(() => [
-                                (x(!0), L(ve, null, $e(y, (v) => (x(), we(B(sB), {
-                                  key: v,
+                                (x(!0), L(ve, null, $e(k, (_) => (x(), we(B(sB), {
+                                  key: _,
                                   class: "ui-datepicker-head-cell"
                                 }, {
                                   default: G(() => [
-                                    Re(ee(v), 1)
+                                    Re(ee(_), 1)
                                   ]),
                                   _: 2
                                 }, 1024))), 128))
@@ -36487,20 +36492,20 @@ const lme = {
                         }, 1024),
                         K(B(cB), null, {
                           default: G(() => [
-                            (x(!0), L(ve, null, $e(b.rows, (v, _) => (x(), we(B(GE), {
-                              key: `row-${_}`,
+                            (x(!0), L(ve, null, $e(v.rows, (_, w) => (x(), we(B(GE), {
+                              key: `row-${w}`,
                               class: "ui-datepicker-row"
                             }, {
                               default: G(() => [
-                                (x(!0), L(ve, null, $e(v, (w) => (x(), we(B(lB), {
-                                  key: w.toString(),
-                                  date: w,
+                                (x(!0), L(ve, null, $e(_, (S) => (x(), we(B(lB), {
+                                  key: S.toString(),
+                                  date: S,
                                   class: "ui-datepicker-cell"
                                 }, {
                                   default: G(() => [
                                     K(B(dB), {
-                                      day: w,
-                                      month: b.value,
+                                      day: S,
+                                      month: v.value,
                                       class: "ui-datepicker-cell-trigger"
                                     }, null, 8, ["day", "month"])
                                   ]),
