@@ -17,7 +17,7 @@
   gap: 0;
 
   background-color: #fff;
-  border: 1px solid #c6d2db;
+  border: 1px solid $color-border;
   border-radius: $border-radius-base;
   transition: border-color $transition-base;
   cursor: pointer;
@@ -25,10 +25,11 @@
   &:hover:not(.is-disabled) { border-color: var(--color-primary); }
   &:focus-within:not(.is-disabled) { border-color: var(--color-primary); }
 
-  &.size-dp-xs { height: $size-xs-height; font-size: $font-size-sm; }
-  &.size-dp-sm { height: $size-sm-height; font-size: $font-size-base; }
-  &.size-dp-md { height: $size-md-height; font-size: $font-size-base; }
-  &.size-dp-lg { height: $size-lg-height; font-size: $font-size-base; }
+  // 글자크기는 UiSelect/UiInput과 동일하게 size 토큰을 따른다 (xs 12 / sm 13 / md 14 / lg 15)
+  &.size-dp-xs { height: $size-xs-height; font-size: $size-xs-font; }
+  &.size-dp-sm { height: $size-sm-height; font-size: $size-sm-font; }
+  &.size-dp-md { height: $size-md-height; font-size: $size-md-font; }
+  &.size-dp-lg { height: $size-lg-height; font-size: $size-lg-font; }
 
   &.is-disabled {
     opacity: 0.5;
@@ -51,7 +52,8 @@
     background: rgba(var(--color-primary-rgb, 60, 105, 219), 0.14);
     color: var(--color-primary);
   }
-  &[data-placeholder] { color: $color-text-disabled; }
+  // 빈 상태 placeholder(연도.월.일)도 입력 텍스트와 동일한 색으로 — select/input과 통일감
+  &[data-placeholder] { color: $color-text-primary; }
 }
 
 .ui-datepicker-literal {
@@ -95,7 +97,7 @@
   gap: 2px;
   padding: 0 8px;
   background-color: #fff;
-  border: 1px solid #c6d2db;
+  border: 1px solid $color-border;
   border-radius: $border-radius-base;
   transition: border-color $transition-base;
   flex-shrink: 0;
@@ -103,10 +105,10 @@
   &:hover:not(.is-disabled) { border-color: var(--color-primary); }
   &:focus-within:not(.is-disabled) { border-color: var(--color-primary); }
 
-  &.size-dp-xs { height: $size-xs-height; font-size: $font-size-sm; }
-  &.size-dp-sm { height: $size-sm-height; font-size: $font-size-base; }
-  &.size-dp-md { height: $size-md-height; font-size: $font-size-base; }
-  &.size-dp-lg { height: $size-lg-height; font-size: $font-size-base; }
+  &.size-dp-xs { height: $size-xs-height; font-size: $size-xs-font; }
+  &.size-dp-sm { height: $size-sm-height; font-size: $size-sm-font; }
+  &.size-dp-md { height: $size-md-height; font-size: $size-md-font; }
+  &.size-dp-lg { height: $size-lg-height; font-size: $size-lg-font; }
 
   &.is-disabled { opacity: 0.5; cursor: not-allowed; }
 }
