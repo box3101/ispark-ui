@@ -72,7 +72,7 @@ const counterCustomStyle = computed(() => {
       class="ui-avatar-group__counter"
       :class="counterSizeClass"
       :style="counterCustomStyle"
-      aria-label="`그 외 ${overflowCount}명`"
+      :aria-label="`그 외 ${overflowCount}명`"
     >
       +{{ overflowCount }}
     </span>
