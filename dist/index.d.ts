@@ -101,6 +101,14 @@ confirmBeforeClose: boolean;
 drawerRef: HTMLElement;
 }, any>;
 
+declare const __VLS_component_14: DefineComponent<Props_27, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<Props_27> & Readonly<{}>, {
+variant: ProgressVariant;
+size: ProgressSize;
+label: string;
+max: number;
+showValue: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
+
 declare const __VLS_component_2: DefineComponent<Props_2, {
 focus: () => void | undefined;
 blur: () => void | undefined;
@@ -317,6 +325,16 @@ declare function __VLS_template_13(): {
     rootEl: any;
 };
 
+declare function __VLS_template_14(): {
+    attrs: Partial<{}>;
+    slots: {
+        label?(_: {}): any;
+        default?(_: {}): any;
+    };
+    refs: {};
+    rootEl: HTMLDivElement;
+};
+
 declare function __VLS_template_2(): {
     attrs: Partial<{}>;
     slots: {
@@ -409,6 +427,8 @@ declare type __VLS_TemplateResult_12 = ReturnType<typeof __VLS_template_12>;
 
 declare type __VLS_TemplateResult_13 = ReturnType<typeof __VLS_template_13>;
 
+declare type __VLS_TemplateResult_14 = ReturnType<typeof __VLS_template_14>;
+
 declare type __VLS_TemplateResult_2 = ReturnType<typeof __VLS_template_2>;
 
 declare type __VLS_TemplateResult_3 = ReturnType<typeof __VLS_template_3>;
@@ -456,6 +476,12 @@ declare type __VLS_WithTemplateSlots_13<T, S> = T & {
 };
 
 declare type __VLS_WithTemplateSlots_14<T, S> = T & {
+    new (): {
+        $slots: S;
+    };
+};
+
+declare type __VLS_WithTemplateSlots_15<T, S> = T & {
     new (): {
         $slots: S;
     };
@@ -641,6 +667,10 @@ export declare function openConfirm(options: ConfirmOptions): Promise<boolean>;
  * openToast({ message: '오래 유지', duration: 0 })  // 수동 close만
  */
 export declare function openToast(options: ToastOptions | string): number;
+
+export declare type ProgressSize = 'sm' | 'md' | 'lg';
+
+export declare type ProgressVariant = 'primary' | 'success' | 'warning' | 'danger';
 
 declare interface Props {
     /**
@@ -1045,6 +1075,21 @@ declare interface Props_26 {
     showLegend?: boolean;
 }
 
+declare interface Props_27 {
+    /** 현재 값 */
+    value: number;
+    /** 최대값 (기본 100) */
+    max?: number;
+    /** 상단 라벨 텍스트 (#label 슬롯으로도 가능) */
+    label?: string;
+    /** 퍼센트 텍스트 표시 */
+    showValue?: boolean;
+    /** 색상 변형 */
+    variant?: ProgressVariant;
+    /** 바 두께 — sm 6 / md 8 / lg 12px */
+    size?: ProgressSize;
+}
+
 declare interface Props_3 {
     modelValue?: string | number;
     options: SelectOption[];
@@ -1418,6 +1463,8 @@ showTotal: boolean;
 showRange: boolean;
 showFirstLast: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
+
+export declare const UiProgress: __VLS_WithTemplateSlots_15<typeof __VLS_component_14, __VLS_TemplateResult_14["slots"]>;
 
 export declare const UiRadio: __VLS_WithTemplateSlots_9<typeof __VLS_component_9, __VLS_TemplateResult_9["slots"]>;
 

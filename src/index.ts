@@ -53,6 +53,10 @@ export { default as UiChart } from './components/ui/UiChart.vue'
 export { useChart } from './composables/useChart'
 export type { ChartType } from './composables/useChart'
 
+// Progress 컴포넌트 — 가로 진행률 바
+export { default as UiProgress } from './components/ui/UiProgress.vue'
+export type { ProgressVariant, ProgressSize } from './components/ui/UiProgress.vue'
+
 // Confirm 컴포넌트 + composable — openConfirm()으로 Promise<boolean> 반환
 export { default as UiConfirm } from './components/ui/UiConfirm.vue'
 export { openConfirm } from './composables/useConfirm'
