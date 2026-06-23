@@ -48,6 +48,11 @@ export type { AccordionItemDef } from './components/ui/UiAccordion.vue'
 export { default as UiCalendarMonth } from './components/ui/UiCalendarMonth.vue'
 export type { CalendarMonthEvent, CalendarEventSpan } from './components/ui/UiCalendarMonth.vue'
 
+// Chart 컴포넌트 + useChart composable (Chart.js 기반, bar/line/pie/mixed/radar)
+export { default as UiChart } from './components/ui/UiChart.vue'
+export { useChart } from './composables/useChart'
+export type { ChartType } from './composables/useChart'
+
 // Confirm 컴포넌트 + composable — openConfirm()으로 Promise<boolean> 반환
 export { default as UiConfirm } from './components/ui/UiConfirm.vue'
 export { openConfirm } from './composables/useConfirm'

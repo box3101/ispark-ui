@@ -1,0 +1,122 @@
+<template>
+  <div class="ui-chart">
+    <div
+      v-if="showLegend"
+      :id="legendId"
+      class="ui-chart-legend"
+    />
+    <div class="ui-chart-canvas-wrap">
+      <canvas :id="chartId" />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { nextTick, onMounted, watch } from 'vue'
+import { useChart, type ChartType } from '../../composables/useChart'
+
+interface Props {
+  /** 차트 타입 — bar / line / pie / mixed / radar */
+  type: ChartType
+  /** 차트 설정 객체 (categories, data/datasets, colorKey, maxValue 등) */
+  config: Record<string, any>
+  /** 범례 표시 여부 */
+  showLegend?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  showLegend: false,
+})
+
+const { chartId, legendId, createChart, destroyChart } = useChart()
+
+/** 차트 렌더링 */
+const renderChart = () => {
+  destroyChart()
+  nextTick(() => {
+    createChart(props.type, {
+      ...props.config,
+      showLegend: props.showLegend,
+    })
+  })
+}
+
+onMounted(() => {
+  nextTick(() => {
+    renderChart()
+  })
+})
+
+// config 또는 type 변경 시 차트 재생성 (참조 비교 — key 변경으로 재생성 처리)
+watch(
+  () => props.config,
+  (newConfig, oldConfig) => {
+    if (newConfig !== oldConfig) {
+      renderChart()
+    }
+  },
+)
+
+watch(
+  () => props.type,
+  () => {
+    renderChart()
+  },
+)
+</script>
+
+<style lang="scss" scoped>
+.ui-chart {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ui-chart-legend {
+  display: flex;
+  justify-content: center;
+  gap: 4px 8px;
+  flex-shrink: 0;
+  margin-bottom: 10px;
+
+  :deep(.legend-item) {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+    @include typo($body-small);
+    color: $color-text-secondary;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  :deep(.legend-item__dot) {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  :deep(.legend-item__text) {
+    white-space: nowrap;
+  }
+
+  :deep(.legend-item__info) {
+    @include typo($body-xsmall);
+    color: $color-text-disabled;
+    margin-left: 2px;
+  }
+}
+
+.ui-chart-canvas-wrap {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 260px;
+}
+</style>

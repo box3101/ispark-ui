@@ -547,6 +547,8 @@ export declare interface CalendarMonthEvent {
     meta?: unknown;
 }
 
+export declare type ChartType = 'bar' | 'line' | 'pie' | 'mixed' | 'radar';
+
 /** 토스트 수동 닫기 */
 export declare function closeToast(id: number): void;
 
@@ -1034,6 +1036,15 @@ declare interface Props_25 {
     placeholder?: string;
 }
 
+declare interface Props_26 {
+    /** 차트 타입 — bar / line / pie / mixed / radar */
+    type: ChartType;
+    /** 차트 설정 객체 (categories, data/datasets, colorKey, maxValue 등) */
+    config: Record<string, any>;
+    /** 범례 표시 여부 */
+    showLegend?: boolean;
+}
+
 declare interface Props_3 {
     modelValue?: string | number;
     options: SelectOption[];
@@ -1282,6 +1293,10 @@ showWeekdays: boolean;
         span: CalendarEventSpan;
     }): any;
 }>;
+
+export declare const UiChart: DefineComponent<Props_26, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<Props_26> & Readonly<{}>, {
+showLegend: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 
 export declare const UiCheckbox: __VLS_WithTemplateSlots_8<typeof __VLS_component_8, __VLS_TemplateResult_8["slots"]>;
 
@@ -1543,5 +1558,13 @@ id: string;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 
 export declare const UiTooltip: __VLS_WithTemplateSlots_10<typeof __VLS_component_10, __VLS_TemplateResult_10["slots"]>;
+
+export declare const useChart: () => {
+    chartId: string;
+    legendId: string;
+    createChart: (type: ChartType, config: any) => void;
+    updateChart: (type: ChartType, newData: any) => void;
+    destroyChart: () => void;
+};
 
 export { }
