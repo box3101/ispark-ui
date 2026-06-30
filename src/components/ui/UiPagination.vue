@@ -1,6 +1,7 @@
 <template>
   <div
     class="ui-pagination"
+    :class="`align-${align}`"
     role="navigation"
     aria-label="페이지네이션"
   >
@@ -106,6 +107,8 @@ interface Props {
   showRange?: boolean
   /** 양 끝 처음/마지막 페이지 «/» 버튼 표시. 페이지 많은 케이스 권장. 기본 false */
   showFirstLast?: boolean
+  /** 가로 정렬. between(기본): 총개수·컨트롤·range를 양끝 분배 / left·center·right: 전체를 해당 위치로 */
+  align?: 'left' | 'center' | 'right' | 'between'
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -116,6 +119,7 @@ const props = withDefaults(defineProps<Props>(), {
   showTotal: true,
   showRange: true,
   showFirstLast: false,
+  align: 'between',
 })
 
 const emit = defineEmits<{
@@ -167,6 +171,17 @@ const onPageChange = (page: number) => {
   gap: 16px;
   width: 100%;
   flex-wrap: wrap;
+
+  // 가로 정렬 변형 (기본 between = space-between)
+  &.align-left {
+    justify-content: flex-start;
+  }
+  &.align-center {
+    justify-content: center;
+  }
+  &.align-right {
+    justify-content: flex-end;
+  }
 }
 
 .ui-pagination-total {

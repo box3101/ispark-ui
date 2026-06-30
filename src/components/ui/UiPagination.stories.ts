@@ -28,6 +28,7 @@ ispark-ui 표준 페이지네이션. UiTable과 짝으로 자주 쓰이는 리�
 - **\`prevLabel\`** / **\`nextLabel\`** — 이전/다음 버튼 라벨
 - **\`showTotal\`** \`boolean\` — '총 N개' 좌측 표시 (기본 true)
 - **\`showRange\`** \`boolean\` — 'n-m / total' 우측 표시 (기본 true)
+- **\`align\`** \`'left' | 'center' | 'right' | 'between'\` — 가로 정렬 (기본 'between' = 양끝 분배). 컨트롤만 가운데 두려면 \`align="center"\` + \`showTotal\`/\`showRange\` false
 
 ## 페이지 번호 표시 규칙
 - 총 7페이지 이하: 전체 번호 표시
@@ -61,6 +62,26 @@ export const Playground: Story = {
     totalCount: 247,
     pageSize: 10,
     totalLabel: '개',
+  },
+  render: (args) => ({
+    components: { UiPagination },
+    setup: () => {
+      const page = ref(args.modelValue)
+      return { args, page }
+    },
+    template: '<UiPagination v-bind="args" v-model="page" />',
+  }),
+}
+
+// 가운데 정렬 — 컨트롤만 중앙 (총개수/range 숨김)
+export const Centered: Story = {
+  args: {
+    modelValue: 1,
+    totalCount: 100,
+    pageSize: 10,
+    align: 'center',
+    showTotal: false,
+    showRange: false,
   },
   render: (args) => ({
     components: { UiPagination },

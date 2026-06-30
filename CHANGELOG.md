@@ -2,6 +2,13 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.5.19] - 2026-06-30
+
+### Added — UiPagination `align` prop
+- **`align`** `'left' | 'center' | 'right' | 'between'` (기본 `'between'`) — 가로 정렬. `justify-content` 매핑(left=flex-start / center=center / right=flex-end / between=space-between).
+  - 기본값 `'between'`으로 기존 동작 유지(하위호환). 컨트롤만 가운데 두려면 `align="center"` + `show-total`/`show-range` false 조합.
+  - 신규 `Centered` 스토리 추가.
+
 ## [0.5.18] - 2026-06-30
 
 ### Changed — UiPagination

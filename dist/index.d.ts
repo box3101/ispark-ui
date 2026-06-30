@@ -847,6 +847,8 @@ declare interface Props_17 {
     showRange?: boolean;
     /** 양 끝 처음/마지막 페이지 «/» 버튼 표시. 페이지 많은 케이스 권장. 기본 false */
     showFirstLast?: boolean;
+    /** 가로 정렬. between(기본): 총개수·컨트롤·range를 양끝 분배 / left·center·right: 전체를 해당 위치로 */
+    align?: 'left' | 'center' | 'right' | 'between';
 }
 
 declare interface Props_18 {
@@ -1455,6 +1457,7 @@ change: (page: number) => any;
 "onUpdate:modelValue"?: ((page: number) => any) | undefined;
 onChange?: ((page: number) => any) | undefined;
 }>, {
+align: "left" | "center" | "right" | "between";
 pageSize: number;
 totalLabel: string;
 prevLabel: string;
