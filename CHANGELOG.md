@@ -2,6 +2,13 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.5.18] - 2026-06-30
+
+### Changed — UiPagination
+- **`이전`/`다음`/`처음`/`끝` 버튼 border 제거** — 텍스트형 스타일로 변경. 페이지 번호 버튼은 기존 border 유지, active 페이지는 primary 채움 유지.
+  - hover 시 `--color-primary-bg` 배경 + primary 텍스트로 어포던스 제공.
+  - border-width(1px)는 투명으로 남겨 페이지 번호 버튼과 높이·정렬 일치(레이아웃 시프트 없음).
+
 ## [0.5.0] - 2026-05-07
 
 ### Added — UiModal 신규 컴포넌트

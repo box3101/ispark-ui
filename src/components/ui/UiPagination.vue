@@ -226,6 +226,19 @@ const onPageChange = (page: number) => {
   }
 }
 
+// 이전/다음/처음·끝 버튼 — border 없는 텍스트형 (페이지 번호 버튼은 border 유지)
+// border-width(1px)는 투명으로 남겨 페이지 번호 버튼과 높이·정렬을 맞춤
+.ui-pagination-btn {
+  border-color: transparent;
+  background: transparent;
+
+  &:hover:not(:disabled):not(.is-active) {
+    border-color: transparent;
+    background: var(--color-primary-bg);
+    color: var(--color-primary);
+  }
+}
+
 // edge(« ») 버튼은 살짝 좁고 텍스트 톤 다운
 .ui-pagination-btn--edge {
   min-width: 32px;

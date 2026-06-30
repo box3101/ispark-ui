@@ -35334,7 +35334,7 @@ const R5e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
       t.showRange ? (L(), N("span", zbe, re(a.value) + "-" + re(r.value) + " / " + re(t.totalCount), 1)) : ae("", !0)
     ]));
   }
-}), tRe = /* @__PURE__ */ Ue(Rbe, [["__scopeId", "data-v-3d5d3cfb"]]), Pbe = { class: "ui-dropdown-content-list" }, Bbe = { class: "ui-dropdown-item-label" }, nRe = /* @__PURE__ */ Ie({
+}), tRe = /* @__PURE__ */ Ue(Rbe, [["__scopeId", "data-v-fbeceb07"]]), Pbe = { class: "ui-dropdown-content-list" }, Bbe = { class: "ui-dropdown-item-label" }, nRe = /* @__PURE__ */ Ie({
   __name: "UiDropdownMenu",
   props: {
     items: {},
