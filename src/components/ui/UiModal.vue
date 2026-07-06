@@ -4,7 +4,7 @@
       <DialogOverlay v-if="showOverlay" class="ui-modal-overlay" />
       <DialogContent
         class="ui-modal-content"
-        :class="[`size-${size}`, customClass, { 'is-fullscreen': isFullscreen }]"
+        :class="[`ui-modal-size-${size}`, customClass, { 'is-fullscreen': isFullscreen }]"
         :style="contentStyle"
         @escape-key-down="onEscapeKeyDown"
         @pointer-down-outside="onPointerDownOutside"
@@ -164,10 +164,11 @@ const contentStyle = computed(() => {
   z-index: $z-modal + 1;
 
   // 반응형 max-width — viewport 안전 여백 보장
-  &.size-sm { max-width: min(400px, calc(100vw - 40px)); }
-  &.size-md { max-width: min(560px, calc(100vw - 40px)); }
-  &.size-lg { max-width: min(800px, calc(100vw - 40px)); }
-  &.size-xl { max-width: min(1080px, calc(100vw - 40px)); }
+  // 프리픽스(ui-modal-size-*): 호스트 앱의 레거시 글로벌 .size-md 등과 충돌 방지 (teleport로 언스코프드이므로)
+  &.ui-modal-size-sm { max-width: min(400px, calc(100vw - 40px)); }
+  &.ui-modal-size-md { max-width: min(560px, calc(100vw - 40px)); }
+  &.ui-modal-size-lg { max-width: min(800px, calc(100vw - 40px)); }
+  &.ui-modal-size-xl { max-width: min(1080px, calc(100vw - 40px)); }
 
   max-height: calc(100vh - 40px);
   overflow-y: auto;

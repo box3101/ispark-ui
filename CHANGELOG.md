@@ -2,6 +2,11 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.5.21] - 2026-07-06
+
+### Fixed — UiModal size 클래스 충돌
+- **UiModal size 클래스 `size-*` → `ui-modal-size-*` 프리픽스** — Radix teleport로 `<body>`에 언스코프드로 렌더되어 바 `.size-md` 등이 호스트 앱의 레거시 글로벌 `.size-md`(예: 입력 높이 유틸)와 충돌해 모달이 찌부러지던 문제 해결. 충돌 없는 컴포넌트 프리픽스 클래스로 변경.
+
 ## [0.5.20] - 2026-06-30
 
 ### Added — team_agent_front 마이그레이션 호환

@@ -754,7 +754,7 @@ const YU = {
               class: "ui-modal-overlay"
             })) : ae("", !0),
             Q(U(kB), {
-              class: ee(["ui-modal-content", [`size-${t.size}`, t.customClass, { "is-fullscreen": r.value }]]),
+              class: ee(["ui-modal-content", [`ui-modal-size-${t.size}`, t.customClass, { "is-fullscreen": r.value }]]),
               style: Mt(h.value),
               onEscapeKeyDown: c,
               onPointerDownOutside: l,
