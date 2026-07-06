@@ -88,6 +88,7 @@ interface Props {
     | 'outline'
     | 'ghost'
     | 'danger'
+    | 'dark'
   /**
    * 사이즈 — xs(24px) / sm(28px) / md(32px·기본) / lg(40px)
    */
@@ -423,6 +424,20 @@ defineExpose({
     @include desktop-hover {
       border-color: var(--color-primary);
       color: var(--color-primary);
+    }
+  }
+
+  // 진회색 solid(중립 강조) — 마이그레이션 호환용
+  &.variant-dark {
+    background-color: #58616a;
+    color: #fff;
+
+    @include desktop-hover {
+      background-color: #4a5259;
+    }
+
+    &:active:not(:disabled):not([aria-disabled='true']) {
+      background-color: #3f474d;
     }
   }
 

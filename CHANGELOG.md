@@ -2,6 +2,12 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.5.20] - 2026-06-30
+
+### Added — team_agent_front 마이그레이션 호환
+- **UiButton `dark` variant** — 진회색 solid(#58616a) 중립 강조 버튼. 기존 로컬 `variant="dark"` 이전 대응.
+- **UiModal `isOpen` prop (한시 호환 alias)** — 레거시 단방향 `:is-open` 바인딩 지원. `open` 미지정 시 `isOpen`으로 열림 상태 결정. `v-model:open` 정식 전환 후 제거 예정.
+
 ## [0.5.19] - 2026-06-30
 
 ### Added — UiPagination `align` prop

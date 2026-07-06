@@ -103,7 +103,7 @@ const YU = {
   for (const [o, i] of e)
     n[o] = i;
   return n;
-}, Fze = /* @__PURE__ */ Ue(tW, [["__scopeId", "data-v-b698fdf2"]]), nW = ["for"], oW = {
+}, Fze = /* @__PURE__ */ Ue(tW, [["__scopeId", "data-v-58e40bb8"]]), nW = ["for"], oW = {
   key: 0,
   class: "ui-input-required",
   "aria-hidden": "true"
@@ -711,6 +711,7 @@ const YU = {
   __name: "UiModal",
   props: {
     open: { type: Boolean, default: !1 },
+    isOpen: { type: Boolean },
     title: { default: "" },
     size: { default: "md" },
     showClose: { type: Boolean, default: !0 },
@@ -723,27 +724,27 @@ const YU = {
   },
   emits: ["update:open", "close"],
   setup(t, { emit: e }) {
-    const n = t, o = e, i = (h) => {
-      o("update:open", h), h || o("close");
-    }, a = xe(!1), r = () => {
-      a.value = !a.value;
+    const n = t, o = e, i = W(() => !!(n.open || n.isOpen)), a = (p) => {
+      o("update:open", p), p || o("close");
+    }, r = xe(!1), s = () => {
+      r.value = !r.value;
     };
     Ft(
-      () => n.open,
-      (h) => {
-        h || (a.value = !1);
+      i,
+      (p) => {
+        p || (r.value = !1);
       }
     );
-    const s = (h) => {
-      n.closeOnEscape || h.preventDefault();
-    }, c = (h) => {
-      n.closeOnOverlayClick || h.preventDefault();
-    }, l = (h) => {
-      n.closeOnOverlayClick || h.preventDefault();
-    }, d = W(() => a.value || !n.maxWidth ? {} : { maxWidth: n.maxWidth });
-    return (h, p) => (L(), Ne(U(yB), {
-      open: t.open,
-      "onUpdate:open": i
+    const c = (p) => {
+      n.closeOnEscape || p.preventDefault();
+    }, l = (p) => {
+      n.closeOnOverlayClick || p.preventDefault();
+    }, d = (p) => {
+      n.closeOnOverlayClick || p.preventDefault();
+    }, h = W(() => r.value || !n.maxWidth ? {} : { maxWidth: n.maxWidth });
+    return (p, f) => (L(), Ne(U(yB), {
+      open: i.value,
+      "onUpdate:open": a
     }, {
       default: Z(() => [
         Q(U(mB), null, {
@@ -753,15 +754,15 @@ const YU = {
               class: "ui-modal-overlay"
             })) : ae("", !0),
             Q(U(kB), {
-              class: ee(["ui-modal-content", [`size-${t.size}`, t.customClass, { "is-fullscreen": a.value }]]),
-              style: Mt(d.value),
-              onEscapeKeyDown: s,
-              onPointerDownOutside: c,
-              onInteractOutside: l
+              class: ee(["ui-modal-content", [`size-${t.size}`, t.customClass, { "is-fullscreen": r.value }]]),
+              style: Mt(h.value),
+              onEscapeKeyDown: c,
+              onPointerDownOutside: l,
+              onInteractOutside: d
             }, {
               default: Z(() => [
-                h.$slots.header || t.title || t.showClose || t.showFullscreen ? (L(), N("header", wW, [
-                  Te(h.$slots, "header", {}, () => [
+                p.$slots.header || t.title || t.showClose || t.showFullscreen ? (L(), N("header", wW, [
+                  Te(p.$slots, "header", {}, () => [
                     t.title ? (L(), Ne(U(Vd), {
                       key: 0,
                       class: "ui-modal-title"
@@ -774,7 +775,7 @@ const YU = {
                       key: 1,
                       class: "ui-modal-sr-only"
                     }, {
-                      default: Z(() => [...p[0] || (p[0] = [
+                      default: Z(() => [...f[0] || (f[0] = [
                         qe("모달", -1)
                       ])]),
                       _: 1
@@ -784,10 +785,10 @@ const YU = {
                         key: 0,
                         type: "button",
                         class: "ui-modal-fullscreen-toggle",
-                        "aria-label": a.value ? "축소" : "전체화면",
-                        onClick: r
+                        "aria-label": r.value ? "축소" : "전체화면",
+                        onClick: s
                       }, [
-                        a.value ? (L(), N("svg", AW, [...p[2] || (p[2] = [
+                        r.value ? (L(), N("svg", AW, [...f[2] || (f[2] = [
                           I("path", {
                             d: "M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5",
                             stroke: "currentColor",
@@ -795,7 +796,7 @@ const YU = {
                             "stroke-linecap": "round",
                             "stroke-linejoin": "round"
                           }, null, -1)
-                        ])])) : (L(), N("svg", LW, [...p[1] || (p[1] = [
+                        ])])) : (L(), N("svg", LW, [...f[1] || (f[1] = [
                           I("path", {
                             d: "M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5",
                             stroke: "currentColor",
@@ -810,7 +811,7 @@ const YU = {
                         class: "ui-modal-close",
                         "aria-label": "닫기"
                       }, {
-                        default: Z(() => [...p[3] || (p[3] = [
+                        default: Z(() => [...f[3] || (f[3] = [
                           I("svg", {
                             width: "20",
                             height: "20",
@@ -831,20 +832,20 @@ const YU = {
                     ])
                   ])
                 ])) : ae("", !0),
-                !h.$slots.header && !t.title && !t.showClose && !t.showFullscreen ? (L(), Ne(U(Vd), {
+                !p.$slots.header && !t.title && !t.showClose && !t.showFullscreen ? (L(), Ne(U(Vd), {
                   key: 1,
                   class: "ui-modal-sr-only"
                 }, {
-                  default: Z(() => [...p[4] || (p[4] = [
+                  default: Z(() => [...f[4] || (f[4] = [
                     qe("모달", -1)
                   ])]),
                   _: 1
                 })) : ae("", !0),
                 I("div", NW, [
-                  Te(h.$slots, "default")
+                  Te(p.$slots, "default")
                 ]),
-                h.$slots.footer ? (L(), N("footer", IW, [
-                  Te(h.$slots, "footer")
+                p.$slots.footer ? (L(), N("footer", IW, [
+                  Te(p.$slots, "footer")
                 ])) : ae("", !0)
               ]),
               _: 3

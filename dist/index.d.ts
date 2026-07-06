@@ -21,7 +21,7 @@ click: (event: MouseEvent) => any;
 }, string, PublicProps, Readonly<Props> & Readonly<{
 onClick?: ((event: MouseEvent) => any) | undefined;
 }>, {
-variant: "primary" | "secondary" | "outline" | "ghost" | "danger";
+variant: "primary" | "secondary" | "outline" | "ghost" | "danger" | "dark";
 size: Size;
 shape: Shape;
 as: "button" | "a";
@@ -676,7 +676,7 @@ declare interface Props {
     /**
      * 시멘틱 variant — primary(강조) / secondary(보조) / ghost(트리거) / danger(파괴)
      */
-    variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+    variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'dark';
     /**
      * 사이즈 — xs(24px) / sm(28px) / md(32px·기본) / lg(40px)
      */
@@ -1126,6 +1126,8 @@ declare interface Props_4 {
 
 declare interface Props_5 {
     open?: boolean;
+    /** [호환] 레거시 단방향 :is-open 지원. open 미지정 시 사용. v-model:open 전환 후 제거 예정 */
+    isOpen?: boolean;
     title?: string;
     size?: 'sm' | 'md' | 'lg' | 'xl';
     showClose?: boolean;

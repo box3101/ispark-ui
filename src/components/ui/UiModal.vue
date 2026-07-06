@@ -1,5 +1,5 @@
 <template>
-  <DialogRoot :open="open" @update:open="onUpdateOpen">
+  <DialogRoot :open="effectiveOpen" @update:open="onUpdateOpen">
     <DialogPortal>
       <DialogOverlay v-if="showOverlay" class="ui-modal-overlay" />
       <DialogContent
@@ -61,6 +61,8 @@ import { DialogClose, DialogContent, DialogOverlay, DialogPortal, DialogRoot, Di
 
 interface Props {
   open?: boolean
+  /** [호환] 레거시 단방향 :is-open 지원. open 미지정 시 사용. v-model:open 전환 후 제거 예정 */
+  isOpen?: boolean
   title?: string
   size?: 'sm' | 'md' | 'lg' | 'xl'
   showClose?: boolean
@@ -90,6 +92,9 @@ const emit = defineEmits<{
   close: []
 }>()
 
+// [호환] open(양방향 v-model) 또는 isOpen(레거시 단방향) 중 하나로 열림 상태 결정
+const effectiveOpen = computed(() => Boolean(props.open || props.isOpen))
+
 const onUpdateOpen = (value: boolean) => {
   emit('update:open', value)
   if (!value) emit('close')
@@ -104,7 +109,7 @@ const toggleFullscreen = () => {
 
 // 닫힐 때 fullscreen reset — 다시 열면 원래 size로
 watch(
-  () => props.open,
+  effectiveOpen,
   (open) => {
     if (!open) isFullscreen.value = false
   },
