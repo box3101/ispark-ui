@@ -11,6 +11,8 @@
 //   --major          major 버전 증가 (0.5.22 → 1.0.0)
 //   --no-app         team_agent_front 재설치·서버 재시작 생략 (ispark-ui 릴리스만)
 //   --no-issue       TaskFlow 이슈 자동 등록 생략
+//   --issue-only     ispark 릴리스 없이 team_agent_front 최신 커밋만 #36에 등록 후 종료
+//                    (ispark-ui 안 건드린 team_agent 단독 작업 기록용, 변경 요약 인자 불필요)
 //   --app <경로>     이번 실행에만 소비 프로젝트 경로 지정
 //   --set-app <경로> 소비 프로젝트 경로를 로컬에 저장(팀원별 최초 1회) 후 종료
 //   --set-taskflow <이메일> <비밀번호>  TaskFlow 로그인 정보를 로컬에 저장(팀원별 최초 1회) 후 종료
@@ -67,6 +69,7 @@ let type = 'Changed'
 let bump = 'patch'
 let skipApp = false
 let skipIssue = false // --no-issue: TaskFlow 이슈 등록 생략
+let issueOnly = false // --issue-only: 릴리스 없이 team_agent 최신 커밋만 #36 등록
 let appOverride = '' // --app: 이번 실행만 사용할 경로
 let setAppPath = '' // --set-app: 로컬 설정에 저장할 경로
 let setTf = null // --set-taskflow: { email, password }
@@ -79,6 +82,7 @@ for (let i = 0; i < raw.length; i++) {
   if (a === '--major') { bump = 'major'; continue }
   if (a === '--no-app') { skipApp = true; continue }
   if (a === '--no-issue') { skipIssue = true; continue }
+  if (a === '--issue-only') { issueOnly = true; continue }
   if (a === '--app') { appOverride = raw[++i] || ''; continue }
   if (a === '--set-app') { setAppPath = raw[++i] || ''; continue }
   if (a === '--set-taskflow') { setTf = { email: raw[++i] || '', password: raw[++i] || '' }; continue }
@@ -110,6 +114,28 @@ if (setTf) {
   writeFileSync(LOCAL_CONFIG, JSON.stringify(cfg, null, 2) + '\n')
   ok(`TaskFlow 계정 저장됨 → ${setTf.email}`)
   console.log(`   ${LOCAL_CONFIG} (git 에 커밋되지 않음)`)
+  process.exit(0)
+}
+
+// --issue-only: ispark 릴리스 없이 team_agent_front 최신 커밋만 #36에 등록하고 종료
+// (ispark-ui를 안 건드린 team_agent 단독 작업 기록용 — 변경 요약 인자 불필요)
+if (issueOnly) {
+  const appDir = appOverride || process.env.ISPARK_APP_DIR || readLocalConfig().appDir || DEFAULT_APP_DIR
+  if (!existsSync(appDir)) {
+    die(`소비 프로젝트 경로 없음: ${appDir}\n   저장:  node scripts/release.mjs --set-app "C:\\내경로\\team_agent_front"`)
+  }
+  const { apiBase, email, password } = taskflowCreds()
+  if (!email || !password) {
+    die('TaskFlow 로그인 정보 없음\n   저장:  node scripts/release.mjs --set-taskflow <이메일> <비밀번호>')
+  }
+  let token
+  try {
+    token = await tfLogin(apiBase, email, password)
+  } catch (e) {
+    die(`TaskFlow 로그인 실패 — ${e.message} (${apiBase} 백엔드 기동 확인)`)
+  }
+  log(`TeamAgent #36 등록 (team_agent_front 최신 커밋)`)
+  await registerTeamAgentIssue(apiBase, token, appDir)
   process.exit(0)
 }
 
@@ -241,29 +267,65 @@ function restartDevServer(appDir) {
 }
 
 // ============================================
-// 헬퍼: TaskFlow 이슈 자동 등록
+// 헬퍼: TaskFlow 로그인 정보 / 로그인
+// ============================================
+function taskflowCreds() {
+  const tf = readLocalConfig().taskflow || {}
+  return {
+    apiBase: process.env.TASKFLOW_API || tf.apiBase || TF_DEFAULT_API,
+    email: process.env.TASKFLOW_EMAIL || tf.email || '',
+    password: process.env.TASKFLOW_PASSWORD || tf.password || '',
+  }
+}
+
+async function tfLogin(apiBase, email, password) {
+  const res = await fetch(`${apiBase}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  })
+  if (!res.ok) throw new Error(`로그인 ${res.status}`)
+  return (await res.json()).token
+}
+
+// team_agent_front HEAD 커밋 1개를 #36에 등록 (--issue-only / 릴리스 반영 공용)
+async function registerTeamAgentIssue(apiBase, token, appDir) {
+  try {
+    const taSha = capture('git rev-parse --short HEAD', { cwd: appDir })
+    const taSubject = capture('git log -1 --pretty=%s', { cwd: appDir })
+    const taFiles = capture('git show --name-only --pretty=format: HEAD', { cwd: appDir })
+      .split('\n').map((s) => s.trim())
+      .filter((f) => f.startsWith('pages/') || f.startsWith('components/'))
+    const taBody = [
+      '변경: 최신 커밋 반영',
+      ...(taFiles.length ? taFiles.slice(0, 20).map((f) => `- ${f}`) : ['- (pages/components 변경 없음)']),
+      `커밋: ${taSha}`,
+    ].join('\n')
+    await createIssueIfNew(apiBase, token, TF_PROJECT_TEAMAGENT, {
+      title: taSubject,
+      description: taBody,
+      category: 'improvement',
+      status: 'done',
+    }, taSha, 'TeamAgent #36')
+  } catch (e) {
+    console.warn(`${c.gray}ℹ TeamAgent #36 등록 생략 — ${e.message}${c.reset}`)
+  }
+}
+
+// ============================================
+// 헬퍼: TaskFlow 이슈 자동 등록 (릴리스 흐름용)
 //   #33 ← 이번 ispark-ui 릴리스,  #36 ← team_agent_front 최신 커밋
 //   실패/미설정 시 릴리스는 그대로 두고 경고만 출력 (best-effort)
 // ============================================
 async function registerIssues(appReflected) {
-  const tf = readLocalConfig().taskflow || {}
-  const apiBase = process.env.TASKFLOW_API || tf.apiBase || TF_DEFAULT_API
-  const email = process.env.TASKFLOW_EMAIL || tf.email || ''
-  const password = process.env.TASKFLOW_PASSWORD || tf.password || ''
+  const { apiBase, email, password } = taskflowCreds()
   if (!email || !password) {
     console.warn(`${c.gray}ℹ TaskFlow 로그인 정보 없음 — 이슈 등록 생략.\n   저장:  node scripts/release.mjs --set-taskflow <이메일> <비밀번호>${c.reset}`)
     return
   }
-
   let token
   try {
-    const res = await fetch(`${apiBase}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    })
-    if (!res.ok) throw new Error(`로그인 ${res.status}`)
-    token = (await res.json()).token
+    token = await tfLogin(apiBase, email, password)
   } catch (e) {
     console.warn(`${c.gray}ℹ TaskFlow 이슈 등록 생략 — ${e.message} (${apiBase} 백엔드 기동 확인)${c.reset}`)
     return
@@ -286,28 +348,7 @@ async function registerIssues(appReflected) {
   }, shortHash, 'ispark-ui #33')
 
   // #36 TeamAgent — 최신 커밋 (실제 재설치가 이뤄졌을 때만)
-  if (appReflected) {
-    try {
-      const taSha = capture('git rev-parse --short HEAD', { cwd: APP_DIR })
-      const taSubject = capture('git log -1 --pretty=%s', { cwd: APP_DIR })
-      const taFiles = capture('git show --name-only --pretty=format: HEAD', { cwd: APP_DIR })
-        .split('\n').map((s) => s.trim())
-        .filter((f) => f.startsWith('pages/') || f.startsWith('components/'))
-      const taBody = [
-        '변경: 최신 커밋 반영',
-        ...(taFiles.length ? taFiles.slice(0, 20).map((f) => `- ${f}`) : ['- (pages/components 변경 없음)']),
-        `커밋: ${taSha}`,
-      ].join('\n')
-      await createIssueIfNew(apiBase, token, TF_PROJECT_TEAMAGENT, {
-        title: taSubject,
-        description: taBody,
-        category: 'improvement',
-        status: 'done',
-      }, taSha, 'TeamAgent #36')
-    } catch (e) {
-      console.warn(`${c.gray}ℹ TeamAgent #36 등록 생략 — ${e.message}${c.reset}`)
-    }
-  }
+  if (appReflected) await registerTeamAgentIssue(apiBase, token, APP_DIR)
 }
 
 // 커밋 sha 로 중복 체크 후 없을 때만 이슈 생성
