@@ -1,0 +1,4 @@
+{
+  "//": "이 파일을 release.local.json 로 복사해서 본인 team_agent_front 경로를 넣으세요. (또는 `node scripts/release.mjs --set-app \"경로\"` 한 번 실행) release.local.json 은 git 에 커밋되지 않습니다.",
+  "appDir": "C:\\team_agent_front"
+}

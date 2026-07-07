@@ -6,10 +6,14 @@
 //   npm run release -- "변경 요약" [옵션]
 //
 // 옵션:
-//   --type <섹션>   CHANGELOG 섹션명 (기본 Changed) 예) --type Fixed / Added
-//   --minor         minor 버전 증가 (0.5.22 → 0.6.0)
-//   --major         major 버전 증가 (0.5.22 → 1.0.0)
-//   --no-app        team_agent_front 재설치·서버 재시작 생략 (ispark-ui 릴리스만)
+//   --type <섹션>    CHANGELOG 섹션명 (기본 Changed) 예) --type Fixed / Added
+//   --minor          minor 버전 증가 (0.5.22 → 0.6.0)
+//   --major          major 버전 증가 (0.5.22 → 1.0.0)
+//   --no-app         team_agent_front 재설치·서버 재시작 생략 (ispark-ui 릴리스만)
+//   --app <경로>     이번 실행에만 소비 프로젝트 경로 지정
+//   --set-app <경로> 소비 프로젝트 경로를 로컬에 저장(팀원별 최초 1회) 후 종료
+//
+// 소비 프로젝트 경로 우선순위: --app > 환경변수 ISPARK_APP_DIR > 로컬설정(release.local.json) > 기본값
 //
 // 동작 순서:
 //   1) npm run build            (dist 재생성 + 타입체크, 실패 시 여기서 중단)
@@ -30,10 +34,14 @@ import { tmpdir } from 'node:os'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(__dirname, '..') // ispark-ui 루트
 
-// ---- 환경 설정 (필요 시 환경변수로 덮어쓰기) ----
-const APP_DIR = process.env.ISPARK_APP_DIR || 'C:\\team_agent_front' // 소비 프로젝트 경로
+// ---- 환경 설정 ----
 const REPO_SLUG = 'box3101/ispark-ui' // github: 설치 슬러그
 const DEV_PORTS = [3001, 3000] // team_agent_front dev 서버 후보 포트
+const DEFAULT_APP_DIR = 'C:\\team_agent_front' // 소비 프로젝트 기본 경로 (팀원별로 다르면 --set-app 로 저장)
+const LOCAL_CONFIG = resolve(__dirname, 'release.local.json') // 사람마다 다른 로컬 설정 (git 무시)
+const readLocalConfig = () => {
+  try { return JSON.parse(readFileSync(LOCAL_CONFIG, 'utf8')) } catch { return {} }
+}
 
 // ---- 로그 헬퍼 ----
 const c = { cyan: '\x1b[36m', green: '\x1b[32m', gray: '\x1b[90m', red: '\x1b[31m', reset: '\x1b[0m' }
@@ -50,6 +58,8 @@ const capture = (cmd, opts = {}) => execSync(cmd, { encoding: 'utf8', cwd: ROOT,
 let type = 'Changed'
 let bump = 'patch'
 let skipApp = false
+let appOverride = '' // --app: 이번 실행만 사용할 경로
+let setAppPath = '' // --set-app: 로컬 설정에 저장할 경로
 const msgParts = []
 const raw = process.argv.slice(2)
 for (let i = 0; i < raw.length; i++) {
@@ -58,13 +68,29 @@ for (let i = 0; i < raw.length; i++) {
   if (a === '--minor') { bump = 'minor'; continue }
   if (a === '--major') { bump = 'major'; continue }
   if (a === '--no-app') { skipApp = true; continue }
+  if (a === '--app') { appOverride = raw[++i] || ''; continue }
+  if (a === '--set-app') { setAppPath = raw[++i] || ''; continue }
   if (a.startsWith('--')) continue // 알 수 없는 플래그 무시
   msgParts.push(a)
 }
+
+// --set-app: 소비 프로젝트 경로를 로컬 설정에 저장하고 종료 (팀원별 최초 1회만 실행)
+if (setAppPath) {
+  const cfg = readLocalConfig()
+  cfg.appDir = setAppPath
+  writeFileSync(LOCAL_CONFIG, JSON.stringify(cfg, null, 2) + '\n')
+  ok(`앱 경로 저장됨 → ${setAppPath}`)
+  console.log(`   ${LOCAL_CONFIG} (git 에 커밋되지 않음)`)
+  process.exit(0)
+}
+
 const message = msgParts.join(' ').trim()
 if (!message) {
   die('변경 요약을 입력하세요.  예)  npm run release -- "UiDrawer 타이틀 18px로 확대"')
 }
+
+// 소비 프로젝트 경로 결정: --app > 환경변수 > 로컬설정 > 기본값
+const APP_DIR = appOverride || process.env.ISPARK_APP_DIR || readLocalConfig().appDir || DEFAULT_APP_DIR
 
 // ============================================
 // 1) 빌드 — 실패하면 버전/CHANGELOG 손대기 전에 중단
@@ -144,7 +170,7 @@ if (skipApp) {
 
 if (!existsSync(APP_DIR)) {
   console.log(`\n${c.green}🎉 ispark-ui 릴리스 완료${c.reset}  v${newVersion} · ${shortHash}`)
-  die(`소비 프로젝트 경로를 찾지 못함: ${APP_DIR}  (ISPARK_APP_DIR 환경변수로 지정 가능)`)
+  die(`소비 프로젝트 경로를 찾지 못함: ${APP_DIR}\n   경로 저장:  node scripts/release.mjs --set-app "C:\\내경로\\team_agent_front"`)
 }
 
 log(`team_agent_front 재설치 (github:${REPO_SLUG}#${shortHash})`)
