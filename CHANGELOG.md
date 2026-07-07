@@ -2,6 +2,11 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.5.22] - 2026-07-07
+
+### Changed — UiDrawer 타이틀 크기
+- **`.ui-drawer-title` font-size `16px` → `18px`** — 드로어 헤더 타이틀 위계 강화. UiModal 등 다른 오버레이 타이틀과 시각 크기 정합.
+
 ## [0.5.21] - 2026-07-06
 
 ### Fixed — UiModal size 클래스 충돌

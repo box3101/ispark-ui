@@ -36962,7 +36962,7 @@ const k6e = {
       }, 8, ["name"])
     ]));
   }
-}), cRe = /* @__PURE__ */ Ue(C6e, [["__scopeId", "data-v-e100c6b2"]]), S6e = {
+}), cRe = /* @__PURE__ */ Ue(C6e, [["__scopeId", "data-v-573ceac0"]]), S6e = {
   key: 0,
   class: "ui-file-list"
 }, L6e = ["href"], A6e = ["src", "alt"], N6e = { class: "ui-file-item__info" }, I6e = { class: "ui-file-item__name" }, E6e = ["onClick"], T6e = ["href"], D6e = ["onClick"], $6e = /* @__PURE__ */ Ie({

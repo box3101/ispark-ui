@@ -397,7 +397,7 @@ onUnmounted(() => {
 }
 
 .ui-drawer-title {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   color: $color-text-heading;
   margin: 0;
