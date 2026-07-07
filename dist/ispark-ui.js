@@ -36755,7 +36755,7 @@ const k6e = {
   props: {
     open: { type: Boolean, default: !1 },
     title: { default: "" },
-    width: { default: "420px" },
+    width: { default: "620px" },
     minWidth: { default: "320px" },
     maxWidth: { default: "100vw" },
     position: { default: "right" },
@@ -36962,7 +36962,7 @@ const k6e = {
       }, 8, ["name"])
     ]));
   }
-}), cRe = /* @__PURE__ */ Ue(C6e, [["__scopeId", "data-v-573ceac0"]]), S6e = {
+}), cRe = /* @__PURE__ */ Ue(C6e, [["__scopeId", "data-v-3afa2db4"]]), S6e = {
   key: 0,
   class: "ui-file-list"
 }, L6e = ["href"], A6e = ["src", "alt"], N6e = { class: "ui-file-item__info" }, I6e = { class: "ui-file-item__name" }, E6e = ["onClick"], T6e = ["href"], D6e = ["onClick"], $6e = /* @__PURE__ */ Ie({

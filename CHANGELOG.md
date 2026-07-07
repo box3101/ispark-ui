@@ -2,6 +2,11 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.5.23] - 2026-07-07
+
+### Changed
+- UiDrawer width 변경
+
 ## [0.5.22] - 2026-07-07
 
 ### Changed — UiDrawer 타이틀 크기

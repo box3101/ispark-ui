@@ -108,7 +108,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   open: false,
   title: '',
-  width: '420px',
+  width: '620px',
   minWidth: '320px',
   maxWidth: '100vw',
   position: 'right',
