@@ -104,7 +104,10 @@
         @end="onReorderEnd"
       >
         <template #item="{ element: row, index: rowIdx }">
-          <tr class="ui-table-drag-row">
+          <tr
+            class="ui-table-drag-row"
+            :class="{ 'has-drag-handle': !!dragHandle }"
+          >
             <td
               v-for="(col, colIdx) in visibleColumns"
               :key="col.key"
@@ -630,8 +633,9 @@ watch(
 }
 
 // ===== 드래그 재정렬 (draggable 모드) =====
-// 핸들 미지정 시 행 전체가 드래그 대상 → grab 커서
-.ui-table-drag-row {
+// 핸들 미지정 시에만 행 전체가 드래그 대상 → grab 커서.
+// 핸들(dragHandle) 지정 시엔 커서를 행에 주지 않음 (핸들 요소가 소비 측에서 grab 처리)
+.ui-table-drag-row:not(.has-drag-handle) {
   cursor: grab;
 
   &:active {

@@ -2,6 +2,11 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.6.2] - 2026-07-08
+
+### Fixed
+- UiTable draggable — dragHandle 지정 시 grab 커서를 행 전체가 아닌 핸들에만 적용
+
 ## [0.6.1] - 2026-07-08
 
 ### Fixed
