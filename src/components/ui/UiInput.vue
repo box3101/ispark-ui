@@ -676,9 +676,6 @@ defineExpose({
 
   &.is-focused:not(.is-disabled) {
     border-color: var(--color-primary);
-    // Button/Select와 동일한 outline ring — 키보드 포커스 시각 통일
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
   }
 
   // ===== size — 공용 토큰 (height/padding-x/font + 자동 icon size) =====

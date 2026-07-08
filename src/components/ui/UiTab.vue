@@ -230,6 +230,13 @@ const onKeydown = (e: KeyboardEvent) => {
   }
 }
 
+.ui-tab-item-label {
+  // 활성 탭 라벨 볼드 — 사이즈 typo 믹스인이 부모 font-weight를 덮으므로 라벨에 직접 지정
+  .is-active & {
+    font-weight: $font-weight-bold;
+  }
+}
+
 .ui-tab-item-count {
   display: inline-flex;
   align-items: center;
