@@ -74,9 +74,9 @@
         </tr>
       </thead>
 
-      <tbody>
-        <!-- 빈 상태 — #empty 슬롯 우선, 기본은 UiEmpty 컴포넌트 사용 -->
-        <tr v-if="!data || data.length === 0">
+      <!-- 빈 상태 — #empty 슬롯 우선, 기본은 UiEmpty 컴포넌트 사용 -->
+      <tbody v-if="!data || data.length === 0">
+        <tr>
           <td
             :colspan="visibleColumns.length"
             class="ui-table-empty"
@@ -90,11 +90,44 @@
             </slot>
           </td>
         </tr>
+      </tbody>
 
-        <!-- 데이터 행 — clickable일 때 키보드(Enter/Space)도 지원 (button 역할) -->
+      <!-- 드래그 재정렬 모드 — vuedraggable(지연 로드)로 tbody 렌더 -->
+      <component
+        :is="DraggableComp"
+        v-else-if="draggable"
+        v-model="dragModel"
+        tag="tbody"
+        :item-key="itemKey"
+        :handle="dragHandle"
+        :animation="dragAnimation"
+        @end="onReorderEnd"
+      >
+        <template #item="{ element: row, index: rowIdx }">
+          <tr class="ui-table-drag-row">
+            <td
+              v-for="(col, colIdx) in visibleColumns"
+              :key="col.key"
+              :class="{ 'is-last': colIdx === visibleColumns.length - 1 }"
+              :style="{ textAlign: col.align || 'center' }"
+            >
+              <slot
+                :name="`cell-${col.key}`"
+                :row="row"
+                :value="row[col.key]"
+                :index="rowIdx"
+              >
+                {{ row[col.key] }}
+              </slot>
+            </td>
+          </tr>
+        </template>
+      </component>
+
+      <!-- 데이터 행 — clickable일 때 키보드(Enter/Space)도 지원 (button 역할) -->
+      <tbody v-else>
         <tr
           v-for="(row, rowIdx) in displayedData"
-          v-else
           :key="rowIdx"
           :class="{ 'is-clickable': clickable, 'is-selected': isRowSelected(row) }"
           :tabindex="clickable ? 0 : undefined"
@@ -125,7 +158,7 @@
 </template>
 
 <script setup lang="ts" generic="TRow extends Record<string, unknown> = Record<string, unknown>">
-import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 import type { Ref } from 'vue'
 import UiEmpty from './UiEmpty.vue'
 import UiSelect from './UiSelect.vue'
@@ -177,6 +210,17 @@ export interface UiTableProps<TRow extends Record<string, unknown> = Record<stri
   selectedRowValue?: unknown
   /** 컬럼 세로 구분선 표시 여부 (기본: true) */
   bordered?: boolean
+  /**
+   * 드래그 재정렬 모드 — 활성 시 정렬/필터 UI 비활성, 행 순서를 `v-model:data`로 반영.
+   * (vuedraggable 지연 로드 — 이 모드일 때만 번들 로드)
+   */
+  draggable?: boolean
+  /** draggable 모드 행 고유키 (기본 'id') */
+  itemKey?: string
+  /** draggable 핸들 셀렉터 (예: '.drag-handle') — 미지정 시 행 전체 드래그 */
+  dragHandle?: string
+  /** draggable 애니메이션 ms (기본 200) */
+  dragAnimation?: number
 }
 
 const props = withDefaults(defineProps<UiTableProps<TRow>>(), {
@@ -190,6 +234,10 @@ const props = withDefaults(defineProps<UiTableProps<TRow>>(), {
   selectedRowKey: undefined,
   selectedRowValue: undefined,
   bordered: true,
+  draggable: false,
+  itemKey: 'id',
+  dragHandle: undefined,
+  dragAnimation: 200,
 })
 
 // ===== 가로 스크롤 힌트 =====
@@ -280,7 +328,8 @@ const isRowSelected = (row: TRow) => {
 type SortOrder = 'asc' | 'desc' | ''
 const sortState = ref<{ key: string; order: SortOrder }>({ key: '', order: '' })
 
-const isColumnSortable = (col: TableColumn) => col.sortable === true
+// draggable 모드에선 정렬 비활성 (정렬된 뷰 재정렬 모순 방지)
+const isColumnSortable = (col: TableColumn) => !props.draggable && col.sortable === true
 
 const getSortOrder = (key: string): SortOrder => (sortState.value.key === key ? sortState.value.order : '')
 
@@ -365,13 +414,25 @@ watch(
 const emit = defineEmits<{
   'row-click': [row: TRow, index: number]
   'filter-change': [filters: Record<string, string>]
+  'update:data': [rows: TRow[]]
+  'reorder-end': []
 }>()
+
+// ===== 드래그 재정렬 (draggable 모드) — vuedraggable 지연 로드 =====
+// draggable=true일 때만 import되어 비드래그 사용자 번들에서 격리됨
+const DraggableComp = defineAsyncComponent(() => import('vuedraggable'))
+const dragModel = computed<TRow[]>({
+  get: () => props.data,
+  set: (rows) => emit('update:data', rows),
+})
+const onReorderEnd = () => emit('reorder-end')
 
 // ===== 필터 =====
 const filterState = ref<Record<string, string>>({}) as Ref<Record<string, string>>
 
+// draggable 모드에선 필터 비활성
 const isColumnFilterable = (col: TableColumn) =>
-  col.filterable === true && col.filterOptions && col.filterOptions.length > 0
+  !props.draggable && col.filterable === true && col.filterOptions && col.filterOptions.length > 0
 
 const getFilterValue = (key: string) => filterState.value[key] ?? ''
 
@@ -566,6 +627,25 @@ watch(
   text-align: center !important;
   color: $color-text-disabled;
   @include typo($body-medium);
+}
+
+// ===== 드래그 재정렬 (draggable 모드) =====
+// 핸들 미지정 시 행 전체가 드래그 대상 → grab 커서
+.ui-table-drag-row {
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+// SortableJS가 드래그 중 원본 행에 부여하는 전역 클래스
+:deep(.sortable-ghost) {
+  opacity: 0.4;
+}
+
+:deep(.sortable-drag) {
+  cursor: grabbing;
 }
 
 // ===== borderless (세로 구분선 제거) =====

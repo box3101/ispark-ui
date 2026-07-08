@@ -2,6 +2,11 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.6.0] - 2026-07-08
+
+### Added
+- UiTable draggable 모드 추가 (행 드래그 재정렬, vuedraggable 지연 로드)
+
 ## [0.5.25] - 2026-07-08
 
 ### Added

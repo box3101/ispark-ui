@@ -721,3 +721,51 @@ export const Borderless: Story = {
     await expect(thStyle.borderRightStyle).toBe('none')
   },
 }
+
+// ===== Draggable — 드래그로 행 순서 변경 (vuedraggable 지연 로드) =====
+// `draggable` + `v-model:data` 조합. 이 모드에선 정렬/필터 비활성, `@reorder-end`로 종료 감지.
+const dragColumns: TableColumn[] = [
+  { key: '_drag', label: '', width: '40px', align: 'center' },
+  { key: 'name', label: '항목', align: 'left' },
+  { key: 'useYn', label: '사용', width: '80px' },
+]
+
+export const Draggable: Story = {
+  name: '드래그 재정렬 (draggable)',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`draggable` + `v-model:data`로 행 순서를 드래그 변경. `drag-handle`로 핸들 셀렉터 지정(미지정 시 행 전체 드래그). 이 모드에선 정렬/필터 UI가 비활성화되고, `@reorder-end`로 드래그 종료를 감지한다. vuedraggable은 이 모드일 때만 지연 로드된다.',
+      },
+    },
+  },
+  render: () => ({
+    components: { UiTable },
+    setup() {
+      const rows = ref([
+        { id: 1, name: '지식검색', useYn: 'Y' },
+        { id: 2, name: '데이터분석', useYn: 'Y' },
+        { id: 3, name: '리스크진단', useYn: 'N' },
+        { id: 4, name: '뉴스큐레이션', useYn: 'Y' },
+      ])
+      return { rows, dragColumns }
+    },
+    template: `
+      <UiTable
+        draggable
+        v-model:data="rows"
+        :columns="dragColumns"
+        item-key="id"
+        drag-handle=".drag-handle"
+      >
+        <template #cell-_drag>
+          <span class="drag-handle" style="cursor: grab; user-select: none; color: #9aa4b2;">⣿</span>
+        </template>
+        <template #cell-useYn="{ value }">
+          {{ value === 'Y' ? '사용' : '미사용' }}
+        </template>
+      </UiTable>
+    `,
+  }),
+}

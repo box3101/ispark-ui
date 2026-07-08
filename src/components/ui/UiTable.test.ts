@@ -164,4 +164,22 @@ describe('UiTable', () => {
     await nextTick()
     expect(rows[0].classList.contains('is-selected')).toBe(false)
   })
+
+  // 7. draggable 모드 — sortable 컬럼이어도 정렬 UI 비활성 (정렬된 뷰 재정렬 모순 방지)
+  it('draggable=true면 sortable 컬럼이어도 정렬 버튼 미렌더', async () => {
+    const columns: TableColumn[] = [
+      { key: 'name', label: '이름', align: 'left' },
+      { key: 'score', label: '점수', sortable: true, sortType: 'number' },
+    ]
+    const data = [
+      { id: 1, name: 'A', score: 30 },
+      { id: 2, name: 'B', score: 10 },
+    ]
+    render(UiTable, { props: { columns, data, draggable: true, itemKey: 'id' } })
+    await nextTick()
+
+    // 정렬 버튼은 렌더되지 않고(정렬 비활성), 헤더 라벨만 표시
+    expect(screen.queryByRole('button', { name: /점수/ })).toBeNull()
+    expect(screen.getByText('점수')).toBeTruthy()
+  })
 })

@@ -1512,7 +1512,9 @@ export declare const UiTable: <TRow extends Record<string, unknown> = Record<str
     props: __VLS_PrettifyLocal<Pick<Partial<{}> & Omit<{
         readonly "onRow-click"?: ((row: TRow, index: number) => any) | undefined;
         readonly "onFilter-change"?: ((filters: Record<string, string>) => any) | undefined;
-    } & VNodeProps & AllowedComponentProps & ComponentCustomProps, never>, "onRow-click" | "onFilter-change"> & UiTableProps<TRow> & Partial<{}>> & PublicProps;
+        readonly "onUpdate:data"?: ((rows: TRow[]) => any) | undefined;
+        readonly "onReorder-end"?: (() => any) | undefined;
+    } & VNodeProps & AllowedComponentProps & ComponentCustomProps, never>, "onRow-click" | "onFilter-change" | "onUpdate:data" | "onReorder-end"> & UiTableProps<TRow> & Partial<{}>> & PublicProps;
     expose(exposed: ShallowUnwrapRef<    {}>): void;
     attrs: any;
     slots: Partial<Record<`header-${string}`, (_: {
@@ -1521,13 +1523,17 @@ export declare const UiTable: <TRow extends Record<string, unknown> = Record<str
         sortOrder: "" | "desc" | "asc";
         onSort: () => void;
     }) => any>> & Partial<Record<`cell-${string}`, (_: {
+        row: any;
+        value: any;
+        index: any;
+    }) => any>> & Partial<Record<`cell-${string}`, (_: {
         row: TRow;
         value: unknown;
         index: number;
     }) => any>> & {
         empty?(_: {}): any;
     };
-    emit: ((evt: "row-click", row: TRow, index: number) => void) & ((evt: "filter-change", filters: Record<string, string>) => void);
+    emit: ((evt: "row-click", row: TRow, index: number) => void) & ((evt: "filter-change", filters: Record<string, string>) => void) & ((evt: "update:data", rows: TRow[]) => void) & ((evt: "reorder-end") => void);
 }>) => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }> & {
@@ -1557,6 +1563,17 @@ declare interface UiTableProps<TRow extends Record<string, unknown> = Record<str
     selectedRowValue?: unknown;
     /** 컬럼 세로 구분선 표시 여부 (기본: true) */
     bordered?: boolean;
+    /**
+     * 드래그 재정렬 모드 — 활성 시 정렬/필터 UI 비활성, 행 순서를 `v-model:data`로 반영.
+     * (vuedraggable 지연 로드 — 이 모드일 때만 번들 로드)
+     */
+    draggable?: boolean;
+    /** draggable 모드 행 고유키 (기본 'id') */
+    itemKey?: string;
+    /** draggable 핸들 셀렉터 (예: '.drag-handle') — 미지정 시 행 전체 드래그 */
+    dragHandle?: string;
+    /** draggable 애니메이션 ms (기본 200) */
+    dragAnimation?: number;
 }
 
 export declare const UiTextarea: DefineComponent<Props_15, {
