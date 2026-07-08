@@ -2,6 +2,11 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.6.1] - 2026-07-08
+
+### Fixed
+- UiTable draggable — vuedraggable externalize(peerDep 전환), 소비 앱 지연 로드 청크 미해결 수정
+
 ## [0.6.0] - 2026-07-08
 
 ### Added

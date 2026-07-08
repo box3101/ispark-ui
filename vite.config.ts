@@ -48,7 +48,7 @@ export default defineConfig({
     },
     rollupOptions: {
       // peerDependencies는 번들 제외 (소비 앱과 중복 방지)
-      external: ['vue', 'radix-vue', /^@internationalized\/date/],
+      external: ['vue', 'radix-vue', 'vuedraggable', /^@internationalized\/date/],
       output: {
         globals: {
           vue: 'Vue',
