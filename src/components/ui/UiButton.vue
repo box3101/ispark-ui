@@ -80,10 +80,11 @@ const sanitizeHref = (raw?: string): string | undefined => {
 
 interface Props {
   /**
-   * 시멘틱 variant — primary(강조) / secondary(보조) / ghost(트리거) / danger(파괴)
+   * 시멘틱 variant — primary(강조) / primary-line(파란 테두리) / secondary(보조) / ghost(트리거) / danger(파괴)
    */
   variant?:
     | 'primary'
+    | 'primary-line'
     | 'secondary'
     | 'outline'
     | 'ghost'
@@ -424,6 +425,22 @@ defineExpose({
     @include desktop-hover {
       border-color: var(--color-primary);
       color: var(--color-primary);
+    }
+  }
+
+  // primary 라인(파란 테두리) — 리스트 헤더 "추가" 트리거용. 마이그레이션 호환(team_agent 다수 사용)
+  &.variant-primary-line {
+    background-color: var(--color-bg-elevated);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+
+    @include desktop-hover {
+      background-color: var(--color-primary-bg);
+    }
+
+    &:active:not(:disabled):not([aria-disabled='true']) {
+      background-color: var(--color-primary-bg);
+      border-color: var(--color-primary-dark);
     }
   }
 

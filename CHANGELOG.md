@@ -2,6 +2,11 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.5.25] - 2026-07-08
+
+### Added
+- UiButton primary-line variant 추가 (파란 테두리 — 리스트 헤더 추가 버튼용)
+
 ## [0.5.24] - 2026-07-08
 
 ### Changed

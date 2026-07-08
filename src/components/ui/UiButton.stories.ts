@@ -16,7 +16,7 @@ const meta = {
         component: `
 ## 핵심 props
 
-- **\`variant\`** \`primary\` | \`secondary\` | \`ghost\` | \`danger\` — 시멘틱 4종
+- **\`variant\`** \`primary\` | \`primary-line\` | \`secondary\` | \`ghost\` | \`danger\` — 시멘틱 variant
 - **\`size\`** \`xs\` | \`sm\` | \`md\` | \`lg\` — 24 / 28 / 32 / 40px (공용 토큰)
 - **\`iconSize\`** \`xs\` | \`sm\` | \`md\` | \`lg\` — 미지정 시 size 따라감, 명시 시 override
 - **\`shape\`** \`rounded\`(6px) | \`pill\`(완전 라운드) | \`circle\`(iconOnly FAB)
@@ -59,13 +59,14 @@ size/shape는 \`src/styles/tokens/_size.scss\`, \`_shape.scss\` 공용 토큰 �
       control: 'select',
       options: [
         'primary',
+        'primary-line',
         'secondary',
         'outline',
         'ghost',
         'danger',
       ],
       description:
-        'variant 5종 — primary(강조) / secondary(보조) / outline(테두리) / ghost(트리거) / danger(파괴)',
+        'variant 6종 — primary(강조) / primary-line(파란 테두리) / secondary(보조) / outline(테두리) / ghost(트리거) / danger(파괴)',
     },
     size: {
       control: 'inline-radio',
@@ -243,6 +244,12 @@ export const AllVariants: Story = {
             <UiButton variant="primary" size="md">Primary</UiButton>
             <UiButton variant="primary" size="lg">Primary</UiButton>
 
+            <span style="font-size: 12px; color: #6b7280;">primary-line</span>
+            <UiButton variant="primary-line" size="xs">Primary Line</UiButton>
+            <UiButton variant="primary-line" size="sm">Primary Line</UiButton>
+            <UiButton variant="primary-line" size="md">Primary Line</UiButton>
+            <UiButton variant="primary-line" size="lg">Primary Line</UiButton>
+
             <span style="font-size: 12px; color: #6b7280;">secondary</span>
             <UiButton variant="secondary" size="xs">Secondary</UiButton>
             <UiButton variant="secondary" size="sm">Secondary</UiButton>
@@ -284,6 +291,11 @@ export const AllVariants: Story = {
             <UiButton variant="primary">Save</UiButton>
             <UiButton variant="primary" disabled>Save</UiButton>
             <UiButton variant="primary" loading>Saving…</UiButton>
+
+            <span style="font-size: 12px; color: #6b7280;">primary-line</span>
+            <UiButton variant="primary-line">추가</UiButton>
+            <UiButton variant="primary-line" disabled>추가</UiButton>
+            <UiButton variant="primary-line" loading>추가</UiButton>
 
             <span style="font-size: 12px; color: #6b7280;">secondary</span>
             <UiButton variant="secondary">Cancel</UiButton>
