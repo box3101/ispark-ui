@@ -80,7 +80,7 @@ const sanitizeHref = (raw?: string): string | undefined => {
 
 interface Props {
   /**
-   * 시멘틱 variant — primary(강조) / primary-line(파란 테두리) / secondary(보조) / ghost(트리거) / danger(파괴)
+   * 시멘틱 variant — primary(강조) / primary-line(파란 테두리) / secondary(보조) / ghost(트리거) / danger(파괴) / danger-line(빨간 테두리·인라인 삭제)
    */
   variant?:
     | 'primary'
@@ -89,6 +89,7 @@ interface Props {
     | 'outline'
     | 'ghost'
     | 'danger'
+    | 'danger-line'
     | 'dark'
   /**
    * 사이즈 — xs(24px) / sm(28px) / md(32px·기본) / lg(40px)
@@ -441,6 +442,26 @@ defineExpose({
     &:active:not(:disabled):not([aria-disabled='true']) {
       background-color: var(--color-primary-bg);
       border-color: var(--color-primary-dark);
+    }
+  }
+
+  // danger 라인(빨간 테두리) — 인라인 파괴 액션(행/카드 "삭제")용. solid danger는 과하므로 라인형
+  &.variant-danger-line {
+    background-color: var(--color-bg-elevated);
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+
+    &:focus-visible {
+      outline-color: var(--color-danger);
+    }
+
+    @include desktop-hover {
+      background-color: var(--color-danger-bg);
+    }
+
+    &:active:not(:disabled):not([aria-disabled='true']) {
+      background-color: var(--color-danger-bg);
+      border-color: var(--color-danger-dark);
     }
   }
 

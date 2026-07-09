@@ -21,7 +21,7 @@ click: (event: MouseEvent) => any;
 }, string, PublicProps, Readonly<Props> & Readonly<{
 onClick?: ((event: MouseEvent) => any) | undefined;
 }>, {
-variant: "primary" | "primary-line" | "secondary" | "outline" | "ghost" | "danger" | "dark";
+variant: "primary" | "primary-line" | "secondary" | "outline" | "ghost" | "danger" | "danger-line" | "dark";
 size: Size;
 shape: Shape;
 as: "button" | "a";
@@ -674,9 +674,9 @@ export declare type ProgressVariant = 'primary' | 'success' | 'warning' | 'dange
 
 declare interface Props {
     /**
-     * 시멘틱 variant — primary(강조) / primary-line(파란 테두리) / secondary(보조) / ghost(트리거) / danger(파괴)
+     * 시멘틱 variant — primary(강조) / primary-line(파란 테두리) / secondary(보조) / ghost(트리거) / danger(파괴) / danger-line(빨간 테두리·인라인 삭제)
      */
-    variant?: 'primary' | 'primary-line' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'dark';
+    variant?: 'primary' | 'primary-line' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'danger-line' | 'dark';
     /**
      * 사이즈 — xs(24px) / sm(28px) / md(32px·기본) / lg(40px)
      */

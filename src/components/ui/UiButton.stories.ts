@@ -64,9 +64,10 @@ size/shape는 \`src/styles/tokens/_size.scss\`, \`_shape.scss\` 공용 토큰 �
         'outline',
         'ghost',
         'danger',
+        'danger-line',
       ],
       description:
-        'variant 6종 — primary(강조) / primary-line(파란 테두리) / secondary(보조) / outline(테두리) / ghost(트리거) / danger(파괴)',
+        'variant 7종 — primary / primary-line(파란 테두리) / secondary / outline / ghost / danger(파괴 solid) / danger-line(빨간 테두리·인라인 삭제)',
     },
     size: {
       control: 'inline-radio',
@@ -273,6 +274,12 @@ export const AllVariants: Story = {
             <UiButton variant="danger" size="sm">Danger</UiButton>
             <UiButton variant="danger" size="md">Danger</UiButton>
             <UiButton variant="danger" size="lg">Danger</UiButton>
+
+            <span style="font-size: 12px; color: #6b7280;">danger-line</span>
+            <UiButton variant="danger-line" size="xs">삭제</UiButton>
+            <UiButton variant="danger-line" size="sm">삭제</UiButton>
+            <UiButton variant="danger-line" size="md">삭제</UiButton>
+            <UiButton variant="danger-line" size="lg">삭제</UiButton>
           </div>
         </section>
 
@@ -316,6 +323,11 @@ export const AllVariants: Story = {
             <UiButton variant="danger">Delete</UiButton>
             <UiButton variant="danger" disabled>Delete</UiButton>
             <UiButton variant="danger" loading>Deleting…</UiButton>
+
+            <span style="font-size: 12px; color: #6b7280;">danger-line</span>
+            <UiButton variant="danger-line">삭제</UiButton>
+            <UiButton variant="danger-line" disabled>삭제</UiButton>
+            <UiButton variant="danger-line" loading>삭제</UiButton>
           </div>
         </section>
 

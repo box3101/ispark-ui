@@ -2,6 +2,11 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.6.5] - 2026-07-09
+
+### Added
+- UiButton danger-line variant 추가 (빨간 테두리 — 인라인 삭제 액션용)
+
 ## [0.6.4] - 2026-07-09
 
 ### Added
