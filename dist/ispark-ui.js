@@ -687,7 +687,7 @@ const JU = {
       }, 8, ["open"])
     ]));
   }
-}), jze = /* @__PURE__ */ Ue(wW, [["__scopeId", "data-v-86ac40e0"]]), CW = {
+}), jze = /* @__PURE__ */ Ue(wW, [["__scopeId", "data-v-175b9df1"]]), CW = {
   key: 0,
   class: "ui-modal-header"
 }, SW = { class: "ui-modal-header-actions" }, LW = ["aria-label"], AW = {
@@ -716,7 +716,7 @@ const JU = {
     size: { default: "md" },
     showClose: { type: Boolean, default: !0 },
     showOverlay: { type: Boolean, default: !0 },
-    showFullscreen: { type: Boolean, default: !0 },
+    showFullscreen: { type: Boolean, default: !1 },
     closeOnOverlayClick: { type: Boolean, default: !0 },
     closeOnEscape: { type: Boolean, default: !0 },
     customClass: { default: "" },
@@ -888,7 +888,7 @@ const JU = {
       ])) : ae("", !0)
     ]));
   }
-}), PW = /* @__PURE__ */ Ue(RW, [["__scopeId", "data-v-e6805b12"]]), BW = {
+}), PW = /* @__PURE__ */ Ue(RW, [["__scopeId", "data-v-c90c8029"]]), BW = {
   key: 0,
   class: "ui-table-scroll-hint"
 }, FW = ["aria-sort"], qW = {
@@ -34819,7 +34819,7 @@ const B5e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
       ])) : ae("", !0)
     ], 6));
   }
-}), Kze = /* @__PURE__ */ Ue(Y5e, [["__scopeId", "data-v-0ce93713"]]), J5e = ["aria-label"], Q5e = /* @__PURE__ */ Ie({
+}), Kze = /* @__PURE__ */ Ue(Y5e, [["__scopeId", "data-v-788ea132"]]), J5e = ["aria-label"], Q5e = /* @__PURE__ */ Ie({
   __name: "UiBadgeGroup",
   props: {
     gap: { default: 8 },
@@ -34840,7 +34840,7 @@ const B5e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
       Te(o.$slots, "default", {}, void 0, !0)
     ], 14, J5e));
   }
-}), Zze = /* @__PURE__ */ Ue(Q5e, [["__scopeId", "data-v-63d4ae45"]]), ebe = ["aria-label"], tbe = {
+}), Zze = /* @__PURE__ */ Ue(Q5e, [["__scopeId", "data-v-2d4e43b6"]]), ebe = ["aria-label"], tbe = {
   key: 0,
   class: "ui-loading-text"
 }, nbe = /* @__PURE__ */ Ie({
@@ -34863,7 +34863,7 @@ const B5e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
       t.text ? (L(), N("p", tbe, re(t.text), 1)) : ae("", !0)
     ], 10, ebe));
   }
-}), Xze = /* @__PURE__ */ Ue(nbe, [["__scopeId", "data-v-995344dd"]]), obe = ["for"], ibe = ["id", "aria-checked", "aria-disabled", "disabled"], abe = /* @__PURE__ */ Ie({
+}), Xze = /* @__PURE__ */ Ue(nbe, [["__scopeId", "data-v-68d603e4"]]), obe = ["for"], ibe = ["id", "aria-checked", "aria-disabled", "disabled"], abe = /* @__PURE__ */ Ie({
   __name: "UiToggle",
   props: {
     modelValue: { type: Boolean },
@@ -34904,7 +34904,7 @@ const B5e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
       ])], 10, ibe)
     ], 2));
   }
-}), Yze = /* @__PURE__ */ Ue(abe, [["__scopeId", "data-v-4acad01a"]]), rbe = ["for"], sbe = ["id", "checked", "disabled"], cbe = {
+}), Yze = /* @__PURE__ */ Ue(abe, [["__scopeId", "data-v-740076d0"]]), rbe = ["for"], sbe = ["id", "checked", "disabled"], cbe = {
   class: "ui-checkbox-box",
   "aria-hidden": "true"
 }, lbe = {
@@ -35604,7 +35604,7 @@ const B5e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
       ], 40, qbe)
     ], 2));
   }
-}), iRe = /* @__PURE__ */ Ue(Ube, [["__scopeId", "data-v-bfc69b54"]]), Wbe = 5, m1 = _e([]);
+}), iRe = /* @__PURE__ */ Ue(Ube, [["__scopeId", "data-v-f41889ac"]]), Wbe = 5, m1 = _e([]);
 let Gbe = 0;
 function aRe(t) {
   const e = typeof t == "string" ? { message: t } : t, n = ++Gbe, o = {
@@ -36756,7 +36756,7 @@ const Zbe = {
       _: 3
     }, 8, ["class", "model-value", "default-value", "collapsible", "disabled"]));
   }
-}), lRe = /* @__PURE__ */ Ue(g6e, [["__scopeId", "data-v-50d18cd0"]]), ND = _e({
+}), lRe = /* @__PURE__ */ Ue(g6e, [["__scopeId", "data-v-2b2c2fa9"]]), ND = _e({
   open: !1,
   title: "확인",
   message: "",
@@ -75435,7 +75435,7 @@ const OIe = { class: "ui-markdown-toolbar" }, zIe = { class: "ui-markdown-toolba
       ], 4)
     ], 36));
   }
-}), bRe = /* @__PURE__ */ Ue(cEe, [["__scopeId", "data-v-b49ec5c5"]]);
+}), bRe = /* @__PURE__ */ Ue(cEe, [["__scopeId", "data-v-adcb5c64"]]);
 /*!
  * @kurkle/color v0.3.4
  * https://github.com/kurkle/color#readme
@@ -86344,7 +86344,7 @@ const wze = () => {
       ])
     ]));
   }
-}), MRe = /* @__PURE__ */ Ue(Nze, [["__scopeId", "data-v-a81ad027"]]), Ize = {
+}), MRe = /* @__PURE__ */ Ue(Nze, [["__scopeId", "data-v-d003150d"]]), Ize = {
   key: 0,
   class: "ui-progress__label"
 }, Eze = {
@@ -86397,7 +86397,7 @@ const wze = () => {
       ])) : ae("", !0)
     ], 2));
   }
-}), xRe = /* @__PURE__ */ Ue($ze, [["__scopeId", "data-v-7154d5b6"]]), Oze = ["innerHTML"], zze = { class: "ui-confirm-actions" }, Rze = /* @__PURE__ */ Ie({
+}), xRe = /* @__PURE__ */ Ue($ze, [["__scopeId", "data-v-88f63bf8"]]), Oze = ["innerHTML"], zze = { class: "ui-confirm-actions" }, Rze = /* @__PURE__ */ Ie({
   __name: "UiConfirm",
   setup(t) {
     const { confirmState: e } = b6e();

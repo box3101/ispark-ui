@@ -2,6 +2,11 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.6.3] - 2026-07-09
+
+### Changed
+- **UiModal `showFullscreen` 기본값 `true` → `false`** — 일반 중앙 모달에서 전체화면 버튼을 기본 숨김. team_agent_front 로컬 UiModal 동작과 정합. 필요 시 `show-fullscreen` prop으로 명시 활성화.
+
 ## [0.6.2] - 2026-07-08
 
 ### Fixed
