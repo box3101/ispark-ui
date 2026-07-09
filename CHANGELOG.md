@@ -2,6 +2,11 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.6.4] - 2026-07-09
+
+### Added
+- icon-upload 아이콘 추가 (UiDropdownMenu 엑셀 업로드 등)
+
 ## [0.6.3] - 2026-07-09
 
 ### Changed
