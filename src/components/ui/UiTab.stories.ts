@@ -23,7 +23,9 @@ ispark-ui 표준 탭 — 페이지/모달 내부 콘텐츠 네비게이션. unde
 - **\`modelValue\`** \`string\` — 현재 선택된 탭 value (v-model)
 - **\`tabs\`** \`TabItem[]\` — 탭 정의 배열
 - **\`size\`** \`'sm' | 'md' | 'lg'\` — sm(36px) / md(40px·기본) / lg(48px)
-- **\`align\`** \`'left' | 'center' | 'right' | 'stretch'\` — center(기본 max-width 800)/left/right/stretch(균등 분할)
+- **\`align\`** \`'left' | 'center' | 'right' | 'stretch'\` — left/center/right/stretch(균등 분할)
+- **\`contentMaxWidth\`** \`string\` — \`.ui-tab-inner\` max-width (예: \`'800px'\`). 빈 값이면 full-width
+- **\`contentPaddingX\`** \`string\` — contentMaxWidth 사용 시 좌우 padding (기본 \`'16px'\`)
 - **\`ariaLabel\`** \`string\` — \`<div role="tablist">\`의 aria-label
 
 ## TabItem
@@ -59,6 +61,8 @@ interface TabItem {
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
     align: { control: 'inline-radio', options: ['left', 'center', 'right', 'stretch'] },
+    contentMaxWidth: { control: 'text' },
+    contentPaddingX: { control: 'text' },
     ariaLabel: { control: 'text' },
   },
 } satisfies Meta<typeof UiTab>
@@ -91,7 +95,7 @@ export const Playground: Story = {
   }),
 }
 
-// 기본 — center align (max-width 800px)
+// 기본 — center align
 export const Default: Story = {
   args: {
     tabs: baseTabs,
@@ -213,9 +217,38 @@ export const AllAlignments: Story = {
     template: `
       <div style="display: flex; flex-direction: column; gap: 24px;">
         <div><h4 style="margin: 0 0 6px; color: #6f7a93; font-size: 12px;">left</h4><UiTab v-model="v" :tabs="tabs" align="left" /></div>
-        <div><h4 style="margin: 0 0 6px; color: #6f7a93; font-size: 12px;">center (기본, max-width 800)</h4><UiTab v-model="v" :tabs="tabs" align="center" /></div>
+        <div><h4 style="margin: 0 0 6px; color: #6f7a93; font-size: 12px;">center (기본)</h4><UiTab v-model="v" :tabs="tabs" align="center" /></div>
         <div><h4 style="margin: 0 0 6px; color: #6f7a93; font-size: 12px;">right</h4><UiTab v-model="v" :tabs="tabs" align="right" /></div>
         <div><h4 style="margin: 0 0 6px; color: #6f7a93; font-size: 12px;">stretch — 균등 분할</h4><UiTab v-model="v" :tabs="tabs" align="stretch" /></div>
+      </div>
+    `,
+  }),
+}
+
+// contentMaxWidth — 프롬프트 페이지 패턴 (800px 컨테이너 내 left 정렬)
+export const ContentConstrained: Story = {
+  render: () => ({
+    components: { UiTab },
+    setup: () => {
+      const cur = ref('system')
+      const tabs: TabItem[] = [
+        { label: '시스템 프롬프트', value: 'system' },
+        { label: '금지어/필터링', value: 'filter' },
+        { label: '토큰/응답 제한', value: 'limit' },
+      ]
+      return { cur, tabs }
+    },
+    template: `
+      <div style="background: #f4f7f9; padding: 16px 0;">
+        <UiTab
+          v-model="cur"
+          :tabs="tabs"
+          align="left"
+          content-max-width="800px"
+        />
+        <div style="max-width: 800px; margin: 0 auto; padding: 16px; background: #fff;">
+          <p style="margin: 0; color: #4d5462; font-size: 14px;">탭과 본문이 동일한 800px 컨테이너 기준선에 맞춰집니다.</p>
+        </div>
       </div>
     `,
   }),

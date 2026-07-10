@@ -2,6 +2,16 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.6.7] - 2026-07-10
+
+### Added
+- UiTab `contentMaxWidth` / `contentPaddingX` prop 추가 — 탭 inner를 중앙 컨테이너로 제한 (align과 분리)
+- `$color-placeholder` 토큰 추가 (#aebccb)
+
+### Changed
+- UiInput / UiTextarea placeholder 색상을 `#aebccb`로 통일 (team_agent 로컬과 동일)
+- UiTab Props/스토리북 문서에서 잘못된 "center = max-width 800" 설명 제거
+
 ## [0.6.6] - 2026-07-09
 
 ### Added

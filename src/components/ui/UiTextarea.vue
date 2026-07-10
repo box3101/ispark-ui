@@ -328,8 +328,7 @@ defineExpose({
   &.size-lg { min-height: 104px; }
 
   &::placeholder {
-    // UiInput과 동일 토큰 — WCAG AA 대비(~5.2:1) 보장
-    color: var(--color-text-disabled);
+    color: $color-placeholder;
     opacity: 1; // Firefox 기본 opacity 0.5 무시
   }
 
@@ -451,7 +450,8 @@ defineExpose({
   background: transparent;
 
   &::placeholder {
-    color: var(--color-text-disabled, #9ca3af);
+    color: $color-placeholder;
+    opacity: 1;
   }
 }
 

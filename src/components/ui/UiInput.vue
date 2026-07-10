@@ -759,8 +759,7 @@ defineExpose({
   outline: none;
 
   &::placeholder {
-    // 디자인 토큰 사용 — 28px sm에서도 WCAG AA 대비(약 5.2:1) 보장
-    color: $color-text-disabled;
+    color: $color-placeholder;
     font-weight: $font-weight-normal;
     opacity: 1; // Firefox 기본 opacity 0.5 무시
   }

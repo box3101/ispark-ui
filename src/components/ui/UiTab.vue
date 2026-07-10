@@ -5,6 +5,11 @@
   >
     <div
       class="ui-tab-inner"
+      :class="{ 'is-content-constrained': !!contentMaxWidth }"
+      :style="contentMaxWidth ? {
+        '--ui-tab-content-max-width': contentMaxWidth,
+        '--ui-tab-content-padding-x': contentPaddingX,
+      } : undefined"
       role="tablist"
       :aria-label="ariaLabel || undefined"
       @keydown="onKeydown"
@@ -60,8 +65,12 @@ interface Props {
   tabs: TabItem[]
   /** 탭 크기 — sm(36px) / md(40px·기본) / lg(48px) */
   size?: 'sm' | 'md' | 'lg'
-  /** 정렬 — left / center(기본 max-width 800px) / right / stretch(균등 분할) */
+  /** 정렬 — left / center / right / stretch(균등 분할) */
   align?: 'left' | 'center' | 'right' | 'stretch'
+  /** .ui-tab-inner max-width. 빈 값이면 full-width */
+  contentMaxWidth?: string
+  /** contentMaxWidth 사용 시 .ui-tab-inner 좌우 padding */
+  contentPaddingX?: string
   /** role="tablist"의 aria-label */
   ariaLabel?: string
 }
@@ -69,6 +78,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   size: 'md',
   align: 'center',
+  contentMaxWidth: '',
+  contentPaddingX: '16px',
   ariaLabel: '',
 })
 
@@ -156,7 +167,15 @@ const onKeydown = (e: KeyboardEvent) => {
   display: flex;
   align-items: center;
 
-  // align variants — justify-content로 탭 자체를 정렬 (이전: max-width만 적용해 inner는 가운데지만 탭은 좌측에 붙음)
+  &.is-content-constrained {
+    max-width: var(--ui-tab-content-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--ui-tab-content-padding-x, 16px);
+    padding-right: var(--ui-tab-content-padding-x, 16px);
+  }
+
+  // align variants — justify-content로 탭 자체를 정렬
   .ui-tab.align-left & {
     justify-content: flex-start;
   }

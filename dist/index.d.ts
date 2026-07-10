@@ -875,8 +875,12 @@ declare interface Props_19 {
     tabs: TabItem[];
     /** 탭 크기 — sm(36px) / md(40px·기본) / lg(48px) */
     size?: 'sm' | 'md' | 'lg';
-    /** 정렬 — left / center(기본 max-width 800px) / right / stretch(균등 분할) */
+    /** 정렬 — left / center / right / stretch(균등 분할) */
     align?: 'left' | 'center' | 'right' | 'stretch';
+    /** .ui-tab-inner max-width. 빈 값이면 full-width */
+    contentMaxWidth?: string;
+    /** contentMaxWidth 사용 시 .ui-tab-inner 좌우 padding */
+    contentPaddingX?: string;
     /** role="tablist"의 aria-label */
     ariaLabel?: string;
 }
@@ -1506,6 +1510,8 @@ onChange?: ((value: string) => any) | undefined;
 size: "sm" | "md" | "lg";
 ariaLabel: string;
 align: "left" | "center" | "right" | "stretch";
+contentMaxWidth: string;
+contentPaddingX: string;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 
 export declare const UiTable: <TRow extends Record<string, unknown> = Record<string, unknown>>(__VLS_props: NonNullable<Awaited<typeof __VLS_setup>>["props"], __VLS_ctx?: __VLS_PrettifyLocal<Pick<NonNullable<Awaited<typeof __VLS_setup>>, "attrs" | "emit" | "slots">>, __VLS_expose?: NonNullable<Awaited<typeof __VLS_setup>>["expose"], __VLS_setup?: Promise<{
