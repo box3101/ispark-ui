@@ -148,6 +148,33 @@ if (!message) {
 const APP_DIR = appOverride || process.env.ISPARK_APP_DIR || readLocalConfig().appDir || DEFAULT_APP_DIR
 
 // ============================================
+// 0) 프리플라이트 — 로컬이 원격보다 뒤처졌으면 즉시 중단
+//    빌드·버전bump·커밋을 다 한 뒤 push에서 거부되면 "반쯤 망가진 상태"가 된다.
+//    (팀원이 먼저 릴리스한 경우 여기서 걸림)
+// ============================================
+log('프리플라이트 — 원격 최신 여부 확인')
+const preflightBranch = capture('git rev-parse --abbrev-ref HEAD')
+try {
+  execSync('git fetch origin', { cwd: ROOT, stdio: 'ignore' })
+} catch {
+  console.warn(`${c.gray}ℹ git fetch 실패(오프라인?) — 프리플라이트 건너뜀${c.reset}`)
+}
+let behindCount = '0'
+try {
+  behindCount = capture(`git rev-list --count HEAD..origin/${preflightBranch}`)
+} catch {
+  behindCount = '0' // 원격에 해당 브랜치 없음 → 통과
+}
+if (Number(behindCount) > 0) {
+  die(
+    `로컬 ${preflightBranch}이(가) origin/${preflightBranch}보다 ${behindCount}커밋 뒤처졌습니다.\n` +
+      `   먼저 실행:  git pull --ff-only origin ${preflightBranch}\n` +
+      `   (버전·CHANGELOG·dist 무엇도 변경되지 않았습니다)`,
+  )
+}
+ok(`프리플라이트 통과 — ${preflightBranch} 최신`)
+
+// ============================================
 // 1) 빌드 — 실패하면 버전/CHANGELOG 손대기 전에 중단
 // ============================================
 log('빌드 (npm run build) — dist 재생성 + 타입체크')
