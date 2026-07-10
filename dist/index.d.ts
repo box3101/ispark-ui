@@ -21,7 +21,7 @@ click: (event: MouseEvent) => any;
 }, string, PublicProps, Readonly<Props> & Readonly<{
 onClick?: ((event: MouseEvent) => any) | undefined;
 }>, {
-variant: "primary" | "primary-line" | "secondary" | "outline" | "ghost" | "danger" | "danger-line" | "dark";
+variant: "primary" | "primary-line" | "secondary" | "outline" | "ghost" | "danger" | "danger-line" | "dark" | "solid-muted" | "line-secondary";
 size: Size;
 shape: Shape;
 as: "button" | "a";
@@ -676,7 +676,7 @@ declare interface Props {
     /**
      * 시멘틱 variant — primary(강조) / primary-line(파란 테두리) / secondary(보조) / ghost(트리거) / danger(파괴) / danger-line(빨간 테두리·인라인 삭제)
      */
-    variant?: 'primary' | 'primary-line' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'danger-line' | 'dark';
+    variant?: 'primary' | 'primary-line' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'danger-line' | 'dark' | 'solid-muted' | 'line-secondary';
     /**
      * 사이즈 — xs(24px) / sm(28px) / md(32px·기본) / lg(40px)
      */

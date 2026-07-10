@@ -91,6 +91,8 @@ interface Props {
     | 'danger'
     | 'danger-line'
     | 'dark'
+    | 'solid-muted'
+    | 'line-secondary'
   /**
    * 사이즈 — xs(24px) / sm(28px) / md(32px·기본) / lg(40px)
    */
@@ -476,6 +478,43 @@ defineExpose({
 
     &:active:not(:disabled):not([aria-disabled='true']) {
       background-color: #3f474d;
+    }
+  }
+
+  // 회청 solid — team_agent 로컬 secondary(#6f7a93) 마이그레이션 호환 (ispark secondary와 별도)
+  &.variant-solid-muted {
+    background-color: #6f7a93;
+    color: #fff;
+    border-color: #6f7a93;
+
+    @include desktop-hover {
+      background-color: #697285;
+      border-color: #697285;
+    }
+
+    &:active:not(:disabled):not([aria-disabled='true']) {
+      background-color: #636d80;
+      border-color: #636d80;
+    }
+  }
+
+  // 회색 라인 — team_agent 로컬 line-secondary 마이그레이션 호환
+  &.variant-line-secondary {
+    background-color: #fff;
+    border-color: #64748b;
+    color: #64748b;
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 150%;
+
+    @include desktop-hover {
+      background-color: #f4f7f9;
+      border-color: #64748b;
+      color: #64748b;
+    }
+
+    &:active:not(:disabled):not([aria-disabled='true']) {
+      background-color: #ecf0f3;
     }
   }
 

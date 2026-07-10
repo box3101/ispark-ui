@@ -2,6 +2,12 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.6.6] - 2026-07-09
+
+### Added
+- UiButton `solid-muted` variant 추가 — team_agent 로컬 secondary(#6f7a93) solid 마이그레이션 호환
+- UiButton `line-secondary` variant 추가 — team_agent 로컬 line-secondary(회색 테두리) 마이그레이션 호환
+
 ## [0.6.5] - 2026-07-09
 
 ### Added
