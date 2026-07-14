@@ -21,7 +21,7 @@ const meta = {
 - **\`src\`** \`string\` — 이미지 URL
 - **\`name\`** \`string\` — 이니셜 추출 + 배경색 결정에 사용
 - **\`alt\`** \`string\` — 접근성 라벨 (없으면 name 사용)
-- **\`size\`** \`'xs' | 'sm' | 'md' | 'lg' | number\` — 24 / 28 / 32 / 40px 또는 커스텀
+- **\`size\`** \`'xs' | 'sm' | 'md' | 'lg' | number\` — 26 / 30 / 32 / 34px 또는 커스텀
 - **\`shape\`** \`'circle' | 'square'\` — 기본 circle
 - **\`color\`** \`string\` — 배경색 수동 지정
         `,
@@ -32,7 +32,7 @@ const meta = {
     size: {
       control: 'inline-radio',
       options: ['xs', 'sm', 'md', 'lg'],
-      description: 'xs(24px) / sm(28px) / md(32px·기본) / lg(40px) 또는 숫자(px)',
+      description: 'xs(26px) / sm(30px) / md(32px·기본) / lg(34px) 또는 숫자(px)',
       table: {
         category: 'Appearance',
         type: { summary: "'xs' | 'sm' | 'md' | 'lg' | number" },

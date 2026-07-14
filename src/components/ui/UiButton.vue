@@ -94,7 +94,7 @@ interface Props {
     | 'solid-muted'
     | 'line-secondary'
   /**
-   * 사이즈 — xs(24px) / sm(28px) / md(32px·기본) / lg(40px)
+   * 사이즈 — xxs(24) / xs(26) / sm(30) / md(32·기본) / lg(34) / xlg(36)
    */
   size?: Size
   /**
@@ -228,6 +228,22 @@ defineExpose({
   }
 
   // ===== size — 공용 토큰 (height/padding-x/font + 자동 icon size) =====
+  &.size-xxs {
+    height: $size-xxs-height;
+    padding: 0 $size-xxs-padding-x;
+    font-size: $size-xxs-font;
+
+    .ui-button-icon :deep(i:not([class*='size-'])) {
+      width: $size-xxs-icon;
+      height: $size-xxs-icon;
+    }
+    .ui-button-spinner {
+      width: $size-xxs-icon;
+      height: $size-xxs-icon;
+      border-width: 1.5px;
+    }
+  }
+
   &.size-xs {
     height: $size-xs-height;
     padding: 0 $size-xs-padding-x;
@@ -292,7 +308,27 @@ defineExpose({
     }
   }
 
+  &.size-xlg {
+    height: $size-xlg-height;
+    padding: 0 $size-xlg-padding-x;
+    font-size: $size-xlg-font;
+
+    .ui-button-icon :deep(i:not([class*='size-'])) {
+      width: $size-xlg-icon;
+      height: $size-xlg-icon;
+    }
+    .ui-button-spinner {
+      width: $size-xlg-icon;
+      height: $size-xlg-icon;
+      border-width: 2px;
+    }
+  }
+
   // ===== iconSize override — size 클래스보다 후행 → 동일 specificity에서 후행 승 =====
+  &.icon-size-xxs .ui-button-icon :deep(i:not([class*='size-'])) {
+    width: $size-xxs-icon;
+    height: $size-xxs-icon;
+  }
   &.icon-size-xs .ui-button-icon :deep(i:not([class*='size-'])) {
     width: $size-xs-icon;
     height: $size-xs-icon;
@@ -309,6 +345,10 @@ defineExpose({
     width: $size-lg-icon;
     height: $size-lg-icon;
   }
+  &.icon-size-xlg .ui-button-icon :deep(i:not([class*='size-'])) {
+    width: $size-xlg-icon;
+    height: $size-xlg-icon;
+  }
 
   // ===== shape — 공용 토큰 =====
   &.shape-rounded {
@@ -322,8 +362,11 @@ defineExpose({
   }
 
   // ===== component-local: button 고유 min-width =====
+  &.size-xxs {
+    min-width: 40px;
+  }
   &.size-xs {
-    min-width: 52px;
+    min-width: 50px;
   }
   &.size-sm {
     min-width: 60px;
@@ -332,6 +375,9 @@ defineExpose({
     min-width: 68px;
   }
   &.size-lg {
+    min-width: 72px;
+  }
+  &.size-xlg {
     min-width: 84px;
   }
 
@@ -340,6 +386,10 @@ defineExpose({
     padding: 0;
     min-width: auto;
 
+    &.size-xxs {
+      width: $size-xxs-height;
+      min-width: $size-xxs-height;
+    }
     &.size-xs {
       width: $size-xs-height;
       min-width: $size-xs-height;
@@ -355,6 +405,10 @@ defineExpose({
     &.size-lg {
       width: $size-lg-height;
       min-width: $size-lg-height;
+    }
+    &.size-xlg {
+      width: $size-xlg-height;
+      min-width: $size-xlg-height;
     }
   }
 

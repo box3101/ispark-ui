@@ -179,11 +179,14 @@ $header-height: 48px;
 $chat-input-height: 64px;
 $chat-max-width: 768px;
 // ===================================
-// 공통 높이 (디자인 시스템 정리: 3단계로 통일)
+// 공통 높이 — tokens/_size.scss 와 동기화 (레거시 별칭)
 // ===================================
-$height-sm: 28px;
+$height-xxs: 24px;
+$height-xs: 26px;
+$height-sm: 30px;
 $height-md: 32px;
-$height-lg: 40px;
+$height-lg: 34px;
+$height-xlg: 36px;
 /** 로그인·회원가입 등 인증 폼 입력 (UiInput size=auth) */
 $height-auth: 44px;
 // ===================================

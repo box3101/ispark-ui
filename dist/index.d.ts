@@ -628,7 +628,8 @@ export declare interface FileItem {
 
 export declare type IconColor = 'primary' | 'danger' | 'white' | 'black' | 'muted';
 
-export declare const INPUT_SIZES: readonly ["sm", "md", "lg", "auth"];
+/** 폼 입력(UiInput 등) — sm(30) / md(32) / lg(34) / xlg(36) / auth(44). xs·xxs 제외 */
+export declare const INPUT_SIZES: readonly ["sm", "md", "lg", "xlg", "auth"];
 
 export declare type InputSize = (typeof INPUT_SIZES)[number];
 
@@ -678,7 +679,7 @@ declare interface Props {
      */
     variant?: 'primary' | 'primary-line' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'danger-line' | 'dark' | 'solid-muted' | 'line-secondary';
     /**
-     * 사이즈 — xs(24px) / sm(28px) / md(32px·기본) / lg(40px)
+     * 사이즈 — xxs(24) / xs(26) / sm(30) / md(32·기본) / lg(34) / xlg(36)
      */
     size?: Size;
     /**
@@ -944,12 +945,12 @@ declare interface Props_2 {
      */
     step?: string | number;
     /**
-     * 사이즈 — `sm`(28px) / `md`(32px·기본) / `lg`(40px) / `auth`(44px·로그인 전용)
+     * 사이즈 — `sm`(30) / `md`(32·기본) / `lg`(34) / `xlg`(36) / `auth`(44·로그인 전용)
      * UiButton과 동일 토큰 사용 → 검색바에서 자동 정렬.
      */
     size?: InputSize;
     /**
-     * 아이콘 사이즈 — 미지정 시 `size` 따라감, 명시 시 override (xs/sm/md/lg).
+     * 아이콘 사이즈 — 미지정 시 `size` 따라감, 명시 시 override (xxs~xlg).
      * 슬롯 내 `<i>`에 `size-N` 클래스 안 붙였을 때만 적용.
      */
     iconSize?: Size;
@@ -1190,7 +1191,12 @@ declare interface Props_9 {
 
 declare type RadioValue = string | number | boolean;
 
-export declare const SELECT_SIZES: readonly ["xs", "sm", "md", "lg", "auth"];
+/**
+ * 셀렉트 트리거(UiSelect) —
+ * xs(26)는 DatePicker 내부 년/월 등 좁은 영역용.
+ * xlg(36) / auth(44) 포함.
+ */
+export declare const SELECT_SIZES: readonly ["xs", "sm", "md", "lg", "xlg", "auth"];
 
 export declare interface SelectOption {
     label: string;
@@ -1206,7 +1212,8 @@ export declare const SHAPES: readonly ["rounded", "pill", "circle"];
 
 export declare type Size = (typeof SIZES)[number];
 
-export declare const SIZES: readonly ["xs", "sm", "md", "lg"];
+/** 액션 컴포넌트용(UiButton 등) — xxs(24) / xs(26) / sm(30) / md(32) / lg(34) / xlg(36) */
+export declare const SIZES: readonly ["xxs", "xs", "sm", "md", "lg", "xlg"];
 
 export declare interface TabItem {
     /** 탭 라벨 */

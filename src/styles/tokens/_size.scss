@@ -1,15 +1,23 @@
 // 모든 폼/액션 컴포넌트가 참조하는 공용 size 토큰
-// (UiButton, UiInput, UiSelect, UiTag, UiBadge 등)
+// (UiButton, UiInput, UiSelect 등)
 //
 // 컴포넌트 고유 속성(button의 min-width, input의 border-color 등)은
 // 여기에 넣지 않는다. 그것은 해당 컴포넌트 SCSS에서 직접 정의한다.
+//
+// height 스케일 (team_agent 정렬):
+//   xxs 24 / xs 26 / sm 30 / md 32 / lg 34 / xlg 36 / auth 44
 
-$size-xs-height:     24px;
+$size-xxs-height:    24px;
+$size-xxs-icon:      12px;
+$size-xxs-font:      12px;
+$size-xxs-padding-x: 6px;
+
+$size-xs-height:     26px;
 $size-xs-icon:       12px;
 $size-xs-font:       12px;
 $size-xs-padding-x:  8px;
 
-$size-sm-height:     28px;
+$size-sm-height:     30px;
 $size-sm-icon:       16px;
 $size-sm-font:       13px;
 $size-sm-padding-x:  10px;
@@ -19,10 +27,15 @@ $size-md-icon:       18px;
 $size-md-font:       14px;
 $size-md-padding-x:  12px;
 
-$size-lg-height:     40px;
-$size-lg-icon:       20px;
-$size-lg-font:       15px;
-$size-lg-padding-x:  16px;
+$size-lg-height:     34px;
+$size-lg-icon:       18px;
+$size-lg-font:       14px;
+$size-lg-padding-x:  12px;
+
+$size-xlg-height:    36px;
+$size-xlg-icon:      20px;
+$size-xlg-font:      15px;
+$size-xlg-padding-x: 16px;
 
 // 폼 입력 컴포넌트(UiInput, UiTextarea 등)의 로그인/auth 사이즈
 // — 액션 컴포넌트(UiButton)에는 노출하지 않는다(prop options에서 제외)
@@ -33,9 +46,11 @@ $size-auth-padding-x: 10px;
 
 // SCSS @each 반복용 map (개별 변수와 동일한 출처)
 $sizes: (
+  xxs:  (height: $size-xxs-height,  icon: $size-xxs-icon,  font: $size-xxs-font,  padding-x: $size-xxs-padding-x),
   xs:   (height: $size-xs-height,   icon: $size-xs-icon,   font: $size-xs-font,   padding-x: $size-xs-padding-x),
   sm:   (height: $size-sm-height,   icon: $size-sm-icon,   font: $size-sm-font,   padding-x: $size-sm-padding-x),
   md:   (height: $size-md-height,   icon: $size-md-icon,   font: $size-md-font,   padding-x: $size-md-padding-x),
   lg:   (height: $size-lg-height,   icon: $size-lg-icon,   font: $size-lg-font,   padding-x: $size-lg-padding-x),
+  xlg:  (height: $size-xlg-height,  icon: $size-xlg-icon,  font: $size-xlg-font,  padding-x: $size-xlg-padding-x),
   auth: (height: $size-auth-height, icon: $size-auth-icon, font: $size-auth-font, padding-x: $size-auth-padding-x),
 );

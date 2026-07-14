@@ -326,8 +326,8 @@ defineExpose({
   }
 
   // ===== size — 공용 토큰 =====
-  // xs(24px)는 인라인/캘린더 헤더 등 좁은 영역용 (예: UiDatePicker 내부 셀렉트)
-  @each $key in (xs sm md lg auth) {
+  // xs(26px)는 인라인/캘린더 헤더 등 좁은 영역용 (예: UiDatePicker 내부 셀렉트)
+  @each $key in (xs sm md lg xlg auth) {
     $vals: map.get($sizes, $key);
     &.size-#{$key} {
       min-height: map.get($vals, height);

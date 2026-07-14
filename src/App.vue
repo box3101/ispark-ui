@@ -18,11 +18,14 @@ import UiButton from './components/ui/UiButton.vue'
     </section>
 
     <section>
-      <h2>UiButton — size 3종</h2>
+      <h2>UiButton — size</h2>
       <div class="row">
-        <UiButton size="sm">Small (28px)</UiButton>
+        <UiButton size="xxs">XXS (24px)</UiButton>
+        <UiButton size="xs">XS (26px)</UiButton>
+        <UiButton size="sm">Small (30px)</UiButton>
         <UiButton size="md">Medium (32px)</UiButton>
-        <UiButton size="lg">Large (40px)</UiButton>
+        <UiButton size="lg">Large (34px)</UiButton>
+        <UiButton size="xlg">XLG (36px)</UiButton>
       </div>
     </section>
 

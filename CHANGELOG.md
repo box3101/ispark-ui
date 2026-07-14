@@ -2,6 +2,20 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.6.8] - 2026-07-14
+
+### Changed
+- **공용 size 토큰 재배치** (`_size.scss`) — team_agent 정렬:
+  - `xxs` 24 / `xs` 26 / `sm` 30 / `md` 32 / **`lg` 34** (기존 32→34) / `xlg` 36 / `auth` 44
+- **UiButton** size: `xxs` | `xs` | `sm` | `md` | `lg` | `xlg` (`xxs`·`xlg` 추가)
+- **UiInput** size: `sm` | `md` | `lg` | `xlg` | `auth` (`xlg` 추가)
+- **UiSelect / UiMultiSelect** size: `xs` | `sm` | `md` | `lg` | `xlg` | `auth` (`xlg` 추가)
+
+### Notes
+- Checkbox / Radio / Toggle는 고정 px — 이번 변경과 분리 (후속 과제)
+- DatePicker·Avatar 등 `$size-*-height` 참조 컴포넌트는 새 height를 자동 따름
+- **시각 breaking**: 기존 `lg`(32px)와 `xs`(24px) 사용처의 실제 높이가 변경됨
+
 ## [0.6.7] - 2026-07-10
 
 ### Added

@@ -127,9 +127,17 @@ describe('UiButton', () => {
     expect(btn.classList.contains('icon-size-xs')).toBe(true)
   })
 
-  // ===== size 4단계 (xs 추가) =====
+  // ===== size (xxs / xs / … / xlg) =====
   it('size="xs" 클래스 적용', () => {
     render(UiButton, { props: { size: 'xs' }, slots: { default: '작게' } })
     expect(screen.getByRole('button').classList.contains('size-xs')).toBe(true)
+  })
+
+  it('size="xxs" / size="xlg" 클래스 적용', () => {
+    const { unmount } = render(UiButton, { props: { size: 'xxs' }, slots: { default: 'XXS' } })
+    expect(screen.getByRole('button').classList.contains('size-xxs')).toBe(true)
+    unmount()
+    render(UiButton, { props: { size: 'xlg' }, slots: { default: 'XLG' } })
+    expect(screen.getByRole('button').classList.contains('size-xlg')).toBe(true)
   })
 })

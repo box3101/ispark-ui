@@ -23,8 +23,8 @@ const meta = {
 - **\`type\`** \`text\` | \`search\` | \`password\` | \`email\` | \`tel\` | \`url\`
 - **\`label\`** + **\`labelHidden\`** + **\`required\`** — \`<label for>\` 자동 연결 + 필수 표시(*) (v0.3.0)
 - **\`error\`** + **\`errorMessage\`** — 에러 상태 + aria-invalid 자동, 메시지 role=alert (v0.3.0)
-- **\`size\`** \`sm\`(28px) | \`md\`(32px·기본) | \`lg\`(40px) | \`auth\`(44px·로그인 전용) — 공용 토큰
-- **\`iconSize\`** \`xs\` | \`sm\` | \`md\` | \`lg\` — 미지정 시 size 따라감, 명시 시 override
+- **\`size\`** \`sm\`(30) | \`md\`(32·기본) | \`lg\`(34) | \`xlg\`(36) | \`auth\`(44·로그인 전용) — 공용 토큰
+- **\`iconSize\`** \`xxs\` | \`xs\` | \`sm\` | \`md\` | \`lg\` | \`xlg\` — 미지정 시 size 따라감, 명시 시 override
 - **\`shape\`** \`rounded\`(기본 6px) | \`pill\`(완전 라운드, 검색바)
 - **\`disabled\`** / **\`readonly\`**
 - **\`numberOnly\`** + \`allowDecimal\` / \`allowNegative\` — 숫자 전용 (한글 IME 대응)
@@ -74,7 +74,7 @@ size/shape는 \`src/styles/tokens/_size.scss\`, \`_shape.scss\` 공용 토큰 �
     size: {
       control: 'inline-radio',
       options: INPUT_SIZES,
-      description: 'sm(28px) / md(32px·기본) / lg(40px) / auth(44px·로그인) — 공용 토큰',
+      description: 'sm(30) / md(32·기본) / lg(34) / xlg(36) / auth(44·로그인) — 공용 토큰',
     },
     shape: {
       control: 'inline-radio',
@@ -218,15 +218,16 @@ export const Playground: Story = {
   }),
 }
 
-// ===== 2. AllSizes — 4종 사이즈 비교 =====
+// ===== 2. AllSizes — 5종 사이즈 비교 =====
 export const AllSizes: Story = {
   render: () => ({
     components: { UiInput },
     template: `
       <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px;">
-        <UiInput size="sm" placeholder="Small (28px)" />
+        <UiInput size="sm" placeholder="Small (30px)" />
         <UiInput size="md" placeholder="Medium (32px) — 기본" />
-        <UiInput size="lg" placeholder="Large (40px)" />
+        <UiInput size="lg" placeholder="Large (34px)" />
+        <UiInput size="xlg" placeholder="XLarge (36px)" />
         <UiInput size="auth" placeholder="Auth (44px) — 로그인 전용" />
       </div>
     `,

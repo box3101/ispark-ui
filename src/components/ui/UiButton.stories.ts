@@ -17,8 +17,8 @@ const meta = {
 ## 핵심 props
 
 - **\`variant\`** \`primary\` | \`primary-line\` | \`secondary\` | \`ghost\` | \`danger\` — 시멘틱 variant
-- **\`size\`** \`xs\` | \`sm\` | \`md\` | \`lg\` — 24 / 28 / 32 / 40px (공용 토큰)
-- **\`iconSize\`** \`xs\` | \`sm\` | \`md\` | \`lg\` — 미지정 시 size 따라감, 명시 시 override
+- **\`size\`** \`xxs\` | \`xs\` | \`sm\` | \`md\` | \`lg\` | \`xlg\` — 24 / 26 / 30 / 32 / 34 / 36px (공용 토큰)
+- **\`iconSize\`** \`xxs\` | \`xs\` | \`sm\` | \`md\` | \`lg\` | \`xlg\` — 미지정 시 size 따라감, 명시 시 override
 - **\`shape\`** \`rounded\`(6px) | \`pill\`(완전 라운드) | \`circle\`(iconOnly FAB)
 - **\`as\`** \`button\` | \`a\` — 링크로 사용 시 \`as="a"\` + \`href\`
 - **\`target\`** \`_blank\` 등 — \`as="a"\` 전용. \`_blank\`이면 \`rel="noopener noreferrer"\` 자동 부여
@@ -72,7 +72,7 @@ size/shape는 \`src/styles/tokens/_size.scss\`, \`_shape.scss\` 공용 토큰 �
     size: {
       control: 'inline-radio',
       options: SIZES,
-      description: 'xs(24px) / sm(28px) / md(32px·기본) / lg(40px) — 공용 토큰',
+      description: 'xxs(24) / xs(26) / sm(30) / md(32·기본) / lg(34) / xlg(36) — 공용 토큰',
     },
     shape: {
       control: 'inline-radio',
@@ -227,59 +227,75 @@ export const AllVariants: Story = {
     components: { UiButton },
     template: `
       <div style="display: flex; flex-direction: column; gap: 28px; font-family: inherit;">
-        <!-- 행 헤더 + 4 variants × 4 size 그리드 -->
+        <!-- 행 헤더 + variants × 6 size 그리드 -->
         <section>
           <h4 style="margin: 0 0 12px; font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.06em;">
             Variant × Size
           </h4>
-          <div style="display: grid; grid-template-columns: 80px repeat(4, auto); gap: 12px 14px; align-items: center;">
+          <div style="display: grid; grid-template-columns: 90px repeat(6, auto); gap: 12px 14px; align-items: center;">
             <span></span>
-            <span style="font-size: 12px; color: #6b7280;">xs · 24</span>
-            <span style="font-size: 12px; color: #6b7280;">sm · 28</span>
+            <span style="font-size: 12px; color: #6b7280;">xxs · 24</span>
+            <span style="font-size: 12px; color: #6b7280;">xs · 26</span>
+            <span style="font-size: 12px; color: #6b7280;">sm · 30</span>
             <span style="font-size: 12px; color: #6b7280;">md · 32</span>
-            <span style="font-size: 12px; color: #6b7280;">lg · 40</span>
+            <span style="font-size: 12px; color: #6b7280;">lg · 34</span>
+            <span style="font-size: 12px; color: #6b7280;">xlg · 36</span>
 
             <span style="font-size: 12px; color: #6b7280;">primary</span>
+            <UiButton variant="primary" size="xxs">Primary</UiButton>
             <UiButton variant="primary" size="xs">Primary</UiButton>
             <UiButton variant="primary" size="sm">Primary</UiButton>
             <UiButton variant="primary" size="md">Primary</UiButton>
             <UiButton variant="primary" size="lg">Primary</UiButton>
+            <UiButton variant="primary" size="xlg">Primary</UiButton>
 
             <span style="font-size: 12px; color: #6b7280;">primary-line</span>
+            <UiButton variant="primary-line" size="xxs">Primary Line</UiButton>
             <UiButton variant="primary-line" size="xs">Primary Line</UiButton>
             <UiButton variant="primary-line" size="sm">Primary Line</UiButton>
             <UiButton variant="primary-line" size="md">Primary Line</UiButton>
             <UiButton variant="primary-line" size="lg">Primary Line</UiButton>
+            <UiButton variant="primary-line" size="xlg">Primary Line</UiButton>
 
             <span style="font-size: 12px; color: #6b7280;">secondary</span>
+            <UiButton variant="secondary" size="xxs">Secondary</UiButton>
             <UiButton variant="secondary" size="xs">Secondary</UiButton>
             <UiButton variant="secondary" size="sm">Secondary</UiButton>
             <UiButton variant="secondary" size="md">Secondary</UiButton>
             <UiButton variant="secondary" size="lg">Secondary</UiButton>
+            <UiButton variant="secondary" size="xlg">Secondary</UiButton>
 
             <span style="font-size: 12px; color: #6b7280;">ghost</span>
+            <UiButton variant="ghost" size="xxs">Ghost</UiButton>
             <UiButton variant="ghost" size="xs">Ghost</UiButton>
             <UiButton variant="ghost" size="sm">Ghost</UiButton>
             <UiButton variant="ghost" size="md">Ghost</UiButton>
             <UiButton variant="ghost" size="lg">Ghost</UiButton>
+            <UiButton variant="ghost" size="xlg">Ghost</UiButton>
 
             <span style="font-size: 12px; color: #6b7280;">outline</span>
+            <UiButton variant="outline" size="xxs">Outline</UiButton>
             <UiButton variant="outline" size="xs">Outline</UiButton>
             <UiButton variant="outline" size="sm">Outline</UiButton>
             <UiButton variant="outline" size="md">Outline</UiButton>
             <UiButton variant="outline" size="lg">Outline</UiButton>
+            <UiButton variant="outline" size="xlg">Outline</UiButton>
 
             <span style="font-size: 12px; color: #6b7280;">danger</span>
+            <UiButton variant="danger" size="xxs">Danger</UiButton>
             <UiButton variant="danger" size="xs">Danger</UiButton>
             <UiButton variant="danger" size="sm">Danger</UiButton>
             <UiButton variant="danger" size="md">Danger</UiButton>
             <UiButton variant="danger" size="lg">Danger</UiButton>
+            <UiButton variant="danger" size="xlg">Danger</UiButton>
 
             <span style="font-size: 12px; color: #6b7280;">danger-line</span>
+            <UiButton variant="danger-line" size="xxs">삭제</UiButton>
             <UiButton variant="danger-line" size="xs">삭제</UiButton>
             <UiButton variant="danger-line" size="sm">삭제</UiButton>
             <UiButton variant="danger-line" size="md">삭제</UiButton>
             <UiButton variant="danger-line" size="lg">삭제</UiButton>
+            <UiButton variant="danger-line" size="xlg">삭제</UiButton>
           </div>
         </section>
 
@@ -357,16 +373,18 @@ export const AllVariants: Story = {
   }),
 }
 
-// ===== 3. AllSizes — 4단계 사이즈 비교 =====
+// ===== 3. AllSizes — 6단계 사이즈 비교 =====
 export const AllSizes: Story = {
   render: () => ({
     components: { UiButton },
     template: `
-      <div style="display: flex; gap: 12px; align-items: center;">
-        <UiButton size="xs">XS (24px)</UiButton>
-        <UiButton size="sm">SM (28px)</UiButton>
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <UiButton size="xxs">XXS (24px)</UiButton>
+        <UiButton size="xs">XS (26px)</UiButton>
+        <UiButton size="sm">SM (30px)</UiButton>
         <UiButton size="md">MD (32px)</UiButton>
-        <UiButton size="lg">LG (40px)</UiButton>
+        <UiButton size="lg">LG (34px)</UiButton>
+        <UiButton size="xlg">XLG (36px)</UiButton>
       </div>
     `,
   }),

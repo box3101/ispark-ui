@@ -134,7 +134,7 @@ interface SelectOption {
     size: {
       control: 'inline-radio',
       options: SELECT_SIZES,
-      description: '`xs`(24px · 인라인/캘린더 헤더) / `sm`(28px) / `md`(32px · 기본) / `lg`(40px) / `auth`(44px · 로그인 화면 전용) — 공용 토큰 `SelectSize`.',
+      description: '`xs`(26 · 인라인/캘린더 헤더) / `sm`(30) / `md`(32 · 기본) / `lg`(34) / `xlg`(36) / `auth`(44 · 로그인 화면 전용) — 공용 토큰 `SelectSize`.',
       table: {
         category: 'Appearance',
         type: { summary: 'SelectSize' },
@@ -542,14 +542,16 @@ export const Sizes: Story = {
       const vSm = ref('')
       const vMd = ref('')
       const vLg = ref('')
+      const vXlg = ref('')
       const vAuth = ref('')
-      return { args, sampleOptions, vSm, vMd, vLg, vAuth }
+      return { args, sampleOptions, vSm, vMd, vLg, vXlg, vAuth }
     },
     template: `
       <div style="display: flex; flex-direction: column; gap: 12px; width: 240px;">
-        <UiSelect v-bind="args" v-model="vSm" :options="sampleOptions" size="sm" placeholder="sm 28px" />
+        <UiSelect v-bind="args" v-model="vSm" :options="sampleOptions" size="sm" placeholder="sm 30px" />
         <UiSelect v-bind="args" v-model="vMd" :options="sampleOptions" size="md" placeholder="md 32px" />
-        <UiSelect v-bind="args" v-model="vLg" :options="sampleOptions" size="lg" placeholder="lg 40px" />
+        <UiSelect v-bind="args" v-model="vLg" :options="sampleOptions" size="lg" placeholder="lg 34px" />
+        <UiSelect v-bind="args" v-model="vXlg" :options="sampleOptions" size="xlg" placeholder="xlg 36px" />
         <UiSelect v-bind="args" v-model="vAuth" :options="sampleOptions" size="auth" placeholder="auth 44px" />
       </div>
     `,

@@ -203,12 +203,12 @@ interface Props {
    */
   step?: string | number
   /**
-   * 사이즈 — `sm`(28px) / `md`(32px·기본) / `lg`(40px) / `auth`(44px·로그인 전용)
+   * 사이즈 — `sm`(30) / `md`(32·기본) / `lg`(34) / `xlg`(36) / `auth`(44·로그인 전용)
    * UiButton과 동일 토큰 사용 → 검색바에서 자동 정렬.
    */
   size?: InputSize
   /**
-   * 아이콘 사이즈 — 미지정 시 `size` 따라감, 명시 시 override (xs/sm/md/lg).
+   * 아이콘 사이즈 — 미지정 시 `size` 따라감, 명시 시 override (xxs~xlg).
    * 슬롯 내 `<i>`에 `size-N` 클래스 안 붙였을 때만 적용.
    */
   iconSize?: Size
@@ -679,7 +679,7 @@ defineExpose({
   }
 
   // ===== size — 공용 토큰 (height/padding-x/font + 자동 icon size) =====
-  @each $key in (sm md lg auth) {
+  @each $key in (sm md lg xlg auth) {
     $vals: map.get($sizes, $key);
     &.size-#{$key} {
       height: map.get($vals, height);
@@ -711,7 +711,7 @@ defineExpose({
   }
 
   // ===== iconSize override — size 클래스보다 후행 (specificity 동일 시 후행 승) =====
-  @each $key in (xs sm md lg) {
+  @each $key in (xxs xs sm md lg xlg) {
     $vals: map.get($sizes, $key);
     &.icon-size-#{$key} .ui-input-icon :deep(i:not([class*='size-'])) {
       width: map.get($vals, icon);

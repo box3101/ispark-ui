@@ -217,7 +217,7 @@ defineExpose({
   }
 
   // ===== size — 공용 토큰 =====
-  @each $key in (xs sm md lg auth) {
+  @each $key in (xs sm md lg xlg auth) {
     $vals: map.get($sizes, $key);
     &.size-#{$key} {
       min-height: map.get($vals, height);

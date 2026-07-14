@@ -101,7 +101,7 @@ interface MultiSelectOption {
     size: {
       control: 'inline-radio',
       options: SELECT_SIZES,
-      description: '`xs`(24px) / `sm`(28px) / `md`(32px · 기본) / `lg`(40px) / `auth`(44px) — 공용 토큰 `SelectSize`.',
+      description: '`xs`(26) / `sm`(30) / `md`(32 · 기본) / `lg`(34) / `xlg`(36) / `auth`(44) — 공용 토큰 `SelectSize`.',
       table: {
         category: 'Appearance',
         type: { summary: 'SelectSize' },
@@ -311,13 +311,15 @@ export const Sizes: Story = {
       const vSm = ref<Array<string | number>>([])
       const vMd = ref<Array<string | number>>([])
       const vLg = ref<Array<string | number>>([])
-      return { args, sampleOptions, vSm, vMd, vLg }
+      const vXlg = ref<Array<string | number>>([])
+      return { args, sampleOptions, vSm, vMd, vLg, vXlg }
     },
     template: `
       <div style="display: flex; flex-direction: column; gap: 12px; width: 240px;">
-        <UiMultiSelect v-bind="args" v-model="vSm" :options="sampleOptions" size="sm" placeholder="sm 28px" />
+        <UiMultiSelect v-bind="args" v-model="vSm" :options="sampleOptions" size="sm" placeholder="sm 30px" />
         <UiMultiSelect v-bind="args" v-model="vMd" :options="sampleOptions" size="md" placeholder="md 32px" />
-        <UiMultiSelect v-bind="args" v-model="vLg" :options="sampleOptions" size="lg" placeholder="lg 40px" />
+        <UiMultiSelect v-bind="args" v-model="vLg" :options="sampleOptions" size="lg" placeholder="lg 34px" />
+        <UiMultiSelect v-bind="args" v-model="vXlg" :options="sampleOptions" size="xlg" placeholder="xlg 36px" />
       </div>
     `,
   }),
