@@ -2,6 +2,11 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.6.9] - 2026-07-16
+
+### Changed
+- UiModal 타이틀 typography body-xlarge-bold + line-height 1.4
+
 ## [0.6.8] - 2026-07-14
 
 ### Changed

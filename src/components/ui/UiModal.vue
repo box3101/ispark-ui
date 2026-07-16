@@ -221,7 +221,8 @@ const contentStyle = computed(() => {
 
 .ui-modal-title {
   margin: 0;
-  @include typo($body-large-bold, var(--color-text-heading));
+  @include typo($body-xlarge-bold, var(--color-text-heading));
+  line-height: 1.4;
   flex: 1;
   min-width: 0;
 }
