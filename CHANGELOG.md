@@ -2,6 +2,11 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+## [0.6.10] - 2026-07-20
+
+### Changed
+- UiConfirm·UiModal Dialog 접근성 — DialogDescription 등록
+
 ## [0.6.9] - 2026-07-16
 
 ### Changed

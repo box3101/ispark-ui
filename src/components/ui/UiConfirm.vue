@@ -6,7 +6,10 @@
         <DialogContent class="ui-confirm-content" @escape-key-down.prevent="onCancel">
           <DialogTitle class="ui-confirm-title">{{ confirmState.title }}</DialogTitle>
           <!-- v-html로 줄바꿈(<br>), 볼드(<strong>) 지원 -->
-          <p class="ui-confirm-message" v-html="confirmState.message" />
+          <!-- DialogDescription as-child: radix aria-describedby 등록(접근성) + 기존 p/v-html 유지 -->
+          <DialogDescription as-child>
+            <p class="ui-confirm-message" v-html="confirmState.message" />
+          </DialogDescription>
           <div class="ui-confirm-actions">
             <button
               type="button"
@@ -37,6 +40,7 @@ import {
   DialogOverlay,
   DialogContent,
   DialogTitle,
+  DialogDescription,
 } from 'radix-vue'
 import { useConfirmState, resolveConfirm } from '../../composables/useConfirm'
 

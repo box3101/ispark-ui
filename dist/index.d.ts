@@ -166,6 +166,7 @@ onClose?: (() => any) | undefined;
 size: "sm" | "md" | "lg" | "xl";
 title: string;
 open: boolean;
+description: string;
 showClose: boolean;
 showOverlay: boolean;
 showFullscreen: boolean;
@@ -1134,6 +1135,8 @@ declare interface Props_5 {
     /** [호환] 레거시 단방향 :is-open 지원. open 미지정 시 사용. v-model:open 전환 후 제거 예정 */
     isOpen?: boolean;
     title?: string;
+    /** 스크린리더용 설명(접근성). 지정 시 헤더 아래 노출, 미지정 시 sr-only fallback */
+    description?: string;
     size?: 'sm' | 'md' | 'lg' | 'xl';
     showClose?: boolean;
     showOverlay?: boolean;

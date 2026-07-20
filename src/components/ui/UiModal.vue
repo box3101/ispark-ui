@@ -43,6 +43,10 @@
         </header>
         <DialogTitle v-if="!$slots.header && !title && !showClose && !showFullscreen" class="ui-modal-sr-only">모달</DialogTitle>
 
+        <!-- radix aria-describedby 등록(접근성): description 있으면 노출, 없으면 sr-only fallback -->
+        <DialogDescription v-if="description" class="ui-modal-desc">{{ description }}</DialogDescription>
+        <DialogDescription v-else class="ui-modal-sr-only">{{ title || '대화상자' }}</DialogDescription>
+
         <div class="ui-modal-body">
           <slot />
         </div>
@@ -57,13 +61,15 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { DialogClose, DialogContent, DialogOverlay, DialogPortal, DialogRoot, DialogTitle } from 'radix-vue'
+import { DialogClose, DialogContent, DialogDescription, DialogOverlay, DialogPortal, DialogRoot, DialogTitle } from 'radix-vue'
 
 interface Props {
   open?: boolean
   /** [호환] 레거시 단방향 :is-open 지원. open 미지정 시 사용. v-model:open 전환 후 제거 예정 */
   isOpen?: boolean
   title?: string
+  /** 스크린리더용 설명(접근성). 지정 시 헤더 아래 노출, 미지정 시 sr-only fallback */
+  description?: string
   size?: 'sm' | 'md' | 'lg' | 'xl'
   showClose?: boolean
   showOverlay?: boolean
@@ -77,6 +83,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   open: false,
   title: '',
+  description: '',
   size: 'md',
   showClose: true,
   showOverlay: true,
@@ -204,6 +211,12 @@ const contentStyle = computed(() => {
   gap: $spacing-md;
   padding: $spacing-md $spacing-lg;
   border-bottom: 1px solid var(--color-border);
+}
+
+.ui-modal-desc {
+  margin: 0;
+  padding: $spacing-sm $spacing-lg 0;
+  @include typo($body-small, var(--color-text-secondary));
 }
 
 .ui-modal-body {
