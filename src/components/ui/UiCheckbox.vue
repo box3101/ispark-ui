@@ -187,7 +187,8 @@ const onChange = () => {
 }
 
 .ui-checkbox-label {
-  font-size: $font-size-sm;
+  // sm 컨트롤(버튼/인풋)과 맞춤 — typography $font-size-sm(12px)과 분리
+  font-size: $size-sm-font; // 13px
   font-weight: $font-weight-normal;
   color: $color-text-primary;
   line-height: 1.5;

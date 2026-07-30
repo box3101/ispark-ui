@@ -3,6 +3,12 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.6.12] - 2026-07-30
+
+### Fixed
+- typography 토큰 `$font-size-xs`/`$font-size-sm` 원복 (10px / 12px) — v0.6.11 전역 영향(뱃지 등) 롤백
+- **UiCheckbox** 라벨만 `$size-sm-font`(13px)로 분리 — 체크박스 라벨 가독성 유지, Badge 등 타 컴포넌트 비영향
+
 ## [0.6.11] - 2026-07-30
 
 ### Changed
