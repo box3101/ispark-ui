@@ -2,6 +2,11 @@
 
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
+
+## [0.6.11] - 2026-07-30
+
+### Changed
+- typography 토큰 조정: `$font-size-xs` 10px→11px, `$font-size-sm` 12px→13px (체크박스/라디오 라벨 등 보조 텍스트 가독성)
 ## [0.6.10] - 2026-07-20
 
 ### Changed
