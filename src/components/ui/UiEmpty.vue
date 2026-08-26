@@ -71,14 +71,23 @@ withDefaults(defineProps<Props>(), {
   opacity: 0.5;
 }
 
+/*
+  빈 상태는 "비활성 정보"가 아니라 그 순간 사용자가 읽어야 하는
+  유일한 내용이다. 전에는 title 이 $body-small(12px), desc 가
+  $body-xsmall(10px) 이라 본문($font-size-base 14px)보다 작았고,
+  두 줄 모두 색이 #6f7a93 으로 같아 제목과 설명이 구분되지 않았다.
+  ($color-text-disabled 와 $color-text-muted 는 현재 같은 값이다)
+
+  크기로 위계를, 색으로 주/보조를 나눈다.
+*/
 .ui-empty-title {
-  @include typo($body-small);
-  color: $color-text-disabled;
+  @include typo($body-large-bold);
+  color: $color-text-primary;
 }
 
 .ui-empty-desc {
-  @include typo($body-xsmall);
-  color: $color-text-muted;
+  @include typo($body-medium);
+  color: $color-text-secondary;
 }
 
 .ui-empty-action {
