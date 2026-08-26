@@ -49,9 +49,14 @@ ispark-ui 표준 빈 상태(Empty State) 컴포넌트. 데이터가 없거나, �
 - **Events**: 없음
 
 ## 디자인 토큰
-- color: \`$color-text-disabled\`(title/icon), \`$color-text-muted\`(desc)
-- typo: \`$body-small\`(title), \`$body-xsmall\`(desc)
+- color: \`$color-text-primary\`(title), \`$color-text-secondary\`(desc), \`$color-text-disabled\`(icon)
+- typo: \`$body-large-bold\`(title, 16px), \`$body-medium\`(desc, 14px)
 - icon 크기: \`size-24\` 클래스(24px) 고정
+
+> **왜 본문보다 크게 두나** — 빈 상태는 그 순간 사용자가 읽어야 하는 유일한 내용이다.
+> 이전에는 title \`$body-small\`(12px) / desc \`$body-xsmall\`(10px) 로 본문(14px)보다 작았고,
+> 두 줄 모두 \`#6f7a93\` 이라 제목과 설명이 색으로 구분되지 않았다.
+> 크기로 위계를, 색으로 주/보조를 나눈다.
         `,
       },
     },
