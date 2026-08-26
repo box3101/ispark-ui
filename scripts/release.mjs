@@ -10,6 +10,7 @@
 //   --minor          minor 버전 증가 (0.5.22 → 0.6.0)
 //   --major          major 버전 증가 (0.5.22 → 1.0.0)
 //   --no-app         team_agent_front 재설치·서버 재시작 생략 (ispark-ui 릴리스만)
+//   --no-tag         버전 태그 생성·push 생략 (npm publish 안 함)
 //   --no-issue       TaskFlow 이슈 자동 등록 생략
 //   --issue-only     ispark 릴리스 없이 team_agent_front 최신 커밋만 #36에 등록 후 종료
 //                    (ispark-ui 안 건드린 team_agent 단독 작업 기록용, 변경 요약 인자 불필요)
@@ -27,9 +28,10 @@
 //   3) CHANGELOG.md 항목 추가
 //   4) git 커밋 (dist 포함)
 //   5) main 브랜치로 fast-forward 머지 + push
-//   6) team_agent_front 에서 새 커밋 해시로 재설치
-//   7) team_agent_front dev 서버 재시작
-//   8) TaskFlow 이슈 자동 등록 — #33(ispark-ui 변경) / #36(TeamAgent 최신 커밋)
+//   6) v{version} 태그 생성 + push → GitHub Actions 가 npm publish 실행
+//   7) team_agent_front 에서 새 커밋 해시로 재설치
+//   8) team_agent_front dev 서버 재시작
+//   9) TaskFlow 이슈 자동 등록 — #33(ispark-ui 변경) / #36(TeamAgent 최신 커밋)
 // ============================================
 
 import { execSync, spawn } from 'node:child_process'
@@ -68,6 +70,7 @@ const capture = (cmd, opts = {}) => execSync(cmd, { encoding: 'utf8', cwd: ROOT,
 let type = 'Changed'
 let bump = 'patch'
 let skipApp = false
+let skipTag = false // --no-tag: 태그 생성·push 생략 (npm publish 안 돌림)
 let skipIssue = false // --no-issue: TaskFlow 이슈 등록 생략
 let issueOnly = false // --issue-only: 릴리스 없이 team_agent 최신 커밋만 #36 등록
 let appOverride = '' // --app: 이번 실행만 사용할 경로
@@ -81,6 +84,7 @@ for (let i = 0; i < raw.length; i++) {
   if (a === '--minor') { bump = 'minor'; continue }
   if (a === '--major') { bump = 'major'; continue }
   if (a === '--no-app') { skipApp = true; continue }
+  if (a === '--no-tag') { skipTag = true; continue }
   if (a === '--no-issue') { skipIssue = true; continue }
   if (a === '--issue-only') { issueOnly = true; continue }
   if (a === '--app') { appOverride = raw[++i] || ''; continue }
@@ -242,7 +246,32 @@ if (branch !== 'main') run(`git checkout ${branch}`)
 ok('main push 완료')
 
 // ============================================
-// 6) team_agent_front 재설치 + 7) dev 서버 재시작
+// 6) 태그 생성 + push → GitHub Actions 가 npm publish 실행
+// --------------------------------------------
+// publish.yml 이 'v*' 태그 push 에만 반응한다. 이 단계를 건너뛰면
+// 커밋은 올라가지만 npm 에는 영원히 배포되지 않는다.
+// ============================================
+const tagName = `v${newVersion}`
+let tagPushed = false
+if (skipTag) {
+  console.warn(`${c.gray}ℹ --no-tag — 태그 생략. npm 배포는 실행되지 않습니다.${c.reset}`)
+} else {
+  try {
+    // 이전 실패로 로컬에 같은 태그가 남아 있을 수 있으므로 정리 후 재생성
+    if (capture(`git tag --list ${tagName}`)) run(`git tag -d ${tagName}`)
+    run(`git tag ${tagName}`)
+    run(`git push origin ${tagName}`)
+    tagPushed = true
+    ok(`태그 ${tagName} push 완료 — npm publish 워크플로 시작됨`)
+    console.log(`${c.gray}   진행 확인: gh run watch --exit-status${c.reset}`)
+  } catch {
+    console.warn(`${c.red}✖ 태그 push 실패 — npm 에 배포되지 않았습니다.${c.reset}`)
+    console.warn(`${c.gray}   수동 복구: git tag ${tagName} && git push origin ${tagName}${c.reset}`)
+  }
+}
+
+// ============================================
+// 7) team_agent_front 재설치 + 8) dev 서버 재시작
 // ============================================
 let appDone = false // 실제로 재설치/서버재시작까지 됐는지 (→ #36 등록 여부 판단)
 if (!skipApp) {
@@ -258,7 +287,7 @@ if (!skipApp) {
 }
 
 // ============================================
-// 8) TaskFlow 이슈 자동 등록 (#33 ispark-ui, #36 TeamAgent)
+// 9) TaskFlow 이슈 자동 등록 (#33 ispark-ui, #36 TeamAgent)
 // ============================================
 if (!skipIssue) {
   await registerIssues(appDone)
@@ -266,6 +295,9 @@ if (!skipIssue) {
 
 // ---- 최종 요약 ----
 console.log(`\n${c.green}🎉 완료${c.reset}  v${oldVersion} → v${newVersion} · ${shortHash}`)
+if (tagPushed) {
+  console.log(`   npm 배포 진행 중 — 확인: npm view ${pkg.name} version`)
+}
 if (appDone) {
   console.log(`   브라우저에서 ${DEV_PORTS.map((p) => `localhost:${p}`).join(' 또는 ')} 새로고침으로 확인하세요.`)
 }
