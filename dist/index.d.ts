@@ -1522,7 +1522,9 @@ ariaLabel: string;
 align: "left" | "center" | "right" | "stretch";
 contentMaxWidth: string;
 contentPaddingX: string;
-}, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
+}, {}, {}, {}, string, ComponentProvideOptions, false, {
+innerRef: HTMLDivElement;
+}, HTMLDivElement>;
 
 export declare const UiTable: <TRow extends Record<string, unknown> = Record<string, unknown>>(__VLS_props: NonNullable<Awaited<typeof __VLS_setup>>["props"], __VLS_ctx?: __VLS_PrettifyLocal<Pick<NonNullable<Awaited<typeof __VLS_setup>>, "attrs" | "emit" | "slots">>, __VLS_expose?: NonNullable<Awaited<typeof __VLS_setup>>["expose"], __VLS_setup?: Promise<{
     props: __VLS_PrettifyLocal<Pick<Partial<{}> & Omit<{

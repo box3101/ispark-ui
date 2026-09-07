@@ -3,6 +3,11 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.6.13] - 2026-09-07
+
+### Changed
+- UiTab 좁은 컨테이너 가로 스크롤 + hover 밑줄 프리뷰
+
 ## [0.6.12] - 2026-07-30
 
 ### Fixed
