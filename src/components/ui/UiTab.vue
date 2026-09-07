@@ -4,8 +4,15 @@
     :class="[`size-${size}`, `align-${align}`]"
   >
     <div
+      ref="innerRef"
       class="ui-tab-inner"
-      :class="{ 'is-content-constrained': !!contentMaxWidth }"
+      :class="{
+        'is-content-constrained': !!contentMaxWidth,
+        'is-scrollable': isScrollable,
+        'is-dragging': isDragging,
+        'can-prev': canPrev,
+        'can-next': canNext,
+      }"
       :style="contentMaxWidth ? {
         '--ui-tab-content-max-width': contentMaxWidth,
         '--ui-tab-content-padding-x': contentPaddingX,
@@ -13,6 +20,11 @@
       role="tablist"
       :aria-label="ariaLabel || undefined"
       @keydown="onKeydown"
+      @pointerdown="onPointerDown"
+      @pointermove="onPointerMove"
+      @pointerup="onPointerUp"
+      @pointercancel="onPointerUp"
+      @click.capture="onClickCapture"
     >
       <button
         v-for="(tab, idx) in tabs"
@@ -45,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 export interface TabItem {
   /** 탭 라벨 */
@@ -100,6 +112,117 @@ const onSelect = (tab: TabItem) => {
   emit('update:modelValue', tab.value)
   emit('change', tab.value)
 }
+
+// ===== 가로 스크롤 =====
+// 폭이 모자라면 줄바꿈 대신 옆으로 스크롤한다. 뷰포트가 아니라 "컨테이너" 기준이라
+// 미디어쿼리를 쓰지 않는다 — 모달·드로어 안에서도 동일하게 동작해야 하기 때문.
+const innerRef = ref<HTMLElement | null>(null)
+const isScrollable = ref(false)
+const canPrev = ref(false)
+const canNext = ref(false)
+
+const syncEdges = () => {
+  const el = innerRef.value
+  if (!el) return
+  const max = el.scrollWidth - el.clientWidth
+  isScrollable.value = max > 1
+  canPrev.value = el.scrollLeft > 1
+  canNext.value = el.scrollLeft < max - 1
+}
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+// 선택된 탭을 항상 보이는 위치로 — 키보드 ←/→ 로 화면 밖 탭에 가도 따라간다
+const revealActive = async () => {
+  await nextTick()
+  if (!isScrollable.value) return
+  const active = innerRef.value?.querySelector('.ui-tab-item.is-active') as HTMLElement | null
+  active?.scrollIntoView({
+    inline: 'center',
+    block: 'nearest',
+    behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+  })
+}
+
+// ===== 드래그 스크롤 =====
+// overflow-x 는 마우스로 잡아끄는 조작을 지원하지 않으므로 pointer 이벤트로 직접 만든다.
+const DRAG_THRESHOLD = 5
+const isDragging = ref(false)
+let dragStartX = 0
+let dragStartScrollLeft = 0
+let dragMoved = 0
+let suppressClick = false
+
+const onPointerDown = (e: PointerEvent) => {
+  const el = innerRef.value
+  if (!el || !isScrollable.value || e.button !== 0) return
+  suppressClick = false
+  isDragging.value = true
+  dragMoved = 0
+  dragStartX = e.clientX
+  dragStartScrollLeft = el.scrollLeft
+  // 여기서 setPointerCapture 를 걸면 click 이 버튼 대신 캡처 대상으로 가서
+  // 탭 선택이 통째로 죽는다. 임계값을 넘겨 '드래그'로 확정된 뒤에만 캡처한다.
+}
+
+const onPointerMove = (e: PointerEvent) => {
+  const el = innerRef.value
+  if (!isDragging.value || !el) return
+  const delta = e.clientX - dragStartX
+  dragMoved = Math.max(dragMoved, Math.abs(delta))
+  if (dragMoved <= DRAG_THRESHOLD) return
+  if (!el.hasPointerCapture(e.pointerId)) el.setPointerCapture(e.pointerId)
+  el.scrollLeft = dragStartScrollLeft - delta
+}
+
+const onPointerUp = (e: PointerEvent) => {
+  const el = innerRef.value
+  if (!isDragging.value) return
+  isDragging.value = false
+  if (el?.hasPointerCapture(e.pointerId)) el.releasePointerCapture(e.pointerId)
+  // 끌었으면 뒤따르는 click(탭 선택)을 막고, 제자리 클릭이면 그대로 통과시킨다
+  suppressClick = dragMoved > DRAG_THRESHOLD
+}
+
+// 임계값을 넘기기 전에는 포인터 캡처가 없어서 요소 밖에서 손을 떼면 pointerup 을 놓친다.
+// 그대로 두면 is-dragging 이 영구히 남아 커서가 grabbing 에 고정되므로 window 에서 한 번 더 받는다.
+const onWindowPointerUp = (e: PointerEvent) => {
+  if (isDragging.value) onPointerUp(e)
+}
+
+const onClickCapture = (e: MouseEvent) => {
+  if (!suppressClick) return
+  suppressClick = false
+  e.preventDefault()
+  e.stopPropagation()
+}
+
+let resizeObserver: ResizeObserver | null = null
+
+onMounted(() => {
+  const el = innerRef.value
+  if (!el) return
+  syncEdges()
+  el.addEventListener('scroll', syncEdges, { passive: true })
+  window.addEventListener('pointerup', onWindowPointerUp)
+  window.addEventListener('pointercancel', onWindowPointerUp)
+  if (typeof ResizeObserver !== 'undefined') {
+    resizeObserver = new ResizeObserver(syncEdges)
+    resizeObserver.observe(el)
+  }
+})
+
+onBeforeUnmount(() => {
+  innerRef.value?.removeEventListener('scroll', syncEdges)
+  window.removeEventListener('pointerup', onWindowPointerUp)
+  window.removeEventListener('pointercancel', onWindowPointerUp)
+  resizeObserver?.disconnect()
+  resizeObserver = null
+})
+
+watch(() => props.modelValue, revealActive)
+watch(() => props.tabs, () => nextTick(syncEdges), { deep: true })
 
 // 키보드 네비 (ArrowLeft/Right + Home/End)
 //  - 비활성 탭은 자동 skip
@@ -165,7 +288,39 @@ const onKeydown = (e: KeyboardEvent) => {
 
 .ui-tab-inner {
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
+  // 폭이 모자라면 줄바꿈 대신 가로 스크롤. 스크롤바는 숨기고 페이드로 대체한다
+  overflow-x: auto;
+  @include hide-scrollbar;
+
+  // 페이드 마스크 — 배경색과 무관하게 동작하도록 mask 사용 (그라데이션 오버레이 X)
+  --ui-tab-fade: 32px;
+
+  &.can-prev.can-next {
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 var(--ui-tab-fade),
+      #000 calc(100% - var(--ui-tab-fade)),
+      transparent 100%
+    );
+  }
+  &.can-prev:not(.can-next) {
+    mask-image: linear-gradient(to right, transparent 0, #000 var(--ui-tab-fade));
+  }
+  &.can-next:not(.can-prev) {
+    mask-image: linear-gradient(to left, transparent 0, #000 var(--ui-tab-fade));
+  }
+
+  // 넘칠 때만 잡아끌 수 있다는 신호를 준다
+  &.is-scrollable {
+    cursor: grab;
+  }
+  &.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
 
   &.is-content-constrained {
     max-width: var(--ui-tab-content-max-width);
@@ -175,20 +330,36 @@ const onKeydown = (e: KeyboardEvent) => {
     padding-right: var(--ui-tab-content-padding-x, 16px);
   }
 
-  // align variants — justify-content로 탭 자체를 정렬
-  .ui-tab.align-left & {
-    justify-content: flex-start;
-  }
+  // align variants
+  //  justify-content: center/right 는 넘쳤을 때 앞쪽으로 삐져나간 탭을 scrollLeft 로
+  //  되돌릴 수 없어 첫 탭이 영구히 잘린다. auto 여백은 남는 공간이 있을 때만 먹으므로
+  //  넘치는 순간 자동으로 flex-start 와 같아진다.
   .ui-tab.align-center & {
-    justify-content: center;
+    .ui-tab-item:first-child {
+      margin-inline-start: auto;
+    }
+    .ui-tab-item:last-child {
+      margin-inline-end: auto;
+    }
   }
   .ui-tab.align-right & {
-    justify-content: flex-end;
+    .ui-tab-item:first-child {
+      margin-inline-start: auto;
+    }
   }
+  // 균등 분할은 넘칠 일이 없다 — 스크롤 대신 라벨 말줄임으로 처리
   .ui-tab.align-stretch & {
+    overflow-x: hidden;
+    cursor: default;
+
     .ui-tab-item {
-      flex: 1;
+      flex: 1 1 0;
+      min-width: 0;
       justify-content: center;
+    }
+    .ui-tab-item-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }
@@ -198,12 +369,15 @@ const onKeydown = (e: KeyboardEvent) => {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
   padding: 10px 16px;
   border: none;
   background: transparent;
-  cursor: pointer;
+  // 부모가 grab/grabbing 일 때 pointer 가 덮어써서 드래그 힌트가 사라지는 것 방지
+  cursor: inherit;
+  white-space: nowrap;
   color: $color-text-secondary;
-  transition: color 0.15s ease;
+  transition: color $transition-fast;
 
   // ===== size =====
   .ui-tab.size-sm & {
@@ -218,8 +392,30 @@ const onKeydown = (e: KeyboardEvent) => {
     @include typo($body-xlarge);
   }
 
-  &:hover:not(:disabled):not(.is-disabled) {
-    color: $color-text-dark;
+  // 밑줄 하나로 hover(회색 프리뷰)와 선택(accent)을 함께 표현한다.
+  // hover 가 선택 상태와 같은 자리에 한 단계 약하게 뜨므로 "누르면 이렇게 된다"가 예측된다.
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: $color-placeholder;
+    opacity: 0;
+    transition: opacity $transition-fast;
+  }
+
+  // hover 는 포인터가 있는 기기에서만.
+  // 없으면 모바일에서 탭한 뒤 hover 가 눌러붙어 선택도 아닌데 강조된 탭이 남는다.
+  @media (hover: hover) {
+    &:hover:not(:disabled):not(.is-disabled):not(.is-active) {
+      color: $color-text-dark;
+
+      &::after {
+        opacity: 1;
+      }
+    }
   }
 
   &.is-active {
@@ -227,13 +423,8 @@ const onKeydown = (e: KeyboardEvent) => {
     font-weight: $font-weight-bold;
 
     &::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      right: 0;
-      height: 2px;
       background: var(--color-primary);
+      opacity: 1;
     }
   }
 
@@ -276,7 +467,8 @@ const onKeydown = (e: KeyboardEvent) => {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ui-tab-item {
+  .ui-tab-item,
+  .ui-tab-item::after {
     transition: none;
   }
 }
