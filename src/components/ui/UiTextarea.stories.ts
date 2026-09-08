@@ -34,7 +34,7 @@ ispark-ui 표준 멀티라인 입력 컴포넌트. CSS 드래그 리사이즈(re
 - **\`radius\`** \`'sm' | 'base' | 'lg'\` — 4/6/8px
 - **\`border\`** \`boolean\` — 테두리 표시 (기본 true)
 - **\`spellcheck\`** \`boolean\` — 브라우저 맞춤법 밑줄 (기본 true)
-- **\`expandable\`** \`boolean\` — 우상단 전체보기 버튼 (기본 true). 클릭 시 모달로 큰 textarea 편집
+- **\`expandable\`** \`boolean\` — 우상단 전체보기 버튼 (기본 true). 클릭 시 모달로 큰 textarea 편집. 모달 본문은 \`.ui-textarea.type-modal\` — 필드와 같은 토큰, 전체보기 버튼(\`has-expand\`)·리사이즈·카운터 오버레이 클래스는 없음
 - 포커스: outline 없음 — \`border-color: primary\`만
 
 ## API — 폼 필드 (UiInput 일관성)
@@ -340,6 +340,17 @@ export const Expandable: Story = {
     },
     template: '<UiTextarea v-bind="args" v-model="value" />',
   }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const expandBtn = canvas.getByRole('button', { name: '전체보기' })
+    await userEvent.click(expandBtn)
+    // 모달은 radix portal → canvas 밖(document.body)
+    const modalTa = canvasElement.ownerDocument.querySelector('.ui-textarea.type-modal') as HTMLTextAreaElement
+    await expect(modalTa).toBeTruthy()
+    await expect(modalTa.classList.contains('ui-textarea')).toBe(true)
+    await expect(modalTa.classList.contains('has-expand')).toBe(false)
+    await expect(modalTa.classList.contains('is-resizable')).toBe(false)
+  },
 }
 
 // 전체보기 비활성화

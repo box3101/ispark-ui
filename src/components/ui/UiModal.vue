@@ -212,7 +212,7 @@ const contentStyle = computed(() => {
   align-items: center;
   justify-content: space-between;
   gap: $spacing-md;
-  padding: $spacing-md $spacing-lg;
+  padding: 14px 20px;
   border-bottom: 1px solid var(--color-border);
   flex-shrink: 0;
 }
@@ -228,7 +228,7 @@ const contentStyle = computed(() => {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
-  padding: $spacing-lg;
+  padding: 20px;
 }
 
 .ui-modal-footer {

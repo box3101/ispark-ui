@@ -151,4 +151,23 @@ describe('UiTextarea', () => {
     const ta = container.querySelector('textarea')!
     expect(ta.classList.contains('is-resizable')).toBe(false)
   })
+
+  // 14. 전체보기 모달 textarea — .ui-textarea + .type-modal, expand 관련 클래스 없음
+  it('전체보기 모달: ui-textarea type-modal, has-expand/is-resizable 없음', async () => {
+    const { container } = render(UiTextarea, {
+      props: { modelValue: '본문', expandable: true, border: true, label: '메모' },
+    })
+    const expandBtn = container.querySelector('.ui-textarea-expand') as HTMLButtonElement
+    expect(expandBtn).not.toBeNull()
+    await fireEvent.click(expandBtn)
+    await nextTick()
+    const modalTa = document.querySelector('.ui-textarea.type-modal') as HTMLTextAreaElement
+    expect(modalTa).not.toBeNull()
+    expect(modalTa.classList.contains('ui-textarea')).toBe(true)
+    expect(modalTa.classList.contains('type-modal')).toBe(true)
+    expect(modalTa.classList.contains('has-expand')).toBe(false)
+    expect(modalTa.classList.contains('is-resizable')).toBe(false)
+    expect(modalTa.classList.contains('has-counter')).toBe(false)
+    expect(modalTa.value).toBe('본문')
+  })
 })

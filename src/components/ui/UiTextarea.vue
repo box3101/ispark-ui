@@ -79,7 +79,12 @@
     >
       <textarea
         ref="expandTextareaRef"
-        class="ui-textarea-modal-textarea"
+        class="ui-textarea type-modal"
+        :class="[
+          `radius-${radius}`,
+          `size-${size}`,
+          { 'has-border': border, 'is-error': isError },
+        ]"
         :value="modelValue"
         :placeholder="placeholder"
         :readonly="readonly"
@@ -431,61 +436,23 @@ defineExpose({
   opacity: 1;
 }
 
-.ui-textarea.has-expand {
+// 전체보기 버튼용 우측 패딩 — 모달 textarea(type-modal)에는 버튼이 없으므로 제외
+.ui-textarea.has-expand:not(.type-modal) {
   padding-right: 32px;
 }
 
-// 전체보기 모달 내 textarea — PC 14px / 모바일·태블릿(≤1024) 10px
-.ui-textarea-modal-textarea {
+// 전체보기 모달 전용 — 필드와 같은 .ui-textarea 토큰을 쓰고, 레이아웃만 덮음
+// has-expand / has-counter / is-resizable 은 클래스 자체를 안 붙임
+.ui-textarea.type-modal {
   flex: 1;
-  width: 100%;
   min-height: 300px;
-  padding: 14px;
-  border: none;
-  outline: none;
   resize: none;
-  box-sizing: border-box;
-  font-family: inherit;
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--color-text-primary, #1f2937);
-  background: transparent;
+  @include custom-scrollbar;
 
-  // 모달 본문·Storybook 오버라이드보다 우선 — 트랙/화살표 없는 thin pill
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
-
-  &::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
-
-  &::-webkit-scrollbar-button {
-    display: none;
-    width: 0;
-    height: 0;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.15);
-    border-radius: 9999px;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.25);
-    }
-  }
-
-  &::placeholder {
-    color: $color-placeholder;
-    opacity: 1;
-  }
-
-  @media (max-width: $breakpoint-lg) {
-    padding: 10px;
+  &.size-sm,
+  &.size-md,
+  &.size-lg {
+    min-height: 300px;
   }
 }
 
