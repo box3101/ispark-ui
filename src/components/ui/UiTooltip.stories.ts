@@ -26,6 +26,12 @@ ispark-ui 표준 툴팁 — radix-vue \`Tooltip\` 프리미티브 래핑. 접근
   덮어쓰면 화살표가 뒤집힌다. 크기는 \`TooltipArrow\` 의 \`width\`/\`height\` prop 으로 바꾼다.
 - svg 는 기본 \`overflow: hidden\` 이라 \`stroke\` 바깥 절반이 잘린다 → \`overflow: visible\` 필수.
   0.5px stroke 는 서브픽셀이라 사실상 안 보인다.
+- 밑변(툴팁과 맞닿는 변)에 보이던 선의 정체는 화살표 stroke 가 아니라 **툴팁 본체의 보더** 였다.
+  화살표는 툴팁 바깥에 붙는데 그 자리에도 보더가 지나가기 때문. 두 가지로 처리한다.
+  (1) \`stroke-dasharray: 0 30 36.06\` — 폴리곤 첫 변(밑변 30)은 건너뛰고 두 빗변만 그린다
+  (2) 폴리곤을 \`translateY(-1.5)\` 로 툴팁 쪽에 밀어 넣어 흰 채움으로 보더 구간을 덮는다.
+  transform 을 svg 가 아니라 **폴리곤**에 주는 이유는, 이미 회전된 좌표계 안에서 적용돼야
+  4방향 모두 "툴팁 쪽"으로 움직이기 때문이다 (실측: top/bottom/left 모두 겹침 1.05px).
 - 배경은 \`--ui-tooltip-bg\` 하나로 관리한다. 화살표가 \`TooltipContent\` 의 자식이라
   이 변수를 상속받으므로 배경만 바꾸면 화살표 fill 이 따라온다.
 
@@ -41,6 +47,9 @@ ispark-ui 표준 툴팁 — radix-vue \`Tooltip\` 프리미티브 래핑. 접근
 - **\`align\`** \`'start' | 'center' | 'end'\` — 정렬 (기본 center)
 - **\`delayDuration\`** \`number\` — hover 표시 지연 ms (기본 200)
 - **\`showArrow\`** \`boolean\` — 화살표 표시 (기본 true)
+- \`arrowWidth\` / \`arrowHeight\` \`number\` — 화살표 크기 (기본 14 / 7).
+  **CSS \`transform\` 으로 키우면 안 된다** — radix 가 방향 회전에 쓰는 속성이라 화살표가 뒤집힌다
+- \`defaultOpen\` \`boolean\` — 처음부터 열린 상태. 문서/시각 회귀 테스트용
 - **\`fontSize\`** \`string\` — 본문 글자 크기 override (예: \`'11px'\`)
 - **\`contentClass\`** \`string\` — radix portal 박스에 추가 클래스 (페이지 스타일 override)
 
@@ -334,6 +343,22 @@ export const SpecScenarios: Story = {
             </div>
           </section>
         </div>
+      </div>
+    `,
+  }),
+}
+
+// 열린 상태 고정 — 화살표/보더 접합부를 hover 없이 확인한다 (시각 회귀용)
+export const AlwaysOpen: Story = {
+  parameters: { layout: 'fullscreen' },
+  render: () => ({
+    components: { UiTooltip, UiButton },
+    template: `
+      <div style="display:grid;grid-template-columns:repeat(2,220px);gap:90px 60px;padding:90px 40px;background:#fff;">
+        <UiTooltip content="top 방향" side="top" default-open><UiButton variant="secondary">top</UiButton></UiTooltip>
+        <UiTooltip content="right 방향" side="right" default-open><UiButton variant="secondary">right</UiButton></UiTooltip>
+        <UiTooltip content="bottom 방향" side="bottom" default-open><UiButton variant="secondary">bottom</UiButton></UiTooltip>
+        <UiTooltip content="left 방향" side="left" default-open><UiButton variant="secondary">left</UiButton></UiTooltip>
       </div>
     `,
   }),
