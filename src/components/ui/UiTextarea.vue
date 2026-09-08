@@ -435,7 +435,7 @@ defineExpose({
   padding-right: 32px;
 }
 
-// 전체보기 모달 내 textarea — PC 14px / 모바일·태블릿(~1023) 10px
+// 전체보기 모달 내 textarea — PC 14px / 모바일·태블릿(≤1024) 10px
 .ui-textarea-modal-textarea {
   flex: 1;
   width: 100%;
@@ -484,7 +484,7 @@ defineExpose({
     opacity: 1;
   }
 
-  @include mobile {
+  @media (max-width: $breakpoint-lg) {
     padding: 10px;
   }
 }

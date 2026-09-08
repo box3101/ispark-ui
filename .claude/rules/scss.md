@@ -95,7 +95,7 @@ assets/styles/page/
   - 색상 포함: `@include typo($body-large-bold, $color-text-heading);` — 두 번째 인자로 color 전달 가능
   - 색상 별도 작성도 가능: `@include typo($body-large-bold); color: $color-text-dark;`
 - 타이포 프리셋: `@include typo($body-medium-bold)` → font-size/weight/line-height 일괄 적용
-- 모바일/태블릿 전용: `@include mobile { ... }` → `@media (max-width: 1023px)`
+- 모바일/태블릿 전용: `@media (max-width: $breakpoint-lg)` — `$breakpoint-lg: 1024px`
 - 텍스트 말줄임: `@include ellipsis(1)` 또는 `@include ellipsis(2)`
 - 커스텀 스크롤바: `@include custom-scrollbar`
 - 스크롤바 오른쪽 띄우기: 스크롤 영역에 `width: calc(100% + 6px); padding-right: 6px;` 추가 — 스크롤바가 컨텐츠 바깥 오른쪽에 위치
@@ -103,14 +103,14 @@ assets/styles/page/
 
 ## 반응형 전략 (2분할)
 
-**데스크탑 버전** (1024px~)
+**데스크탑 버전** (1025px~)
 
 - 기본 레이아웃, 고정 너비 기반
 - 브라우저 창 줄이면 가로 스크롤 발생 (레이아웃 깨짐 방지)
 - `min-width`로 최소 너비 보장 → 리사이즈해도 레이아웃 유지
 - 사이드바 펼침 (260px)
 
-**모바일/태블릿 버전** (~1023px)
+**모바일/태블릿 버전** (≤1024px)
 
 - 사이드바 숨김, 햄버거 메뉴
 - 유동적 레이아웃 (퍼센트/flex 기반)
@@ -124,8 +124,8 @@ assets/styles/page/
   min-width: 1024px; // 이 아래로 줄이면 가로 스크롤
 }
 
-// 모바일/태블릿: 1024px 미만일 때만 적용
-@media (max-width: 1023px) {
+// 모바일/태블릿: ≤1024px일 때만 적용
+@media (max-width: $breakpoint-lg) {
   .layout-default {
     min-width: auto; // 고정 해제, 유동 레이아웃
   }

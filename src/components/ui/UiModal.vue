@@ -312,8 +312,8 @@ const contentStyle = computed(() => {
   }
 }
 
-// 모바일+태블릿 (~1023) — 기본 규칙 뒤에 두어 cascade로 override
-@media (max-width: #{$breakpoint-lg - 1}) {
+// 모바일+태블릿 (≤1024) — 기본 규칙 뒤에 두어 cascade로 override
+@media (max-width: $breakpoint-lg) {
   .ui-modal-header {
     gap: 8px;
     padding: 14px 16px;

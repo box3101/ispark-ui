@@ -465,8 +465,8 @@ onUnmounted(() => {
   border-top: 1px solid $color-border;
 }
 
-// 모바일+태블릿 (~1023) — UiModal과 동일 밀도 (기본 규칙 뒤 cascade)
-@media (max-width: #{$breakpoint-lg - 1}) {
+// 모바일+태블릿 (≤1024) — UiModal과 동일 밀도 (기본 규칙 뒤 cascade)
+@media (max-width: $breakpoint-lg) {
   .ui-drawer-header {
     gap: 8px;
     padding: 14px 16px;
