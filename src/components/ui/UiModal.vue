@@ -164,6 +164,8 @@ const contentStyle = computed(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
   width: 100%;
   background: var(--color-bg-elevated);
   border-radius: $shape-rounded;
@@ -178,7 +180,7 @@ const contentStyle = computed(() => {
   &.ui-modal-size-xl { max-width: min(1080px, calc(100vw - 40px)); }
 
   max-height: calc(100vh - 40px);
-  overflow-y: auto;
+  overflow: hidden; // 본문 스크롤은 .ui-modal-body — 헤더/푸터 고정
 
   &[data-state='open'] {
     animation: ui-modal-content-in 200ms ease-out forwards;
@@ -201,6 +203,7 @@ const contentStyle = computed(() => {
     transform: none !important;
     border-radius: 0;
     animation: none !important;
+    overflow: hidden;
   }
 }
 
@@ -211,17 +214,21 @@ const contentStyle = computed(() => {
   gap: $spacing-md;
   padding: $spacing-md $spacing-lg;
   border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
 }
 
 .ui-modal-desc {
   margin: 0;
   padding: $spacing-sm $spacing-lg 0;
   @include typo($body-small, var(--color-text-secondary));
+  flex-shrink: 0;
 }
 
 .ui-modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
   padding: $spacing-lg;
-  // header/footer가 sticky가 아니라 단순 영역. 본문 길면 .ui-modal-content가 스크롤
 }
 
 .ui-modal-footer {
@@ -230,6 +237,7 @@ const contentStyle = computed(() => {
   gap: $spacing-sm;
   padding: $spacing-md $spacing-lg;
   border-top: 1px solid var(--color-border);
+  flex-shrink: 0;
 }
 
 .ui-modal-title {
@@ -301,6 +309,37 @@ const contentStyle = computed(() => {
   &:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
+  }
+}
+
+// 모바일+태블릿 (~1023) — 기본 규칙 뒤에 두어 cascade로 override
+@media (max-width: #{$breakpoint-lg - 1}) {
+  .ui-modal-header {
+    gap: 8px;
+    padding: 14px 16px;
+  }
+
+  .ui-modal-desc {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .ui-modal-body {
+    padding: 16px;
+  }
+
+  .ui-modal-footer {
+    padding: 12px 16px;
+  }
+
+  .ui-modal-title {
+    @include typo($body-large-bold, var(--color-text-heading)); // font-size만 rem 토큰
+  }
+
+  .ui-modal-close,
+  .ui-modal-fullscreen-toggle {
+    width: 24px;
+    height: 24px;
   }
 }
 

@@ -1,7 +1,16 @@
 import { render, screen } from '@testing-library/vue'
+import { composeStories } from '@storybook/vue3'
 import { describe, it, expect, vi } from 'vitest'
 import { ref, defineComponent, h, nextTick } from 'vue'
 import UiModal from './UiModal.vue'
+import * as stories from './UiModal.stories'
+
+const { Default, WithTitle, WithFooter, Fullscreen } = composeStories(stories)
+
+async function waitPortal() {
+  await nextTick()
+  await new Promise((r) => setTimeout(r, 0))
+}
 
 describe('UiModal', () => {
   // 1. v-model:open prop → DialogContent (role=dialog) 렌더 동기화
@@ -89,5 +98,58 @@ describe('UiModal', () => {
     await nextTick()
     await new Promise((r) => setTimeout(r, 0))
     expect(screen.queryByRole('button', { name: '저장' })).not.toBeNull()
+  })
+
+  // 6. 헤더/푸터 고정 — content는 스크롤하지 않고 body만 overflow
+  it('content overflow hidden + body overflow-y auto, header/footer shrink 0', async () => {
+    render(UiModal, {
+      props: { open: true, title: '긴 본문', description: '설명' },
+      slots: {
+        default: '<p>본문</p>',
+        footer: '<button>저장</button>',
+      },
+    })
+    await waitPortal()
+    const dialog = screen.getByRole('dialog')
+    const header = dialog.querySelector('.ui-modal-header') as HTMLElement
+    const desc = dialog.querySelector('.ui-modal-desc') as HTMLElement
+    const body = dialog.querySelector('.ui-modal-body') as HTMLElement
+    const footer = dialog.querySelector('.ui-modal-footer') as HTMLElement
+
+    expect(header).not.toBeNull()
+    expect(desc).not.toBeNull()
+    expect(body).not.toBeNull()
+    expect(footer).not.toBeNull()
+
+    const contentStyle = getComputedStyle(dialog)
+    expect(contentStyle.display).toBe('flex')
+    expect(contentStyle.flexDirection).toBe('column')
+    expect(contentStyle.overflow).toBe('hidden')
+
+    expect(getComputedStyle(body).overflowY).toBe('auto')
+    expect(getComputedStyle(header).flexShrink).toBe('0')
+    expect(getComputedStyle(desc).flexShrink).toBe('0')
+    expect(getComputedStyle(footer).flexShrink).toBe('0')
+  })
+
+  // 7. 스토리 play 회귀
+  it('Default play: 열기 후 ESC로 닫힘', async () => {
+    const { container } = render(Default())
+    await Default.play?.({ canvasElement: container })
+  })
+
+  it('WithTitle play: 제목 + 닫기 버튼', async () => {
+    const { container } = render(WithTitle())
+    await WithTitle.play?.({ canvasElement: container })
+  })
+
+  it('WithFooter play: 저장/취소 버튼', async () => {
+    const { container } = render(WithFooter())
+    await WithFooter.play?.({ canvasElement: container })
+  })
+
+  it('Fullscreen play: 전체화면 토글', async () => {
+    const { container } = render(Fullscreen())
+    await Fullscreen.play?.({ canvasElement: container })
   })
 })

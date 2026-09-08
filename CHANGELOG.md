@@ -3,6 +3,11 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.6.14] - 2026-09-08
+
+### Changed
+- UiModal 모바일 패딩·닫기버튼 밀도 축소 + 바디만 스크롤(헤더/푸터 고정) Changed
+
 ## [0.6.13] - 2026-09-07
 
 ### Changed

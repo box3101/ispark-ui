@@ -363,7 +363,7 @@ export const CustomHeaderSlot: Story = {
         </button>
         <UiModal v-bind="args" v-model:open="open">
           <template #header>
-            <div style="display: flex; align-items: center; gap: 12px; padding: 16px 24px; border-bottom: 1px solid #eee;">
+            <div style="display: flex; align-items: center; gap: 12px;">
               <div style="width: 32px; height: 32px; border-radius: 50%; background: #6366f1;"></div>
               <div style="flex: 1;">
                 <div style="font-weight: 600;">커스텀 헤더</div>
