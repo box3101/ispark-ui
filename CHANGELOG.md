@@ -3,6 +3,11 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.6.16] - 2026-09-08
+
+### Changed
+- UiTextarea resizable 기본 true — CSS 드래그 높이 조절, 막을 때만 false
+
 ## [0.6.15] - 2026-09-08
 
 ### Changed

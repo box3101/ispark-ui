@@ -133,4 +133,22 @@ describe('UiTextarea', () => {
     })
     expect(container.querySelector('.ui-textarea-counter')).toBeNull()
   })
+
+  // 12. resizable 기본 true → is-resizable 클래스
+  it('resizable 기본 true: is-resizable 클래스', () => {
+    const { container } = render(UiTextarea, {
+      props: { modelValue: '' },
+    })
+    const ta = container.querySelector('textarea')!
+    expect(ta.classList.contains('is-resizable')).toBe(true)
+  })
+
+  // 13. resizable=false → 클래스 없음
+  it('resizable=false: is-resizable 클래스 없음', () => {
+    const { container } = render(UiTextarea, {
+      props: { modelValue: '', resizable: false },
+    })
+    const ta = container.querySelector('textarea')!
+    expect(ta.classList.contains('is-resizable')).toBe(false)
+  })
 })

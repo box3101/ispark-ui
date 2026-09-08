@@ -31,7 +31,7 @@
         :class="[
           `radius-${radius}`,
           `size-${size}`,
-          { 'has-border': border, 'is-error': isError, 'has-counter': showCounter, 'has-expand': expandable },
+          { 'has-border': border, 'is-error': isError, 'has-counter': showCounter, 'has-expand': expandable, 'is-resizable': resizable },
         ]"
         :value="modelValue"
         :placeholder="placeholder"
@@ -123,11 +123,13 @@ interface Props {
   readonly?: boolean
   /** 초기 표시 rows. autoResize=true면 입력 따라 자동 확장 (기본 1 → autoResize로 콘텐츠 맞춤) */
   rows?: number
-  /** 입력에 따라 scrollHeight로 자동 높이 조절. 기본 true */
+  /** 입력에 따라 scrollHeight로 자동 높이 조절. 기본 true. resizable=true면 CSS 드래그와 충돌 방지로 미적용 */
   autoResize?: boolean
   maxLength?: number
   /** autoResize 한계 — N줄 초과 시 scroll. 기본 10 */
   maxRows?: number
+  /** 모서리 드래그로 높이 조절 (CSS resize: vertical). 기본 true. false면 resize 막음 */
+  resizable?: boolean
   radius?: 'sm' | 'base' | 'lg'
   /** 테두리 표시 (기본 false — 외부에서 wrap 스타일 입히는 경우 대비) */
   border?: boolean
@@ -161,6 +163,7 @@ const props = withDefaults(defineProps<Props>(), {
   autoResize: true,
   maxLength: undefined,
   maxRows: 10,
+  resizable: true,
   radius: 'base',
   border: true,
   size: 'md',
@@ -209,7 +212,8 @@ const getLineHeight = (): number => {
 
 const adjustHeight = () => {
   const el = textareaRef.value
-  if (!el || !props.autoResize) return
+  // resizable(드래그)과 동시 적용 시 JS height가 드래그를 덮어쓰므로 스킵
+  if (!el || !props.autoResize || props.resizable) return
 
   el.style.height = 'auto'
   let newHeight = el.scrollHeight
@@ -233,13 +237,13 @@ const onInput = (event: Event) => {
 }
 
 onMounted(() => {
-  if (props.autoResize) adjustHeight()
+  if (props.autoResize && !props.resizable) adjustHeight()
 })
 
 watch(
   () => props.modelValue,
   () => {
-    if (props.autoResize) nextTick(adjustHeight)
+    if (props.autoResize && !props.resizable) nextTick(adjustHeight)
   },
 )
 
@@ -292,7 +296,7 @@ defineExpose({
   font-family: inherit;
   color: var(--color-text-primary);
   background-color: var(--color-bg-elevated);
-  resize: none;
+  resize: none; // resizable=false(기본 아님) 또는 미적용 시 고정
   // Input과 동일한 가로 패딩 토큰 사용 — size별 padding 토큰을 size 블록에서 적용
   padding: $spacing-sm map.get($sizes, 'md', padding-x);
   width: 100%;
@@ -302,6 +306,11 @@ defineExpose({
   outline: none;
   @include typo($body-medium);
   transition: border-color $transition-base, outline-color $transition-base;
+
+  // 모서리 드래그로 세로 높이 조절 (기본 ON)
+  &.is-resizable {
+    resize: vertical;
+  }
 
   // ===== Radius — 공용 shape 토큰과 정렬 =====
   &.radius-sm {

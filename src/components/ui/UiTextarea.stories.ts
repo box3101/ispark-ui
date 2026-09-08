@@ -14,18 +14,19 @@ const meta = {
     docs: {
       description: {
         component: `
-ispark-ui 표준 멀티라인 입력 컴포넌트. 자동 높이 조절(autoResize) + 글자수 카운터 + 폼 필드 패턴(label/error/desc).
+ispark-ui 표준 멀티라인 입력 컴포넌트. CSS 드래그 리사이즈(resizable) + 자동 높이(autoResize) + 글자수 카운터 + 폼 필드 패턴(label/error/desc).
 
 ## Input vs Textarea
 - **Input** (\`UiInput\`) — 한 줄 텍스트. 이메일/이름/검색 등.
-- **Textarea** (이 컴포넌트) — 여러 줄. 메모/메시지/설명/주소 등. autoResize로 콘텐츠 맞춤.
+- **Textarea** (이 컴포넌트) — 여러 줄. 메모/메시지/설명/주소 등.
 
 ## API — 핵심
 - **\`modelValue\`** \`string\` — v-model
 - **\`placeholder\`** \`string\`
 - **\`disabled\`** / **\`readonly\`** \`boolean\`
-- **\`rows\`** \`number\` — 초기 표시 줄 수 (기본 1). autoResize=true면 콘텐츠 따라 자동 확장
-- **\`autoResize\`** \`boolean\` — 입력 따라 scrollHeight로 높이 조절 (기본 true)
+- **\`rows\`** \`number\` — 초기 표시 줄 수 (기본 1)
+- **\`resizable\`** \`boolean\` — 모서리 드래그로 세로 높이 조절 (기본 **true**). \`false\`면 resize 고정
+- **\`autoResize\`** \`boolean\` — 입력 따라 scrollHeight로 높이 조절 (기본 true). **\`resizable=true\`일 때는 드래그와 충돌 방지로 미적용** — 자동확장이 필요하면 \`resizable={false}\`
 - **\`maxRows\`** \`number\` — autoResize 한계. 초과 시 scroll (기본 10)
 - **\`maxLength\`** \`number\` — 최대 글자수 (HTML maxlength)
 - **\`showCounter\`** \`boolean\` — \`maxLength\`와 함께 사용 시 우하단 'n / max' 카운터
@@ -80,10 +81,16 @@ ispark-ui 표준 멀티라인 입력 컴포넌트. 자동 높이 조절(autoResi
     autoResize: {
       control: 'boolean',
       table: { category: 'Behavior', defaultValue: { summary: 'true' } },
+      description: 'resizable=true면 미적용. 자동확장은 resizable=false와 함께 사용',
     },
     maxRows: {
       control: { type: 'number', min: 1, max: 30 },
       table: { category: 'Behavior', defaultValue: { summary: '10' } },
+    },
+    resizable: {
+      control: 'boolean',
+      table: { category: 'Behavior', defaultValue: { summary: 'true' } },
+      description: '모서리 드래그로 세로 높이 조절. false면 resize 고정',
     },
     rows: {
       control: { type: 'number', min: 1, max: 20 },
@@ -130,8 +137,7 @@ export const Playground: Story = {
     border: true,
     size: 'md',
     radius: 'base',
-    autoResize: true,
-    maxRows: 6,
+    resizable: true,
   },
   render: (args) => ({
     components: { UiTextarea },
@@ -143,10 +149,10 @@ export const Playground: Story = {
   }),
 }
 
-// 기본 — placeholder + autoResize 동작 시연
+// 기본 — 모서리 드래그로 높이 조절 (resizable 기본 true)
 export const Default: Story = {
   args: {
-    placeholder: '여기에 입력... (입력에 따라 높이 자동 확장)',
+    placeholder: '우하단 모서리를 드래그해 높이를 조절하세요',
     border: true,
   },
   render: (args) => ({
@@ -160,6 +166,7 @@ export const Default: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     const ta = canvas.getByRole('textbox') as HTMLTextAreaElement
+    await expect(ta.classList.contains('is-resizable')).toBe(true)
     await userEvent.type(ta, '안녕하세요')
     await expect(args['onUpdate:modelValue']).toHaveBeenCalled()
     // 마지막 콜 인자 = 누적 값
@@ -179,6 +186,8 @@ export const WithFormField: Story = {
     maxLength: 500,
     showCounter: true,
     maxRows: 8,
+    resizable: false,
+    autoResize: true,
   },
   render: (args) => ({
     components: { UiTextarea },
@@ -246,11 +255,12 @@ export const MaxLengthCounter: Story = {
   }),
 }
 
-// autoResize 시연 — 텍스트 양에 따라 높이 자동 확장. maxRows 4 한계
+// autoResize 시연 — resizable 끄고 텍스트 양에 따라 높이 자동 확장. maxRows 4 한계
 export const AutoResize: Story = {
   args: {
     placeholder: '엔터로 줄을 늘려보세요',
     border: true,
+    resizable: false,
     autoResize: true,
     maxRows: 4,
   },
@@ -262,6 +272,31 @@ export const AutoResize: Story = {
     },
     template: '<UiTextarea v-bind="args" v-model="value" />',
   }),
+}
+
+// resize 고정 — 드래그 불가
+export const ResizableOff: Story = {
+  args: {
+    label: '고정 높이',
+    placeholder: 'resizable=false — 모서리 드래그 불가',
+    border: true,
+    resizable: false,
+    autoResize: false,
+    rows: 4,
+  },
+  render: (args) => ({
+    components: { UiTextarea },
+    setup: () => {
+      const value = ref('')
+      return { args, value }
+    },
+    template: '<UiTextarea v-bind="args" v-model="value" />',
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const ta = canvas.getByRole('textbox') as HTMLTextAreaElement
+    await expect(ta.classList.contains('is-resizable')).toBe(false)
+  },
 }
 
 // size 3종 비교
@@ -293,6 +328,8 @@ export const Expandable: Story = {
     expandable: true,
     rows: 3,
     maxRows: 5,
+    resizable: false,
+    autoResize: true,
   },
   render: (args) => ({
     components: { UiTextarea },

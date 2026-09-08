@@ -35080,6 +35080,7 @@ const q5e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
     autoResize: { type: Boolean, default: !0 },
     maxLength: { default: void 0 },
     maxRows: { default: 10 },
+    resizable: { type: Boolean, default: !0 },
     radius: { default: "base" },
     border: { type: Boolean, default: !0 },
     size: { default: "md" },
@@ -35113,7 +35114,7 @@ const q5e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
       return parseFloat(M.lineHeight) || 20;
     }, g = () => {
       const b = h.value;
-      if (!b || !o.autoResize) return;
+      if (!b || !o.autoResize || o.resizable) return;
       b.style.height = "auto";
       let M = b.scrollHeight;
       if (o.maxRows) {
@@ -35126,11 +35127,11 @@ const q5e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
       i("update:modelValue", M.value), Jt(g);
     };
     return Kc(() => {
-      o.autoResize && g();
+      o.autoResize && !o.resizable && g();
     }), It(
       () => o.modelValue,
       () => {
-        o.autoResize && Jt(g);
+        o.autoResize && !o.resizable && Jt(g);
       }
     ), e({
       focus: () => {
@@ -35165,7 +35166,7 @@ const q5e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
           class: ee(["ui-textarea", [
             `radius-${t.radius}`,
             `size-${t.size}`,
-            { "has-border": t.border, "is-error": l.value, "has-counter": t.showCounter, "has-expand": t.expandable }
+            { "has-border": t.border, "is-error": l.value, "has-counter": t.showCounter, "has-expand": t.expandable, "is-resizable": t.resizable }
           ]]),
           value: t.modelValue,
           placeholder: t.placeholder,
@@ -35239,7 +35240,7 @@ const q5e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
       }, ae(t.desc), 9, Lbe)) : re("", !0)
     ], 2));
   }
-}), nRe = /* @__PURE__ */ Ue(Abe, [["__scopeId", "data-v-3397796d"]]), oRe = /* @__PURE__ */ Ie({
+}), nRe = /* @__PURE__ */ Ue(Abe, [["__scopeId", "data-v-686298c0"]]), oRe = /* @__PURE__ */ Ie({
   __name: "UiTooltip",
   props: {
     content: { default: "" },
