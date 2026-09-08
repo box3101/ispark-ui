@@ -39,10 +39,13 @@ content: string;
 side: "top" | "right" | "bottom" | "left";
 sideOffset: number;
 align: "start" | "center" | "end";
+defaultOpen: boolean;
 fontSize: string;
 contentClass: string;
 delayDuration: number;
 showArrow: boolean;
+arrowWidth: number;
+arrowHeight: number;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
 declare const __VLS_component_11: DefineComponent<Props_18, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
@@ -831,6 +834,12 @@ declare interface Props_16 {
     delayDuration?: number;
     /** 화살표 표시 (기본 true) */
     showArrow?: boolean;
+    /** 화살표 너비 (기본 14). CSS transform 으로 키우면 radix 의 방향 회전이 덮여 뒤집힌다 */
+    arrowWidth?: number;
+    /** 화살표 높이 (기본 7) */
+    arrowHeight?: number;
+    /** 처음부터 열린 상태로 — 문서/시각 회귀 테스트용 */
+    defaultOpen?: boolean;
 }
 
 declare interface Props_17 {

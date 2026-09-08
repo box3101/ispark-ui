@@ -35240,7 +35240,7 @@ const q5e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
       }, ae(t.desc), 9, Lbe)) : re("", !0)
     ], 2));
   }
-}), nRe = /* @__PURE__ */ Ue(Abe, [["__scopeId", "data-v-6410b51a"]]), oRe = /* @__PURE__ */ Ie({
+}), nRe = /* @__PURE__ */ Ue(Abe, [["__scopeId", "data-v-de89e252"]]), oRe = /* @__PURE__ */ Ie({
   __name: "UiTooltip",
   props: {
     content: { default: "" },
@@ -35250,12 +35250,15 @@ const q5e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
     sideOffset: { default: 6 },
     align: { default: "center" },
     delayDuration: { default: 200 },
-    showArrow: { type: Boolean, default: !0 }
+    showArrow: { type: Boolean, default: !0 },
+    arrowWidth: { default: 14 },
+    arrowHeight: { default: 7 },
+    defaultOpen: { type: Boolean, default: !1 }
   },
   setup(t) {
     return (e, n) => (L(), Le(K(yU), { "delay-duration": t.delayDuration }, {
       default: Y(() => [
-        te(K(mU), null, {
+        te(K(mU), { "default-open": t.defaultOpen }, {
           default: Y(() => [
             te(K(gU), { "as-child": "" }, {
               default: Y(() => [
@@ -35278,8 +35281,10 @@ const q5e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
                     ]),
                     t.showArrow ? (L(), Le(K(MU), {
                       key: 0,
-                      class: "ui-tooltip-arrow"
-                    })) : re("", !0)
+                      class: "ui-tooltip-arrow",
+                      width: t.arrowWidth,
+                      height: t.arrowHeight
+                    }, null, 8, ["width", "height"])) : re("", !0)
                   ]),
                   _: 3
                 }, 8, ["class", "style", "side", "side-offset", "align"])
@@ -35288,7 +35293,7 @@ const q5e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
             })
           ]),
           _: 3
-        })
+        }, 8, ["default-open"])
       ]),
       _: 3
     }, 8, ["delay-duration"]));
@@ -37079,7 +37084,7 @@ const v6e = {
       }, 8, ["name"])
     ]));
   }
-}), hRe = /* @__PURE__ */ Ue(N6e, [["__scopeId", "data-v-87e520ad"]]), I6e = {
+}), hRe = /* @__PURE__ */ Ue(N6e, [["__scopeId", "data-v-9f2158d3"]]), I6e = {
   key: 0,
   class: "ui-file-list"
 }, E6e = ["href"], T6e = ["src", "alt"], D6e = { class: "ui-file-item__info" }, $6e = { class: "ui-file-item__name" }, O6e = ["onClick"], z6e = ["href"], R6e = ["onClick"], P6e = /* @__PURE__ */ Ie({
