@@ -672,50 +672,10 @@
     background: #fafbfc !important;
   }
 
-  /* Name 컬럼 — prop 이름 강조 */
-  html body .sbdocs .docblock-argstable-body tr td:first-child {
-    color: #1a1f2b !important;
-  }
-  html body .sbdocs .docblock-argstable-body tr td:first-child * {
-    color: #1a1f2b !important;
-    font-weight: 600;
-  }
-
   /* Description 컬럼 텍스트 */
   html body .sbdocs .docblock-argstable-body td span,
   html body .sbdocs .docblock-argstable-body td div {
     color: #6b7280 !important;
-  }
-
-  /* Description 레이아웃 */
-  html body .sbdocs .docblock-argstable-body td:nth-child(2) > div {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 4px !important;
-    align-items: center;
-  }
-  /* 설명 텍스트는 별도 줄 */
-  html body .sbdocs .docblock-argstable-body td:nth-child(2) > div > span:first-child {
-    flex-basis: 100%;
-    margin-bottom: 2px;
-    background: transparent !important;
-    border: 0 !important;
-    color: #6b7280 !important;
-    padding: 0 !important;
-    font-size: 13px !important;
-  }
-
-  /* Enum chip — 미니멀하게 (배경 거의 없이, 테두리만 살짝) */
-  html body .sbdocs .docblock-argstable-body td > div > span,
-  html body .sbdocs .docblock-argstable-body td > div > div,
-  html body .sbdocs .docblock-argstable-body td span[class^="css-"]:not([class*="sbdocs"]) {
-    background-color: transparent !important;
-    color: #9ca3af !important;
-    border: 1px solid #e5e7eb !important;
-    border-radius: 4px !important;
-    font-size: 11px !important;
-    padding: 1px 6px !important;
-    font-family: "JetBrains Mono", ui-monospace, monospace !important;
   }
 
   /* Default 컬럼 — 값 강조 */
@@ -752,34 +712,6 @@
   html body .sbdocs .docblock-argstable input[type="checkbox"] {
     accent-color: #d97757;
     box-shadow: none !important;
-  }
-
-  /* Reset/Action 버튼 — 미니멀 */
-  html body .sbdocs .docblock-argstable button {
-    background: transparent !important;
-    color: #9ca3af !important;
-    border: 1px solid #e5e7eb !important;
-    box-shadow: none !important;
-    border-radius: 4px !important;
-  }
-  html body .sbdocs .docblock-argstable button:hover {
-    color: #d97757 !important;
-    border-color: #d97757 !important;
-  }
-
-  /* Section header (PROPS / EVENTS) */
-  html body .sbdocs .docblock-argstable tr[class*="ArgsTableSection"],
-  html body .sbdocs .docblock-argstable tr[class*="SectionRow"],
-  html body .sbdocs .docblock-argstable tr td[colspan] {
-    background: #f8f9fa !important;
-    color: #9ca3af !important;
-    font-family: "JetBrains Mono", ui-monospace, monospace;
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    font-weight: 600;
-    text-transform: uppercase;
-    border-top: 1px solid #e6e8ec !important;
-    border-bottom: 1px solid #e6e8ec !important;
   }
 
   /* ── bullet list 줄간격 ─────────── */
