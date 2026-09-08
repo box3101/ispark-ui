@@ -465,6 +465,32 @@ onUnmounted(() => {
   border-top: 1px solid $color-border;
 }
 
+// 모바일+태블릿 (~1023) — UiModal과 동일 밀도 (기본 규칙 뒤 cascade)
+@media (max-width: #{$breakpoint-lg - 1}) {
+  .ui-drawer-header {
+    gap: 8px;
+    padding: 14px 16px;
+  }
+
+  .ui-drawer-body {
+    padding: 16px;
+  }
+
+  .ui-drawer-footer {
+    padding: 12px 16px;
+  }
+
+  .ui-drawer-title {
+    @include typo($body-large-bold, $color-text-heading); // font-size만 rem 토큰
+  }
+
+  .ui-drawer-close,
+  .ui-drawer-action-btn {
+    width: 24px;
+    height: 24px;
+  }
+}
+
 // 오버레이 애니메이션
 .ui-drawer-overlay-enter-active,
 .ui-drawer-overlay-leave-active {

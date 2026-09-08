@@ -37078,7 +37078,7 @@ const v6e = {
       }, 8, ["name"])
     ]));
   }
-}), hRe = /* @__PURE__ */ Ue(N6e, [["__scopeId", "data-v-3afa2db4"]]), I6e = {
+}), hRe = /* @__PURE__ */ Ue(N6e, [["__scopeId", "data-v-87e520ad"]]), I6e = {
   key: 0,
   class: "ui-file-list"
 }, E6e = ["href"], T6e = ["src", "alt"], D6e = { class: "ui-file-item__info" }, $6e = { class: "ui-file-item__name" }, O6e = ["onClick"], z6e = ["href"], R6e = ["onClick"], P6e = /* @__PURE__ */ Ie({
