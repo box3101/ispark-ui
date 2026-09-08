@@ -3,6 +3,11 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.6.18] - 2026-09-08
+
+### Changed
+- UiTooltip 다크 → 라이트 테마 + 본문 12px
+
 ## [0.6.17] - 2026-09-08
 
 ### Changed
