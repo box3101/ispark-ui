@@ -3,6 +3,11 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.6.17] - 2026-09-08
+
+### Changed
+- UiTextarea 모달 패딩·포커스 outline 제거 + thin pill 스크롤바
+
 ## [0.6.16] - 2026-09-08
 
 ### Changed

@@ -65,11 +65,20 @@ table {
   border-spacing: 0;
 }
 
-// 글로벌 커스텀 스크롤바
+// 글로벌 커스텀 스크롤바 — 트랙/화살표 없는 thin pill thumb
 * {
+  scrollbar-width: thin; // Firefox
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+
   &::-webkit-scrollbar {
     width: 5px;
     height: 5px;
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   &::-webkit-scrollbar-track {

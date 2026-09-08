@@ -362,9 +362,7 @@ defineExpose({
     &:focus:not(:disabled):not([readonly]),
     &:focus-visible:not(:disabled):not([readonly]) {
       border-color: var(--color-primary);
-      // Input/Button/Select와 동일한 outline ring — 폼 키보드 포커스 통일
-      outline: 2px solid var(--color-primary);
-      outline-offset: 2px;
+      outline: none;
     }
   }
 
@@ -374,11 +372,6 @@ defineExpose({
     &.has-border:hover,
     &.has-border:focus {
       border-color: var(--color-danger);
-    }
-    // 포커스 ring도 danger 색으로
-    &.has-border:focus,
-    &.has-border:focus-visible {
-      outline-color: var(--color-danger);
     }
   }
 
@@ -442,12 +435,12 @@ defineExpose({
   padding-right: 32px;
 }
 
-// 전체보기 모달 내 textarea
+// 전체보기 모달 내 textarea — PC 14px / 모바일·태블릿(~1023) 10px
 .ui-textarea-modal-textarea {
   flex: 1;
   width: 100%;
   min-height: 300px;
-  padding: 16px;
+  padding: 14px;
   border: none;
   outline: none;
   resize: none;
@@ -458,9 +451,41 @@ defineExpose({
   color: var(--color-text-primary, #1f2937);
   background: transparent;
 
+  // 모달 본문·Storybook 오버라이드보다 우선 — 트랙/화살표 없는 thin pill
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 9999px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.25);
+    }
+  }
+
   &::placeholder {
     color: $color-placeholder;
     opacity: 1;
+  }
+
+  @include mobile {
+    padding: 10px;
   }
 }
 

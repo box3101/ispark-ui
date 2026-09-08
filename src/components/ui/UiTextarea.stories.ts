@@ -35,6 +35,7 @@ ispark-ui 표준 멀티라인 입력 컴포넌트. CSS 드래그 리사이즈(re
 - **\`border\`** \`boolean\` — 테두리 표시 (기본 true)
 - **\`spellcheck\`** \`boolean\` — 브라우저 맞춤법 밑줄 (기본 true)
 - **\`expandable\`** \`boolean\` — 우상단 전체보기 버튼 (기본 true). 클릭 시 모달로 큰 textarea 편집
+- 포커스: outline 없음 — \`border-color: primary\`만
 
 ## API — 폼 필드 (UiInput 일관성)
 - **\`label\`** \`string\` — 라벨 텍스트. \`<label htmlFor>\` ↔ textarea id 자동 매칭
