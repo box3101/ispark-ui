@@ -19,6 +19,10 @@ radix-vue \`DatePicker\` + \`@internationalized/date\` 기반.
 - **\`datetime\`** — 날짜 + 시간 (HH:MM, 화살표 키 증감)
 - **\`month\`** — 연/월만 (월 grid 패널)
 
+## 달력 조작
+
+오늘은 오늘 날짜를 선택하고 달력을 닫습니다(datetime은 기존 시간 유지, month는 이번 달 선택). 초기화는 날짜·시간을 비우며 clearable=false로 숨길 수 있습니다. 오늘 날짜는 테두리, 선택일은 채운 배경으로 구분합니다.
+
 ## modelValue
 
 \`DateValue\` (CalendarDate 또는 CalendarDateTime). v-model 양방향.
@@ -41,9 +45,10 @@ const dt = ref<DateValue>(new CalendarDateTime(2026, 5, 20, 14, 30))
     size: {
       control: 'inline-radio',
       options: ['xs', 'sm', 'md', 'lg'],
-      description: 'xs(24) / sm(28·기본) / md(32) / lg(40)',
+      description: 'xs(24) / sm(36·기본) / md(32) / lg(40)',
     },
     disabled: { control: 'boolean' },
+    clearable: { control: 'boolean', description: '초기화 버튼 표시 (기본 true)' },
     locale: { control: 'text', description: '기본 ko-KR' },
   },
 } satisfies Meta<typeof UiDatePicker>
@@ -52,7 +57,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 // 캘린더 팝오버 공간 확보용 wrapper
-const WRAP = 'padding: 0 20px 280px; max-width: 360px;'
+const WRAP = 'padding: 24px 16px 400px; max-width: 440px;'
 
 // ===== Playground =====
 export const Playground: Story = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
+﻿import type { Meta, StoryObj } from '@storybook/vue3'
 import { ref } from 'vue'
 import { CalendarDate } from '@internationalized/date'
 import UiDateRangePicker, { type DateRange } from './UiDateRangePicker.vue'
@@ -31,16 +31,20 @@ const range = ref<DateRange>({
 \`\`\`
 
 ## 동작
-- 한 줄 input field에 [시작 segments] ~ [종료 segments] 형태
-- 트리거 클릭 → 단일 month 캘린더
-- 첫 클릭 = 시작일, 두 번째 클릭 = 종료일 (사이 범위 자동 하이라이트)
+- 기본 빠른 선택: 오늘 / 최근 7일 / 최근 30일 / 이번 달. presets=[]로 숨기거나 기존처럼 직접 지정할 수 있습니다.
+- 초기화는 시작일·종료일을 비웁니다. clearable=false로 숨길 수 있습니다.
+- 기본은 시작일·종료일 각각의 입력창과 독립 달력입니다. 다른 날짜는 유지하며 개별 수정·초기화할 수 있습니다.
+- mode="range" 옵션에서는 PC 두 달 / 모바일 한 달을 사용합니다.
+- 종료일은 시작일 이전으로 선택할 수 없습니다. 직접 입력한 역전 범위는 안내 후 반영하지 않습니다.
         `,
       },
     },
   },
   argTypes: {
+    mode: { control: 'inline-radio', options: ['separate', 'range'], description: 'separate: 독립 달력(기본), range: 두 달 달력' },
     size: { control: 'inline-radio', options: ['xs', 'sm', 'md', 'lg'] },
     disabled: { control: 'boolean' },
+    clearable: { control: 'boolean' },
     locale: { control: 'text', description: '기본 ko-KR' },
   },
 } satisfies Meta<typeof UiDateRangePicker>
@@ -48,7 +52,7 @@ const range = ref<DateRange>({
 export default meta
 type Story = StoryObj<typeof meta>
 
-const WRAP = 'padding: 0 20px 320px; max-width: 460px;'
+const WRAP = 'padding: 24px 16px 460px; max-width: 720px;'
 
 // ===== Playground =====
 export const Playground: Story = {
@@ -92,7 +96,7 @@ export const AllSizes: Story = {
       return { a: mk(), b: mk(), c: mk(), d: mk() }
     },
     template: `
-      <div style="display: flex; flex-direction: column; gap: 12px; padding: 0 20px 320px; max-width: 460px;">
+      <div style="display: flex; flex-direction: column; gap: 12px; padding: 24px 16px 460px; max-width: 720px;">
         <UiDateRangePicker v-model="a" size="xs" />
         <UiDateRangePicker v-model="b" size="sm" />
         <UiDateRangePicker v-model="c" size="md" />
@@ -157,4 +161,10 @@ export const Showcase: Story = {
   parameters: {
     docs: { disable: true },
   },
+}
+
+
+export const TwoMonthCalendar: Story = {
+  args: { mode: 'range' },
+  render: args => ({ components: { UiDateRangePicker }, setup() { const value = ref<DateRange>({ start: undefined, end: undefined }); return { args, value } }, template: `<div style="${WRAP}"><UiDateRangePicker v-bind="args" v-model="value" /></div>` }),
 }

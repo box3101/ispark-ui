@@ -4,14 +4,14 @@ import { h } from 'vue'
 import UiBadge from './UiBadge.vue'
 
 describe('UiBadge', () => {
-  // 1. 기본 — variant/size 미지정 시 default/sm 클래스
-  it('기본값: variant=default, size=sm 클래스', () => {
+  // 1. 기본 — variant/size 미지정 시 default/md 클래스
+  it('기본값: variant=default, size=md 클래스', () => {
     const { container } = render(UiBadge, {
       slots: { default: '라벨' },
     })
     const el = container.querySelector('.ui-badge')!
     expect(el.classList.contains('variant-default')).toBe(true)
-    expect(el.classList.contains('size-sm')).toBe(true)
+    expect(el.classList.contains('size-md')).toBe(true)
     expect(screen.getByText('라벨')).toBeTruthy()
   })
 

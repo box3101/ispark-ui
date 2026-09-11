@@ -4,10 +4,12 @@
     :class="[
       `variant-${effectiveVariant}`,
       `size-${size}`,
+      `shape-${shape}`,
       { 'is-icon-only': iconOnly },
     ]"
     :style="badgeStyle"
   >
+    <span v-if="dot && !iconOnly && !$slots['icon-left']" class="ui-badge-dot" aria-hidden="true" />
     <!-- 왼쪽 아이콘 -->
     <span
       v-if="$slots['icon-left']"
@@ -44,6 +46,10 @@ interface Props {
   /** 시맨틱 variant — 도메인 특화 색은 colorHex 사용 */
   variant?: BadgeVariant
   size?: BadgeSize
+  /** 기본은 둥근 사각형, pill은 알약형 */
+  shape?: 'rounded' | 'pill'
+  /** 왼쪽 상태 점. 왼쪽 아이콘 슬롯이 있으면 아이콘 우선 */
+  dot?: boolean
   /** 아이콘 only (정사각형, 텍스트 미렌더) */
   iconOnly?: boolean
   /** 지정 시 variant 색상 대신 이 컬러 기반(text + bg tinted)으로 표시. 6자리/3자리 hex 지원 */
@@ -54,7 +60,9 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   variant: 'default',
-  size: 'sm',
+  size: 'md',
+  shape: 'rounded',
+  dot: false,
   iconOnly: false,
   colorHex: '',
   bgAlpha: 0.12,
@@ -121,8 +129,12 @@ if (import.meta.env.DEV) {
 .ui-badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  border-radius: 24px;
+  gap: 6px;
+  border-radius: 6px;
+  vertical-align: middle;
+  box-sizing: border-box;
+  line-height: 1;
+  &.shape-pill { border-radius: 999px; }
   font-size: $font-size-sm;
   white-space: nowrap;
   font-weight: 600;
@@ -143,7 +155,7 @@ if (import.meta.env.DEV) {
   &.size-md {
     height: 24px;
     padding: 0 10px;
-    font-size: $font-size-sm;
+    font-size: 12px;
   }
 
   &.size-lg {
@@ -165,8 +177,8 @@ if (import.meta.env.DEV) {
 
   // ===== Variant — 시맨틱 5종 (light tint 패턴) =====
   &.variant-default {
-    background: var(--color-background);
-    color: var(--color-text-dark);
+    background: #f1f3f5;
+    color: #475569;
   }
 
   &.variant-primary {
@@ -175,23 +187,23 @@ if (import.meta.env.DEV) {
   }
 
   &.variant-success {
-    background: rgba(34, 197, 94, 0.12);
-    color: #15803d;
+    background: #e0f5e9;
+    color: #166534;
   }
 
   &.variant-warning {
-    background: rgba(245, 158, 11, 0.14);
-    color: #b45309;
+    background: #fff1d6;
+    color: #92400e;
   }
 
   &.variant-danger {
-    background: rgba(239, 68, 68, 0.12);
-    color: #b91c1c;
+    background: #ffe4e9;
+    color: #b42335;
   }
 
   &.variant-info {
-    background: rgba(143, 79, 223, 0.12);
-    color: #6d28d9;
+    background: #e4edff;
+    color: #1e40af;
   }
 }
 
@@ -200,6 +212,7 @@ if (import.meta.env.DEV) {
   align-items: center;
   flex-shrink: 0;
 }
+.ui-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
 
 .ui-badge-text {
   display: inline-flex;

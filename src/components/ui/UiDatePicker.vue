@@ -1,12 +1,12 @@
 <template>
   <div
-    class="ui-datepicker-wrap"
+    class="ui-datepicker-wrap ui-datepicker-single"
     :class="{ 'has-time': type === 'datetime', 'is-month': type === 'month' }"
   >
     <DatePickerRoot
       v-model="internalDate"
       v-model:placeholder="calendarPlaceholder"
-      :open="type === 'month' ? monthPickerOpen : undefined"
+      :open="monthPickerOpen"
       :locale="locale"
       :granularity="pickerGranularity"
       :disabled="disabled"
@@ -14,6 +14,7 @@
       :max-value="maxValue"
       @update:open="onRootOpenUpdate"
     >
+      <DatePickerAnchor as-child>
       <DatePickerField
         v-slot="{ segments }"
         class="ui-datepicker-field"
@@ -74,10 +75,13 @@
           </svg>
         </DatePickerTrigger>
       </DatePickerField>
+      </DatePickerAnchor>
 
       <DatePickerContent
-        class="ui-datepicker-popover"
-        :side-offset="4"
+        class="ui-datepicker-popover ui-datepicker-popover--single"
+        :side-offset="8"
+        align="start"
+        :collision-padding="8"
       >
         <!-- type=month: 일 그리드 대신 월 선택 (granularity=month는 필드 세그먼트만 처리, 캘린더는 day 고정) -->
         <div
@@ -243,6 +247,7 @@
             </DatePickerNext>
           </div>
 
+          <slot name="header" :close="closeCalendar" />
           <DatePickerGrid
             v-for="month in grid"
             :key="month.value.toString()"
@@ -281,6 +286,12 @@
             </DatePickerGridBody>
           </DatePickerGrid>
         </DatePickerCalendar>
+        <div class="ui-datepicker-footer">
+          <slot name="footer" :close="closeCalendar" :clear="onClear">
+          <button type="button" :disabled="disabled || isTodayDisabled" @click="onToday">오늘</button>
+          <button v-if="clearable" type="button" :disabled="disabled || !modelValue" @click="onClear">초기화</button>
+          </slot>
+        </div>
       </DatePickerContent>
     </DatePickerRoot>
 
@@ -330,6 +341,7 @@
 
 <script setup lang="ts">
 import {
+  DatePickerAnchor,
   DatePickerCalendar,
   DatePickerCell,
   DatePickerCellTrigger,
@@ -355,6 +367,8 @@ interface Props {
   type?: 'date' | 'datetime' | 'month'
   size?: 'xs' | 'sm' | 'md' | 'lg'
   disabled?: boolean
+  /** 선택 해제 버튼 표시 */
+  clearable?: boolean
   locale?: string
   minValue?: DateValue
   maxValue?: DateValue
@@ -367,6 +381,7 @@ const props = withDefaults(defineProps<Props>(), {
   type: 'date',
   size: 'sm',
   disabled: false,
+  clearable: true,
   locale: 'ko-KR',
   minValue: undefined,
   maxValue: undefined,
@@ -411,9 +426,7 @@ const onFieldClick = (e: MouseEvent) => {
 const monthPickerOpen = ref(false)
 
 const onRootOpenUpdate = (open: boolean) => {
-  if (props.type === 'month') {
-    monthPickerOpen.value = open
-  }
+  monthPickerOpen.value = open
 }
 
 // 4행 × 3열로 grouping — role="row" 구조와 화살표 키 이동 기준
@@ -599,7 +612,7 @@ const yearOptions = computed((): number[] => {
 })
 
 // UiSelect용 옵션
-const yearSelectOptions = computed(() => yearOptions.value.map((y: number) => ({ label: String(y), value: String(y) })))
+const yearSelectOptions = computed(() => yearOptions.value.map((y: number) => ({ label: `${y}년`, value: String(y) })))
 
 const monthSelectOptions = computed(() =>
   Array.from({ length: 12 }, (_, i) => ({ label: `${i + 1}월`, value: String(i + 1) })),
@@ -650,4 +663,30 @@ const isNextYearDisabled = computed(() => {
   const maxY = toCalendarDate(props.maxValue).year
   return (calendarPlaceholder.value.year ?? 0) >= maxY
 })
+
+// 오늘 날짜를 선택합니다. datetime의 시간은 internalDate setter에서 유지합니다.
+function currentDay() {
+  const date = new Date()
+  return new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate())
+}
+const isTodayDisabled = computed(() => {
+  const date = currentDay()
+  if (props.type === 'month') return isMonthOutOfRange(date.year, date.month)
+  return Boolean((props.minValue && date.compare(toCalendarDate(props.minValue)) < 0)
+    || (props.maxValue && date.compare(toCalendarDate(props.maxValue)) > 0))
+})
+function onToday() {
+  if (props.disabled || isTodayDisabled.value) return
+  calendarPlaceholder.value = currentDay()
+  internalDate.value = calendarPlaceholder.value
+  monthPickerOpen.value = false
+}
+function onClear() {
+  if (props.disabled || !props.clearable) return
+  timeHour.value = 0
+  timeMinute.value = 0
+  internalDate.value = undefined
+  monthPickerOpen.value = false
+}
+function closeCalendar() { monthPickerOpen.value = false }
 </script>
