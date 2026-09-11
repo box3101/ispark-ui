@@ -61,18 +61,39 @@ side: "top" | "bottom" | "left" | "right";
 sideOffset: number;
 align: "start" | "center" | "end";
 collisionPadding: number;
+triggerLabel: string;
 contentClass: string;
+triggerVariant: "text" | "icon";
 openOnHover: boolean;
 hoverCloseDelay: number;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
-declare const __VLS_component_12: DefineComponent<Props_21, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+declare const __VLS_component_12: DefineComponent<Props_20, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+"update:modelValue": (value: DateValue | undefined) => any;
+}, string, PublicProps, Readonly<Props_20> & Readonly<{
+"onUpdate:modelValue"?: ((value: DateValue | undefined) => any) | undefined;
+}>, {
+size: "xs" | "sm" | "md" | "lg";
+type: "date" | "datetime" | "month";
+disabled: boolean;
+modelValue: DateValue;
+clearable: boolean;
+triggerLabel: string;
+locale: string;
+minValue: DateValue;
+maxValue: DateValue;
+}, {}, {}, {}, string, ComponentProvideOptions, false, {
+monthCellRefs: HTMLButtonElement[];
+}, HTMLDivElement>;
+
+declare const __VLS_component_13: DefineComponent<Props_21, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 "update:modelValue": (value: string | string[] | undefined) => any;
 change: (value: string | string[] | undefined) => any;
 }, string, PublicProps, Readonly<Props_21> & Readonly<{
 "onUpdate:modelValue"?: ((value: string | string[] | undefined) => any) | undefined;
 onChange?: ((value: string | string[] | undefined) => any) | undefined;
 }>, {
+variant: "divider" | "card";
 size: "sm" | "md" | "lg";
 type: "single" | "multiple";
 disabled: boolean;
@@ -82,7 +103,7 @@ items: AccordionItemDef[];
 collapsible: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
-declare const __VLS_component_13: DefineComponent<Props_22, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+declare const __VLS_component_14: DefineComponent<Props_22, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 "update:open": (value: boolean) => any;
 }, string, PublicProps, Readonly<Props_22> & Readonly<{
 "onUpdate:open"?: ((value: boolean) => any) | undefined;
@@ -96,15 +117,15 @@ showFullscreen: boolean;
 closeOnOverlayClick: boolean;
 closeOnEscape: boolean;
 maxWidth: string;
-minWidth: string;
 resizable: boolean;
+minWidth: string;
 showResize: boolean;
 confirmBeforeClose: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {
 drawerRef: HTMLElement;
 }, any>;
 
-declare const __VLS_component_14: DefineComponent<Props_27, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<Props_27> & Readonly<{}>, {
+declare const __VLS_component_15: DefineComponent<Props_25, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<Props_25> & Readonly<{}>, {
 variant: ProgressVariant;
 size: ProgressSize;
 label: string;
@@ -193,7 +214,9 @@ overlap: number;
 declare const __VLS_component_6: DefineComponent<Props_9, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<Props_9> & Readonly<{}>, {
 variant: BadgeVariant;
 size: BadgeSize;
+shape: "rounded" | "pill";
 iconOnly: boolean;
+dot: boolean;
 colorHex: string;
 bgAlpha: number;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLSpanElement>;
@@ -252,13 +275,37 @@ declare type __VLS_Props = {
 
 declare type __VLS_Props_2 = {
     modelValue?: DateRange;
+    /** 기본: 시작일/종료일 독립 달력. range는 기존 두 달 달력 */
+    mode?: 'separate' | 'range';
     size?: 'xs' | 'sm' | 'md' | 'lg';
     disabled?: boolean;
+    clearable?: boolean;
     locale?: string;
     minValue?: DateValue;
     maxValue?: DateValue;
     /** 팝오버 상단에 표시할 빠른 선택 프리셋 */
     presets?: DateRangePreset[];
+};
+
+declare type __VLS_Props_3 = {
+    files: FileItem[];
+    getUrl: (path: string) => string;
+    deletable?: boolean;
+    layout?: 'list' | 'grid';
+};
+
+declare type __VLS_Props_4 = {
+    loading?: boolean;
+    accept?: string;
+    label?: string;
+    disabled?: boolean;
+    variant?: 'button' | 'dropzone';
+    /** 파일당 최대 bytes. 생략하면 제한 없음 */
+    maxSize?: number;
+    /** 드래그 영역 보조 문구 */
+    hint?: string;
+    /** 서버 업로드 실패 등 외부 오류 메시지 */
+    error?: string;
 };
 
 declare function __VLS_template(): {
@@ -297,6 +344,23 @@ declare function __VLS_template_11(): {
 declare function __VLS_template_12(): {
     attrs: Partial<{}>;
     slots: {
+        header?(_: {
+            close: typeof closeCalendar;
+        }): any;
+        footer?(_: {
+            close: typeof closeCalendar;
+            clear: typeof onClear;
+        }): any;
+    };
+    refs: {
+        monthCellRefs: HTMLButtonElement[];
+    };
+    rootEl: HTMLDivElement;
+};
+
+declare function __VLS_template_13(): {
+    attrs: Partial<{}>;
+    slots: {
         default?(_: {}): any;
         default?(_: {}): any;
         header?(_: {
@@ -316,7 +380,7 @@ declare function __VLS_template_12(): {
     rootEl: any;
 };
 
-declare function __VLS_template_13(): {
+declare function __VLS_template_14(): {
     attrs: Partial<{}>;
     slots: {
         header?(_: {}): any;
@@ -329,7 +393,7 @@ declare function __VLS_template_13(): {
     rootEl: any;
 };
 
-declare function __VLS_template_14(): {
+declare function __VLS_template_15(): {
     attrs: Partial<{}>;
     slots: {
         label?(_: {}): any;
@@ -433,6 +497,8 @@ declare type __VLS_TemplateResult_13 = ReturnType<typeof __VLS_template_13>;
 
 declare type __VLS_TemplateResult_14 = ReturnType<typeof __VLS_template_14>;
 
+declare type __VLS_TemplateResult_15 = ReturnType<typeof __VLS_template_15>;
+
 declare type __VLS_TemplateResult_2 = ReturnType<typeof __VLS_template_2>;
 
 declare type __VLS_TemplateResult_3 = ReturnType<typeof __VLS_template_3>;
@@ -486,6 +552,12 @@ declare type __VLS_WithTemplateSlots_14<T, S> = T & {
 };
 
 declare type __VLS_WithTemplateSlots_15<T, S> = T & {
+    new (): {
+        $slots: S;
+    };
+};
+
+declare type __VLS_WithTemplateSlots_16<T, S> = T & {
     new (): {
         $slots: S;
     };
@@ -579,6 +651,8 @@ export declare interface CalendarMonthEvent {
 
 export declare type ChartType = 'bar' | 'line' | 'pie' | 'mixed' | 'radar';
 
+declare function closeCalendar(): void;
+
 /** 토스트 수동 닫기 */
 export declare function closeToast(id: number): void;
 
@@ -592,7 +666,7 @@ export declare interface ConfirmOptions {
     confirmText?: string;
     /** 취소 버튼 텍스트 (기본: '취소') */
     cancelText?: string;
-    /** 확인 버튼 variant (기본: 'danger') */
+    /** 확인 버튼 variant (기본: 'primary') */
     variant?: 'primary' | 'danger';
 }
 
@@ -612,7 +686,7 @@ declare interface DateRangePreset {
 export declare interface DropdownMenuItemDef {
     /** 메뉴 항목 레이블 */
     label: string;
-    /** ispark-ui 아이콘 클래스 (예: 'icon-edit'). 24·16 사이즈 클래스 자동(size-16) */
+    /** Lucide 이름 (예: 'pencil'). 기존 'icon-edit' 클래스도 지원 */
     icon?: string;
     /** 고유 식별자 (필수) — @select 이벤트로 부모에 전달 */
     value: string;
@@ -620,14 +694,21 @@ export declare interface DropdownMenuItemDef {
     color?: 'default' | 'danger';
     /** 항목 비활성 */
     disabled?: boolean;
+    /** 항목 위에 구분선 표시 */
+    separator?: boolean;
+    /** 우측 안내 문구 (예: 권한 없음) */
+    description?: string;
+    /** 단축키 표시 전용. 실제 키 바인딩은 사용하는 화면에서 처리 */
+    shortcut?: string;
 }
 
-/** 파일 아이템 인터페이스 */
 export declare interface FileItem {
     id: number;
     filename: string;
     path: string;
     mimetype: string;
+    /** 파일 크기 (bytes). 생략하면 형식만 표시 */
+    size?: number;
 }
 
 export declare type IconColor = 'primary' | 'danger' | 'white' | 'black' | 'muted';
@@ -642,12 +723,16 @@ export declare interface MultiSelectOption {
     value: string | number;
 }
 
+declare function onClear(): void;
+
 /**
  * 확인/취소 다이얼로그 표시. Promise<boolean> 반환.
  *
  * @example
  * const confirmed = await openConfirm({
  *   title: '삭제',
+ *   variant: 'danger',
+ *   confirmText: '삭제',
  *   message: '삭제하시겠습니까?',
  * })
  * if (!confirmed) return
@@ -866,6 +951,10 @@ declare interface Props_17 {
 
 declare interface Props_18 {
     items: DropdownMenuItemDef[];
+    /** 기본 버튼 형태. trigger 슬롯이 있으면 슬롯을 사용 */
+    triggerVariant?: 'text' | 'icon';
+    /** 버튼 텍스트 및 접근성 이름 */
+    triggerLabel?: string;
     /** 상단 비클릭 라벨 (DropdownMenuLabel) — 구역 안내용 */
     title?: string;
     /** 제어 모드: v-model:open */
@@ -1014,6 +1103,8 @@ declare interface Props_20 {
     type?: 'date' | 'datetime' | 'month';
     size?: 'xs' | 'sm' | 'md' | 'lg';
     disabled?: boolean;
+    /** 선택 해제 버튼 표시 */
+    clearable?: boolean;
     locale?: string;
     minValue?: DateValue;
     maxValue?: DateValue;
@@ -1036,6 +1127,8 @@ declare interface Props_21 {
     disabled?: boolean;
     /** 크기 — sm / md(기본) / lg */
     size?: 'sm' | 'md' | 'lg';
+    /** 기본 구분선형 / 개별 카드형 */
+    variant?: 'divider' | 'card';
 }
 
 declare interface Props_22 {
@@ -1060,32 +1153,12 @@ declare interface Props_22 {
 }
 
 declare interface Props_23 {
-    /** 파일 목록 */
-    files: FileItem[];
-    /** 파일 URL 생성 함수 */
-    getUrl: (path: string) => string;
-    /** 삭제 버튼 표시 여부 */
-    deletable?: boolean;
-}
-
-declare interface Props_24 {
-    /** 업로드 중 상태 */
-    loading?: boolean;
-    /** 허용 파일 형식 (예: 'image/*', '.pdf,.doc') */
-    accept?: string;
-    /** 버튼 라벨 */
-    label?: string;
-    /** 비활성화 */
-    disabled?: boolean;
-}
-
-declare interface Props_25 {
     modelValue?: string;
     editable?: boolean;
     placeholder?: string;
 }
 
-declare interface Props_26 {
+declare interface Props_24 {
     /** 차트 타입 — bar / line / pie / mixed / radar */
     type: ChartType;
     /** 차트 설정 객체 (categories, data/datasets, colorKey, maxValue 등) */
@@ -1094,7 +1167,7 @@ declare interface Props_26 {
     showLegend?: boolean;
 }
 
-declare interface Props_27 {
+declare interface Props_25 {
     /** 현재 값 */
     value: number;
     /** 최대값 (기본 100) */
@@ -1195,6 +1268,10 @@ declare interface Props_9 {
     /** 시맨틱 variant — 도메인 특화 색은 colorHex 사용 */
     variant?: BadgeVariant;
     size?: BadgeSize;
+    /** 기본은 둥근 사각형, pill은 알약형 */
+    shape?: 'rounded' | 'pill';
+    /** 왼쪽 상태 점. 왼쪽 아이콘 슬롯이 있으면 아이콘 우선 */
+    dot?: boolean;
     /** 아이콘 only (정사각형, 텍스트 미렌더) */
     iconOnly?: boolean;
     /** 지정 시 variant 색상 대신 이 컬러 기반(text + bg tinted)으로 표시. 6자리/3자리 hex 지원 */
@@ -1246,6 +1323,8 @@ export declare interface TableColumn {
     key: string;
     label: string;
     width?: string;
+    /** 가로 스크롤 시 왼쪽에 고정. 여러 열 지정 가능. */
+    sticky?: 'left';
     align?: 'left' | 'center' | 'right';
     headerAlign?: 'left' | 'center' | 'right';
     sortable?: boolean;
@@ -1287,7 +1366,7 @@ export declare type ToastPlacement = 'top-center' | 'top-right' | 'bottom-center
 /** Toast 시멘틱 타입 */
 export declare type ToastType = 'success' | 'error' | 'warning' | 'info';
 
-export declare const UiAccordion: __VLS_WithTemplateSlots_12<typeof __VLS_component_12, __VLS_TemplateResult_12["slots"]>;
+export declare const UiAccordion: __VLS_WithTemplateSlots_13<typeof __VLS_component_13, __VLS_TemplateResult_13["slots"]>;
 
 export declare const UiAvatar: DefineComponent<Props_7, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<Props_7> & Readonly<{}>, {
 size: Size | number;
@@ -1302,7 +1381,7 @@ export declare const UiBadgeGroup: __VLS_WithTemplateSlots_7<typeof __VLS_compon
 
 export declare const UiButton: __VLS_WithTemplateSlots<typeof __VLS_component, __VLS_TemplateResult["slots"]>;
 
-export declare const UiCalendarMonth: __VLS_WithTemplateSlots_14<DefineComponent<    {
+export declare const UiCalendarMonth: __VLS_WithTemplateSlots_15<DefineComponent<    {
 /** 표시할 연도 */
 year: number;
 /** 표시할 월 (1-12) */
@@ -1368,7 +1447,7 @@ showWeekdays: boolean;
     }): any;
 }>;
 
-export declare const UiChart: DefineComponent<Props_26, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<Props_26> & Readonly<{}>, {
+export declare const UiChart: DefineComponent<Props_24, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<Props_24> & Readonly<{}>, {
 showLegend: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 
@@ -1376,22 +1455,7 @@ export declare const UiCheckbox: __VLS_WithTemplateSlots_8<typeof __VLS_componen
 
 export declare const UiConfirm: DefineComponent<    {}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
-export declare const UiDatePicker: DefineComponent<Props_20, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
-"update:modelValue": (value: DateValue | undefined) => any;
-}, string, PublicProps, Readonly<Props_20> & Readonly<{
-"onUpdate:modelValue"?: ((value: DateValue | undefined) => any) | undefined;
-}>, {
-size: "xs" | "sm" | "md" | "lg";
-type: "date" | "datetime" | "month";
-disabled: boolean;
-modelValue: DateValue;
-triggerLabel: string;
-locale: string;
-minValue: DateValue;
-maxValue: DateValue;
-}, {}, {}, {}, string, ComponentProvideOptions, false, {
-monthCellRefs: HTMLButtonElement[];
-}, HTMLDivElement>;
+export declare const UiDatePicker: __VLS_WithTemplateSlots_12<typeof __VLS_component_12, __VLS_TemplateResult_12["slots"]>;
 
 export declare const UiDateRangePicker: DefineComponent<__VLS_Props_2, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 "update:modelValue": (value: DateRange) => any;
@@ -1401,36 +1465,42 @@ export declare const UiDateRangePicker: DefineComponent<__VLS_Props_2, {}, {}, {
 size: "xs" | "sm" | "md" | "lg";
 disabled: boolean;
 modelValue: DateRange;
+clearable: boolean;
+mode: "separate" | "range";
 locale: string;
 minValue: DateValue;
 maxValue: DateValue;
-presets: DateRangePreset[];
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 
-export declare const UiDrawer: __VLS_WithTemplateSlots_13<typeof __VLS_component_13, __VLS_TemplateResult_13["slots"]>;
+export declare const UiDrawer: __VLS_WithTemplateSlots_14<typeof __VLS_component_14, __VLS_TemplateResult_14["slots"]>;
 
 export declare const UiDropdownMenu: __VLS_WithTemplateSlots_11<typeof __VLS_component_11, __VLS_TemplateResult_11["slots"]>;
 
 export declare const UiEmpty: __VLS_WithTemplateSlots_4<typeof __VLS_component_4, __VLS_TemplateResult_4["slots"]>;
 
-export declare const UiFileList: DefineComponent<Props_23, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+export declare const UiFileList: DefineComponent<__VLS_Props_3, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 delete: (file: FileItem) => any;
-}, string, PublicProps, Readonly<Props_23> & Readonly<{
+}, string, PublicProps, Readonly<__VLS_Props_3> & Readonly<{
 onDelete?: ((file: FileItem) => any) | undefined;
 }>, {
+layout: "list" | "grid";
 deletable: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
-export declare const UiFileUpload: DefineComponent<Props_24, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+export declare const UiFileUpload: DefineComponent<__VLS_Props_4, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 upload: (file: File) => any;
-}, string, PublicProps, Readonly<Props_24> & Readonly<{
+reject: (message: string) => any;
+}, string, PublicProps, Readonly<__VLS_Props_4> & Readonly<{
 onUpload?: ((file: File) => any) | undefined;
+onReject?: ((message: string) => any) | undefined;
 }>, {
+variant: "button" | "dropzone";
 disabled: boolean;
 loading: boolean;
 label: string;
-accept: string;
-}, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLLabelElement>;
+}, {}, {}, {}, string, ComponentProvideOptions, false, {
+input: HTMLInputElement;
+}, HTMLDivElement>;
 
 export declare const UiIcon: DefineComponent<__VLS_Props, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<__VLS_Props> & Readonly<{}>, {
 size: string | number;
@@ -1444,9 +1514,9 @@ text: string;
 overlay: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 
-export declare const UiMarkdownEditor: DefineComponent<Props_25, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+export declare const UiMarkdownEditor: DefineComponent<Props_23, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 "update:modelValue": (value: string) => any;
-}, string, PublicProps, Readonly<Props_25> & Readonly<{
+}, string, PublicProps, Readonly<Props_23> & Readonly<{
 "onUpdate:modelValue"?: ((value: string) => any) | undefined;
 }>, {
 modelValue: string;
@@ -1494,7 +1564,7 @@ showRange: boolean;
 showFirstLast: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 
-export declare const UiProgress: __VLS_WithTemplateSlots_15<typeof __VLS_component_14, __VLS_TemplateResult_14["slots"]>;
+export declare const UiProgress: __VLS_WithTemplateSlots_16<typeof __VLS_component_15, __VLS_TemplateResult_15["slots"]>;
 
 export declare const UiRadio: __VLS_WithTemplateSlots_9<typeof __VLS_component_9, __VLS_TemplateResult_9["slots"]>;
 
@@ -1561,6 +1631,7 @@ export declare const UiTable: <TRow extends Record<string, unknown> = Record<str
         index: number;
     }) => any>> & {
         empty?(_: {}): any;
+        'empty-action'?(_: {}): any;
     };
     emit: ((evt: "row-click", row: TRow, index: number) => void) & ((evt: "filter-change", filters: Record<string, string>) => void) & ((evt: "update:data", rows: TRow[]) => void) & ((evt: "reorder-end") => void);
 }>) => VNode<RendererNode, RendererElement, {
@@ -1592,6 +1663,10 @@ declare interface UiTableProps<TRow extends Record<string, unknown> = Record<str
     selectedRowValue?: unknown;
     /** 컬럼 세로 구분선 표시 여부 (기본: true) */
     bordered?: boolean;
+    /** 헤더 오른쪽 경계를 드래그해 열 너비 조절 */
+    resizable?: boolean;
+    /** 열 리사이즈 최소 너비(px) */
+    minColumnWidth?: number;
     /**
      * 드래그 재정렬 모드 — 활성 시 정렬/필터 UI 비활성, 행 순서를 `v-model:data`로 반영.
      * (vuedraggable 지연 로드 — 이 모드일 때만 번들 로드)
@@ -1628,10 +1703,10 @@ required: boolean;
 id: string;
 maxLength: number;
 border: boolean;
+resizable: boolean;
 rows: number;
 autoResize: boolean;
 maxRows: number;
-resizable: boolean;
 radius: "sm" | "base" | "lg";
 spellcheck: boolean;
 showCounter: boolean;

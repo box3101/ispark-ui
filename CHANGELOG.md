@@ -3,6 +3,19 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.7.0] - 2026-09-11
+
+### Added
+- UiTable 열 리사이즈, 왼쪽 고정 열, 스크롤 안내 및 empty-action 슬롯.
+
+### Changed
+- 파일 목록·업로드, 드롭다운, 확인창, 배지, 날짜 선택, 아코디언, 토스트, 체크박스 UI 개선.
+- UiTab 기본 pointer, 스크롤 가능 시 grab, 드래그 중 grabbing 커서 적용.
+- Storybook 소개 페이지와 컴포넌트 예제 개선.
+
+### Fixed
+- Storybook 예제 간 체크박스 ID 충돌 및 아이콘 갤러리 이름 변환 오류 수정.
+
 ## [0.6.19] - 2026-09-08
 
 ### Fixed

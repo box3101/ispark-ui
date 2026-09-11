@@ -375,7 +375,10 @@ const onKeydown = (e: KeyboardEvent) => {
   background: transparent;
   cursor: pointer;
 
-  .ui-tab-inner.is-dragging & {
+  .ui-tab-inner.is-scrollable &:not(:disabled) {
+    cursor: grab;
+  }
+  .ui-tab-inner.is-dragging &:not(:disabled) {
     cursor: grabbing;
   }
   white-space: nowrap;
