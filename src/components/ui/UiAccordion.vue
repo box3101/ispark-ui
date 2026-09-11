@@ -3,7 +3,7 @@
   <AccordionRoot
     v-if="type === 'multiple'"
     class="ui-accordion"
-    :class="[`size-${size}`, { 'is-disabled': disabled }]"
+    :class="[`size-${size}`, `variant-${variant}`, { 'is-disabled': disabled }]"
     type="multiple"
     :model-value="modelValueArray"
     :default-value="defaultValueArray"
@@ -53,7 +53,7 @@
   <AccordionRoot
     v-else
     class="ui-accordion"
-    :class="[`size-${size}`, { 'is-disabled': disabled }]"
+    :class="[`size-${size}`, `variant-${variant}`, { 'is-disabled': disabled }]"
     type="single"
     :model-value="modelValueString"
     :default-value="defaultValueString"
@@ -148,6 +148,8 @@ interface Props {
   disabled?: boolean
   /** 크기 — sm / md(기본) / lg */
   size?: 'sm' | 'md' | 'lg'
+  /** 기본 구분선형 / 개별 카드형 */
+  variant?: 'divider' | 'card'
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -158,6 +160,7 @@ const props = withDefaults(defineProps<Props>(), {
   collapsible: true,
   disabled: false,
   size: 'md',
+  variant: 'divider',
 })
 
 const emit = defineEmits<{
@@ -208,6 +211,18 @@ const onUpdate = (val: string | string[] | undefined) => {
 .ui-accordion {
   width: 100%;
   border-top: 1px solid $color-border;
+  &.variant-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 0;
+    > .ui-accordion-item {
+      border: 1px solid $color-border;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--color-bg-elevated);
+    }
+  }
 }
 
 .ui-accordion-item {
@@ -225,6 +240,9 @@ const onUpdate = (val: string | string[] | undefined) => {
   justify-content: space-between;
   gap: $spacing-sm;
   width: 100%;
+  box-sizing: border-box;
+  min-height: 48px;
+  font-family: inherit;
   border: none;
   background: transparent;
   text-align: left;
@@ -241,6 +259,8 @@ const onUpdate = (val: string | string[] | undefined) => {
   .ui-accordion.size-md & {
     padding: 14px 16px;
     @include typo($body-medium);
+    min-height: 52px;
+    font-size: 14px;
   }
   .ui-accordion.size-lg & {
     padding: 18px 20px;
@@ -248,7 +268,7 @@ const onUpdate = (val: string | string[] | undefined) => {
   }
 
   &:hover:not(:disabled) {
-    color: var(--color-primary);
+    background: $color-background;
   }
 
   &:focus-visible {
@@ -258,8 +278,7 @@ const onUpdate = (val: string | string[] | undefined) => {
   }
 
   &[data-state='open'] {
-    color: var(--color-primary);
-    font-weight: $font-weight-bold;
+    background: $color-background;
 
     .ui-accordion-chevron {
       transform: rotate(180deg);
@@ -275,6 +294,9 @@ const onUpdate = (val: string | string[] | undefined) => {
 .ui-accordion-title {
   flex: 1;
   min-width: 0;
+  font-weight: 600;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .ui-accordion-chevron {
@@ -283,7 +305,7 @@ const onUpdate = (val: string | string[] | undefined) => {
   transition: transform $transition-base;
 
   .ui-accordion-trigger[data-state='open'] & {
-    color: var(--color-primary);
+    color: $color-text-dark;
   }
 }
 
@@ -301,19 +323,22 @@ const onUpdate = (val: string | string[] | undefined) => {
 }
 
 .ui-accordion-content-inner {
+  overflow-wrap: anywhere;
   // size별 가로 패딩은 trigger와 통일, 세로는 조금 더 좁게
   .ui-accordion.size-sm & {
-    padding: 0 12px 12px;
+    padding: 12px 12px 16px;
     @include typo($body-small);
   }
   .ui-accordion.size-md & {
-    padding: 0 16px 16px;
+    padding: 14px 16px 20px;
     @include typo($body-medium);
+    font-size: 14px;
   }
   .ui-accordion.size-lg & {
-    padding: 0 20px 20px;
+    padding: 16px 20px 24px;
     @include typo($body-large);
   }
+  .ui-accordion & { line-height: 1.6; }
 }
 
 @keyframes ui-accordion-slide-down {

@@ -20,6 +20,7 @@ const meta = {
 ispark-ui 표준 아코디언 — radix-vue 기반. FAQ/설정 그룹/긴 콘텐츠 접기에 사용.
 
 ## API
+- **variant** — divider(기본 구분선형) / card(개별 카드형)
 - **\`items\`** \`AccordionItemDef[]\` — 항목 배열 (간편 사용)
 - **\`type\`** \`'single' | 'multiple'\` — single(기본·하나만 열림) / multiple(여러 개 동시)
 - **\`modelValue\`** \`string | string[]\` — v-model (single=string, multiple=string[])
@@ -55,13 +56,14 @@ interface AccordionItemDef {
 
 ## 디자인 토큰
 - 상단·항목 사이 \`1px solid $color-border\` 구분선
-- 열린 헤더 \`var(--color-primary)\` + bold
+- 제목은 진한 회색·굵기 600, 열린 헤더는 연한 배경으로 구분
 - chevron 180° 회전 + slide down/up 애니메이션
         `,
       },
     },
   },
   argTypes: {
+    variant: { control: 'inline-radio', options: ['divider', 'card'] },
     type: { control: 'inline-radio', options: ['single', 'multiple'] },
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
     collapsible: { control: 'boolean' },
@@ -266,5 +268,19 @@ export const WithCustomContent: Story = {
         </template>
       </UiAccordion>
     `,
+  }),
+}
+
+export const Cards: Story = {
+  args: { items: faqItems, variant: 'card', defaultValue: 'q1' },
+  render: args => ({ components: { UiAccordion }, setup: () => ({ args }), template: '<UiAccordion v-bind="args" />' }),
+}
+export const CompareVariants: Story = {
+  render: () => ({
+    components: { UiAccordion }, setup: () => ({ items: faqItems }),
+    template: `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:32px;padding:16px 0">
+      <section><h3 style="margin:0 0 16px;font-size:16px;font-weight:600">기본 · 구분선형</h3><UiAccordion :items="items" default-value="q1" /></section>
+      <section><h3 style="margin:0 0 16px;font-size:16px;font-weight:600">옵션 · 카드형</h3><UiAccordion :items="items" variant="card" default-value="q1" /></section>
+    </div>`,
   }),
 }

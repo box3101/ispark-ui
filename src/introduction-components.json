@@ -1,0 +1,205 @@
+[
+  {
+    "name": "UiButton",
+    "description": "액션 트리거",
+    "category": "form",
+    "href": "./?path=/docs/components-form-uibutton--docs",
+    "preview": "iframe.html?id=components-form-uibutton--playground&viewMode=story"
+  },
+  {
+    "name": "UiInput",
+    "description": "단일 행 입력",
+    "category": "form",
+    "href": "./?path=/docs/components-form-uiinput--docs",
+    "preview": "iframe.html?id=components-form-uiinput--playground&viewMode=story"
+  },
+  {
+    "name": "UiSelect",
+    "description": "옵션 선택",
+    "category": "form",
+    "href": "./?path=/docs/components-form-uiselect--docs",
+    "preview": "iframe.html?id=components-form-uiselect--playground&viewMode=story"
+  },
+  {
+    "name": "UiMultiSelect",
+    "description": "다중 선택",
+    "category": "form",
+    "href": "./?path=/docs/components-form-uimultiselect--docs",
+    "preview": "iframe.html?id=components-form-uimultiselect--playground&viewMode=story"
+  },
+  {
+    "name": "UiTextarea",
+    "description": "여러 행 입력",
+    "category": "form",
+    "href": "./?path=/docs/components-form-uitextarea--docs",
+    "preview": "iframe.html?id=components-form-uitextarea--playground&viewMode=story"
+  },
+  {
+    "name": "UiToggle",
+    "description": "on/off 스위치",
+    "category": "form",
+    "href": "./?path=/docs/components-form-uitoggle--docs",
+    "preview": "iframe.html?id=components-form-uitoggle--playground&viewMode=story"
+  },
+  {
+    "name": "UiCheckbox",
+    "description": "다중 선택",
+    "category": "form",
+    "href": "./?path=/docs/components-form-uicheckbox--docs",
+    "preview": "iframe.html?id=components-form-uicheckbox--playground&viewMode=story"
+  },
+  {
+    "name": "UiRadio",
+    "description": "단일 선택",
+    "category": "form",
+    "href": "./?path=/docs/components-form-uiradio--docs",
+    "preview": "iframe.html?id=components-form-uiradio--playground&viewMode=story"
+  },
+  {
+    "name": "UiDatePicker",
+    "description": "날짜 선택",
+    "category": "form",
+    "href": "./?path=/docs/components-form-uidatepicker--docs",
+    "preview": "iframe.html?id=components-form-uidatepicker--showcase&viewMode=story"
+  },
+  {
+    "name": "UiDateRangePicker",
+    "description": "기간 선택",
+    "category": "form",
+    "href": "./?path=/docs/components-form-uidaterangepicker--docs",
+    "preview": "iframe.html?id=components-form-uidaterangepicker--showcase&viewMode=story"
+  },
+  {
+    "name": "UiMarkdownEditor",
+    "description": "마크다운 WYSIWYG 에디터",
+    "category": "form",
+    "href": "./?path=/docs/components-form-uimarkdowneditor--docs",
+    "preview": "iframe.html?id=components-form-uimarkdowneditor--playground&viewMode=story"
+  },
+  {
+    "name": "UiAvatar",
+    "description": "사용자 아바타",
+    "category": "display",
+    "href": "./?path=/docs/components-display-uiavatar--docs",
+    "preview": "iframe.html?id=components-display-uiavatar--color-consistency&viewMode=story"
+  },
+  {
+    "name": "UiBadge",
+    "description": "상태·카테고리 라벨",
+    "category": "display",
+    "href": "./?path=/docs/components-display-uibadge--docs",
+    "preview": "iframe.html?id=components-display-uibadge--playground&viewMode=story"
+  },
+  {
+    "name": "UiBadgeGroup",
+    "description": "뱃지 묶음 + gap 제어",
+    "category": "display",
+    "href": "./?path=/docs/components-display-uibadgegroup--docs",
+    "preview": "iframe.html?id=components-display-uibadgegroup--default&viewMode=story"
+  },
+  {
+    "name": "UiTable",
+    "description": "데이터 표",
+    "category": "display",
+    "href": "./?path=/docs/components-display-uitable--docs",
+    "preview": "iframe.html?id=components-display-uitable--small-size&viewMode=story"
+  },
+  {
+    "name": "UiPagination",
+    "description": "페이지 네비게이션",
+    "category": "display",
+    "href": "./?path=/docs/components-display-uipagination--docs",
+    "preview": "iframe.html?id=components-display-uipagination--playground&viewMode=story"
+  },
+  {
+    "name": "UiAccordion",
+    "description": "접기·펼치기",
+    "category": "display",
+    "href": "./?path=/docs/components-display-uiaccordion--docs",
+    "preview": "iframe.html?id=components-display-uiaccordion--playground&viewMode=story"
+  },
+  {
+    "name": "UiEmpty",
+    "description": "빈 상태 안내",
+    "category": "feedback",
+    "href": "./?path=/docs/components-feedback-uiempty--docs",
+    "preview": "iframe.html?id=components-feedback-uiempty--playground&viewMode=story"
+  },
+  {
+    "name": "UiLoading",
+    "description": "로딩 인디케이터",
+    "category": "feedback",
+    "href": "./?path=/docs/components-feedback-uiloading--docs",
+    "preview": "iframe.html?id=components-feedback-uiloading--showcase&viewMode=story"
+  },
+  {
+    "name": "UiToast",
+    "description": "알림 토스트",
+    "category": "feedback",
+    "href": "./?path=/docs/components-feedback-uitoast--docs",
+    "preview": "iframe.html?id=components-feedback-uitoast--showcase&viewMode=story"
+  },
+  {
+    "name": "UiProgress",
+    "description": "진행률 바",
+    "category": "feedback",
+    "href": "./?path=/docs/components-feedback-uiprogress--docs",
+    "preview": "iframe.html?id=components-feedback-uiprogress--showcase&viewMode=story"
+  },
+  {
+    "name": "UiModal",
+    "description": "모달 다이얼로그",
+    "category": "overlay",
+    "href": "./?path=/docs/components-overlay-uimodal--docs",
+    "preview": "iframe.html?id=components-overlay-uimodal--trigger&viewMode=story"
+  },
+  {
+    "name": "UiTooltip",
+    "description": "보조 설명",
+    "category": "overlay",
+    "href": "./?path=/docs/components-overlay-uitooltip--docs",
+    "preview": "iframe.html?id=components-overlay-uitooltip--playground&viewMode=story"
+  },
+  {
+    "name": "UiDropdownMenu",
+    "description": "컨텍스트 메뉴",
+    "category": "overlay",
+    "href": "./?path=/docs/components-overlay-uidropdownmenu--docs",
+    "preview": "iframe.html?id=components-overlay-uidropdownmenu--playground&viewMode=story"
+  },
+  {
+    "name": "UiDrawer",
+    "description": "슬라이드 패널",
+    "category": "overlay",
+    "href": "./?path=/docs/components-overlay-uidrawer--docs",
+    "preview": "iframe.html?id=components-overlay-uidrawer--default&viewMode=story"
+  },
+  {
+    "name": "UiTab",
+    "description": "탭 전환",
+    "category": "navigation",
+    "href": "./?path=/docs/components-navigation-uitab--docs",
+    "preview": "iframe.html?id=components-navigation-uitab--playground&viewMode=story"
+  },
+  {
+    "name": "UiFileUpload",
+    "description": "파일 업로드",
+    "category": "data",
+    "href": "./?path=/docs/components-data-uifileupload--docs",
+    "preview": "iframe.html?id=components-data-uifileupload--playground&viewMode=story"
+  },
+  {
+    "name": "UiFileList",
+    "description": "파일 목록",
+    "category": "data",
+    "href": "./?path=/docs/components-data-uifilelist--docs",
+    "preview": "iframe.html?id=components-data-uifilelist--default&viewMode=story"
+  },
+  {
+    "name": "UiChart",
+    "description": "차트(bar·line·pie·mixed·radar)",
+    "category": "data",
+    "href": "./?path=/docs/components-data-uichart--docs",
+    "preview": "iframe.html?id=components-data-uichart--bar&viewMode=story"
+  }
+]

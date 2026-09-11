@@ -1,0 +1,85 @@
+/* Layout only; controls use the library's own component styles. */
+html body .sbdocs .ispark-catalog-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 24px;
+}
+html body .sbdocs .ispark-catalog-brand {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+html body .sbdocs .ispark-catalog-brand h1 {
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  letter-spacing: -0.03em;
+}
+html body .sbdocs .ispark-catalog-brand p {
+  color: #64748b;
+  font-size: 13px;
+  margin: 0;
+}
+html body .sbdocs .ispark-catalog-actions { display: flex; gap: 8px; }
+html body .sbdocs .ispark-catalog-actions a.ui-button { text-decoration: none; }
+html body .sbdocs .ispark-catalog-actions a.ui-button.variant-primary { color: #fff !important; }
+html body .sbdocs .ispark-catalog-actions a.ui-button.variant-outline { color: #475569 !important; }
+html body .sbdocs .ispark-catalog-tabs { margin-bottom: 26px; }
+html body .sbdocs .ispark-intro a:focus-visible { outline: 2px solid #3e63dd; outline-offset: 3px; }
+html body .sbdocs .ispark-intro .ispark-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+html body .sbdocs .ispark-catalog-heading h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 6px;
+  padding: 0;
+  border: 0;
+  font-size: 22px;
+}
+
+html body .sbdocs .ispark-catalog-heading p {
+  margin: 0 0 20px;
+  color: #64748b;
+  font-size: 13px;
+}
+html body .sbdocs .ispark-intro .ispark-card__demo {
+  min-height: 176px;
+  border-bottom: 0;
+  background: #fafbfd;
+}
+html body .sbdocs .ispark-intro .ispark-card__frame { height: 176px; }
+html body .sbdocs .ispark-intro .ispark-card__meta { padding: 14px 16px 17px; gap: 5px; }
+html body .sbdocs .ispark-intro .ispark-card {
+  border-color: #e2e8f0;
+  border-radius: 6px;
+  transition: border-color 150ms ease;
+}
+html body .sbdocs .ispark-intro .ispark-card:hover {
+  border-color: #94a3b8;
+  box-shadow: none;
+  transform: none;
+}
+html body .sbdocs .ispark-intro .ispark-foot {
+  margin-top: 40px;
+  padding: 24px 0 0;
+}
+html body .sbdocs .ispark-intro .ispark-foot__links a { color: #475569; }
+@media (max-width: 760px) {
+  html body .sbdocs .ispark-intro .ispark-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  html body .sbdocs .ispark-intro .ispark-hero__cta { margin-left: 0; }
+}
+@media (max-width: 460px) {
+  html body .sbdocs .ispark-intro .ispark-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body .sbdocs .ispark-intro a { transition: none; }
+}

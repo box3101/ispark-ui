@@ -373,8 +373,11 @@ const onKeydown = (e: KeyboardEvent) => {
   padding: 10px 16px;
   border: none;
   background: transparent;
-  // 부모가 grab/grabbing 일 때 pointer 가 덮어써서 드래그 힌트가 사라지는 것 방지
-  cursor: inherit;
+  cursor: pointer;
+
+  .ui-tab-inner.is-dragging & {
+    cursor: grabbing;
+  }
   white-space: nowrap;
   color: $color-text-secondary;
   transition: color $transition-fast;

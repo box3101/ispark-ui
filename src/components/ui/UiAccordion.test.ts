@@ -64,3 +64,15 @@ describe('UiAccordion', () => {
     })
   })
 })
+
+it('카드형에서도 방향키로 다음 헤더에 이동한다', async () => {
+  const { Cards } = composeStories(stories)
+  const { container } = render(Cards())
+  const triggers = container.querySelectorAll<HTMLButtonElement>('button[aria-expanded]')
+  triggers[0]!.focus()
+  await fireEvent.keyDown(triggers[0]!, { key: 'ArrowDown' })
+  expect(document.activeElement).toBe(triggers[1])
+  await fireEvent.click(triggers[1]!)
+  expect(triggers[0]!.getAttribute('aria-expanded')).toBe('false')
+  expect(triggers[1]!.getAttribute('aria-expanded')).toBe('true')
+})
