@@ -3,6 +3,11 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.7.1] - 2026-09-11
+
+### Fixed
+- UiTable의 sm 및 borderless 모드에서 셀 세로 여백 유지 (기본 8px, sm 6px).
+
 ## [0.7.0] - 2026-09-11
 
 ### Added

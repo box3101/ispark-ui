@@ -829,7 +829,7 @@ watch(
     }
 
     tbody td {
-      padding: 0 16px;
+      padding: 8px 16px;
       border-right: none;
     }
 
@@ -858,7 +858,7 @@ watch(
 
     tbody td {
       height: 28px;
-      padding: 0 12px;
+      padding: 6px 12px;
       @include typo($body-medium);
       color: $color-text-primary;
       border-bottom-color: $color-border-light;
