@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import UiTable from './UiTable.vue'
 import type { TableColumn } from './UiTable.vue'
 import UiBadge from './UiBadge.vue'
+import UiButton from './UiButton.vue'
 
 const meta = {
   title: 'Components/Display/UiTable',
@@ -28,7 +29,17 @@ ispark-ui 표준 데이터 테이블. 컬럼 정의 + 행 데이터를 받아 �
 - \`table-layout: fixed\` — 컬럼 너비는 \`columns[].width\`로 명시 (미지정 시 균등 분할)
 - **로컬 정렬만 지원** — 서버 정렬은 부모에서 정렬 완료 후 \`data\`로 주입
 - 페이지네이션 / 다중 선택 / 셀 편집 미지원 (필요 시 외부 컴포넌트와 조합)
-- 빈 상태 UI 전체를 교체하려면 컴포넌트 바깥에서 \`data.length === 0\` 분기 후 \`UiEmpty\` 사용 권장
+- 빈 상태 전체 교체는 \`#empty\`, 안내 아래 버튼 추가는 \`#empty-action\` 슬롯 사용
+
+## 가로 스크롤과 고정 열
+- 처음에는 오른쪽 중앙에 페이드와 이동 버튼이 표시됩니다. 한 번 가로 스크롤하면 안내는 숨겨지고 다시 처음으로 이동해도 나타나지 않습니다.
+- \`columns[].sticky: 'left'\`로 왼쪽 고정 열을 지정합니다. 여러 열을 지정하면 순서대로 고정됩니다.
+- 고정 열은 앞쪽에 배치하고 너비를 지정하는 것을 권장합니다.
+
+## 열 너비 조절
+- \`resizable\`을 켜면 헤더 오른쪽 경계를 드래그해 열 너비를 조절합니다.
+- \`minColumnWidth\`는 최소 너비(px), 기본 64. 경계에 포커스 후 ←/→로 10px씩 조절할 수도 있습니다.
+- 다른 열 너비는 유지되며, 넓어지면 가로 스크롤됩니다. columns 변경 시 조절한 너비는 초기화됩니다.
 
 ## API 한눈에 보기
 - **Props**: 아래 Args 테이블 — Data / Appearance / Behavior / Selection 그룹
@@ -190,6 +201,73 @@ interface TableColumn {
 
 export default meta
 type Story = StoryObj<typeof meta>
+
+export const StickyColumns: Story = {
+  name: '가로 스크롤 · 고정 열',
+  render: () => ({
+    components: { UiTable, UiBadge },
+    setup() {
+      const columns: TableColumn[] = [
+        { key: 'name', label: '종목', width: '160px', sticky: 'left', align: 'left' },
+        { key: 'date', label: '날짜', width: '120px' },
+        { key: 'time', label: '시각', width: '80px' },
+        { key: 'theme', label: '테마', width: '100px' },
+        { key: 'price', label: '알림가', width: '140px', align: 'right', sortable: true },
+        { key: 'change', label: '신호 시가대비', width: '160px', align: 'right' },
+        { key: 'high', label: '최고', width: '140px', align: 'right' },
+        { key: 'fixed', label: '고정', width: '140px', align: 'right' },
+      ]
+      const rows = [
+        { name: '휴니드', date: '2026-09-11', time: '09:23', theme: '방산', price: 4585, change: '+0.85%', high: '+0.22%', fixed: '-0.11%' },
+        { name: '원익IPS', date: '2026-09-11', time: '09:18', theme: '반도체', price: 114000, change: '+0.62%', high: '+0.26%', fixed: '-3.00%' },
+        { name: 'SK증권', date: '2026-09-11', time: '09:08', theme: '증권', price: 2445, change: '+0.54%', high: '+0.61%', fixed: '-1.64%' },
+      ]
+      return { columns, rows }
+    },
+    template: `<div style="width: 100%; max-width: 760px;">
+      <UiTable :columns="columns" :data="rows" resizable sticky-header max-height="280px">
+        <template #cell-theme="{ value }"><UiBadge>{{ value }}</UiBadge></template>
+        <template #cell-price="{ value }">{{ value.toLocaleString('ko-KR') }}</template>
+      </UiTable>
+    </div>`,
+  }),
+}
+
+export const RefinedPreview: Story = {
+  name: '제품 목록 · 개선된 디자인',
+  render: () => ({
+    components: { UiTable, UiBadge, UiButton },
+    setup() {
+      const filtered = ref(false)
+      const columns: TableColumn[] = [
+        { key: 'name', label: '제품명', width: '45%', align: 'left', headerAlign: 'left' },
+        { key: 'price', label: '가격', width: '25%', align: 'right', sortable: true, sortType: 'number' },
+        { key: 'stock', label: '재고', width: '15%', align: 'right' },
+        { key: 'status', label: '상태', width: '15%' },
+      ]
+      const rows = [
+        { name: 'IPTV 셋톱박스', price: 45000, stock: 24, status: '정상' },
+        { name: '케이블 모뎀 (3.1)', price: 89000, stock: 12, status: '정상' },
+        { name: '무선 공유기 (Wi-Fi 6)', price: 129000, stock: 0, status: '품절' },
+        { name: '기업용 라우터', price: 248000, stock: 8, status: '정상' },
+      ]
+      return { columns, rows, filtered }
+    },
+    template: `
+      <div style="width: 100%;">
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
+          <UiButton variant="outline" @click="filtered = !filtered">{{ filtered ? '전체 보기' : '검색 결과 없음 보기' }}</UiButton>
+        </div>
+        <UiTable resizable :columns="columns" :data="filtered ? [] : rows" empty-icon="icon-search"
+          empty-text="검색 결과가 없습니다" empty-description="검색어나 필터 조건을 변경해 보세요.">
+          <template #cell-price="{ value }">{{ value.toLocaleString('ko-KR') }}</template>
+          <template #cell-status="{ value }"><UiBadge :variant="value === '정상' ? 'success' : 'default'" shape="pill">{{ value }}</UiBadge></template>
+          <template #empty-action><UiButton variant="primary-line" @click="filtered = false">필터 초기화</UiButton></template>
+        </UiTable>
+      </div>
+    `,
+  }),
+}
 
 // ===== 공통 fixture =====
 const baseColumns: TableColumn[] = [

@@ -10,13 +10,15 @@ const ALL_ICON_NAMES = Object.keys(lucideIcons)
     const val = (lucideIcons as Record<string, unknown>)[key]
     return (
       /^[A-Z]/.test(key) &&
+      !key.startsWith('Lucide') &&
       !key.endsWith('Icon') &&
       typeof val === 'function'
     )
   })
   .map((key) =>
     // PascalCase → kebab-case
-    key.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase(),
+    key.replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+      .replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase(),
   )
   .sort()
 

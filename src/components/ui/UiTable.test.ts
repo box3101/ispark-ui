@@ -1,10 +1,88 @@
 import { render, screen, fireEvent } from '@testing-library/vue'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { ref, defineComponent, h, nextTick } from 'vue'
 import UiTable from './UiTable.vue'
 import type { TableColumn } from './UiTable.vue'
 
 describe('UiTable', () => {
+  it('hides the initial hint after horizontal scrolling and stacks pinned columns', async () => {
+    const { container } = render(UiTable, { props: {
+      columns: [{ key: 'a', label: 'A', sticky: 'left' }, { key: 'b', label: 'B', sticky: 'left' }, { key: 'c', label: 'C' }],
+      data: [{ a: 1, b: 2, c: 3 }],
+    } })
+    const wrap = container.querySelector('.ui-table-wrap') as HTMLElement
+    Object.defineProperties(wrap, {
+      clientWidth: { value: 400 }, scrollWidth: { value: 800 }, scrollLeft: { value: 0, writable: true },
+    })
+    container.querySelectorAll('th').forEach(cell => {
+      vi.spyOn(cell, 'getBoundingClientRect').mockReturnValue({ width: 100 } as DOMRect)
+    })
+    await fireEvent.scroll(wrap)
+    expect(screen.queryByRole('button', { name: '왼쪽 열 보기' })).toBeNull()
+    expect(screen.getByRole('button', { name: '오른쪽 열 보기' })).toBeTruthy()
+    expect((container.querySelectorAll('th')[1] as HTMLElement).style.left).toBe('100px')
+    expect((container.querySelectorAll('td')[1] as HTMLElement).style.left).toBe('100px')
+    wrap.scrollBy = vi.fn()
+    await fireEvent.click(screen.getByRole('button', { name: '오른쪽 열 보기' }))
+    expect(wrap.scrollBy).toHaveBeenCalled()
+    wrap.scrollLeft = 400
+    await fireEvent.scroll(wrap)
+    expect(screen.queryByRole('button', { name: '오른쪽 열 보기' })).toBeNull()
+    expect(screen.queryByRole('button', { name: '왼쪽 열 보기' })).toBeNull()
+    wrap.scrollLeft = 0
+    await fireEvent.scroll(wrap)
+    expect(screen.queryByRole('button', { name: '오른쪽 열 보기' })).toBeNull()
+  })
+
+  it('resizes one column with a minimum width without sorting', async () => {
+    const { container, rerender } = render(UiTable, { props: {
+      resizable: true,
+      columns: [{ key: 'name', label: 'Name', sortable: true }, { key: 'value', label: 'Value' }],
+      data: [{ name: 'B', value: 2 }, { name: 'A', value: 1 }],
+    } })
+    container.querySelectorAll('th').forEach(cell => {
+      vi.spyOn(cell, 'getBoundingClientRect').mockReturnValue({ width: 150 } as DOMRect)
+    })
+    const handle = screen.getAllByRole('separator')[0]
+    handle.setPointerCapture = vi.fn()
+    const pointer = (type: string, x: number) => {
+      const event = new Event(type, { bubbles: true })
+      Object.assign(event, { clientX: x, pointerId: 1, button: 0 })
+      return fireEvent(handle, event)
+    }
+    await pointer('pointerdown', 100)
+    await pointer('pointermove', 150)
+    const cols = container.querySelectorAll('col')
+    expect(cols[0].style.width).toBe('200px')
+    expect(cols[1].style.width).toBe('150px')
+    expect(container.querySelector('th')?.getAttribute('aria-sort')).toBe('none')
+    await pointer('pointermove', -500)
+    expect(cols[0].style.width).toBe('64px')
+    await pointer('pointerup', -500)
+    await pointer('pointermove', 400)
+    expect(cols[0].style.width).toBe('64px')
+    await rerender({ resizable: false })
+    expect(screen.queryByRole('separator')).toBeNull()
+    expect(cols[0].style.width).toBe('')
+  })
+
+  it('empty-action으로 데이터를 복원하면 빈 상태가 사라진다', async () => {
+    const Wrapper = defineComponent({
+      setup() {
+        const rows = ref<Record<string, unknown>[]>([])
+        return () => h(UiTable, {
+          columns: [{ key: 'name', label: '제품명' }], data: rows.value,
+        }, {
+          'empty-action': () => h('button', { onClick: () => { rows.value = [{ name: '복원된 제품' }] } }, '필터 초기화'),
+        })
+      },
+    })
+    render(Wrapper)
+    await fireEvent.click(screen.getByRole('button', { name: '필터 초기화' }))
+    expect(screen.getByText('복원된 제품')).toBeTruthy()
+    expect(screen.queryByRole('button', { name: '필터 초기화' })).toBeNull()
+  })
+
   // 1. sortType:'number' — 쉼표 포함 문자열을 숫자로 비교
   it('sortType:number — 쉼표 포함 문자열 숫자 정렬', async () => {
     const columns: TableColumn[] = [

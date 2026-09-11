@@ -121,9 +121,14 @@ const onChange = () => {
 
 <style lang="scss" scoped>
 .ui-checkbox {
+  position: relative;
+  box-sizing: border-box;
   display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 32px;
+  padding-block: 6px;
+  max-width: 100%;
   cursor: pointer;
   user-select: none;
 
@@ -131,6 +136,7 @@ const onChange = () => {
   @media (hover: hover) {
     &:hover:not(.is-disabled) .ui-checkbox-box {
       border-color: var(--color-primary);
+      background: color-mix(in srgb, var(--color-primary) 6%, var(--color-bg-elevated));
     }
     // 체크된 상태에서 hover — 살짝 어둡게 (호버 인지)
     &:hover:not(.is-disabled).is-checked .ui-checkbox-box,
@@ -146,8 +152,18 @@ const onChange = () => {
   }
 
   &.is-disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+
+    .ui-checkbox-box {
+      background: #f1f3f5;
+      border-color: #cbd0d8;
+    }
+    &.is-checked .ui-checkbox-box,
+    &.is-indeterminate .ui-checkbox-box {
+      background: #a6adb8;
+      border-color: #a6adb8;
+    }
+    .ui-checkbox-label { color: #929ba9; }
   }
 }
 
@@ -166,12 +182,14 @@ const onChange = () => {
 }
 
 .ui-checkbox-box {
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
-  border: 1.5px solid var(--color-border);
+  width: 18px;
+  height: 18px;
+  margin-top: 1.5px;
+  border: 1.5px solid #929ba9;
   border-radius: $border-radius-sm;
   background: var(--color-bg-elevated);
   flex-shrink: 0;
@@ -187,11 +205,12 @@ const onChange = () => {
 }
 
 .ui-checkbox-label {
-  // sm 컨트롤(버튼/인풋)과 맞춤 — typography $font-size-sm(12px)과 분리
-  font-size: $size-sm-font; // 13px
+  min-width: 0;
+  font-size: 14px;
   font-weight: $font-weight-normal;
   color: $color-text-primary;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 
   // 시각만 숨김 (SR에는 노출)
   &.is-hidden {

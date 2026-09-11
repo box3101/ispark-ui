@@ -1,5 +1,9 @@
 import type { Preview } from '@storybook/vue3'
+import { setup } from '@storybook/vue3'
+import { configureStoryIds } from './vue-id-prefix'
 import '../src/styles/main.scss'
+
+setup(configureStoryIds)
 
 // docs 테마(타이포·색)는 .storybook/preview-head.html 의 CSS 로 처리한다.
 // @storybook/theming 의 create() 를 preview.ts 에서 import 하면 이 프로젝트

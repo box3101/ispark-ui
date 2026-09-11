@@ -41,7 +41,8 @@ ispark-ui 표준 체크박스. 네이티브 \`<input type="checkbox">\`를 시�
 - \`prefers-reduced-motion: reduce\` 시 트랜지션 정지
 
 ## 디자인 토큰
-- 박스: 16×16px / border 1.5px / radius 4px (Toggle 트랙 32×20과 시각 구분)
+- 박스: 18×18px / border 1.5px / radius 4px, 라벨 14px / 간격 8px
+- 라벨을 포함한 클릭 영역 최소 높이 32px. 비활성은 회색으로 구분.
 - on bg: \`var(--color-primary)\` — 테마 전환 대응
         `,
       },
@@ -53,6 +54,30 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 // ===== Stories =====
+
+export const AllStates: Story = {
+  name: '상태별 디자인',
+  render: () => ({
+    components: { UiCheckbox },
+    setup() {
+      const unchecked = ref(false)
+      const checked = ref(true)
+      const mixed = ref(false)
+      const indeterminate = ref(true)
+      return { unchecked, checked, mixed, indeterminate }
+    },
+    template: `
+      <div style="display: grid; gap: 12px; width: min(360px, 100%);">
+        <UiCheckbox v-model="unchecked" label="약관에 동의합니다" />
+        <UiCheckbox v-model="checked" label="선택한 항목" />
+        <UiCheckbox v-model="mixed" :indeterminate="indeterminate" @change="indeterminate = false" label="일부 항목 선택" />
+        <UiCheckbox :model-value="false" disabled label="선택할 수 없는 항목" />
+        <UiCheckbox :model-value="true" disabled label="선택된 비활성 항목" />
+        <UiCheckbox v-model="unchecked" label="설명이 길어져도 체크박스와 텍스트가 자연스럽게 정렬됩니다." />
+      </div>
+    `,
+  }),
+}
 
 export const Playground: Story = {
   args: {

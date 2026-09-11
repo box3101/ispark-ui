@@ -1,24 +1,18 @@
 <template>
+  <div class="ui-table-shell">
   <div
     ref="wrapRef"
     class="ui-table-wrap"
-    :class="[{ 'is-scrollable': !!maxHeight, 'is-borderless': !bordered, 'is-overflowing': isOverflowing }, size === 'sm' ? 'is-sm' : '']"
+    :class="[{ 'is-scrollable': !!maxHeight, 'is-borderless': !bordered, 'is-overflowing': isOverflowing, 'is-scrolled-x': canScrollLeft }, size === 'sm' ? 'is-sm' : '']"
     :style="maxHeight ? { maxHeight } : undefined"
     @scroll="onWrapScroll"
   >
-    <!-- 가로 스크롤 힌트 -->
-    <Transition name="scroll-hint-fade">
-      <div v-if="isOverflowing && !scrollDismissed" class="ui-table-scroll-hint">
-        ← 스크롤하여 더 보기 →
-      </div>
-    </Transition>
-
-    <table class="ui-table" :style="tableMinWidth ? { minWidth: tableMinWidth } : undefined">
+    <table ref="tableRef" class="ui-table" :style="resizedTableWidth ? { width: resizedTableWidth, minWidth: resizedTableWidth } : { minWidth: tableMinWidth }">
       <colgroup>
         <col
           v-for="col in visibleColumns"
           :key="col.key"
-          :style="col.width ? { width: col.width } : undefined"
+          :style="{ width: resizable && columnWidths[col.key] ? `${columnWidths[col.key]}px` : col.width }"
         />
       </colgroup>
 
@@ -27,8 +21,8 @@
           <th
             v-for="(col, idx) in visibleColumns"
             :key="col.key"
-            :class="{ 'is-last': idx === visibleColumns.length - 1, 'is-sortable': isColumnSortable(col) }"
-            :style="{ textAlign: col.headerAlign || 'center' }"
+            :class="{ 'is-last': idx === visibleColumns.length - 1, 'is-sortable': isColumnSortable(col), 'is-pinned': col.sticky === 'left' }"
+            :style="{ textAlign: col.headerAlign || 'center', ...pinnedStyle(col) }"
             :aria-sort="getAriaSort(col)"
           >
             <slot
@@ -53,23 +47,37 @@
                 v-else-if="isColumnSortable(col)"
                 type="button"
                 class="ui-table-sort-btn"
+                :style="{ justifyContent: col.headerAlign === 'left' ? 'flex-start' : col.headerAlign === 'right' ? 'flex-end' : 'center' }"
                 @click="onSortColumn(col)"
               >
                 <span>{{ col.label }}</span>
-                <span
+                <svg
                   class="ui-table-sort-mark"
                   aria-hidden="true"
+                  width="16" height="16" viewBox="0 0 16 16" fill="none"
                   :class="{
                     'is-active': !!getSortOrder(col.key),
                     'is-desc': getSortOrder(col.key) === 'desc',
                   }"
-                  >▲</span
                 >
+                  <path d="M8 13V3M4 7l4-4 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
               </button>
               <template v-else>
                 {{ col.label }}
               </template>
             </slot>
+            <span v-if="resizable" class="ui-table-resizer" role="separator" tabindex="0"
+              aria-orientation="vertical" :aria-label="`${col.label} 열 너비 조절`"
+              :aria-valuemin="resizeMinimum" :aria-valuenow="columnWidths[col.key]"
+              @pointerdown.stop.prevent="startColumnResize($event, col.key)"
+              @pointermove.stop="moveColumnResize"
+              @pointerup.stop="endColumnResize"
+              @pointercancel.stop="endColumnResize"
+              @lostpointercapture="endColumnResize"
+              @click.stop.prevent
+              @keydown.stop="resizeColumnByKey($event, col.key)"
+            />
           </th>
         </tr>
       </thead>
@@ -86,7 +94,9 @@
                 :icon="emptyIcon"
                 :title="emptyText"
                 :description="emptyDescription"
-              />
+              >
+                <template v-if="$slots['empty-action']" #default><slot name="empty-action" /></template>
+              </UiEmpty>
             </slot>
           </td>
         </tr>
@@ -111,8 +121,8 @@
             <td
               v-for="(col, colIdx) in visibleColumns"
               :key="col.key"
-              :class="{ 'is-last': colIdx === visibleColumns.length - 1 }"
-              :style="{ textAlign: col.align || 'center' }"
+              :class="{ 'is-last': colIdx === visibleColumns.length - 1, 'is-pinned': col.sticky === 'left' }"
+              :style="{ textAlign: col.align || 'center', ...pinnedStyle(col) }"
             >
               <slot
                 :name="`cell-${col.key}`"
@@ -142,8 +152,8 @@
           <td
             v-for="(col, colIdx) in visibleColumns"
             :key="col.key"
-            :class="{ 'is-last': colIdx === visibleColumns.length - 1 }"
-            :style="{ textAlign: col.align || 'center' }"
+            :class="{ 'is-last': colIdx === visibleColumns.length - 1, 'is-pinned': col.sticky === 'left' }"
+            :style="{ textAlign: col.align || 'center', ...pinnedStyle(col) }"
           >
             <slot
               :name="`cell-${col.key}`"
@@ -157,6 +167,14 @@
         </tr>
       </tbody>
     </table>
+  </div>
+  <div v-if="canScrollRight && !scrollHintDismissed" class="ui-table-edge edge-right">
+    <button type="button" aria-label="오른쪽 열 보기" @click="scrollColumns(1)">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="m6 4 4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+  </div>
   </div>
 </template>
 
@@ -177,6 +195,8 @@ export interface TableColumn {
   key: string
   label: string
   width?: string
+  /** 가로 스크롤 시 왼쪽에 고정. 여러 열 지정 가능. */
+  sticky?: 'left'
   align?: 'left' | 'center' | 'right'
   headerAlign?: 'left' | 'center' | 'right'
   sortable?: boolean
@@ -213,6 +233,10 @@ export interface UiTableProps<TRow extends Record<string, unknown> = Record<stri
   selectedRowValue?: unknown
   /** 컬럼 세로 구분선 표시 여부 (기본: true) */
   bordered?: boolean
+  /** 헤더 오른쪽 경계를 드래그해 열 너비 조절 */
+  resizable?: boolean
+  /** 열 리사이즈 최소 너비(px) */
+  minColumnWidth?: number
   /**
    * 드래그 재정렬 모드 — 활성 시 정렬/필터 UI 비활성, 행 순서를 `v-model:data`로 반영.
    * (vuedraggable 지연 로드 — 이 모드일 때만 번들 로드)
@@ -237,6 +261,8 @@ const props = withDefaults(defineProps<UiTableProps<TRow>>(), {
   selectedRowKey: undefined,
   selectedRowValue: undefined,
   bordered: true,
+  resizable: false,
+  minColumnWidth: 64,
   draggable: false,
   itemKey: 'id',
   dragHandle: undefined,
@@ -246,17 +272,51 @@ const props = withDefaults(defineProps<UiTableProps<TRow>>(), {
 // ===== 가로 스크롤 힌트 =====
 const wrapRef = ref<HTMLElement | null>(null)
 const isOverflowing = ref(false)
-const scrollDismissed = ref(false)
+const canScrollLeft = ref(false)
+const canScrollRight = ref(false)
+const scrollHintDismissed = ref(false)
+let previousScrollLeft = 0
+const pinnedOffsets = ref<Record<string, number>>({})
+const pinnedWidth = ref(0)
+
+function measurePinnedColumns() {
+  const cells = tableRef.value?.tHead?.rows[0]?.cells
+  if (!cells) return
+  let left = 0
+  const offsets: Record<string, number> = {}
+  visibleColumns.value.forEach((col, index) => {
+    if (col.sticky !== 'left') return
+    offsets[col.key] = left
+    left += cells[index].getBoundingClientRect().width
+  })
+  pinnedOffsets.value = offsets
+  pinnedWidth.value = left
+}
+function pinnedStyle(col: TableColumn) {
+  return col.sticky === 'left' ? { left: `${pinnedOffsets.value[col.key] ?? 0}px` } : {}
+}
 
 function checkOverflow() {
   if (!wrapRef.value) return
-  isOverflowing.value = wrapRef.value.scrollWidth > wrapRef.value.clientWidth
+  const { scrollWidth, clientWidth, scrollLeft } = wrapRef.value
+  isOverflowing.value = scrollWidth > clientWidth + 1
+  canScrollLeft.value = isOverflowing.value && scrollLeft > 1
+  canScrollRight.value = isOverflowing.value && scrollLeft + clientWidth < scrollWidth - 1
+  measurePinnedColumns()
 }
 
 function onWrapScroll() {
-  if (!scrollDismissed.value && isOverflowing.value) {
-    scrollDismissed.value = true
-  }
+  const left = wrapRef.value?.scrollLeft ?? 0
+  if (Math.abs(left - previousScrollLeft) > 0.5) scrollHintDismissed.value = true
+  previousScrollLeft = left
+  checkOverflow()
+}
+
+function scrollColumns(direction: number) {
+  const wrap = wrapRef.value
+  if (!wrap) return
+  wrap.scrollBy({ left: direction * Math.max(80, (wrap.clientWidth - pinnedWidth.value) * 0.7),
+    behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
 }
 
 let resizeObserver: ResizeObserver | null = null
@@ -279,9 +339,9 @@ onMounted(() => {
     if (typeof ResizeObserver !== 'undefined') {
       resizeObserver = new ResizeObserver(() => {
         checkOverflow()
-        if (!isOverflowing.value) scrollDismissed.value = false
       })
       resizeObserver.observe(wrapRef.value)
+      if (tableRef.value) resizeObserver.observe(tableRef.value)
     }
     checkOverflow()
   }
@@ -296,13 +356,53 @@ const visibleColumns = computed(() =>
   props.columns.filter(col => !col.hideBelow || windowWidth.value > col.hideBelow),
 )
 
+const tableRef = ref<HTMLTableElement | null>(null)
+watch(() => [props.columns, props.data, ...visibleColumns.value.map(col => `${col.key}:${col.width}:${col.sticky}`)], () => nextTick(checkOverflow), { deep: true })
+const columnWidths = ref<Record<string, number>>({})
+const resizeMinimum = computed(() => Math.max(24, Number.isFinite(props.minColumnWidth) ? props.minColumnWidth : 64))
+let columnDrag: { key: string; x: number; width: number; pointerId: number } | null = null
+const resizedTableWidth = computed(() => props.resizable && visibleColumns.value.length && visibleColumns.value.every(col => columnWidths.value[col.key])
+  ? `${visibleColumns.value.reduce((sum, col) => sum + columnWidths.value[col.key], 0)}px` : undefined)
+
+function measureColumns() {
+  const cells = tableRef.value?.tHead?.rows[0]?.cells
+  if (!cells) return
+  columnWidths.value = Object.fromEntries(visibleColumns.value.map((col, index) =>
+    [col.key, Math.max(resizeMinimum.value, cells[index].getBoundingClientRect().width)]))
+}
+function setColumnWidth(key: string, width: number) {
+  columnWidths.value = { ...columnWidths.value, [key]: Math.max(resizeMinimum.value, Math.round(width)) }
+  nextTick(checkOverflow)
+}
+function startColumnResize(event: PointerEvent, key: string) {
+  if (event.button !== 0 || !props.resizable) return
+  measureColumns()
+  columnDrag = { key, x: event.clientX, width: columnWidths.value[key], pointerId: event.pointerId }
+  ;(event.currentTarget as HTMLElement).setPointerCapture(event.pointerId)
+}
+function moveColumnResize(event: PointerEvent) {
+  if (!columnDrag || columnDrag.pointerId !== event.pointerId) return
+  setColumnWidth(columnDrag.key, columnDrag.width + event.clientX - columnDrag.x)
+}
+function endColumnResize() { columnDrag = null }
+function resizeColumnByKey(event: KeyboardEvent, key: string) {
+  if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return
+  event.preventDefault()
+  measureColumns()
+  setColumnWidth(key, columnWidths.value[key] + (event.key === 'ArrowRight' ? 10 : -10))
+}
+watch(() => [props.columns, props.resizable, props.minColumnWidth, ...visibleColumns.value.map(col => col.key)], () => {
+  endColumnResize()
+  columnWidths.value = {}
+})
+
 // 컬럼 width 합계 → table min-width (px 단위 컬럼만 합산)
 const tableMinWidth = computed(() => {
   let total = 0
   let hasWidth = false
   for (const col of visibleColumns.value) {
     if (col.width) {
-      const px = parseInt(col.width)
+      const px = /^\d+(\.\d+)?px$/.test(col.width) ? parseFloat(col.width) : NaN
       if (!isNaN(px)) { total += px; hasWidth = true }
     }
   }
@@ -499,6 +599,43 @@ watch(
   }
 }
 
+.ui-table-shell { position: relative; width: 100%; min-width: 0; }
+.ui-table-edge {
+  position: absolute;
+  top: 0;
+  bottom: 8px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 5;
+  &.edge-right { right: 0; background: linear-gradient(to right, transparent, var(--color-bg-elevated)); }
+  &.edge-left { background: linear-gradient(to left, transparent, var(--color-bg-elevated)); }
+  button {
+    box-sizing: border-box;
+    pointer-events: auto;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid $color-border;
+    border-radius: 50%;
+    background: var(--color-bg-elevated);
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+    color: $color-text-secondary;
+    font-size: 22px;
+    line-height: 1;
+    svg { display: block; flex-shrink: 0; }
+    cursor: pointer;
+    &:hover { color: var(--color-primary); border-color: var(--color-primary); }
+    &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+  }
+}
+
 .ui-table-wrap {
   width: 100%;
   overflow: auto;
@@ -517,15 +654,16 @@ watch(
     &.is-sticky {
       position: sticky;
       top: 0;
-      z-index: 1;
+      z-index: 4;
     }
 
     th {
-      height: 42px;
+      position: relative;
+      height: 44px;
       padding: 0 12px;
       background: $color-background;
       @include typo($body-medium-bold);
-      font-weight: 500;
+      font-weight: 600;
       color: $color-text-dark;
       white-space: nowrap;
       vertical-align: middle;
@@ -571,8 +709,8 @@ watch(
     }
 
     td {
-      height: 42px;
-      padding: 0 12px;
+      height: 44px;
+      padding: 8px 12px;
       background: var(--color-bg-elevated);
       border-bottom: 1px solid $color-border-light;
       @include typo($body-medium);
@@ -588,20 +726,50 @@ watch(
 
 }
 
+.ui-table-resizer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 100%;
+  cursor: col-resize;
+  touch-action: none;
+  user-select: none;
+  z-index: 1;
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 20%;
+    height: 60%;
+    width: 2px;
+    background: transparent;
+  }
+  &:hover::after, &:focus-visible::after { background: var(--color-primary); }
+  &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: -2px; }
+}
+
 .ui-table-sort-btn {
   width: 100%;
+  min-height: 36px;
+  font: inherit;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 8px;
   border: 0;
   background: transparent;
   color: inherit;
   cursor: pointer;
+  border-radius: 4px;
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
 }
 
 .ui-table-sort-mark {
-  font-size: 10px;
+  flex-shrink: 0;
   color: $color-text-disabled;
 
   &.is-active {
@@ -625,8 +793,8 @@ watch(
 }
 
 // 빈 상태
-.ui-table-empty {
-  height: 120px;
+.ui-table tbody td.ui-table-empty {
+  height: 180px;
   text-align: center !important;
   color: $color-text-disabled;
   @include typo($body-medium);
@@ -673,27 +841,7 @@ watch(
 }
 
 // ===== 가로 스크롤 힌트 =====
-.ui-table-scroll-hint {
-  position: sticky;
-  left: 0;
-  z-index: 2;
-  text-align: center;
-  padding: 6px 0;
-  font-size: 12px;
-  font-weight: 500;
-  color: $color-text-disabled;
-  background: linear-gradient(180deg, rgba($color-background, 0.95) 0%, rgba($color-background, 0) 100%);
-  pointer-events: none;
-}
 
-.scroll-hint-fade-enter-active,
-.scroll-hint-fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-.scroll-hint-fade-enter-from,
-.scroll-hint-fade-leave-to {
-  opacity: 0;
-}
 
 // ===== sm 사이즈 (컴팩트) =====
 .ui-table-wrap.is-sm {
@@ -738,5 +886,28 @@ watch(
       border-right: none;
     }
   }
+}
+.ui-table-wrap .ui-table thead th[aria-sort='ascending'],
+.ui-table-wrap .ui-table thead th[aria-sort='descending'] {
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 8%, var(--color-bg-elevated));
+}
+.ui-table-wrap .ui-table .is-pinned {
+  position: sticky;
+  z-index: 2;
+  border-right: 1px solid $color-border;
+}
+.ui-table-wrap .ui-table thead th.is-pinned { z-index: 3; }
+.ui-table-wrap.is-scrolled-x .ui-table .is-pinned {
+  box-shadow: 3px 0 5px -3px rgba(15, 23, 42, 0.22);
+}
+.ui-table-wrap .ui-table tr.is-clickable:hover td.is-pinned {
+  background: color-mix(in srgb, var(--color-primary) 7%, var(--color-bg-elevated));
+}
+.ui-table-wrap .ui-table tr.is-selected td.is-pinned {
+  background: color-mix(in srgb, var(--color-primary) 8%, var(--color-bg-elevated));
+}
+.ui-table-wrap .ui-table tr.is-selected:hover td.is-pinned {
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-bg-elevated));
 }
 </style>
