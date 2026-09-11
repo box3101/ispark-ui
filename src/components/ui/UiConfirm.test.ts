@@ -79,16 +79,16 @@ describe('UiConfirm', () => {
     expect(primaryBtn).toBeTruthy()
   })
 
-  // 5. variant='danger' (기본값) → danger 클래스
-  it('기본 variant는 danger', async () => {
+  // 5. 기본 variant → primary 클래스
+  it('기본 variant는 primary', async () => {
     mountConfirm()
 
     openConfirm({ message: '삭제?' })
     await nextTick()
     await new Promise((r) => setTimeout(r, 0))
 
-    const dangerBtn = document.querySelector('.ui-confirm-btn--danger')
-    expect(dangerBtn).toBeTruthy()
+    const primaryBtn = document.querySelector('.ui-confirm-btn--primary')
+    expect(primaryBtn).toBeTruthy()
   })
 
   // 6. 커스텀 텍스트 반영
@@ -121,4 +121,15 @@ describe('UiConfirm', () => {
     const title = document.querySelector('.ui-confirm-title')
     expect(title?.textContent).toBe('확인')
   })
+})
+
+
+it('danger variant adds a warning icon and keeps custom confirmation behavior', async () => {
+  mountConfirm()
+  const result = openConfirm({ title: '파일을 삭제할까요?', message: '삭제 후 복구할 수 없습니다.', variant: 'danger', confirmText: '삭제' })
+  const button = await screen.findByRole('button', { name: '삭제' })
+  expect(document.querySelector('.ui-confirm-icon svg')).toBeTruthy()
+  expect(button.classList.contains('ui-confirm-btn--danger')).toBe(true)
+  button.click()
+  expect(await result).toBe(true)
 })

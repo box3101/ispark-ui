@@ -10,7 +10,7 @@ export interface ConfirmOptions {
   confirmText?: string
   /** 취소 버튼 텍스트 (기본: '취소') */
   cancelText?: string
-  /** 확인 버튼 variant (기본: 'danger') */
+  /** 확인 버튼 variant (기본: 'primary') */
   variant?: 'primary' | 'danger'
 }
 
@@ -31,7 +31,7 @@ const confirmState = ref<ConfirmState>({
   message: '',
   confirmText: '확인',
   cancelText: '취소',
-  variant: 'danger',
+  variant: 'primary',
 })
 
 let resolvePromise: ((value: boolean) => void) | null = null
@@ -42,6 +42,8 @@ let resolvePromise: ((value: boolean) => void) | null = null
  * @example
  * const confirmed = await openConfirm({
  *   title: '삭제',
+ *   variant: 'danger',
+ *   confirmText: '삭제',
  *   message: '삭제하시겠습니까?',
  * })
  * if (!confirmed) return
@@ -61,7 +63,7 @@ export function openConfirm(options: ConfirmOptions): Promise<boolean> {
     message: options.message,
     confirmText: options.confirmText ?? '확인',
     cancelText: options.cancelText ?? '취소',
-    variant: options.variant ?? 'danger',
+    variant: options.variant ?? 'primary',
   }
 
   return new Promise<boolean>((resolve) => {

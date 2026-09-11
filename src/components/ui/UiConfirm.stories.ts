@@ -10,8 +10,15 @@ const meta = {
   title: 'Components/Feedback/UiConfirm',
   component: UiConfirm,
   tags: ['autodocs'],
+  decorators: [() => ({
+    template: '<div style="display:flex;align-items:center;justify-content:center;width:100%;min-height:100dvh;box-sizing:border-box;padding:24px"><story /></div>',
+  })],
   parameters: {
+    // Storybook Canvas prioritizes parameters.layout over docs.canvas.layout.
+    layout: 'fullscreen',
     docs: {
+      canvas: { layout: 'fullscreen' },
+      story: { inline: false, iframeHeight: 360 },
       description: {
         component: `
 \`UiConfirm\`은 모듈 싱글톤 기반 확인 다이얼로그. \`openConfirm()\`으로 어디서든 호출, \`Promise<boolean>\`을 반환.
@@ -24,7 +31,9 @@ import { UiConfirm, openConfirm, openToast } from 'ispark-ui'
 
 async function onDelete() {
   const confirmed = await openConfirm({
-    title: '삭제',
+    title: '파일을 삭제할까요?',
+          variant: 'danger',
+          confirmText: '삭제',
     message: '삭제하시겠습니까?',
   })
   if (!confirmed) return
@@ -45,7 +54,7 @@ async function onDelete() {
 - **\`message\`** 확인 메시지 (필수)
 - **\`confirmText\`** 확인 버튼 텍스트 (기본: '확인')
 - **\`cancelText\`** 취소 버튼 텍스트 (기본: '취소')
-- **\`variant\`** \`'primary'\` | \`'danger'\` — 확인 버튼 색상 (기본: 'danger')
+- **\`variant\`** \`'primary'\` | \`'danger'\` — 확인 버튼 색상 (기본: 'primary')
         `,
       },
     },
@@ -62,8 +71,10 @@ export const Playground: Story = {
     setup() {
       async function onDelete() {
         const confirmed = await openConfirm({
-          title: '삭제',
-          message: '이 항목을 삭제하시겠습니까?\n삭제된 항목은 복구할 수 없습니다.',
+          title: '파일을 삭제할까요?',
+          variant: 'danger',
+          confirmText: '삭제',
+          message: '프로젝트 보고서.pdf 파일을 삭제합니다.\n삭제한 파일은 복구할 수 없습니다.',
         })
         if (confirmed) {
           openToast({ message: '삭제되었습니다.', type: 'success' })
@@ -91,8 +102,8 @@ export const PrimaryVariant: Story = {
     setup() {
       async function onSave() {
         const confirmed = await openConfirm({
-          title: '저장',
-          message: '변경사항을 저장하시겠습니까?',
+          title: '변경사항을 저장할까요?',
+          message: '수정한 내용이 저장됩니다.',
           variant: 'primary',
           confirmText: '저장',
         })
