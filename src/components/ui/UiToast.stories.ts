@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import { expect, within } from '@storybook/test'
+import { onMounted, onBeforeUnmount } from 'vue'
 import UiToast from './UiToast.vue'
 import UiButton from './UiButton.vue'
 import { openToast, closeToast, type ToastType, type ToastPlacement } from '../../composables/useToast'
@@ -10,6 +11,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     docs: {
+      story: { inline: false, iframeHeight: 340 },
       description: {
         component: `
 \`UiToast\`는 모듈 싱글톤 기반 알림. \`openToast()\`로 어디서든 호출.
@@ -29,7 +31,7 @@ import { UiToast, openToast } from 'ispark-ui'
 
 ## API
 
-- **\`type\`** \`success\` | \`error\` | \`warning\` | \`info\` — 좌측 컬러 보더 + 아이콘
+- **\`type\`** \`success\` | \`error\` | \`warning\` | \`info\` — 상태별 아이콘과 은은한 배경. 그림자 없는 공통 테두리.
 - **\`duration\`** ms — 기본 2500. \`0\`이면 자동 닫기 안 함 (수동 close)
 - **\`placement\`** \`top-center\`(기본) | \`top-right\` | \`bottom-center\` | \`bottom-right\` — placement별 독립 stack
 - 최대 동시 표시 5개 (placement별). 초과 시 가장 오래된 toast 제거.
@@ -41,6 +43,28 @@ import { UiToast, openToast } from 'ispark-ui'
 
 export default meta
 type Story = StoryObj<typeof meta>
+
+export const AllTypes: Story = {
+  name: '모든 상태',
+  render: () => ({
+    components: { UiToast },
+    setup() {
+      const ids: number[] = []
+      onMounted(() => {
+        const samples: [ToastType, string][] = [
+          ['success', '변경사항을 저장했어요.'],
+          ['info', '새로운 업데이트가 있어요.'],
+          ['warning', '첨부 파일 크기를 확인해 주세요.'],
+          ['error', '저장하지 못했어요. 다시 시도해 주세요.'],
+        ]
+        samples.forEach(([type, message]) => ids.push(openToast({ type, message, duration: 0 })))
+      })
+      onBeforeUnmount(() => ids.forEach(closeToast))
+      return {}
+    },
+    template: '<UiToast />',
+  }),
+}
 
 const fire = (
   message: string,

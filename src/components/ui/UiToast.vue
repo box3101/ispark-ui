@@ -18,6 +18,7 @@
           aria-live="polite"
         >
           <!-- 타입별 아이콘 (인라인 SVG — icon system 의존 없음) -->
+          <span class="ui-toast-symbol" aria-hidden="true">
           <svg
             class="ui-toast-icon"
             width="20"
@@ -49,8 +50,7 @@
               />
             </template>
             <template v-else-if="toast.type === 'warning'">
-              <circle cx="10" cy="10" r="9" fill="currentColor" opacity="0.12" />
-              <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.2" fill="none" />
+              <path d="M8.7 2.8a1.5 1.5 0 0 1 2.6 0l7 12.2a1.5 1.5 0 0 1-1.3 2.25H3a1.5 1.5 0 0 1-1.3-2.25Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
               <path d="M10 6.5V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
               <circle cx="10" cy="13.5" r="0.75" fill="currentColor" />
             </template>
@@ -61,6 +61,7 @@
               <path d="M10 9V13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
             </template>
           </svg>
+          </span>
 
           <p class="ui-toast-message">{{ toast.message }}</p>
 
@@ -70,7 +71,7 @@
             aria-label="닫기"
             @click="closeToast(toast.id)"
           >
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 12 12" fill="none" aria-hidden="true">
               <path
                 d="M3 3L9 9M9 3L3 9"
                 stroke="currentColor"
@@ -142,43 +143,50 @@ const toastsByPlacement = computed(() => (placement: ToastPlacement) =>
   display: flex;
   align-items: center;
   gap: 12px;
-  min-width: 280px;
-  max-width: min(440px, calc(100vw - 40px));
-  padding: $spacing-md $spacing-lg;
+  box-sizing: border-box;
+  width: min(380px, calc(100vw - 32px));
+  min-height: 64px;
+  padding: 12px 14px;
   background: var(--color-bg-elevated);
   border: 1px solid $color-border;
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-lg;
+  border-radius: 8px;
+  box-shadow: none;
   pointer-events: auto;
 
-  // 타입별 좌측 보더 + 아이콘 색상 통합 (svg는 currentColor 상속)
+  // 상태는 아이콘으로 구분하고 외곽선은 동일하게 유지한다.
   &.type-success {
-    border-left: 3px solid $color-success;
-    .ui-toast-icon { color: $color-success; }
+    .ui-toast-symbol { color: $color-success; background: rgba($color-success, 0.08); }
   }
   &.type-error {
-    border-left: 3px solid $color-error;
-    .ui-toast-icon { color: $color-error; }
+    .ui-toast-symbol { color: $color-error; background: rgba($color-error, 0.08); }
   }
   &.type-warning {
-    border-left: 3px solid $color-warning;
-    .ui-toast-icon { color: $color-warning; }
+    .ui-toast-symbol { color: $color-warning; background: rgba($color-warning, 0.08); }
   }
   &.type-info {
-    border-left: 3px solid $color-info;
-    .ui-toast-icon { color: $color-info; }
+    .ui-toast-symbol { color: $color-primary; background: rgba($color-primary, 0.08); }
   }
 }
 
-.ui-toast-icon {
+.ui-toast-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   flex-shrink: 0;
 }
 
 .ui-toast-message {
   flex: 1;
+  min-width: 0;
   margin: 0;
   @include typo($body-medium, $color-text-heading);
   word-break: keep-all;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .ui-toast-close {
@@ -186,8 +194,8 @@ const toastsByPlacement = computed(() => (placement: ToastPlacement) =>
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border: none;
   background: none;
@@ -199,6 +207,10 @@ const toastsByPlacement = computed(() => (placement: ToastPlacement) =>
   &:hover {
     color: $color-text-primary;
     background: $color-border-light;
+  }
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
   }
 }
 </style>
