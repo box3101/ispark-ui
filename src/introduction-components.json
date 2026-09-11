@@ -201,5 +201,19 @@
     "category": "data",
     "href": "./?path=/docs/components-data-uichart--docs",
     "preview": "iframe.html?id=components-data-uichart--bar&viewMode=story"
+  },
+  {
+    "name": "UiPageHeader",
+    "description": "페이지 제목과 액션",
+    "category": "display",
+    "href": "./?path=/docs/components-display-uipageheader--docs",
+    "preview": "iframe.html?id=components-display-uipageheader--playground&viewMode=story"
+  },
+  {
+    "name": "UiAlert",
+    "description": "안내·주의·오류 배너",
+    "category": "feedback",
+    "href": "./?path=/docs/components-feedback-uialert--docs",
+    "preview": "iframe.html?id=components-feedback-uialert--playground&viewMode=story"
   }
 ]

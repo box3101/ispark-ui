@@ -3,6 +3,13 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.8.0] - 2026-09-11
+
+### Added
+- UiPageHeader: 제목·설명·개수·메타 정보·액션 슬롯과 제목 계층 지정 지원.
+- UiAlert: 상태별 안내 배너, 닫기 및 v-model 표시 제어, 액션 슬롯 지원.
+- Storybook 조합 예제와 소개 페이지 컴포넌트 목록 추가.
+
 ## [0.7.1] - 2026-09-11
 
 ### Fixed
