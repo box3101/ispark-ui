@@ -14,6 +14,26 @@ export default meta
 type Story = StoryObj<typeof meta>
 export const Playground: Story = {}
 export const Simple: Story = { args: { title: '설정', description: '서비스 기본 설정을 관리합니다.', count: undefined } }
+export const SectionHeader: Story = {
+  name: '작은 섹션 헤더 · 한 줄 배치',
+  args: {
+    title: '통과 목록', count: 5, heading: 'h2', size: 'sm', layout: 'inline',
+    description: '09.11 종가 기준 · 검사 677종 → 5종 · 장대양봉 6% · 5일선 +2% · 횡보 20일',
+  },
+  render: (args) => ({
+    components: { UiPageHeader, UiButton, UiIcon },
+    setup() {
+      const exported = ref(false)
+      return { args, exported }
+    },
+    template: `<div>
+      <UiPageHeader v-bind="args">
+        <template #actions><UiButton variant="outline" size="sm" @click="exported = true"><template #icon-left><UiIcon name="download" :size="16" /></template>내보내기</UiButton></template>
+      </UiPageHeader>
+      <p v-if="exported" role="status" style="margin-top: 12px; font-size: 12px;">내보내기 액션 예제입니다.</p>
+    </div>`,
+  }),
+}
 export const WithAlert: Story = {
   name: '제목 + 안내 배너',
   render: () => ({

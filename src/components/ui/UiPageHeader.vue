@@ -5,17 +5,19 @@ withDefaults(defineProps<{
   title: string
   description?: string
   count?: number | string
+  size?: 'md' | 'sm'
+  layout?: 'stacked' | 'inline'
   /** 문서의 제목 계층에 맞춰 지정 */
   heading?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
-}>(), { heading: 'h1' })
+}>(), { heading: 'h1', size: 'md', layout: 'stacked' })
 </script>
 
 <template>
-  <div class="ui-page-header">
+  <div class="ui-page-header" :class="[`size-${size}`, `layout-${layout}`]">
     <div class="ui-page-header-main">
       <div class="ui-page-header-title-row">
         <component :is="heading" class="ui-page-header-title">{{ title }}</component>
-        <UiBadge v-if="count !== undefined" variant="primary" shape="pill">{{ count }}</UiBadge>
+        <UiBadge v-if="count !== undefined" variant="primary" shape="pill" :size="size === 'sm' ? 'sm' : 'md'">{{ count }}</UiBadge>
         <slot name="badge" />
       </div>
       <div v-if="description || $slots.description || $slots.meta" class="ui-page-header-details">
@@ -61,4 +63,16 @@ withDefaults(defineProps<{
 }
 .ui-page-header-meta { min-width: 0; font-size: 12px; color: $color-text-secondary; overflow-wrap: anywhere; }
 .ui-page-header-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.ui-page-header.size-sm {
+  align-items: center;
+  gap: 10px 16px;
+  .ui-page-header-title { font-size: 16px; line-height: 1.5; letter-spacing: -0.01em; }
+  .ui-page-header-description { font-size: 12px; }
+  .ui-page-header-title-row { gap: 8px; }
+}
+.ui-page-header.layout-inline {
+  align-items: center;
+  .ui-page-header-main { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; }
+  .ui-page-header-details { flex: 1 1 240px; margin-top: 0; }
+}
 </style>

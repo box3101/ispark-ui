@@ -237,6 +237,8 @@ description: string;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
 declare const __VLS_component_5: DefineComponent<__VLS_Props, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<__VLS_Props> & Readonly<{}>, {
+size: "md" | "sm";
+layout: "stacked" | "inline";
 heading: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 
@@ -282,6 +284,8 @@ declare type __VLS_Props = {
     title: string;
     description?: string;
     count?: number | string;
+    size?: 'md' | 'sm';
+    layout?: 'stacked' | 'inline';
     /** 문서의 제목 계층에 맞춰 지정 */
     heading?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 };
