@@ -1,13 +1,13 @@
-import { render, fireEvent } from '@testing-library/vue'
+﻿import { render, fireEvent } from '@testing-library/vue'
 import { describe, it, expect } from 'vitest'
 import UiFileUpload from './UiFileUpload.vue'
 
 describe('UiFileUpload', () => {
   // 1. 기본 렌더링 — 라벨 표시
-  it('기본 라벨 "+ 파일 추가" 렌더', () => {
+  it('기본 라벨 "파일 추가" 렌더', () => {
     const { container } = render(UiFileUpload)
     const label = container.querySelector('.ui-file-upload')
-    expect(label?.textContent?.trim()).toBe('+ 파일 추가')
+    expect(label?.textContent?.trim()).toBe('파일 추가')
   })
 
   // 2. 커스텀 라벨
@@ -79,5 +79,49 @@ describe('UiFileUpload', () => {
 
     await fireEvent.change(input)
     expect(input.value).toBe('')
+  })
+})
+
+
+describe('UiFileUpload dropzone validation', () => {
+  const pdf = new File(['pdf'], 'report.PDF', { type: 'application/pdf' })
+  it('accepts a dropped file and emits the original File', async () => {
+    const { getByRole, emitted } = render(UiFileUpload, { props: { variant: 'dropzone', accept: '.pdf' } })
+    await fireEvent.drop(getByRole('button'), { dataTransfer: { files: [pdf] } })
+    expect(emitted().upload).toEqual([[pdf]])
+  })
+  it('validates both file picker and drop using the same size and type rules', async () => {
+    const { container, getByRole, emitted } = render(UiFileUpload, { props: { variant: 'dropzone', accept: '.pdf', maxSize: 2 } })
+    await fireEvent.drop(getByRole('button'), { dataTransfer: { files: [pdf] } })
+    expect(emitted().upload).toBeUndefined()
+    expect(getByRole('alert').textContent).toContain('초과')
+    const input = container.querySelector('input')!
+    Object.defineProperty(input, 'files', { value: [new File(['a'], 'bad.txt', { type: 'text/plain' })] })
+    await fireEvent.change(input)
+    expect(getByRole('alert').textContent).toContain('파일 형식')
+    expect(emitted().reject).toHaveLength(2)
+  })
+  it.each([{ disabled: true }, { loading: true }])('blocks drop and synthetic change while blocked: %o', async state => {
+    const { container, getByRole, emitted } = render(UiFileUpload, { props: { variant: 'dropzone', ...state } })
+    await fireEvent.drop(getByRole('button'), { dataTransfer: { files: [pdf] } })
+    const input = container.querySelector('input')!
+    Object.defineProperty(input, 'files', { value: [pdf] })
+    await fireEvent.change(input)
+    expect(emitted().upload).toBeUndefined()
+  })
+  it('rejects multiple files and clears the error after a valid retry at the size limit', async () => {
+    const { getByRole, queryByRole, emitted } = render(UiFileUpload, { props: { variant: 'dropzone', accept: 'application/pdf', maxSize: 3 } })
+    await fireEvent.drop(getByRole('button'), { dataTransfer: { files: [pdf, pdf] } })
+    expect(getByRole('alert').textContent).toContain('하나씩')
+    await fireEvent.drop(getByRole('button'), { dataTransfer: { files: [pdf] } })
+    expect(queryByRole('alert')).toBeNull()
+    expect(emitted().upload).toEqual([[pdf]])
+  })
+  it('supports image MIME wildcards and an accessible native button', async () => {
+    const { getByRole, emitted } = render(UiFileUpload, { props: { variant: 'dropzone', accept: 'image/*' } })
+    const file = new File(['image'], 'photo.png', { type: 'image/png' })
+    await fireEvent.drop(getByRole('button'), { dataTransfer: { files: [file] } })
+    expect(emitted().upload).toEqual([[file]])
+    expect(getByRole('button').tagName).toBe('BUTTON')
   })
 })

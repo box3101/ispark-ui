@@ -1,60 +1,45 @@
-import type { Meta, StoryObj } from '@storybook/vue3'
-import { fn } from '@storybook/test'
+﻿import type { Meta, StoryObj } from '@storybook/vue3'
+import { fn, expect, userEvent, within, waitFor } from '@storybook/test'
 import { ref } from 'vue'
 import UiDropdownMenu from './UiDropdownMenu.vue'
 import UiButton from './UiButton.vue'
+import UiIcon from './UiIcon.vue'
 import type { DropdownMenuItemDef } from './UiDropdownMenu.vue'
 
+const baseItems: DropdownMenuItemDef[] = [
+  { label: '이름 변경', value: 'rename', icon: 'pencil', shortcut: 'F2' },
+  { label: '복제', value: 'copy', icon: 'copy' },
+  { label: '다운로드', value: 'download', icon: 'download' },
+  { label: '이동', value: 'move', icon: 'folder' },
+  { label: '삭제', value: 'delete', icon: 'trash-2', color: 'danger', separator: true },
+]
+const fileItems: DropdownMenuItemDef[] = [
+  { label: '미리보기', value: 'preview', icon: 'eye' },
+  { label: '공유', value: 'share', icon: 'share-2' },
+  { label: '링크 복사', value: 'link', icon: 'link' },
+  { label: '보관', value: 'archive', icon: 'archive', disabled: true, description: '권한 없음' },
+  { label: '삭제', value: 'delete', icon: 'trash-2', color: 'danger', separator: true },
+]
 const meta = {
-  title: 'Components/Overlay/UiDropdownMenu',
-  component: UiDropdownMenu,
-  tags: ['autodocs'],
-  args: {
-    onSelect: fn(),
-    'onUpdate:open': fn(),
-  },
+  title: 'Components/Overlay/UiDropdownMenu', component: UiDropdownMenu, tags: ['autodocs', 'dropdown'],
+  args: { items: baseItems, onSelect: fn(), 'onUpdate:open': fn() },
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: `
-ispark-ui 표준 드롭다운 메뉴 — radix-vue \`DropdownMenu\` 프리미티브 래핑. 카드/행의 액션 트리거, 사이드바 메뉴, 컨텍스트 메뉴 등에 사용.
+    docs: { description: { component: `아이콘과 액션을 정돈한 드롭다운 메뉴입니다. 기본 텍스트 버튼과 더보기 버튼을 제공하며 기존 trigger 슬롯도 지원합니다.
 
-## API
-- **\`items\`** \`DropdownMenuItemDef[]\` — 메뉴 항목 배열 (\`{ label, value, icon?, color?, disabled? }\`)
-- **\`title\`** \`string\` — 상단 비클릭 라벨 (구역 안내)
-- **\`open\`** \`boolean\` — v-model:open으로 외부 제어
-- **\`side\`** / **\`align\`** / **\`sideOffset\`** / **\`collisionPadding\`** — radix 포지셔닝
-- **\`openOnHover\`** + **\`hoverCloseDelay\`** — hover로 자동 오픈/닫기
-- **\`contentClass\`** — 포털 콘텐츠에 추가 클래스 (글로벌 SCSS override 진입점)
-
-## DropdownMenuItemDef
-\`\`\`ts
-interface DropdownMenuItemDef {
-  label: string
-  value: string                       // @select payload
-  icon?: string                       // 'icon-edit' 등 ispark-ui 아이콘 클래스
-  color?: 'default' | 'danger'        // danger는 빨강
-  disabled?: boolean
-}
-\`\`\`
-
-## 슬롯
-- **trigger** (필수) — 트리거 영역. radix의 \`as-child\` 패턴으로 wrap
-
-## 이벤트
-- \`select\` — \`(value: string)\`. 메뉴 항목 클릭 시 payload는 \`item.value\`
-- \`update:open\` — v-model:open
-
-## 접근성
-- radix-vue 처리: role=menu / aria-orientation / 화살표 키 / Home/End / Esc / 포커스 트랩 / typeahead
-- \`disabled\` 항목은 \`data-disabled\` 자동 + 키보드 skip
-- \`prefers-reduced-motion: reduce\` 시 진입/퇴장 애니메이션 정지
-        `,
-      },
-    },
+- **triggerVariant**: text (기본) / icon. **triggerLabel**: 버튼 텍스트 및 접근성 이름.
+- **items**: label, value, icon?, color?, disabled?, separator?, description?, shortcut?.
+- **icon**: Lucide 이름(pencil, copy 등). 기존 icon-edit 같은 CSS 클래스도 지원합니다.
+- **separator**: 해당 항목 위 구분선. **description**: 우측 보조 문구. **shortcut**: 표시 전용이며 실제 단축키는 사용하는 화면에서 연결합니다.
+- **title**: 상단 구역 이름. **open**: v-model:open으로 외부 제어.
+- **side / align / sideOffset / collisionPadding**: 메뉴 위치 조절.
+- **openOnHover / hoverCloseDelay**: 호버 열기와 닫힘 지연. **contentClass**: 콘텐츠 스타일 확장.
+- **select(value)**: 선택한 항목을 전달합니다. 파일 작업 등 실제 액션은 부모 화면에서 처리합니다.
+- 키보드 화살표 이동, Enter 선택, Escape 닫기 및 비활성 항목 건너뛰기는 Radix가 처리합니다.` } },
   },
   argTypes: {
+    triggerVariant: { control: 'inline-radio', options: ['text', 'icon'] },
+    triggerLabel: { control: 'text' },
     side: { control: 'inline-radio', options: ['top', 'right', 'bottom', 'left'] },
     align: { control: 'inline-radio', options: ['start', 'center', 'end'] },
     sideOffset: { control: { type: 'number', min: 0, max: 20 } },
@@ -62,152 +47,54 @@ interface DropdownMenuItemDef {
     openOnHover: { control: 'boolean' },
     hoverCloseDelay: { control: { type: 'number', min: 0, max: 1000, step: 50 } },
   },
+  render: args => ({ components: { UiDropdownMenu }, setup: () => ({ args }), template: '<div style="padding:24px;min-height:320px"><UiDropdownMenu v-bind="args" /></div>' }),
 } satisfies Meta<typeof UiDropdownMenu>
-
 export default meta
 type Story = StoryObj<typeof meta>
 
-const baseItems: DropdownMenuItemDef[] = [
-  { label: '편집', value: 'edit', icon: 'icon-edit' },
-  { label: '복사', value: 'copy', icon: 'icon-check' },
-  { label: '다운로드', value: 'download', icon: 'icon-download' },
-  { label: '삭제', value: 'delete', icon: 'icon-trashcan', color: 'danger' },
-]
-
-// ===== Stories =====
-
-export const Playground: Story = {
-  args: {
-    items: baseItems,
-    side: 'bottom',
-    align: 'end',
-    sideOffset: 5,
-    openOnHover: false,
-  },
-  render: (args) => ({
-    components: { UiDropdownMenu, UiButton },
-    setup: () => ({ args }),
-    template: `
-      <UiDropdownMenu v-bind="args">
-        <template #trigger>
-          <UiButton variant="outline">메뉴 열기 ▾</UiButton>
-        </template>
-      </UiDropdownMenu>
-    `,
-  }),
-}
-
-// 기본 — 4개 항목 + danger
-export const Default: Story = {
-  args: {
-    items: baseItems,
-  },
-  render: (args) => ({
-    components: { UiDropdownMenu, UiButton },
-    setup: () => ({ args }),
-    template: `
-      <UiDropdownMenu v-bind="args">
-        <template #trigger>
-          <UiButton variant="outline">⋯</UiButton>
-        </template>
-      </UiDropdownMenu>
-    `,
-  }),
-}
-
-// title — 구역 안내 라벨
+export const Playground: Story = { args: { title: '파일 작업', align: 'start', triggerLabel: '메뉴 열기' } }
+export const Default: Story = { args: { triggerVariant: 'icon', triggerLabel: '더보기' } }
 export const WithTitle: Story = {
-  args: {
-    title: '계정',
-    items: [
-      { label: '프로필 설정', value: 'profile', icon: 'icon-edit' },
-      { label: '비밀번호 변경', value: 'pwd', icon: 'icon-check' },
-      { label: '로그아웃', value: 'logout', icon: 'icon-close', color: 'danger' },
-    ],
-    align: 'start',
-  },
-  render: (args) => ({
-    components: { UiDropdownMenu, UiButton },
-    setup: () => ({ args }),
-    template: `
-      <UiDropdownMenu v-bind="args">
-        <template #trigger>
-          <UiButton variant="ghost">👤 사용자</UiButton>
-        </template>
-      </UiDropdownMenu>
-    `,
-  }),
+  args: { title: '계정', align: 'start', triggerLabel: '사용자', items: [
+    { label: '프로필 설정', value: 'profile', icon: 'user' },
+    { label: '비밀번호 변경', value: 'password', icon: 'key-round' },
+    { label: '로그아웃', value: 'logout', icon: 'log-out', color: 'danger', separator: true },
+  ] },
 }
-
-// 비활성 항목 — disabled 키 skip
-export const WithDisabledItem: Story = {
-  args: {
-    items: [
-      { label: '편집', value: 'edit', icon: 'icon-edit' },
-      { label: '복사 (잠금)', value: 'copy', icon: 'icon-check', disabled: true },
-      { label: '내보내기', value: 'export', icon: 'icon-download' },
-      { label: '삭제', value: 'delete', icon: 'icon-trashcan', color: 'danger' },
-    ],
-  },
-  render: (args) => ({
-    components: { UiDropdownMenu, UiButton },
-    setup: () => ({ args }),
-    template: `
-      <UiDropdownMenu v-bind="args">
-        <template #trigger>
-          <UiButton variant="outline">액션</UiButton>
-        </template>
-      </UiDropdownMenu>
-    `,
-  }),
+export const WithDisabledItem: Story = { args: { items: fileItems, triggerLabel: '액션' } }
+export const OpenOnHover: Story = { args: { openOnHover: true, hoverCloseDelay: 300, side: 'right', align: 'start', triggerLabel: '폴더 (호버)' } }
+export const Expanded: Story = {
+  args: { open: true, title: '파일 작업', align: 'start' },
+  parameters: { docs: { story: { inline: false, iframeHeight: 400 } } },
 }
-
-// hover로 오픈 — 사이드바/내비게이션 패턴
-export const OpenOnHover: Story = {
-  args: {
-    items: baseItems,
-    openOnHover: true,
-    hoverCloseDelay: 300,
-    side: 'right',
-    align: 'start',
-  },
-  render: (args) => ({
-    components: { UiDropdownMenu, UiButton },
-    setup: () => ({ args }),
-    template: `
-      <UiDropdownMenu v-bind="args">
-        <template #trigger>
-          <UiButton variant="ghost">📁 폴더 (호버)</UiButton>
-        </template>
-      </UiDropdownMenu>
-    `,
-  }),
-}
-
-// 선택 결과 라이브 표시 — @select 이벤트 시연
-export const SelectionLive: Story = {
-  render: () => ({
-    components: { UiDropdownMenu, UiButton },
-    setup: () => {
-      const lastSelect = ref<string | null>(null)
-      const onSelect = (value: string) => {
-        lastSelect.value = value
-      }
-      return { items: baseItems, lastSelect, onSelect }
-    },
-    template: `
-      <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 12px;">
-        <UiDropdownMenu :items="items" @select="onSelect">
-          <template #trigger>
-            <UiButton variant="primary">메뉴 ▾</UiButton>
-          </template>
-        </UiDropdownMenu>
-        <div style="padding: 10px 14px; background: #f4f7f9; border-radius: 6px; font-size: 13px; color: #4d5462;">
-          <strong>마지막 선택:</strong>
-          <span v-if="lastSelect" style="margin-left: 8px; color: #3c69db;">{{ lastSelect }}</span>
-          <span v-else style="margin-left: 8px; color: #6f7a93;">(아직 없음)</span>
-        </div>
+export const FileActions: Story = {
+  args: { items: fileItems, triggerVariant: 'icon', triggerLabel: '프로젝트 보고서 메뉴', align: 'end' },
+  render: args => ({
+    components: { UiDropdownMenu, UiIcon }, setup: () => ({ args }),
+    template: `<div style="width:min(480px,calc(100vw - 64px));min-height:360px;padding:24px 0">
+      <div style="display:flex;align-items:center;gap:14px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;background:#fff">
+        <div style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:6px;background:#fff1f2;color:#dc2626;flex-shrink:0"><UiIcon name="file-text" :size="24" /></div>
+        <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">프로젝트 보고서.pdf</div><div style="margin-top:4px;font-size:12px;color:#64748b">PDF · 240 KB</div></div>
+        <UiDropdownMenu v-bind="args" />
       </div>
-    `,
+    </div>`,
   }),
+}
+export const SelectionLive: Story = {
+  render: args => ({
+    components: { UiDropdownMenu },
+    setup() { const lastSelect = ref('아직 없음'); return { args, lastSelect, onSelect: (value: string) => { lastSelect.value = value; args.onSelect?.(value) } } },
+    template: `<div style="padding:24px;min-height:340px"><UiDropdownMenu v-bind="args" @select="onSelect" /><p role="status" style="margin-top:20px;font-size:13px;color:#64748b">마지막 선택: {{ lastSelect }}</p></div>`,
+  }),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const body = within(canvasElement.ownerDocument.body)
+    await userEvent.click(canvas.getByRole('button', { name: '메뉴 열기' }))
+    await userEvent.click(await body.findByRole('menuitem', { name: '다운로드' }))
+    await expect(canvas.getByRole('status')).toHaveTextContent('download')
+    await waitFor(() => expect(body.queryByRole('menu')).not.toBeInTheDocument())
+  },
+}
+export const CustomTrigger: Story = {
+  render: args => ({ components: { UiDropdownMenu, UiButton, UiIcon }, setup: () => ({ args }), template: '<div style="padding:24px;min-height:320px"><UiDropdownMenu v-bind="args"><template #trigger><UiButton variant="outline"><UiIcon name="user" :size="16" /> 사용자</UiButton></template></UiDropdownMenu></div>' }),
 }

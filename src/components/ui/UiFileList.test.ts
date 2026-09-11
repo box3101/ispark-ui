@@ -125,3 +125,32 @@ describe('UiFileList', () => {
     expect(imageItems.length).toBe(3)
   })
 })
+
+describe('UiFileList metadata and previews', () => {
+  it('shows byte sizes when provided and preserves older files without sizes', () => {
+    const { container } = render(UiFileList, { props: {
+      files: [{ ...sampleFiles[0]!, size: 245760 }, { ...sampleFiles[1]!, size: 0 }, sampleFiles[2]!], getUrl: mockGetUrl,
+    } })
+    expect(Array.from(container.querySelectorAll('.ui-file-item__meta'), node => node.textContent)).toEqual(['PDF · 240 KB', 'JPG · 0 B', 'TXT'])
+    const link = container.querySelector('.ui-file-item__download')!
+    expect(link.getAttribute('href')).toBe('https://example.com/report.pdf')
+    expect(link.getAttribute('download')).toBe(sampleFiles[0]!.filename)
+  })
+
+  it('replaces a failed image with an icon and retries when its URL changes', async () => {
+    const file = sampleFiles[1]!
+    const { container, rerender } = render(UiFileList, { props: { files: [file], getUrl: mockGetUrl } })
+    await fireEvent.error(container.querySelector('img')!)
+    expect(container.querySelector('img')).toBeNull()
+    expect(container.querySelector('.ui-file-item__icon')).not.toBeNull()
+    await rerender({ files: [{ ...file, path: 'replacement.jpg' }], getUrl: mockGetUrl })
+    expect(container.querySelector('img')?.getAttribute('src')).toBe('https://example.com/replacement.jpg')
+  })
+
+  it('keeps delete events and download links available in grid mode', async () => {
+    const { container, emitted } = render(UiFileList, { props: { files: sampleFiles, getUrl: mockGetUrl, layout: 'grid' } })
+    expect(container.querySelectorAll('.ui-file-item__download')).toHaveLength(3)
+    await fireEvent.click(container.querySelectorAll('.ui-file-item__delete')[1]!)
+    expect(emitted().delete[0]).toEqual([sampleFiles[1]])
+  })
+})

@@ -3,129 +3,66 @@ import { ref } from 'vue'
 import UiFileList from './UiFileList.vue'
 import type { FileItem } from './UiFileList.vue'
 
+// 로컬 SVG 예제: 네트워크 연결 없이 미리보기 및 다운로드 가능
+const landscape = (sky: string, hill: string) => `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400"><rect width="640" height="400" fill="${sky}"/><circle cx="490" cy="85" r="36" fill="#fff3c4"/><path d="M0 240L140 140 300 270 460 170 640 260V400H0Z" fill="${hill}"/><path d="M0 320Q160 200 340 320T640 280V400H0Z" fill="#458277"/></svg>`)}`
+const previews = [landscape('#dbeafe', '#829d92'), landscape('#e0f2fe', '#7da580'), landscape('#ffdfba', '#9e8b91')]
 const sampleFiles: FileItem[] = [
-  { id: 1, filename: '출생증명서.pdf', path: 'sample1.pdf', mimetype: 'application/pdf' },
-  { id: 2, filename: 'KakaoTalk_photo.jpg', path: 'sample2.jpg', mimetype: 'image/jpeg' },
-  { id: 3, filename: '체험단.txt', path: 'sample3.txt', mimetype: 'text/plain' },
+  { id: 1, filename: '출생증명서.pdf', path: 'sample.pdf', mimetype: 'application/pdf', size: 245760 },
+  { id: 2, filename: 'KakaoTalk_photo.svg', path: previews[0], mimetype: 'image/svg+xml', size: 1843200 },
+  { id: 3, filename: '체험단.txt', path: 'sample.txt', mimetype: 'text/plain', size: 12288 },
 ]
-
+const getUrl = (path: string) => path.startsWith('data:') || path.startsWith('/') ? path : (path.endsWith('.pdf') ? '/file-list/sample.pdf' : '/file-list/sample.txt')
 const meta = {
-  title: 'Components/Data/UiFileList',
-  component: UiFileList,
-  tags: ['autodocs'],
+  title: 'Components/Data/UiFileList', component: UiFileList, tags: ['autodocs'],
+  args: { files: sampleFiles, getUrl, deletable: true, layout: 'list' },
   parameters: {
-    docs: {
-      description: {
-        component: `
-파일 목록 표시 컴포넌트. 이미지 파일은 미리보기 썸네일, 일반 파일은 📎 아이콘으로 표시한다.
+    layout: 'padded',
+    docs: { description: { component: `파일 아이콘·미리보기, 파일명, 형식과 크기를 표시하는 첨부파일 목록입니다.
 
-## 사용 패턴
-- \`UiFileUpload\`와 함께 사용하여 파일 첨부 UI 구성
-- \`getUrl\` 함수로 파일 경로를 URL로 변환 (서버 환경에 따라 다름)
-- \`deletable\` 을 \`false\`로 설정하면 읽기 전용 목록
-
-## API
-- **Props**: \`files\` (필수), \`getUrl\` (필수), \`deletable\` (기본: true)
-- **Events**: \`delete\` — 삭제 버튼 클릭 시 해당 FileItem 전달
-        `,
-      },
-    },
+- 기본은 목록형, \`layout="grid"\`로 썸네일 격자형을 사용합니다.
+- \`FileItem.size\`는 선택 사항이며 bytes 단위입니다. 예제의 크기는 표시용 샘플 값입니다.
+- \`getUrl\`로 파일 경로를 URL로 변환합니다. 다운로드는 브라우저 기본 링크를 사용하며 외부 도메인은 서버의 Content-Disposition 설정에 따라 새 탭에서 열릴 수 있습니다.
+- 이미지를 불러오지 못하면 기본 이미지 아이콘을 표시합니다.
+- \`deletable=false\`이면 삭제 버튼을 숨깁니다. 삭제 시 \`delete\` 이벤트로 FileItem을 전달합니다.
+- \`UiFileUpload\`와 함께 사용할 수 있습니다.` } },
   },
   argTypes: {
-    files: {
-      description: '파일 목록 배열',
-      table: { category: 'Data', type: { summary: 'FileItem[]' } },
-      control: false,
-    },
-    getUrl: {
-      description: '파일 경로를 URL로 변환하는 함수',
-      table: { category: 'Data', type: { summary: '(path: string) => string' } },
-      control: false,
-    },
-    deletable: {
-      description: '삭제 버튼 표시 여부',
-      table: { category: 'State', type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
-      control: 'boolean',
-    },
-  } as never,
+    files: { control: false }, getUrl: { control: false },
+    deletable: { control: 'boolean' },
+    layout: { control: 'inline-radio', options: ['list', 'grid'] },
+  },
+  render: args => ({
+    components: { UiFileList },
+    setup() { const removed = ref<number[]>([]); return { args, removed, onDelete: (file: FileItem) => removed.value.push(file.id) } },
+    template: '<div style="width:100%;max-width:720px;margin:24px auto"><UiFileList v-bind="args" :files="args.files.filter(f => !removed.includes(f.id))" @delete="onDelete" /></div>',
+  }),
 } satisfies Meta<typeof UiFileList>
-
 export default meta
 type Story = StoryObj<typeof meta>
 
-// 기본 — 이미지 + 일반 파일 혼합
 export const Default: Story = {
-  render: () => ({
+  render: args => ({
     components: { UiFileList },
     setup() {
-      const files = ref([...sampleFiles])
-      const getUrl = (path: string) => `https://via.placeholder.com/400x200?text=${path}`
-      const onDelete = (file: FileItem) => {
-        files.value = files.value.filter(f => f.id !== file.id)
-      }
-      return { files, getUrl, onDelete }
+      const removed = ref<number[]>([])
+      const onDelete = (file: FileItem) => { removed.value.push(file.id) }
+      return { args, removed, onDelete }
     },
-    template: `
-      <div style="max-width: 400px;">
-        <UiFileList :files="files" :get-url="getUrl" @delete="onDelete" />
-      </div>
-    `,
+    template: `<section style="width:100%;max-width:720px;margin:24px auto">
+      <h2 style="display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:24px;font-weight:700;color:#202938">첨부파일 <span style="padding:2px 9px;border-radius:6px;background:#f1f5f9;font-size:16px">{{ args.files.filter(f => !removed.includes(f.id)).length }}</span></h2>
+      <p style="margin:0 0 24px;color:#64748b;font-size:14px">등록된 파일을 확인하고 다운로드하세요.</p>
+      <UiFileList v-bind="args" :files="args.files.filter(f => !removed.includes(f.id))" @delete="onDelete" />
+    </section>`,
   }),
 }
-
-// 읽기 전용 — 삭제 버튼 없음
-export const ReadOnly: Story = {
-  render: () => ({
-    components: { UiFileList },
-    setup() {
-      const files = ref([...sampleFiles])
-      const getUrl = (path: string) => `https://via.placeholder.com/400x200?text=${path}`
-      return { files, getUrl }
-    },
-    template: `
-      <div style="max-width: 400px;">
-        <UiFileList :files="files" :get-url="getUrl" :deletable="false" />
-      </div>
-    `,
-  }),
+export const ReadOnly: Story = { args: { deletable: false } }
+export const Empty: Story = { args: { files: [] } }
+export const TextFilesOnly: Story = { args: { files: sampleFiles.filter(file => !file.mimetype.startsWith('image/')) } }
+export const Gallery: Story = {
+  args: { layout: 'grid', files: previews.map((path, i) => ({ id: i, filename: ['제주도_여행.svg', '풍경사진.svg', '노을.svg'][i]!, path, mimetype: 'image/svg+xml', size: [2516582, 1153434, 1992294][i] })) },
 }
-
-// 빈 목록 — 아무것도 렌더하지 않음
-export const Empty: Story = {
-  render: () => ({
-    components: { UiFileList },
-    setup() {
-      const getUrl = (path: string) => path
-      return { getUrl }
-    },
-    template: `
-      <div style="max-width: 400px; padding: 16px; background: #f9fafb; border-radius: 8px;">
-        <p style="font-size: 13px; color: #9ca3af;">파일이 없으면 아무것도 렌더하지 않습니다:</p>
-        <UiFileList :files="[]" :get-url="getUrl" />
-      </div>
-    `,
-  }),
-}
-
-// 일반 파일만
-export const TextFilesOnly: Story = {
-  render: () => ({
-    components: { UiFileList },
-    setup() {
-      const files = ref<FileItem[]>([
-        { id: 1, filename: '보고서_2026.pdf', path: 'report.pdf', mimetype: 'application/pdf' },
-        { id: 2, filename: '회의록.docx', path: 'meeting.docx', mimetype: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' },
-      ])
-      const getUrl = (path: string) => `#${path}`
-      const onDelete = (file: FileItem) => {
-        files.value = files.value.filter(f => f.id !== file.id)
-      }
-      return { files, getUrl, onDelete }
-    },
-    template: `
-      <div style="max-width: 400px;">
-        <UiFileList :files="files" :get-url="getUrl" @delete="onDelete" />
-      </div>
-    `,
-  }),
+export const ImageFallback: Story = { args: { files: [{ id: 1, filename: '미리보기를_불러올_수_없는_사진.jpg', path: '/missing-file-preview.jpg', mimetype: 'image/jpeg' }] } }
+export const Narrow: Story = {
+  args: { files: [...sampleFiles, { id: 4, filename: '아주_긴_파일명도_레이아웃이_깨지지_않도록_말줄임으로_표시합니다.pdf', path: 'long.pdf', mimetype: 'application/pdf' }] },
+  render: args => ({ components: { UiFileList }, setup() { const removed = ref<number[]>([]); return { args, removed, onDelete: (file: FileItem) => removed.value.push(file.id) } }, template: '<div style="width:100%;max-width:320px;margin:auto"><UiFileList v-bind="args" :files="args.files.filter(f => !removed.includes(f.id))" @delete="onDelete" /></div>' }),
 }

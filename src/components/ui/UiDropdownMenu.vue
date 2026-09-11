@@ -22,14 +22,24 @@
       @mouseleave="onTriggerMouseLeave"
     >
       <DropdownMenuTrigger as-child>
-        <slot name="trigger" />
+        <slot name="trigger">
+          <button type="button" class="ui-dropdown-trigger" :class="{ 'ui-dropdown-trigger--icon': triggerVariant === 'icon' }" :aria-label="triggerLabel">
+            <template v-if="triggerVariant === 'text'">{{ triggerLabel }}<UiIcon name="chevron-down" :size="16" /></template>
+            <UiIcon v-else name="ellipsis" :size="20" />
+          </button>
+        </slot>
       </DropdownMenuTrigger>
     </div>
     <DropdownMenuTrigger
       v-else
       as-child
     >
-      <slot name="trigger" />
+      <slot name="trigger">
+        <button type="button" class="ui-dropdown-trigger" :class="{ 'ui-dropdown-trigger--icon': triggerVariant === 'icon' }" :aria-label="triggerLabel">
+          <template v-if="triggerVariant === 'text'">{{ triggerLabel }}<UiIcon name="chevron-down" :size="16" /></template>
+          <UiIcon v-else name="ellipsis" :size="20" />
+        </button>
+      </slot>
     </DropdownMenuTrigger>
 
     <DropdownMenuPortal>
@@ -53,21 +63,24 @@
           {{ title }}
         </DropdownMenuLabel>
         <div class="ui-dropdown-content-list">
+          <template v-for="item in items" :key="item.value">
+          <DropdownMenuSeparator v-if="item.separator" class="ui-dropdown-separator" />
           <DropdownMenuItem
-            v-for="item in items"
-            :key="item.value"
             class="ui-dropdown-item"
             :class="{ 'is-danger': item.color === 'danger' }"
             :disabled="item.disabled"
             @select="onSelect(item)"
           >
             <i
-              v-if="item.icon"
+              v-if="item.icon?.startsWith('icon-')"
               :class="[item.icon, 'size-16']"
               aria-hidden="true"
             />
+            <UiIcon v-else-if="item.icon" :name="item.icon" :size="18" />
             <span class="ui-dropdown-item-label">{{ item.label }}</span>
+            <span v-if="item.description || item.shortcut" class="ui-dropdown-item-hint">{{ item.description || item.shortcut }}</span>
           </DropdownMenuItem>
+          </template>
         </div>
       </DropdownMenuContent>
     </DropdownMenuPortal>
@@ -75,20 +88,22 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import UiIcon from './UiIcon.vue'
 import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuRoot,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from 'radix-vue'
 
 export interface DropdownMenuItemDef {
   /** 메뉴 항목 레이블 */
   label: string
-  /** ispark-ui 아이콘 클래스 (예: 'icon-edit'). 24·16 사이즈 클래스 자동(size-16) */
+  /** Lucide 이름 (예: 'pencil'). 기존 'icon-edit' 클래스도 지원 */
   icon?: string
   /** 고유 식별자 (필수) — @select 이벤트로 부모에 전달 */
   value: string
@@ -96,10 +111,20 @@ export interface DropdownMenuItemDef {
   color?: 'default' | 'danger'
   /** 항목 비활성 */
   disabled?: boolean
+  /** 항목 위에 구분선 표시 */
+  separator?: boolean
+  /** 우측 안내 문구 (예: 권한 없음) */
+  description?: string
+  /** 단축키 표시 전용. 실제 키 바인딩은 사용하는 화면에서 처리 */
+  shortcut?: string
 }
 
 interface Props {
   items: DropdownMenuItemDef[]
+  /** 기본 버튼 형태. trigger 슬롯이 있으면 슬롯을 사용 */
+  triggerVariant?: 'text' | 'icon'
+  /** 버튼 텍스트 및 접근성 이름 */
+  triggerLabel?: string
   /** 상단 비클릭 라벨 (DropdownMenuLabel) — 구역 안내용 */
   title?: string
   /** 제어 모드: v-model:open */
@@ -119,6 +144,8 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   title: '',
+  triggerVariant: 'text',
+  triggerLabel: '메뉴 열기',
   open: undefined,
   side: 'bottom',
   align: 'end',
@@ -163,6 +190,7 @@ const clearHoverCloseTimeout = () => {
   clearTimeout(hoverCloseTimeoutId)
   hoverCloseTimeoutId = null
 }
+onBeforeUnmount(clearHoverCloseTimeout)
 
 const scheduleHoverClose = () => {
   clearHoverCloseTimeout()
@@ -218,11 +246,15 @@ watch(openState, (v) => emit('update:open', v))
 <style lang="scss">
 .ui-dropdown-content {
   position: relative; // ::before 절대 배치 기준
-  min-width: 140px;
-  border-radius: $border-radius-base;
+  min-width: min(240px, var(--radix-dropdown-menu-content-available-width, 100vw));
+  max-width: var(--radix-dropdown-menu-content-available-width);
+  max-height: var(--radix-dropdown-menu-content-available-height);
+  overflow-y: auto;
+  box-sizing: border-box;
+  border-radius: 8px;
   background: var(--color-bg-elevated);
-  border: 1px solid rgba(45, 49, 57, 0.2);
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid $color-border-light;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(15, 23, 42, 0.04);
   z-index: $z-dropdown;
 
   // openOnHover hover bridge — trigger와 content 사이 invisible overlay로 mouse leave 방지
@@ -262,29 +294,29 @@ watch(openState, (v) => emit('update:open', v))
 }
 
 .ui-dropdown-title {
-  padding: 8px 12px;
+  padding: 12px 16px;
   font-size: $font-size-sm;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1.3;
-  color: $color-text-primary;
+  color: $color-text-muted;
   cursor: default;
   user-select: none;
-  background: $color-background;
-  border-bottom: 1px solid $color-border;
+  border-bottom: 1px solid $color-border-light;
   border-radius: $border-radius-base $border-radius-base 0 0;
 }
 
 .ui-dropdown-content-list {
-  padding: 4px;
+  padding: 6px;
 }
 
 .ui-dropdown-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  height: 32px;
+  gap: 12px;
+  min-height: 40px;
+  box-sizing: border-box;
   padding: 0 10px;
-  border-radius: $border-radius-sm;
+  border-radius: 6px;
   font-size: $font-size-sm;
   color: $color-text-primary;
   cursor: pointer;
@@ -318,8 +350,31 @@ watch(openState, (v) => emit('update:open', v))
 
   .ui-dropdown-item-label {
     flex: 1;
+    min-width: 0;
     @include ellipsis(1);
   }
+}
+
+.ui-dropdown-separator { height: 1px; margin: 6px 4px; background: $color-border-light; }
+.ui-dropdown-item-hint { margin-left: 12px; font-size: 12px; color: $color-text-muted; white-space: nowrap; }
+.ui-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid $color-border;
+  border-radius: 8px;
+  background: var(--color-bg-elevated);
+  color: $color-text-primary;
+  font-family: inherit;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: background $transition-fast, border-color $transition-fast;
+  &:hover, &[data-state='open'] { background: $color-background; }
+  &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
+  &--icon { width: 36px; padding: 0; }
 }
 
 @keyframes ui-dropdown-in {

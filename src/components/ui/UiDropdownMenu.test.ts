@@ -90,3 +90,38 @@ describe('UiDropdownMenu', () => {
     expect(container.querySelector('button')).not.toBeNull()
   })
 })
+
+describe('UiDropdownMenu built-in triggers and menu content', () => {
+  it('provides an accessible icon trigger without requiring a slot', () => {
+    render(UiDropdownMenu, { props: { items, triggerVariant: 'icon', triggerLabel: '더보기' } })
+    const trigger = screen.getByRole('button', { name: '더보기' })
+    expect(trigger.getAttribute('aria-haspopup')).toBe('menu')
+    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+    expect(trigger.querySelector('svg')).not.toBeNull()
+  })
+
+  it('renders separators, Lucide and legacy icons, hints and disabled state', async () => {
+    render(UiDropdownMenu, { props: { open: true, title: '파일 작업', items: [
+      { label: '이름 변경', value: 'rename', icon: 'pencil', shortcut: 'F2' },
+      { label: '보관', value: 'archive', icon: 'archive', disabled: true, description: '권한 없음' },
+      { label: '삭제', value: 'delete', icon: 'icon-trashcan', separator: true, color: 'danger' },
+    ] } })
+    const rename = await screen.findByRole('menuitem', { name: '이름 변경 F2' })
+    expect(rename.querySelector('svg')).not.toBeNull()
+    expect(screen.getByRole('separator')).toBeTruthy()
+    expect(screen.getByRole('menuitem', { name: '보관 권한 없음' }).getAttribute('data-disabled')).not.toBeNull()
+    expect(screen.getByRole('menuitem', { name: '삭제' }).querySelector('.icon-trashcan')).not.toBeNull()
+  })
+
+  it('emits only enabled selections and closes the menu after selection', async () => {
+    const { emitted } = render(UiDropdownMenu, { props: { open: true, items: [
+      { label: '보관', value: 'archive', disabled: true },
+      { label: '다운로드', value: 'download', icon: 'download' },
+    ] } })
+    await fireEvent.click(await screen.findByRole('menuitem', { name: '보관' }))
+    expect(emitted().select).toBeUndefined()
+    await fireEvent.click(screen.getByRole('menuitem', { name: '다운로드' }))
+    expect(emitted().select).toEqual([['download']])
+    expect(emitted()['update:open']).toContainEqual([false])
+  })
+})
