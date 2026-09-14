@@ -3,6 +3,11 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.9.1] - 2026-09-14
+
+### Changed
+- UiTable sm 셀의 세로 여백을 6px에서 4px로 축소.
+
 ## [0.9.0] - 2026-09-11
 
 ### Added

@@ -858,7 +858,7 @@ watch(
 
     tbody td {
       height: 28px;
-      padding: 6px 12px;
+      padding: 4px 12px;
       @include typo($body-medium);
       color: $color-text-primary;
       border-bottom-color: $color-border-light;
