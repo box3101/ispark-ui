@@ -317,7 +317,7 @@ watch(openState, (v) => emit('update:open', v))
   box-sizing: border-box;
   padding: 0 10px;
   border-radius: 6px;
-  font-size: $font-size-sm;
+  font-size: $font-size-base;
   color: $color-text-primary;
   cursor: pointer;
   outline: none;

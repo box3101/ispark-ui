@@ -3,6 +3,11 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.9.2] - 2026-09-14
+
+### Changed
+- 드롭다운 메뉴 아이템 폰트 12px → 14px (UiSelect와 통일)
+
 ## [0.9.1] - 2026-09-14
 
 ### Changed
