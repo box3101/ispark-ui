@@ -1,5 +1,12 @@
 [
   {
+    "name": "UiRate",
+    "description": "별점 입력·반별·평균 평가 표시",
+    "category": "form",
+    "href": "./?path=/docs/components-form-uirate--docs",
+    "preview": "iframe.html?id=components-form-uirate--playground&viewMode=story"
+  },
+  {
     "name": "UiButton",
     "description": "액션 트리거",
     "category": "form",

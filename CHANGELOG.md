@@ -3,6 +3,12 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.10.0] - 2026-09-16
+
+### Added
+- UiRate: 별점 입력, 반별 선택, 읽기 전용 평균 표시, 비활성화, 크기 옵션 및 키보드 조작 지원.
+- UiRate Storybook 문서·다크 테마 Showcase·소개 카드와 입력/접근성 테스트 추가.
+
 ## [0.9.2] - 2026-09-14
 
 ### Changed

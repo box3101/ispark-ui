@@ -61,6 +61,27 @@ createApp(App).use(IsparkUI).mount('#app')
 
 ### Components
 
+#### UiRate — 별점 입력과 표시
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { UiRate } from '@leechanyong/ispark-ui'
+import '@leechanyong/ispark-ui/style.css'
+
+const rating = ref(3.5)
+</script>
+
+<template>
+  <UiRate v-model="rating" allow-half show-value label="리뷰 평점" />
+  <UiRate :model-value="4.5" readonly size="sm">(128개 평가)</UiRate>
+</template>
+```
+
+`sm` / `md` / `lg`, 반별 선택, 읽기 전용, 비활성화, 방향키·Home·End 조작을 지원합니다.
+`allow-clear`를 켜면 같은 점수를 다시 클릭해 해제할 수 있습니다.
+Storybook의 **Components → Form → UiRate → Showcase**에서 다크 테마 시안을 확인할 수 있습니다.
+
 `UiButton` `UiInput` `UiSelect` `UiModal` `UiDrawer` `UiTab` `UiTable` `UiBadge` `UiToggle` `UiProgress` `UiTooltip` `UiToast` `UiCalendar` `UiAccordion` `UiCheckbox` `UiRadio` `UiSwitch` `UiPagination` `UiEmpty` `UiIcon` …
 
 ### Setup
