@@ -3,6 +3,14 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.10.1] - 2026-09-16
+
+### Fixed
+- UiRate 반별 표시에서 글로벌 SVG 스타일로 인해 금색 별이 축소되는 문제 수정.
+
+### Added
+- UiRate xxs/xs/xlg/auth 크기와 RATE_SIZES 토큰, Storybook 크기 비교 및 브라우저 레이아웃 검증 추가.
+
 ## [0.10.0] - 2026-09-16
 
 ### Added

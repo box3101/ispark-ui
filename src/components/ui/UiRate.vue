@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import UiIcon from './UiIcon.vue'
+import type { RateSize } from '../../design-tokens/size'
 
-export type RateSize = 'sm' | 'md' | 'lg'
+const ICON_SIZES: Record<RateSize, number> = { xxs: 12, xs: 14, sm: 16, md: 24, lg: 32, xlg: 40, auth: 48 }
 
 interface Props {
   name?: string
@@ -38,7 +39,7 @@ const maximum = computed(() => Number.isFinite(props.max) && props.max >= 1 ? Ma
 const value = computed(() => Number.isFinite(props.modelValue) ? Math.min(maximum.value, Math.max(0, props.modelValue)) : 0)
 const isLocked = computed(() => props.disabled || props.readonly)
 const displayed = computed(() => preview.value ?? value.value)
-const iconSize = computed(() => ({ sm: 16, md: 24, lg: 32 })[props.size])
+const iconSize = computed(() => ICON_SIZES[props.size])
 const step = computed(() => props.allowHalf ? 0.5 : 1)
 
 watch([value, isLocked, () => props.allowHalf], () => { preview.value = null })
@@ -88,7 +89,7 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div :class="['ui-rate', `size-${size}`, { 'is-disabled': disabled, 'is-readonly': readonly }]">
+  <div :class="['ui-rate', `size-${size}`, { 'is-disabled': disabled, 'is-readonly': readonly }]" :style="{ '--rate-size': `${iconSize}px` }">
     <div
       ref="control"
       class="stars"
@@ -131,19 +132,16 @@ function onKeydown(event: KeyboardEvent) {
 
 <style lang="scss" scoped>
 .ui-rate {
-  --rate-size: 24px;
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
   gap: $spacing-sm;
   vertical-align: middle;
 
-  &.size-sm { --rate-size: 16px; }
-  &.size-lg { --rate-size: 32px; }
-
-  .stars { display: inline-flex; outline: none; border-radius: $border-radius-sm; }
+  .stars { display: inline-flex; flex-shrink: 0; outline: none; border-radius: $border-radius-sm; }
   .star {
     display: inline-flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
     width: calc(var(--rate-size) + 8px);
@@ -161,6 +159,14 @@ function onKeydown(event: KeyboardEvent) {
     display: inline-flex;
     color: var(--rate-color, var(--color-warning, #{$color-warning}));
     pointer-events: none;
+    // 글로벌 svg max-width: 100%가 반폭 컨테이너 안의 별을 축소하지 않도록 한다.
+    // 별은 원래 크기를 유지하고 컨테이너만 선택 비율에 맞게 잘라낸다.
+    :deep(svg) {
+      max-width: none;
+      width: var(--rate-size);
+      height: var(--rate-size);
+      flex-shrink: 0;
+    }
   }
   .stars:focus-visible .is-current { outline: 2px solid var(--color-primary); outline-offset: 1px; }
   .value { @include typo($body-small-bold); color: var(--color-text-primary, #{$color-text-primary}); }

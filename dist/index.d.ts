@@ -1415,7 +1415,10 @@ declare interface Props_9 {
 
 declare type RadioValue = string | number | boolean;
 
-export declare type RateSize = 'sm' | 'md' | 'lg';
+/** 별점 아이콘 크기 — 12 / 14 / 16 / 24 / 32 / 40 / 48px */
+export declare const RATE_SIZES: readonly ["xxs", "xs", "sm", "md", "lg", "xlg", "auth"];
+
+export declare type RateSize = (typeof RATE_SIZES)[number];
 
 /**
  * 셀렉트 트리거(UiSelect) —

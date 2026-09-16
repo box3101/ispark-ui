@@ -5,6 +5,10 @@
 export const SIZES = ['xxs', 'xs', 'sm', 'md', 'lg', 'xlg'] as const
 export type Size = (typeof SIZES)[number]
 
+/** 별점 아이콘 크기 — 12 / 14 / 16 / 24 / 32 / 40 / 48px */
+export const RATE_SIZES = ['xxs', 'xs', 'sm', 'md', 'lg', 'xlg', 'auth'] as const
+export type RateSize = (typeof RATE_SIZES)[number]
+
 /** 폼 입력(UiInput 등) — sm(30) / md(32) / lg(34) / xlg(36) / auth(44). xs·xxs 제외 */
 export const INPUT_SIZES = ['sm', 'md', 'lg', 'xlg', 'auth'] as const
 export type InputSize = (typeof INPUT_SIZES)[number]

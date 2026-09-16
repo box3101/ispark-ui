@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import { expect, fn, userEvent, within } from '@storybook/test'
 import { ref, watch } from 'vue'
 import UiRate from './UiRate.vue'
+import { RATE_SIZES } from '../../design-tokens/size'
 
 const meta = {
   title: 'Components/Form/UiRate',
@@ -11,7 +12,7 @@ const meta = {
   argTypes: {
     modelValue: { control: 'number', description: '현재 평점. v-model로 갱신하며 외부 소수값도 비율대로 표시합니다.' },
     max: { control: { type: 'number', min: 1, max: 10 }, description: '별 개수. 양의 정수, 기본 5. 유효하지 않으면 5로 표시합니다.' },
-    size: { control: 'select', options: ['sm', 'md', 'lg'], description: '별 크기: 16 / 24 / 32px' },
+    size: { control: 'select', options: RATE_SIZES, description: 'xxs 12 / xs 14 / sm 16 / md 24 / lg 32 / xlg 40 / auth 48px. 별 크기 기준이며 UiInput의 외곽 높이와는 다릅니다.' },
     allowHalf: { control: 'boolean', description: '0.5점 단위 선택 (기본 false)' },
     allowClear: { control: 'boolean', description: '같은 점수를 다시 클릭하면 0점 (기본 false)' },
     readonly: { control: 'boolean', description: '입력 없이 평점 표시 (기본 false)' },
@@ -35,7 +36,8 @@ const meta = {
 
 ### 디자인 토큰
 기본 별 색상은 --color-warning, 포커스는 --color-primary, 빈 별은 --color-text-muted를 사용합니다.
---rate-color / --rate-empty-color로 별 색상을 개별 재정의할 수 있습니다. 별 크기는 sm 16 / md 24 / lg 32px이며 터치 입력 영역은 최소 44px입니다.
+--rate-color / --rate-empty-color로 별 색상을 개별 재정의할 수 있습니다.
+크기 옵션은 xxs 12 / xs 14 / sm 16 / md 24 / lg 32 / xlg 40 / auth 48px입니다. UiInput처럼 이름으로 선택하며, 수치는 입력창 높이가 아닌 별 아이콘 크기입니다. 기존 sm/md/lg 크기는 유지합니다. 터치 입력 영역은 최소 44px입니다.
 ` } } },
   render: (args) => ({
     components: { UiRate },
@@ -54,6 +56,29 @@ export const Playground: Story = {}
 export const Half: Story = { args: { modelValue: 3.5, allowHalf: true } }
 export const Readonly: Story = { args: { modelValue: 4.5, readonly: true } }
 export const Disabled: Story = { args: { disabled: true } }
+export const Sizes: Story = {
+  play: async ({ canvasElement }) => {
+    for (const rate of canvasElement.querySelectorAll('.ui-rate')) {
+      const halfStar = rate.querySelectorAll('.star')[3]
+      const outline = halfStar.querySelector('.outline')!.getBoundingClientRect()
+      const filled = halfStar.querySelector('.fill svg')!.getBoundingClientRect()
+      const clip = halfStar.querySelector('.fill')!.getBoundingClientRect()
+      await expect(outline.width).toBeGreaterThan(0)
+      await expect(filled.width).toBeCloseTo(outline.width)
+      await expect(clip.width * 2).toBeCloseTo(outline.width)
+    }
+  },
+  render: () => ({
+    components: { UiRate },
+    setup: () => ({ sizes: RATE_SIZES }),
+    template: `<div style="display:grid;gap:20px;padding:8px;max-width:100%">
+      <div v-for="size in sizes" :key="size" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <code style="width:40px">{{ size }}</code>
+        <UiRate :size="size" :model-value="3.5" readonly show-value />
+      </div>
+    </div>`,
+  }),
+}
 export const Clearable: Story = {
   args: { allowClear: true },
   play: async ({ canvasElement }) => {

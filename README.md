@@ -78,7 +78,7 @@ const rating = ref(3.5)
 </template>
 ```
 
-`sm` / `md` / `lg`, 반별 선택, 읽기 전용, 비활성화, 방향키·Home·End 조작을 지원합니다.
+`xxs` / `xs` / `sm` / `md` / `lg` / `xlg` / `auth` (별 크기 12 / 14 / 16 / 24 / 32 / 40 / 48px), 반별 선택, 읽기 전용, 비활성화, 방향키·Home·End 조작을 지원합니다.
 `allow-clear`를 켜면 같은 점수를 다시 클릭해 해제할 수 있습니다.
 Storybook의 **Components → Form → UiRate → Showcase**에서 다크 테마 시안을 확인할 수 있습니다.
 
