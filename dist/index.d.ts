@@ -1310,6 +1310,8 @@ declare interface Props_25 {
     showLegend?: boolean;
     /** 범례 위치 — 상단 / 하단 / 왼쪽 / 오른쪽 */
     legendPosition?: 'top' | 'bottom' | 'left' | 'right';
+    /** 원형 차트 형태 — 꽉 찬 파이 / 도넛. 중앙 문구가 있으면 도넛이 기본 */
+    shape?: 'pie' | 'donut';
     /** 원형 차트 중앙 표시 — 없음 / 총합만 / 퍼센트만 / 총합과 퍼센트 */
     centerText?: 'none' | 'total' | 'percent' | 'total-percent';
     /** 원형 조각 내부 표시 — 숨김 / 수량 / 실제 비율 */
@@ -1617,7 +1619,6 @@ showWeekdays: boolean;
 
 export declare const UiChart: DefineComponent<Props_25, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<Props_25> & Readonly<{}>, {
 showLegend: boolean;
-centerText: "none" | "total" | "percent" | "total-percent";
 legendPosition: "top" | "bottom" | "left" | "right";
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 

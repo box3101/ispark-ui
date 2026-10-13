@@ -15,7 +15,33 @@ const pieChartSources = new WeakMap<Chart, {
   summary: ReturnType<typeof getPieSummary>
   legendId: string
   legendValue?: string
+  centerTotalSuffix?: string
 }>()
+
+const CENTER_CUTOUT = '48%'
+
+function parseCutoutAmount(cutout: unknown): number {
+  if (typeof cutout === 'string') return Number(cutout.replace(/%$/, ''))
+  return typeof cutout === 'number' ? cutout : NaN
+}
+
+function isPositiveCutout(cutout: unknown) {
+  const amount = parseCutoutAmount(cutout)
+  return Number.isFinite(amount) && amount > 0
+}
+
+function resolvePieCutout(config: Record<string, any>, pieStyle: Record<string, any>, hasCenterText: boolean) {
+  const shape = config.shape
+  // 구멍 크기를 직접 지정한 경우만 최우선한다. 중앙 문구가 있으면 0은 도넛 기본값으로 되돌린다.
+  if (isPositiveCutout(config.cutout)) return config.cutout
+  if (hasCenterText || shape === 'donut') return isPositiveCutout(pieStyle.cutout) ? pieStyle.cutout : CENTER_CUTOUT
+  if (shape === 'pie') return 0
+  return isPositiveCutout(pieStyle.cutout) ? pieStyle.cutout : 0
+}
+
+function formatLegendAmount(amount: number, suffix: string) {
+  return `${formatPieNumber(amount)}${suffix}`
+}
 
 /** 범례를 다시 만들 때도 Chart.js의 현재 숨김 상태를 반영한다. */
 function syncPieLegendVisibility(legendItem: HTMLElement, chart: Chart, index: number) {
@@ -92,7 +118,7 @@ export const PieChartModule = {
     }
 
     // 범례 생성
-    this.createLegend(legendId, itemsWithColors, id, false, config.legendValue)
+    this.createLegend(legendId, itemsWithColors, id, false, config.legendValue, undefined, config.centerTotalSuffix)
 
     // 텍스트 스타일
     const txtStyle = ChartConfig.textStyles[textStyle] || ChartConfig.textStyles.secondary
@@ -100,14 +126,7 @@ export const PieChartModule = {
     // 파이 스타일
     const pieStyle = ChartConfig.pieStyles[style] || ChartConfig.pieStyles.secondary
     const hasCenterText = config.centerText === 'total' || config.centerText === 'total-percent' || config.centerText === 'percent'
-    const requestedCutout = config.cutout ?? pieStyle.cutout
-    const cutoutAmount = typeof config.cutout === 'string'
-      ? Number(config.cutout.replace(/%$/, ''))
-      : config.cutout
-    const hasValidCutout = Number.isFinite(cutoutAmount) && cutoutAmount > 0
-    // 중앙 문구는 여유 있는 구멍을 사용하고 명시한 양수 cutout은 우선 적용한다.
-    const defaultCutout = config.centerText === 'total-percent' ? '48%' : '60%'
-    const cutout = hasCenterText && !hasValidCutout ? defaultCutout : requestedCutout ?? 0
+    const cutout = resolvePieCutout(config, pieStyle, hasCenterText)
     const isDonut = cutout !== 0 && cutout !== '0' && cutout !== '0%'
     const summary = getPieSummary(itemsWithColors)
     const hasDataLabelMode = ['none', 'value', 'percent'].includes(config.dataLabelMode)
@@ -220,17 +239,19 @@ export const PieChartModule = {
       summary,
       legendId,
       legendValue: config.legendValue,
+      centerTotalSuffix: config.centerTotalSuffix,
     })
   },
 
   /** 범례 생성 */
-  createLegend(legendId: string, items: any[], chartId: string, isSvgDonut = false, legendValue?: string, chart?: Chart) {
+  createLegend(legendId: string, items: any[], chartId: string, isSvgDonut = false, legendValue?: string, chart?: Chart, centerTotalSuffix?: string) {
     const legendContainer = document.getElementById(legendId)
     if (!legendContainer) return
 
     legendContainer.innerHTML = ''
 
     const summary = getPieSummary(items)
+    const suffix = String(centerTotalSuffix ?? '개')
     items.forEach((item, index) => {
       const legendItem = document.createElement('div')
       legendItem.className = 'legend-item'
@@ -252,14 +273,14 @@ export const PieChartModule = {
       const mode = item.legendValue ?? legendValue
       const amount = getPieAmount(item.count ?? item.value)
       if (mode === 'value-percent') {
-        infoText = `${formatPieNumber(amount)}개 (${percentage})`
+        infoText = `${formatLegendAmount(amount, suffix)} (${percentage})`
       } else if (mode === 'value') {
-        infoText = `${formatPieNumber(amount)}개`
+        infoText = formatLegendAmount(amount, suffix)
       } else if (mode === 'percent') {
         infoText = percentage
       } else if (mode === undefined && item.count !== undefined) {
         // 기존 count 범례는 새 옵션을 지정하지 않으면 그대로 유지한다.
-        infoText = `${item.count}개(${item.value}%)`
+        infoText = `${item.count}${suffix}(${item.value}%)`
       }
 
       if (infoText !== undefined) {
@@ -328,7 +349,7 @@ export const PieChartModule = {
       // 기존 플러그인·콜백이 가진 배열/객체 참조를 유지하면서 최신 데이터를 전달한다.
       source.items.splice(0, source.items.length, ...updatedItems)
       Object.assign(source.summary, getPieSummary(source.items))
-      this.createLegend(source.legendId, source.items, chartId, false, source.legendValue, chart)
+      this.createLegend(source.legendId, source.items, chartId, false, source.legendValue, chart, source.centerTotalSuffix)
     }
 
     chart.data.datasets[0].data = updatedItems.map((item) => item.value)
@@ -365,7 +386,7 @@ export const PieChartModule = {
     }))
 
     if (legendId) {
-      this.createLegend(legendId, itemsWithColors, id, false, config.legendValue)
+      this.createLegend(legendId, itemsWithColors, id, false, config.legendValue, undefined, config.centerTotalSuffix)
     }
 
     ChartConfig.instances[id] = new Chart(canvas, {
@@ -482,7 +503,7 @@ export const PieChartModule = {
       container,
     }
 
-    this.createLegend(legendId, data, id, true, config.legendValue)
+    this.createLegend(legendId, data, id, true, config.legendValue, undefined, config.centerTotalSuffix)
   },
 
   /** SVG 도넛 라벨 위치 계산 */

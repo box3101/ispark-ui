@@ -3,6 +3,11 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.11.1] - 2026-10-13
+
+### Changed
+- 원형 차트 파이/도넛 shape 옵션 추가 및 centerText 모드와 관계없이 도넛 굵기 유지
+
 ## [0.11.0] - 2026-10-13
 
 ### Added
