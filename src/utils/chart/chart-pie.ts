@@ -7,6 +7,26 @@
 import { Chart } from 'chart.js/auto'
 import { ChartColors } from './chart-colors'
 import { ChartConfig, getContrastColor } from './chart-config'
+import { createPieCenterTextPlugin, formatPieNumber, formatPiePercentage, getPieAmount, getPiePercentage, getPieSummary } from './chart-pie-summary'
+
+// Chart 인스턴스를 기준으로 보관하여 destroy 이후 별도 ID 저장소가 남지 않게 한다.
+const pieChartSources = new WeakMap<Chart, {
+  items: any[]
+  summary: ReturnType<typeof getPieSummary>
+  legendId: string
+  legendValue?: string
+}>()
+
+/** 범례를 다시 만들 때도 Chart.js의 현재 숨김 상태를 반영한다. */
+function syncPieLegendVisibility(legendItem: HTMLElement, chart: Chart, index: number) {
+  const isHidden = !chart.getDataVisibility(index)
+  ;['.legend-item__text', '.legend-item__info', '.legend-item__dot'].forEach((selector) => {
+    const element = legendItem.querySelector(selector) as HTMLElement | null
+    if (!element) return
+    element.style.opacity = isHidden ? '0.5' : '1'
+    if (selector !== '.legend-item__dot') element.style.textDecoration = isHidden ? 'line-through' : 'none'
+  })
+}
 
 export const PieChartModule = {
   /** 색상 가져오기 */
@@ -18,7 +38,7 @@ export const PieChartModule = {
   create(config: any) {
     const { id, legendId, items, style, textStyle, labelColor, useSvgDonut, type } = config
     const normalizedItems = Array.isArray(items) ? items : []
-    const valueMode = config?.valueMode ? String(config.valueMode) : 'percent'
+    const valueMode = config?.valueMode ? String(config.valueMode) : config.dataLabelMode === 'percent' ? 'ratio' : config.dataLabelMode === 'value' ? 'raw' : 'percent'
 
     function formatRawNumber(v: any): string {
       if (v === null || v === undefined || isNaN(v)) return ''
@@ -72,20 +92,37 @@ export const PieChartModule = {
     }
 
     // 범례 생성
-    this.createLegend(legendId, itemsWithColors, id)
+    this.createLegend(legendId, itemsWithColors, id, false, config.legendValue)
 
     // 텍스트 스타일
     const txtStyle = ChartConfig.textStyles[textStyle] || ChartConfig.textStyles.secondary
 
     // 파이 스타일
     const pieStyle = ChartConfig.pieStyles[style] || ChartConfig.pieStyles.secondary
-    const isDonut = pieStyle.cutout !== undefined
+    const hasCenterText = config.centerText === 'total' || config.centerText === 'total-percent' || config.centerText === 'percent'
+    const requestedCutout = config.cutout ?? pieStyle.cutout
+    const cutoutAmount = typeof config.cutout === 'string'
+      ? Number(config.cutout.replace(/%$/, ''))
+      : config.cutout
+    const hasValidCutout = Number.isFinite(cutoutAmount) && cutoutAmount > 0
+    // 중앙 문구는 여유 있는 구멍을 사용하고 명시한 양수 cutout은 우선 적용한다.
+    const defaultCutout = config.centerText === 'total-percent' ? '48%' : '60%'
+    const cutout = hasCenterText && !hasValidCutout ? defaultCutout : requestedCutout ?? 0
+    const isDonut = cutout !== 0 && cutout !== '0' && cutout !== '0%'
+    const summary = getPieSummary(itemsWithColors)
+    const hasDataLabelMode = ['none', 'value', 'percent'].includes(config.dataLabelMode)
+    const formatDataLabel = (value: any, context?: any) => {
+      if (config.dataLabelMode === 'value') return formatRawNumber(itemsWithColors[context?.dataIndex]?.count ?? value)
+      if (config.dataLabelMode !== 'percent' && valueMode === 'raw') return formatRawNumber(value)
+      if (config.dataLabelMode === 'percent' || valueMode === 'ratio') return `${formatPiePercentage(getPiePercentage(value, summary.valueTotal))}%`
+      return value + '%'
+    }
 
     // 차트 옵션
     const chartOptions: any = {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: pieStyle.cutout || 0,
+      cutout,
       layout: { padding: 6 },
       plugins: {
         legend: { display: false },
@@ -95,16 +132,23 @@ export const PieChartModule = {
           callbacks: {
             label(context: any) {
               if (valueMode === 'raw') {
-                return `${context.label}: ${formatRawNumber(context.parsed)}`
+                return `${context.label}: ${formatRawNumber(config.dataLabelMode === 'value' ? itemsWithColors[context.dataIndex]?.count ?? context.parsed : context.parsed)}`
+              }
+              if (valueMode === 'ratio') {
+                return `${context.label}: ${formatPiePercentage(getPiePercentage(context.parsed, summary.valueTotal))}%`
               }
               return `${context.label}: ${context.parsed}%`
             },
           },
         },
-        datalabels: isDonut
+        datalabels: config.dataLabelMode === 'none' || (!hasDataLabelMode && isDonut && config.showDataLabels !== true)
           ? { display: false }
           : {
+              ...(hasDataLabelMode
+                ? { display: (context: any) => getPieAmount(context.dataset.data[context.dataIndex]) > 0 }
+                : config.showDataLabels !== undefined ? { display: config.showDataLabels } : {}),
               color(context: any) {
+                if (typeof config.dataLabelColor === 'string') return config.dataLabelColor
                 // 슬라이스 배경색 기반 자동 대비 색상
                 const bgColor = context.dataset.backgroundColor[context.dataIndex]
                 if (bgColor && bgColor.startsWith('#')) {
@@ -117,15 +161,30 @@ export const PieChartModule = {
                 }
                 return txtStyle.color || '#FFFFFF'
               },
-              font: {
+              font: hasDataLabelMode ? (context: any) => {
+                const requestedSize = Number(config.dataLabelFontSize)
+                const size = Number.isFinite(requestedSize) && requestedSize > 0 ? requestedSize : 12
+                const arc = context.chart.getDatasetMeta(context.datasetIndex ?? 0).data[context.dataIndex]
+                let fittedSize = size
+                if (arc?.outerRadius > 0 && arc.innerRadius !== undefined) {
+                  const thickness = arc.outerRadius - arc.innerRadius
+                  const angle = Math.min(Math.PI, Math.abs(arc.endAngle - arc.startAngle))
+                  const arcWidth = (arc.outerRadius + arc.innerRadius) * Math.sin(angle / 2)
+                  const ctx = context.chart.ctx
+                  ctx.save()
+                  ctx.font = `500 ${size}px ${txtStyle.fontFamily}, sans-serif`
+                  const textWidth = ctx.measureText(formatDataLabel(context.dataset.data[context.dataIndex], context)).width
+                  ctx.restore()
+                  if (thickness > 0) fittedSize = Math.min(fittedSize, thickness * 0.7)
+                  if (arcWidth > 0 && textWidth > 0) fittedSize = Math.min(fittedSize, size * arcWidth * 0.85 / textWidth)
+                }
+                return { size: Math.max(1, fittedSize), weight: 500, family: txtStyle.fontFamily }
+              } : {
                 size: txtStyle.fontSize,
                 weight: txtStyle.fontWeight,
                 family: txtStyle.fontFamily,
               },
-              formatter(value: any) {
-                if (valueMode === 'raw') return formatRawNumber(value)
-                return value + '%'
-              },
+              formatter: formatDataLabel,
               anchor: 'center',
               align: 'center',
             },
@@ -154,16 +213,24 @@ export const PieChartModule = {
         ],
       },
       options: chartOptions,
+      plugins: hasCenterText ? [createPieCenterTextPlugin(itemsWithColors, config)] : [],
+    })
+    pieChartSources.set(ChartConfig.instances[id], {
+      items: itemsWithColors,
+      summary,
+      legendId,
+      legendValue: config.legendValue,
     })
   },
 
   /** 범례 생성 */
-  createLegend(legendId: string, items: any[], chartId: string, isSvgDonut = false) {
+  createLegend(legendId: string, items: any[], chartId: string, isSvgDonut = false, legendValue?: string, chart?: Chart) {
     const legendContainer = document.getElementById(legendId)
     if (!legendContainer) return
 
     legendContainer.innerHTML = ''
 
+    const summary = getPieSummary(items)
     items.forEach((item, index) => {
       const legendItem = document.createElement('div')
       legendItem.className = 'legend-item'
@@ -176,23 +243,34 @@ export const PieChartModule = {
       text.className = 'legend-item__text'
       text.style.setProperty('--dot-color', item.color)
 
-      if (item.count !== undefined) {
-        text.textContent = `${item.name}`
+      text.textContent = item.name
+      legendItem.appendChild(dot)
+      legendItem.appendChild(text)
 
+      let infoText: string | undefined
+      const percentage = `${formatPiePercentage(getPiePercentage(item.value, summary.valueTotal))}%`
+      const mode = item.legendValue ?? legendValue
+      const amount = getPieAmount(item.count ?? item.value)
+      if (mode === 'value-percent') {
+        infoText = `${formatPieNumber(amount)}개 (${percentage})`
+      } else if (mode === 'value') {
+        infoText = `${formatPieNumber(amount)}개`
+      } else if (mode === 'percent') {
+        infoText = percentage
+      } else if (mode === undefined && item.count !== undefined) {
+        // 기존 count 범례는 새 옵션을 지정하지 않으면 그대로 유지한다.
+        infoText = `${item.count}개(${item.value}%)`
+      }
+
+      if (infoText !== undefined) {
         const info = document.createElement('span')
         info.className = 'legend-item__info'
-        info.textContent = `${item.count}개(${item.value}%)`
-
-        legendItem.appendChild(dot)
-        legendItem.appendChild(text)
+        info.textContent = infoText
         legendItem.appendChild(info)
-      } else {
-        text.textContent = item.name
-        legendItem.appendChild(dot)
-        legendItem.appendChild(text)
       }
 
       legendContainer.appendChild(legendItem)
+      if (chart) syncPieLegendVisibility(legendItem, chart, index)
 
       legendItem.addEventListener('click', () => {
         if (isSvgDonut) {
@@ -201,6 +279,7 @@ export const PieChartModule = {
           const chart = ChartConfig.instances[chartId]
           if (chart) {
             ChartConfig.toggleLegend(legendItem, chart, index, 'pie')
+            syncPieLegendVisibility(legendItem, chart, index)
           }
         }
       })
@@ -239,9 +318,22 @@ export const PieChartModule = {
     const chart = ChartConfig.instances[chartId]
     if (!chart) return
 
-    chart.data.datasets[0].data = newData.map((item) => item.value)
-    chart.data.labels = newData.map((item) => item.name)
-    chart.data.datasets[0].backgroundColor = newData.map((item) => item.color)
+    const source = pieChartSources.get(chart)
+    const updatedItems = newData.map((item, index) => ({
+      ...item,
+      color: item.color || source?.items[index]?.color || '#999999',
+    }))
+
+    if (source) {
+      // 기존 플러그인·콜백이 가진 배열/객체 참조를 유지하면서 최신 데이터를 전달한다.
+      source.items.splice(0, source.items.length, ...updatedItems)
+      Object.assign(source.summary, getPieSummary(source.items))
+      this.createLegend(source.legendId, source.items, chartId, false, source.legendValue, chart)
+    }
+
+    chart.data.datasets[0].data = updatedItems.map((item) => item.value)
+    chart.data.labels = updatedItems.map((item) => item.name)
+    chart.data.datasets[0].backgroundColor = updatedItems.map((item) => item.color)
     chart.update()
   },
 
@@ -273,7 +365,7 @@ export const PieChartModule = {
     }))
 
     if (legendId) {
-      this.createLegend(legendId, itemsWithColors, id)
+      this.createLegend(legendId, itemsWithColors, id, false, config.legendValue)
     }
 
     ChartConfig.instances[id] = new Chart(canvas, {
@@ -390,7 +482,7 @@ export const PieChartModule = {
       container,
     }
 
-    this.createLegend(legendId, data, id, true)
+    this.createLegend(legendId, data, id, true, config.legendValue)
   },
 
   /** SVG 도넛 라벨 위치 계산 */

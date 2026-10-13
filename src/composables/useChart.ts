@@ -12,6 +12,7 @@ import {
   PieChartModule,
   MixedChartModule,
   RadarChartModule,
+  registerChartPlugins,
 } from '../utils/chart'
 
 export type ChartType = 'bar' | 'line' | 'pie' | 'mixed' | 'radar'
@@ -41,6 +42,7 @@ export const useChart = () => {
 
   /** 차트 생성 */
   const createChart = (type: ChartType, config: any) => {
+    registerChartPlugins()
     const module = getModule(type)
     module.create({ ...config, id: chartId, legendId })
   }

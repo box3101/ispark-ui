@@ -3,6 +3,19 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.11.0] - 2026-10-13
+
+### Added
+- UiChart 원형 차트의 중앙 총합·퍼센트, 조각 수량·비율, 항목별 범례 표시 및 범례 위치 옵션.
+
+### Fixed
+- 소비 앱의 프로덕션 번들 최적화에서도 데이터 라벨 플러그인 등록을 유지.
+- 작은 카드와 많은 항목에서 범례 첫 항목이 잘리거나 차트 영역을 가리는 문제 수정.
+
+### Changed
+- Pie Storybook 예제를 총합·퍼센트와 오른쪽 범례 구성 하나로 통합.
+- 외부 프로젝트 사용 문서와 배포 번들·타입 선언 갱신.
+
 ## [0.10.1] - 2026-09-16
 
 ### Fixed

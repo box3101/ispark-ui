@@ -59,8 +59,8 @@ onChange?: ((value: RadioValue) => any) | undefined;
 }>, {
 disabled: boolean;
 label: string;
-labelHidden: boolean;
 name: string;
+labelHidden: boolean;
 id: string;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLLabelElement>;
 
@@ -86,16 +86,16 @@ control: HTMLDivElement;
 
 declare const __VLS_component_13: DefineComponent<Props_17, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<Props_17> & Readonly<{}>, {
 content: string;
+contentClass: string;
+fontSize: string;
 side: "top" | "right" | "bottom" | "left";
 sideOffset: number;
 align: "start" | "center" | "end";
-defaultOpen: boolean;
-fontSize: string;
-contentClass: string;
 delayDuration: number;
 showArrow: boolean;
 arrowWidth: number;
 arrowHeight: number;
+defaultOpen: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
 declare const __VLS_component_14: DefineComponent<Props_19, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
@@ -107,12 +107,12 @@ onSelect?: ((value: string) => any) | undefined;
 }>, {
 title: string;
 open: boolean;
+contentClass: string;
 side: "top" | "bottom" | "left" | "right";
 sideOffset: number;
 align: "start" | "center" | "end";
 collisionPadding: number;
 triggerLabel: string;
-contentClass: string;
 triggerVariant: "text" | "icon";
 openOnHover: boolean;
 hoverCloseDelay: number;
@@ -148,8 +148,8 @@ size: "sm" | "md" | "lg";
 type: "single" | "multiple";
 disabled: boolean;
 modelValue: string | string[];
-defaultValue: string | string[];
 items: AccordionItemDef[];
+defaultValue: string | string[];
 collapsible: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
@@ -204,15 +204,15 @@ type: "text" | "search" | "password" | "email" | "tel" | "url";
 disabled: boolean;
 label: string;
 desc: string;
+name: string;
+required: boolean;
 modelValue: string | number;
 labelHidden: boolean;
 error: boolean;
 errorMessage: string;
 placeholder: string;
 readonly: boolean;
-required: boolean;
 autocomplete: string;
-name: string;
 id: string;
 maxLength: number;
 min: string | number;
@@ -256,7 +256,7 @@ icon: string;
 description: string;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
-declare const __VLS_component_5: DefineComponent<__VLS_Props, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<__VLS_Props> & Readonly<{}>, {
+declare const __VLS_component_5: DefineComponent<__VLS_Props_2, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<__VLS_Props_2> & Readonly<{}>, {
 size: "md" | "sm";
 layout: "stacked" | "inline";
 heading: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -301,6 +301,16 @@ declare type __VLS_PrettifyLocal<T> = {
 } & {};
 
 declare type __VLS_Props = {
+    items: TreeMenuItem[];
+    modelValue?: string;
+    title?: string;
+    searchable?: boolean;
+    /** basic: 헤더 강조 / minimal: 간결한 메뉴 / hierarchy: 아이콘과 곡선 연결선 */
+    variant?: TreeMenuVariant;
+    defaultExpandedIds?: string[];
+};
+
+declare type __VLS_Props_2 = {
     title: string;
     description?: string;
     count?: number | string;
@@ -310,7 +320,7 @@ declare type __VLS_Props = {
     heading?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 };
 
-declare type __VLS_Props_2 = {
+declare type __VLS_Props_3 = {
     title?: string;
     description?: string;
     variant?: AlertVariant;
@@ -319,7 +329,7 @@ declare type __VLS_Props_2 = {
     role?: 'status' | 'alert';
 };
 
-declare type __VLS_Props_3 = {
+declare type __VLS_Props_4 = {
     /** Lucide 아이콘 이름 (kebab-case) */
     name: string;
     /** 토큰('xs'|'sm'|'md'|'lg') 또는 숫자(px) */
@@ -330,7 +340,7 @@ declare type __VLS_Props_3 = {
     strokeWidth?: number;
 };
 
-declare type __VLS_Props_4 = {
+declare type __VLS_Props_5 = {
     modelValue?: DateRange;
     /** 기본: 시작일/종료일 독립 달력. range는 기존 두 달 달력 */
     mode?: 'separate' | 'range';
@@ -344,14 +354,14 @@ declare type __VLS_Props_4 = {
     presets?: DateRangePreset[];
 };
 
-declare type __VLS_Props_5 = {
+declare type __VLS_Props_6 = {
     files: FileItem[];
     getUrl: (path: string) => string;
     deletable?: boolean;
     layout?: 'list' | 'grid';
 };
 
-declare type __VLS_Props_6 = {
+declare type __VLS_Props_7 = {
     loading?: boolean;
     accept?: string;
     label?: string;
@@ -367,7 +377,7 @@ declare type __VLS_Props_6 = {
 
 declare type __VLS_PublicProps = {
     modelValue?: boolean;
-} & __VLS_Props_2;
+} & __VLS_Props_3;
 
 declare function __VLS_template(): {
     attrs: Partial<{}>;
@@ -1298,6 +1308,14 @@ declare interface Props_25 {
     config: Record<string, any>;
     /** 범례 표시 여부 */
     showLegend?: boolean;
+    /** 범례 위치 — 상단 / 하단 / 왼쪽 / 오른쪽 */
+    legendPosition?: 'top' | 'bottom' | 'left' | 'right';
+    /** 원형 차트 중앙 표시 — 없음 / 총합만 / 퍼센트만 / 총합과 퍼센트 */
+    centerText?: 'none' | 'total' | 'percent' | 'total-percent';
+    /** 원형 조각 내부 표시 — 숨김 / 수량 / 실제 비율 */
+    dataLabelMode?: 'none' | 'value' | 'percent';
+    /** 원형 범례 정보 — 이름만 / 수량만 / 비율만 / 수량과 비율 */
+    legendValue?: 'none' | 'value' | 'percent' | 'value-percent';
 }
 
 declare interface Props_26 {
@@ -1504,6 +1522,16 @@ export declare type ToastPlacement = 'top-center' | 'top-right' | 'bottom-center
 /** Toast 시멘틱 타입 */
 export declare type ToastType = 'success' | 'error' | 'warning' | 'info';
 
+export declare interface TreeMenuItem {
+    id: string;
+    label: string;
+    icon?: string;
+    disabled?: boolean;
+    children?: TreeMenuItem[];
+}
+
+export declare type TreeMenuVariant = 'basic' | 'minimal' | 'hierarchy';
+
 export declare const UiAccordion: __VLS_WithTemplateSlots_16<typeof __VLS_component_16, __VLS_TemplateResult_16["slots"]>;
 
 export declare const UiAlert: __VLS_WithTemplateSlots_6<typeof __VLS_component_6, __VLS_TemplateResult_6["slots"]>;
@@ -1589,6 +1617,8 @@ showWeekdays: boolean;
 
 export declare const UiChart: DefineComponent<Props_25, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<Props_25> & Readonly<{}>, {
 showLegend: boolean;
+centerText: "none" | "total" | "percent" | "total-percent";
+legendPosition: "top" | "bottom" | "left" | "right";
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 
 export declare const UiCheckbox: __VLS_WithTemplateSlots_10<typeof __VLS_component_10, __VLS_TemplateResult_10["slots"]>;
@@ -1597,9 +1627,9 @@ export declare const UiConfirm: DefineComponent<    {}, {}, {}, {}, {}, Componen
 
 export declare const UiDatePicker: __VLS_WithTemplateSlots_15<typeof __VLS_component_15, __VLS_TemplateResult_15["slots"]>;
 
-export declare const UiDateRangePicker: DefineComponent<__VLS_Props_4, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+export declare const UiDateRangePicker: DefineComponent<__VLS_Props_5, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 "update:modelValue": (value: DateRange) => any;
-}, string, PublicProps, Readonly<__VLS_Props_4> & Readonly<{
+}, string, PublicProps, Readonly<__VLS_Props_5> & Readonly<{
 "onUpdate:modelValue"?: ((value: DateRange) => any) | undefined;
 }>, {
 size: "xs" | "sm" | "md" | "lg";
@@ -1618,19 +1648,19 @@ export declare const UiDropdownMenu: __VLS_WithTemplateSlots_14<typeof __VLS_com
 
 export declare const UiEmpty: __VLS_WithTemplateSlots_4<typeof __VLS_component_4, __VLS_TemplateResult_4["slots"]>;
 
-export declare const UiFileList: DefineComponent<__VLS_Props_5, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+export declare const UiFileList: DefineComponent<__VLS_Props_6, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 delete: (file: FileItem) => any;
-}, string, PublicProps, Readonly<__VLS_Props_5> & Readonly<{
+}, string, PublicProps, Readonly<__VLS_Props_6> & Readonly<{
 onDelete?: ((file: FileItem) => any) | undefined;
 }>, {
 layout: "list" | "grid";
 deletable: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
-export declare const UiFileUpload: DefineComponent<__VLS_Props_6, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+export declare const UiFileUpload: DefineComponent<__VLS_Props_7, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 upload: (file: File) => any;
 reject: (message: string) => any;
-}, string, PublicProps, Readonly<__VLS_Props_6> & Readonly<{
+}, string, PublicProps, Readonly<__VLS_Props_7> & Readonly<{
 onUpload?: ((file: File) => any) | undefined;
 onReject?: ((message: string) => any) | undefined;
 }>, {
@@ -1642,7 +1672,7 @@ label: string;
 input: HTMLInputElement;
 }, HTMLDivElement>;
 
-export declare const UiIcon: DefineComponent<__VLS_Props_3, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<__VLS_Props_3> & Readonly<{}>, {
+export declare const UiIcon: DefineComponent<__VLS_Props_4, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<__VLS_Props_4> & Readonly<{}>, {
 size: string | number;
 strokeWidth: number;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
@@ -1680,9 +1710,9 @@ onChange?: ((value: (string | number)[]) => any) | undefined;
 size: SelectSize;
 shape: "rounded" | "pill";
 disabled: boolean;
+name: string;
 modelValue: Array<string | number>;
 placeholder: string;
-name: string;
 id: string;
 maxLabels: number;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
@@ -1726,12 +1756,12 @@ shape: "rounded" | "pill";
 disabled: boolean;
 label: string;
 desc: string;
+required: boolean;
 modelValue: string | number;
 labelHidden: boolean;
 error: boolean;
 errorMessage: string;
 placeholder: string;
-required: boolean;
 id: string;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 
@@ -1837,18 +1867,18 @@ size: "sm" | "md" | "lg";
 disabled: boolean;
 label: string;
 desc: string;
+required: boolean;
 modelValue: string;
 labelHidden: boolean;
 error: boolean;
 errorMessage: string;
 placeholder: string;
 readonly: boolean;
-required: boolean;
 id: string;
 maxLength: number;
 border: boolean;
-resizable: boolean;
 rows: number;
+resizable: boolean;
 autoResize: boolean;
 maxRows: number;
 radius: "sm" | "base" | "lg";
@@ -1876,6 +1906,21 @@ id: string;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;
 
 export declare const UiTooltip: __VLS_WithTemplateSlots_13<typeof __VLS_component_13, __VLS_TemplateResult_13["slots"]>;
+
+export declare const UiTreeMenu: DefineComponent<__VLS_Props, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+select: (item: TreeMenuItem) => any;
+"update:modelValue": (id: string) => any;
+}, string, PublicProps, Readonly<__VLS_Props> & Readonly<{
+onSelect?: ((item: TreeMenuItem) => any) | undefined;
+"onUpdate:modelValue"?: ((id: string) => any) | undefined;
+}>, {
+variant: TreeMenuVariant;
+title: string;
+searchable: boolean;
+defaultExpandedIds: string[];
+}, {}, {}, {}, string, ComponentProvideOptions, false, {
+tree: HTMLDivElement;
+}, HTMLElement>;
 
 export declare const useChart: () => {
     chartId: string;

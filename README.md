@@ -41,11 +41,15 @@ ispark-ui는 그 반복을 끝내기 위해 만든 **실전 디자인 시스템*
 npm install @leechanyong/ispark-ui
 ```
 
-```ts
-import IsparkUI from '@leechanyong/ispark-ui'
-import '@leechanyong/ispark-ui/style'
+```vue
+<script setup lang="ts">
+import { UiButton } from '@leechanyong/ispark-ui'
+import '@leechanyong/ispark-ui/style.css'
+</script>
 
-createApp(App).use(IsparkUI).mount('#app')
+<template>
+  <UiButton>확인</UiButton>
+</template>
 ```
 
 ### Architecture
@@ -60,6 +64,42 @@ createApp(App).use(IsparkUI).mount('#app')
 | **Publish** | npm | 시맨틱 버저닝 릴리즈 |
 
 ### Components
+
+#### UiChart — 재사용 가능한 차트
+
+```vue
+<script setup lang="ts">
+import { UiChart } from '@leechanyong/ispark-ui'
+import '@leechanyong/ispark-ui/style.css'
+
+const config = {
+  items: [
+    { name: '대졸', value: 221 },
+    { name: '원졸', value: 45 },
+    { name: '전문', value: 62 },
+  ],
+  dataLabelColor: '#ffffff',
+}
+</script>
+
+<template>
+  <div style="height: 280px">
+    <UiChart
+      type="pie"
+      :config="config"
+      show-legend
+      legend-position="right"
+      center-text="total-percent"
+      data-label-mode="percent"
+      legend-value="value-percent"
+    />
+  </div>
+</template>
+```
+
+중앙 표시는 `none / total / percent / total-percent`, 조각 라벨은 `none / value / percent`, 범례 정보는 `none / value / percent / value-percent`를 선택할 수 있습니다. 범례 위치는 `top / bottom / left / right`를 지원하며 `items[].legendValue`로 항목마다 표시 방식을 바꿀 수 있습니다.
+
+차트의 부모에 높이를 지정하세요. 데이터 변경 시 `config`를 새 객체로 교체해야 갱신됩니다. 수량 데이터는 `value`로 전달하고, 이미 계산한 비율은 모든 항목에 `{ value: 비율, count: 수량 }`을 함께 전달하면 중앙 합계와 범례 수량을 구분해 표시합니다.
 
 #### UiRate — 별점 입력과 표시
 
@@ -89,7 +129,7 @@ Storybook의 **Components → Form → UiRate → Showcase**에서 다크 테마
 ```bash
 npm install && npm run dev        # 개발
 npm run storybook                 # 문서
-npm run build:lib                 # 빌드
+npm run build                     # 빌드
 ```
 
 ---

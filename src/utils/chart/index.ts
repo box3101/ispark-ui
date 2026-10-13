@@ -7,11 +7,16 @@
 import { Chart } from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 
-// 플러그인 1회 등록
-Chart.register(ChartDataLabels)
+let pluginsRegistered = false
 
-// datalabels 기본값: 표시 안 함 (각 차트에서 필요 시 활성화)
-Chart.defaults.set('plugins.datalabels', { display: false })
+/** 소비 앱의 tree-shaking에서도 유지되도록 차트 생성 경로에서 등록한다. */
+export function registerChartPlugins() {
+  if (pluginsRegistered) return
+  Chart.register(ChartDataLabels)
+  // 각 차트가 필요 시 활성화하며 나머지는 기존 숨김 기본값을 유지한다.
+  Chart.defaults.set('plugins.datalabels', { display: false })
+  pluginsRegistered = true
+}
 
 export { ChartColors } from './chart-colors'
 export { ChartConfig } from './chart-config'

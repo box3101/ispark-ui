@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-chart">
+  <div class="ui-chart" :class="[`is-legend-${legendPosition}`, { 'is-pie': type === 'pie' }]">
     <div
       v-if="showLegend"
       :id="legendId"
@@ -22,21 +22,36 @@ interface Props {
   config: Record<string, any>
   /** 범례 표시 여부 */
   showLegend?: boolean
+  /** 범례 위치 — 상단 / 하단 / 왼쪽 / 오른쪽 */
+  legendPosition?: 'top' | 'bottom' | 'left' | 'right'
+  /** 원형 차트 중앙 표시 — 없음 / 총합만 / 퍼센트만 / 총합과 퍼센트 */
+  centerText?: 'none' | 'total' | 'percent' | 'total-percent'
+  /** 원형 조각 내부 표시 — 숨김 / 수량 / 실제 비율 */
+  dataLabelMode?: 'none' | 'value' | 'percent'
+  /** 원형 범례 정보 — 이름만 / 수량만 / 비율만 / 수량과 비율 */
+  legendValue?: 'none' | 'value' | 'percent' | 'value-percent'
 }
 
 const props = withDefaults(defineProps<Props>(), {
   showLegend: false,
+  legendPosition: 'top',
+  centerText: 'none',
 })
 
 const { chartId, legendId, createChart, destroyChart } = useChart()
 
-/** 차트 렌더링 */
+/** 차트 렌더링 — 범례 DOM과 배치가 갱신된 후 생성 */
 const renderChart = () => {
   destroyChart()
   nextTick(() => {
     createChart(props.type, {
       ...props.config,
       showLegend: props.showLegend,
+      ...(props.type === 'pie' ? {
+        centerText: props.centerText,
+        dataLabelMode: props.dataLabelMode ?? props.config.dataLabelMode,
+        legendValue: props.legendValue ?? props.config.legendValue,
+      } : {}),
     })
   })
 }
@@ -47,21 +62,18 @@ onMounted(() => {
   })
 })
 
-// config 또는 type 변경 시 차트 재생성 (참조 비교 — key 변경으로 재생성 처리)
+// config는 참조 변경, 나머지 표시 옵션은 값 변경 시 재생성
 watch(
-  () => props.config,
-  (newConfig, oldConfig) => {
-    if (newConfig !== oldConfig) {
-      renderChart()
-    }
-  },
-)
-
-watch(
-  () => props.type,
-  () => {
-    renderChart()
-  },
+  [
+    () => props.config,
+    () => props.type,
+    () => props.showLegend,
+    () => props.legendPosition,
+    () => props.centerText,
+    () => props.dataLabelMode,
+    () => props.legendValue,
+  ],
+  renderChart,
 )
 </script>
 
@@ -69,17 +81,70 @@ watch(
 .ui-chart {
   width: 100%;
   height: 100%;
+  min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 10px;
+
+  &.is-legend-bottom,
+  &.is-legend-right {
+    .ui-chart-legend {
+      order: 2;
+    }
+  }
+
+  &.is-legend-left,
+  &.is-legend-right {
+    flex-direction: row;
+
+    .ui-chart-legend {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      justify-content: flex-start;
+      justify-content: safe center;
+      max-width: 60%;
+      max-height: 100%;
+      overflow: auto;
+    }
+
+    .ui-chart-canvas-wrap {
+      width: auto;
+      flex-basis: 0;
+    }
+
+    :deep(.legend-item) {
+      flex-shrink: 0;
+    }
+
+    :deep(.legend-item__text) {
+      min-width: 0;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    :deep(.legend-item__info) {
+      margin-left: auto;
+      padding-left: $spacing-sm;
+    }
+  }
+
+  &.is-pie :deep(.legend-item__dot) {
+    border-radius: 50%;
+  }
 }
 
 .ui-chart-legend {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  align-content: flex-start;
+  align-content: safe center;
   gap: 4px 8px;
   flex-shrink: 0;
-  margin-bottom: 10px;
+  max-height: 50%;
+  overflow: auto;
 
   :deep(.legend-item) {
     display: flex;
@@ -87,7 +152,7 @@ watch(
     gap: 4px;
     cursor: pointer;
     user-select: none;
-    @include typo($body-small);
+    @include typo($body-medium);
     color: $color-text-secondary;
 
     &:hover {
@@ -107,9 +172,10 @@ watch(
   }
 
   :deep(.legend-item__info) {
-    @include typo($body-xsmall);
+    @include typo($body-small);
     color: $color-text-disabled;
     margin-left: 2px;
+    white-space: nowrap;
   }
 }
 
@@ -117,6 +183,8 @@ watch(
   position: relative;
   width: 100%;
   flex: 1;
-  min-height: 260px;
+  min-width: 0;
+  min-height: 0;
+  order: 1;
 }
 </style>
