@@ -112,6 +112,31 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
+export const ExcelDownload: Story = {
+  name: '엑셀 다운로드',
+  args: {
+    variant: 'secondary',
+    size: 'sm',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '흰 배경과 연한 테두리의 보조 액션 버튼입니다. 다운로드 아이콘과 명확한 문구를 함께 사용합니다. 실제 엑셀 파일 생성·다운로드는 사용하는 화면에서 click 이벤트에 연결하세요.',
+      },
+    },
+  },
+  render: (args) => ({
+    components: { UiButton },
+    setup: () => ({ args }),
+    template: `
+      <UiButton v-bind="args">
+        <template #icon-left><i class="icon-download" aria-hidden="true" /></template>
+        엑셀 다운로드
+      </UiButton>
+    `,
+  }),
+}
+
 // ===== 1. Playground — 모든 props를 Controls로 조작 + 클릭 자동 테스트 =====
 // iconLeft/iconRight/label은 데모 편의용 (실제 API는 slot)
 export const Playground: Story = {
