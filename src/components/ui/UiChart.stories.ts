@@ -15,7 +15,7 @@ Chart.js 기반 차트 컴포넌트. 데이터 라벨 플러그인은 차트 생
 ## 지원 타입 (경량 버전)
 - **\`bar\`** — 세로 막대
 - **\`line\`** — 라인
-- **\`pie\`** — 파이/도넛 (\`config.style: 'taskStatus'\`면 도넛)
+- **\`pie\`** — 파이/도넛 (\`shape\` 또는 중앙 문구로 선택)
 - **\`mixed\`** — 막대 + 라인 혼합 (이중 축)
 - **\`radar\`** — 방사형
 
@@ -26,7 +26,8 @@ Chart.js 기반 차트 컴포넌트. 데이터 라벨 플러그인은 차트 생
 - **\`config\`** \`object\` — 타입별 데이터/옵션. 변경 시 차트 재생성(참조 비교)
 - **\`showLegend\`** \`boolean\` — 커스텀 범례(HTML) 표시. 기본 \`false\`
 - **\`legendPosition\`** \`'top' | 'bottom' | 'left' | 'right'\` — 범례 위치. 기본 \`'top'\`
-- **\`centerText\`** \`'none' | 'total' | 'percent' | 'total-percent'\` — 원형 차트 중앙 표시. 기본 \`'none'\`
+- **\`shape\`** \`'pie' | 'donut'\` — 원형 형태. 중앙 문구가 있으면 도넛이 기본이다. 중앙 문구가 없을 때 꽉 찬 파이와 도넛을 고른다.
+- **\`centerText\`** \`'none' | 'total' | 'percent' | 'total-percent'\` — 원형 차트 중앙 표시. 미지정하면 \`config.centerText\`를 사용한다.
 
 - **\`dataLabelMode\`** \`'none' | 'value' | 'percent'\` — 원형 조각 내부 표시. 미지정하면 기존 config 설정을 사용한다.
 - **\`legendValue\`** \`'none' | 'value' | 'percent' | 'value-percent'\` — 원형 범례 정보. 미지정하면 기존 config 설정을 사용한다.
@@ -46,14 +47,14 @@ Chart.js 기반 차트 컴포넌트. 데이터 라벨 플러그인은 차트 생
 > 중앙 숫자를 먼저 읽고 단위·비율을 보조 정보로 읽도록 크기와 굵기를 나눈다.
 
 - 범례 이름: \`$body-medium\` — 14px / 400. 수량·비율: \`$body-small\` — 12px / 400(루트 16px 기준).
-- 총합만·퍼센트만은 숫자 28px / 700 + 작은 단위 12px / 400을 유지한다. 두 줄 모드는 단위 포함 총합 16px / 700, 괄호 포함 비율 16px / 500을 같은 제목 색상으로 표시한다.
+- 총합만·퍼센트만은 숫자 28px / 700 + 작은 단위 12px / 400을 유지한다. 두 줄 모드는 단위 포함 총합 19px / 800, 괄호 포함 비율 16px / 500을 같은 제목 색상으로 표시한다.
 - 단독 모드는 숫자·단위를 따로 측정하고, 두 줄 모드는 각 문장 전체를 가운데 정렬한다. 작은 구멍에서는 영역 안에 맞춰 비례 축소한다.
-- 기본 구멍은 총합+비율 48%, 단독 총합·비율 60%다. 직접 지정한 cutout을 우선하며 중앙 표시가 없으면 기존 스타일을 사용한다.
+- 중앙 표시를 켜거나 \`shape="donut"\`이면 구멍은 48%다. \`shape="pie"\`는 중앙 문구가 없을 때 구멍을 닫는다. 직접 지정한 \`cutout\`이 있으면 그것을 우선한다.
 
 - 원 수량은 \`items.value\`로 전달한다. 이미 계산된 비율을 쓰는 데이터는 \`{ value: 46.9, count: 154 }\`처럼 비율과 수량을 함께 전달할 수 있다. 수량 표시는 count를 우선하고 비율은 value 합계를 기준으로 계산한다.
 
 ## 컨테이너
-차트는 부모 높이를 채운다. 카드/패널에 넣을 땐 부모에 높이를 지정하라.
+막대·라인·혼합·방사형은 부모 높이를 채우며 캔버스 \`min-height: 260px\`를 유지한다. 원형 차트는 범례 배치를 위해 최소 높이를 두지 않으므로 카드/패널에 넣을 땐 부모에 높이를 지정하라.
 좌우 범례는 세로 목록, 상하 범례는 줄바꿈 가능한 가로 목록으로 표시한다. 항목이 많으면 처음부터 스크롤할 수 있으며 상하 범례는 부모 높이의 절반까지만 사용한다.
 
 ## 원형 차트 중앙·범례 옵션
@@ -63,14 +64,14 @@ Chart.js 기반 차트 컴포넌트. 데이터 라벨 플러그인은 차트 생
 
 > 작은 카드에서도 원형 차트의 총합과 비율을 함께 읽을 수 있도록 중앙 표시와 범례 위치를 선택한다.
 
-- \`centerText="total-percent"\` — \`328개\` / \`(100%)\`처럼 각 줄을 한 문장으로 묶어 같은 크기로 정렬한다.
+- \`centerText="total-percent"\` — \`328개\`를 조금 더 크고 굵게, \`(100%)\`는 아래에 간격을 두고 표시한다.
 - \`centerText="total"\` — 중앙에 큰 총합 숫자와 작고 가벼운 단위만 표시한다.
 - \`centerText="percent"\` — 중앙에 큰 비율 숫자와 작은 % 기호를 한 줄로 표시한다.
-- 중앙 표시를 켜면 일반 파이도 자동으로 도넛이 된다. \`config.cutout\`으로 구멍 크기를 조절한다.
+- 중앙 표시를 켜면 도넛이 기본이며, \`percent\` / \`total\` / \`total-percent\` 모두 같은 굵기다. 중앙 문구가 없을 때는 \`shape="pie"\`(꽉 찬 원) 또는 \`shape="donut"\`을 고른다. \`config.cutout\`으로 구멍 크기를 조절한다.
 - 총합은 \`items.value\` 합계다. 모든 항목에 \`count\`가 있으면 \`count\` 합계를 사용한다.
 - 범례로 숨긴 항목은 중앙 합계에서 제외하고, 퍼센트는 원래 총합 대비 표시 중인 수량의 비율이다. 합계가 0이면 \`0%\`다.
 - \`config.centerPercent\` — 중앙 퍼센트를 직접 지정(예: 완료율 \`67.4\`). \`0\`도 유효하다.
-- \`config.centerTotalSuffix\` — 총합 단위. 기본 \`'개'\`; 빈 문자열이면 단위를 생략한다.
+- \`config.centerTotalSuffix\` — 중앙 총합과 범례 수량 단위. 기본 \`'개'\`; 빈 문자열이면 단위를 생략한다.
 - \`config.centerTextColor\` — 주요 숫자와 두 줄 중앙 문구 색상. 기본은 테마 제목 색상이며 단독 모드의 작은 단위는 보조색이다.
 - \`config.legendValue: 'none' | 'value' | 'percent' | 'value-percent'\` — 이름만 / \`산업 56개\` / \`대학원 12.8%\` / \`일반 156개 (47.6%)\`를 선택한다. top-level \`legendValue\`를 지정하면 config 값보다 우선한다. 기존 count 범례는 새 옵션을 생략하면 유지한다.
 - \`config.valueMode: 'ratio'\` — 조각 라벨·툴팁을 \`value / 전체 value 합계 × 100\`으로 계산한다. 기존 \`'percent'\`(입력값에 %를 붙임)와 \`'raw'\`(수치 표시)도 유지한다.
@@ -83,6 +84,7 @@ Chart.js 기반 차트 컴포넌트. 데이터 라벨 플러그인은 차트 생
   type="pie"
   show-legend
   legend-position="right"
+  shape="donut"
   center-text="total-percent"
   data-label-mode="percent"
   legend-value="value-percent"
@@ -120,11 +122,17 @@ Chart.js 기반 차트 컴포넌트. 데이터 라벨 플러그인은 차트 생
       description: '범례 위치 — 상하 가로 목록 / 좌우 세로 목록',
       table: { defaultValue: { summary: 'top' } },
     },
+    shape: {
+      control: 'select',
+      options: ['pie', 'donut'],
+      description: '원형 형태 — 꽉 찬 파이 / 도넛. 중앙 문구가 있으면 도넛이 기본',
+      table: { defaultValue: { summary: 'centerText 있으면 donut, 없으면 pie' } },
+    },
     centerText: {
       control: 'select',
       options: ['none', 'total', 'percent', 'total-percent'],
-      description: '기본 원형 차트의 중앙 표시. 표시 시 자동으로 도넛 형태 적용',
-      table: { defaultValue: { summary: 'none' } },
+      description: '기본 원형 차트의 중앙 표시. 표시 시 자동으로 도넛 형태 적용. 미지정하면 config.centerText를 사용',
+      table: { defaultValue: { summary: 'config 또는 없음' } },
     },
     dataLabelMode: {
       control: 'select', options: ['none', 'value', 'percent'],

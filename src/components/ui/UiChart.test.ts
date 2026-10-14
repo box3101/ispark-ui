@@ -73,4 +73,53 @@ describe('UiChart', () => {
     await nextTick()
     expect(createChart.mock.calls.length).toBeGreaterThan(callsAfterMount)
   })
+
+  it.each(['top', 'bottom', 'left', 'right'] as const)('범례 위치 %s를 레이아웃에 반영한다', (legendPosition) => {
+    const { container } = render(UiChart, {
+      props: { type: 'pie', config: { items: [{ name: '완료', value: 42 }] }, showLegend: true, legendPosition },
+    })
+    expect(container.querySelector('.ui-chart')?.classList.contains(`is-legend-${legendPosition}`)).toBe(true)
+  })
+
+  it.each(['none', 'total', 'percent', 'total-percent'] as const)('원형 중앙 표시 %s를 차트 모듈로 전달한다', async (centerText) => {
+    render(UiChart, { props: { type: 'pie', config: { items: [{ name: '완료', value: 42 }] }, centerText } })
+    await nextTick()
+    await nextTick()
+    expect(createChart).toHaveBeenLastCalledWith('pie', expect.objectContaining({ centerText }))
+  })
+
+  it('centerText prop이 없으면 config.centerText를 유지한다', async () => {
+    render(UiChart, { props: { type: 'pie', config: { items: [], centerText: 'total-percent' } } })
+    await nextTick()
+    await nextTick()
+    expect(createChart).toHaveBeenLastCalledWith('pie', expect.objectContaining({ centerText: 'total-percent' }))
+  })
+
+  it('새 라벨·범례 props가 없으면 기존 config 설정을 유지한다', async () => {
+    render(UiChart, { props: { type: 'pie', config: { items: [], dataLabelMode: 'value', legendValue: 'percent' } } })
+    await nextTick()
+    await nextTick()
+    expect(createChart).toHaveBeenLastCalledWith('pie', expect.objectContaining({ dataLabelMode: 'value', legendValue: 'percent' }))
+  })
+
+  it('shape prop이 없으면 config.shape를 유지한다', async () => {
+    render(UiChart, { props: { type: 'pie', config: { items: [], shape: 'donut' } } })
+    await nextTick()
+    await nextTick()
+    expect(createChart).toHaveBeenLastCalledWith('pie', expect.objectContaining({ shape: 'donut' }))
+  })
+
+  it('shape prop이 config.shape보다 우선한다', async () => {
+    render(UiChart, { props: { type: 'pie', config: { items: [], shape: 'donut' }, shape: 'pie' } })
+    await nextTick()
+    await nextTick()
+    expect(createChart).toHaveBeenLastCalledWith('pie', expect.objectContaining({ shape: 'pie' }))
+  })
+
+  it('다른 차트에는 원형 전용 옵션을 넘기지 않는다', async () => {
+    render(UiChart, { props: { type: 'bar', config: barConfig, centerText: 'total-percent' } })
+    await nextTick()
+    await nextTick()
+    expect(createChart).toHaveBeenLastCalledWith('bar', expect.not.objectContaining({ centerText: 'total-percent' }))
+  })
 })

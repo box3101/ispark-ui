@@ -74,10 +74,10 @@ export function createPieCenterTextPlugin(items: PieSummaryItem[], config: Recor
       const isPercentOnly = config.centerText === 'percent'
       const hasPercentageRow = config.centerText === 'total-percent'
       const suffix = isPercentOnly ? '%' : String(config.centerTotalSuffix ?? '개')
-      // 두 줄 모드는 수량·단위를 한 문장으로 묶어 사진처럼 자연스럽게 읽히게 한다.
+      // 두 줄 모드는 총합을 조금 더 크고 굵게, 비율은 보조 정보로 아래에 둔다.
       const rows = hasPercentageRow
         ? [
-            [{ text: `${formatPieNumber(summary.visibleTotal)}${suffix}`, size: 16, weight: 700, color: primaryColor, gap: 0 }],
+            [{ text: `${formatPieNumber(summary.visibleTotal)}${suffix}`, size: 19, weight: 800, color: primaryColor, gap: 0 }],
             [{ text: `(${percentage}%)`, size: 16, weight: 500, color: primaryColor, gap: 0 }],
           ]
         : [[
@@ -109,7 +109,7 @@ export function createPieCenterTextPlugin(items: PieSummaryItem[], config: Recor
           descent: Math.max(...measuredRuns.map((run) => run.descent)),
         }
       })
-      const rowGap = 4
+      const rowGap = hasPercentageRow ? 8 : 4
       const height = measuredRows.reduce((sum, row) => sum + row.ascent + row.descent, 0) + rowGap * (rows.length - 1)
       const width = Math.max(...measuredRows.map((row) => row.width))
       let top = -height / 2

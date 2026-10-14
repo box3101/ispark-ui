@@ -24,6 +24,8 @@ interface Props {
   showLegend?: boolean
   /** 범례 위치 — 상단 / 하단 / 왼쪽 / 오른쪽 */
   legendPosition?: 'top' | 'bottom' | 'left' | 'right'
+  /** 원형 차트 형태 — 꽉 찬 파이 / 도넛. 중앙 문구가 있으면 도넛이 기본 */
+  shape?: 'pie' | 'donut'
   /** 원형 차트 중앙 표시 — 없음 / 총합만 / 퍼센트만 / 총합과 퍼센트 */
   centerText?: 'none' | 'total' | 'percent' | 'total-percent'
   /** 원형 조각 내부 표시 — 숨김 / 수량 / 실제 비율 */
@@ -35,7 +37,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   showLegend: false,
   legendPosition: 'top',
-  centerText: 'none',
 })
 
 const { chartId, legendId, createChart, destroyChart } = useChart()
@@ -48,7 +49,8 @@ const renderChart = () => {
       ...props.config,
       showLegend: props.showLegend,
       ...(props.type === 'pie' ? {
-        centerText: props.centerText,
+        centerText: props.centerText ?? props.config.centerText,
+        shape: props.shape ?? props.config.shape,
         dataLabelMode: props.dataLabelMode ?? props.config.dataLabelMode,
         legendValue: props.legendValue ?? props.config.legendValue,
       } : {}),
@@ -70,6 +72,7 @@ watch(
     () => props.showLegend,
     () => props.legendPosition,
     () => props.centerText,
+    () => props.shape,
     () => props.dataLabelMode,
     () => props.legendValue,
   ],
@@ -133,6 +136,10 @@ watch(
   &.is-pie :deep(.legend-item__dot) {
     border-radius: 50%;
   }
+
+  &.is-pie .ui-chart-canvas-wrap {
+    min-height: 0;
+  }
 }
 
 .ui-chart-legend {
@@ -184,7 +191,7 @@ watch(
   width: 100%;
   flex: 1;
   min-width: 0;
-  min-height: 0;
+  min-height: 260px;
   order: 1;
 }
 </style>
