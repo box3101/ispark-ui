@@ -6,6 +6,8 @@ import './styles/main.scss'
 
 // 컴포넌트
 export { default as UiButton } from './components/ui/UiButton.vue'
+export { default as UiTransfer } from './components/ui/UiTransfer.vue'
+export type { TransferItem } from './components/ui/UiTransfer.vue'
 export { default as UiTreeMenu } from './components/ui/UiTreeMenu.vue'
 export type { TreeMenuItem, TreeMenuVariant } from './components/ui/UiTreeMenu.vue'
 export { default as UiInput } from './components/ui/UiInput.vue'
