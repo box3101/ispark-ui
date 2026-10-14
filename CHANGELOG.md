@@ -3,6 +3,11 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.11.2] - 2026-10-14
+
+### Changed
+- UiChart Storybook에서 원형 꽉 찬 파이·도넛 예제 스토리 제거
+
 ## [0.11.1] - 2026-10-13
 
 ### Changed

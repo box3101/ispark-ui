@@ -235,34 +235,6 @@ export const Pie: Story = {
   },
 }
 
-export const PieSolid: Story = {
-  name: '원형 · 꽉 찬 파이',
-  args: {
-    ...Pie.args,
-    centerText: 'none',
-    shape: 'pie',
-    legendValue: 'percent',
-    config: { ...EDUCATION_CONFIG, legendValue: 'percent' },
-  },
-  play: async ({ canvasElement }) => {
-    await expectSummaryLegend(canvasElement, 'right')
-  },
-}
-
-export const PieDonut: Story = {
-  name: '원형 · 도넛 (중앙 없음)',
-  args: {
-    ...Pie.args,
-    centerText: 'none',
-    shape: 'donut',
-    legendValue: 'percent',
-    config: { ...EDUCATION_CONFIG, legendValue: 'percent' },
-  },
-  play: async ({ canvasElement }) => {
-    await expectSummaryLegend(canvasElement, 'right')
-  },
-}
-
 // ===== 혼합 (막대 + 라인) =====
 export const Mixed: Story = {
   args: {
