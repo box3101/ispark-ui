@@ -55,6 +55,8 @@ export type { ChartType } from './composables/useChart'
 
 // Progress 컴포넌트 — 가로 진행률 바
 export { default as UiProgress } from './components/ui/UiProgress.vue'
+export { default as UiStepper } from './components/ui/UiStepper.vue'
+export type { StepItem, StepId } from './components/ui/UiStepper.vue'
 export type { ProgressVariant, ProgressSize } from './components/ui/UiProgress.vue'
 
 // Confirm 컴포넌트 + composable — openConfirm()으로 Promise<boolean> 반환
