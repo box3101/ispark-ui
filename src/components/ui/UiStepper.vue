@@ -1,5 +1,5 @@
 <template>
-  <nav class="ui-stepper" :class="`ui-stepper--${variant}`" :aria-label="ariaLabel">
+  <nav class="ui-stepper" :class="[`ui-stepper--${variant}`, `ui-stepper--${orientation}`]" :aria-label="ariaLabel">
     <ol class="ui-stepper__list">
       <li
         v-for="(step, index) in steps"
@@ -23,7 +23,7 @@
             <template v-else>{{ index + 1 }}</template>
           </span>
           <span class="ui-stepper__text">
-            <span v-if="variant === 'card'" class="ui-stepper__number" aria-hidden="true">{{ String(index + 1).padStart(2, '0') }}</span>
+            <span v-if="variant === 'card' && orientation === 'horizontal'" class="ui-stepper__number" aria-hidden="true">{{ String(index + 1).padStart(2, '0') }}</span>
             <span class="ui-stepper__label">
               <slot name="label" :step="step" :index="index">{{ step.label }}</slot>
             </span>
@@ -32,7 +32,7 @@
           <span v-if="isCompleted(step, index) && step.id !== modelValue" class="ui-stepper__sr-only">완료</span>
         </component>
         <svg
-          v-if="variant === 'basic' && index < steps.length - 1"
+          v-if="orientation === 'horizontal' && variant === 'basic' && index < steps.length - 1"
           class="ui-stepper__chevron"
           width="16"
           height="16"
@@ -64,7 +64,8 @@ const props = withDefaults(
     /** 단계 ID로 현재 단계를 제어합니다. */
     modelValue?: StepId;
     steps: StepItem[];
-    variant?: 'basic' | 'line' | 'tab' | 'card';
+    variant?: 'basic' | 'line' | 'tab' | 'card' | 'minimal';
+    orientation?: 'horizontal' | 'vertical';
     interactive?: boolean;
     /** completed 값이 없는 경우 현재 단계 이전을 완료로 표시합니다. */
     autoComplete?: boolean;
@@ -72,6 +73,7 @@ const props = withDefaults(
   }>(),
   {
     variant: 'basic',
+    orientation: 'horizontal',
     interactive: true,
     autoComplete: true,
     ariaLabel: '진행 단계',
@@ -268,6 +270,37 @@ function selectStep(step: StepItem) {
     .is-active .ui-stepper__number {
       color: var(--stepper-primary);
     }
+  }
+  &--minimal {
+    .ui-stepper__list { border: 0; padding: 8px; gap: 8px; }
+    .is-active .ui-stepper__step { background: var(--stepper-soft); }
+  }
+  &--vertical {
+    --stepper-success: #16a064;
+    overflow-x: visible;
+    .ui-stepper__list { flex-direction: column; min-width: 0; }
+    .ui-stepper__item { flex: 0 0 auto; }
+    .ui-stepper__step { min-height: 80px; padding: 20px 16px; gap: 12px; align-items: flex-start; }
+    .ui-stepper__indicator { margin-top: 2px; }
+    .ui-stepper__text { min-width: 0; gap: 4px; }
+    .ui-stepper__label { white-space: normal; overflow-wrap: anywhere; font-weight: 600; }
+    .ui-stepper__description { overflow-wrap: anywhere; }
+    .is-completed:not(.is-active) .ui-stepper__indicator { background: var(--stepper-success); }
+    &.ui-stepper--basic, &.ui-stepper--tab {
+      .ui-stepper__item + .ui-stepper__item { border-left: 0; border-top: 1px solid var(--stepper-border); }
+      .ui-stepper__step { border-radius: 0; justify-content: flex-start; }
+      .ui-stepper__item:first-child .ui-stepper__step { border-radius: 9px 9px 0 0; }
+      .ui-stepper__item:last-child .ui-stepper__step { border-radius: 0 0 9px 9px; }
+      .is-active .ui-stepper__step { background: var(--stepper-soft); box-shadow: inset 3px 0 var(--stepper-primary); }
+    }
+    &.ui-stepper--line {
+      .ui-stepper__step { flex-direction: row; text-align: left; }
+      .ui-stepper__indicator { box-shadow: none; }
+      .is-active .ui-stepper__indicator { box-shadow: 0 0 0 6px var(--stepper-soft); }
+      .ui-stepper__item:not(:last-child)::after { top: 56px; left: 29px; width: 2px; height: calc(100% - 40px); }
+      .ui-stepper__item.is-completed:not(.is-active)::after { background: var(--stepper-success); }
+    }
+    &.ui-stepper--card .ui-stepper__list { gap: 10px; }
   }
   &__sr-only {
     position: absolute;
