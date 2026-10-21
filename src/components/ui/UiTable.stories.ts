@@ -202,6 +202,27 @@ interface TableColumn {
 export default meta
 type Story = StoryObj<typeof meta>
 
+export const MergedRows: Story = {
+  name: '셀 병합 · 같은 분류 묶기',
+  parameters: { docs: { description: { story: 'columns[].mergeRows: true로 인접한 같은 값을 rowspan으로 병합합니다. 세로 가운데 정렬이며, 정렬·필터 후 표시 순서로 재계산합니다. 빈 값은 병합하지 않으며 draggable 모드에서는 비활성입니다. 병합 셀 클릭은 첫 행을 선택합니다.' } } },
+  args: {
+    columns: [
+      { key: 'category', label: '분류', mergeRows: true, width: '180px', filterable: true, filterOptions: [{label:'전체',value:''},{label:'기능 요구사항',value:'기능 요구사항(SFR)'},{label:'성능 요구사항',value:'성능 요구사항(PER)'}] },
+      { key: 'id', label: '고유번호', width: '110px', sortable: true },
+      { key: 'title', label: '요구사항 명칭', align: 'left' },
+    ],
+    data: [
+      { category: '기능 요구사항(SFR)', id: 'SFR-01', title: '시스템 구축 공통 요건' },
+      { category: '기능 요구사항(SFR)', id: 'SFR-02', title: '홈페이지 디자인 설계' },
+      { category: '기능 요구사항(SFR)', id: 'SFR-03', title: '사용자 중심 UI/UX 설계' },
+      { category: '기능 요구사항(SFR)', id: 'SFR-04', title: '반응형 홈페이지 구축' },
+      { category: '성능 요구사항(PER)', id: 'PER-01', title: '응답시간' },
+      { category: '성능 요구사항(PER)', id: 'PER-02', title: '동시 사용자 수' },
+    ],
+    clickable: true,
+  },
+}
+
 export const StickyColumns: Story = {
   name: '가로 스크롤 · 고정 열',
   render: () => ({

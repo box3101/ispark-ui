@@ -149,9 +149,10 @@
           @click="clickable && onRowClick(row, rowIdx)"
           @keydown="clickable && onRowKeydown($event, row, rowIdx)"
         >
+          <template v-for="(col, colIdx) in visibleColumns" :key="col.key">
           <td
-            v-for="(col, colIdx) in visibleColumns"
-            :key="col.key"
+            v-if="rowSpans[rowIdx][colIdx] > 0"
+            :rowspan="rowSpans[rowIdx][colIdx] > 1 ? rowSpans[rowIdx][colIdx] : undefined"
             :class="{ 'is-last': colIdx === visibleColumns.length - 1, 'is-pinned': col.sticky === 'left' }"
             :style="{ textAlign: col.align || 'center', ...pinnedStyle(col) }"
           >
@@ -164,6 +165,7 @@
               {{ row[col.key] }}
             </slot>
           </td>
+          </template>
         </tr>
       </tbody>
     </table>
@@ -198,6 +200,8 @@ export interface TableColumn {
   /** 가로 스크롤 시 왼쪽에 고정. 여러 열 지정 가능. */
   sticky?: 'left'
   align?: 'left' | 'center' | 'right'
+  /** 인접한 같은 값을 세로 병합. 정렬·필터 후 재계산, 빈 값은 병합하지 않음. draggable 모드에서는 비활성. */
+  mergeRows?: boolean
   headerAlign?: 'left' | 'center' | 'right'
   sortable?: boolean
   sortType?: 'auto' | 'string' | 'number' | 'date'
@@ -501,6 +505,27 @@ const displayedData = computed(() => {
     if (va === vb) return 0
     return direction * (va > vb ? 1 : -1)
   })
+})
+
+// 실제 표시 순서 기준으로 계산한다. 가려진 셀은 렌더하지 않고 HTML rowspan을 사용한다.
+const rowSpans = computed(() => {
+  const rows = displayedData.value
+  const columns = visibleColumns.value
+  const spans = rows.map(() => columns.map(() => 1))
+  columns.forEach((column, colIndex) => {
+    if (!column.mergeRows) return
+    for (let start = 0; start < rows.length;) {
+      const value = rows[start][column.key]
+      let end = start + 1
+      if (value !== null && value !== undefined && value !== '') {
+        while (end < rows.length && Object.is(rows[end][column.key], value)) end++
+      }
+      spans[start][colIndex] = end - start
+      for (let index = start + 1; index < end; index++) spans[index][colIndex] = 0
+      start = end
+    }
+  })
+  return spans
 })
 
 watch(

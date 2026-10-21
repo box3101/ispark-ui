@@ -5,6 +5,31 @@ import UiTable from './UiTable.vue'
 import type { TableColumn } from './UiTable.vue'
 
 describe('UiTable', () => {
+  it('merges consecutive category cells and recomputes after filtering data', async () => {
+    const columns: TableColumn[] = [{ key: 'category', label: 'Category', mergeRows: true }, { key: 'id', label: 'ID' }]
+    const data = [{ category: 'SFR', id: 1 }, { category: 'SFR', id: 2 }, { category: 'ECR', id: 3 }, { category: 'SFR', id: 4 }]
+    const { container, rerender, emitted } = render(UiTable, { props: { columns, data, clickable: true } })
+    expect(container.querySelector('td')?.getAttribute('rowspan')).toBe('2')
+    expect(container.querySelectorAll('tbody tr')[1].querySelectorAll('td')).toHaveLength(1)
+    await fireEvent.click(container.querySelectorAll('tbody tr')[1])
+    expect(emitted()['row-click'][0]).toEqual([data[1], 1])
+    await rerender({ data: [data[1], data[3]] })
+    expect(container.querySelector('td')?.getAttribute('rowspan')).toBe('2')
+    await rerender({ data: [data[1]] })
+    expect(container.querySelector('[rowspan]')).toBeNull()
+  })
+
+  it('recomputes merged cells after local sorting and keeps blanks separate', async () => {
+    const { container } = render(UiTable, { props: {
+      columns: [{ key: 'category', label: 'Category', mergeRows: true, sortable: true, sortType: 'string' }],
+      data: [{ category: 'B' }, { category: 'A' }, { category: 'B' }, { category: '' }, { category: '' }],
+    } })
+    expect(container.querySelector('[rowspan]')).toBeNull()
+    await fireEvent.click(screen.getByRole('button', { name: 'Category' }))
+    expect(container.querySelector('[rowspan="2"]')?.textContent).toBe('B')
+    expect(container.querySelectorAll('tbody td')).toHaveLength(4)
+  })
+
   it('hides the initial hint after horizontal scrolling and stacks pinned columns', async () => {
     const { container } = render(UiTable, { props: {
       columns: [{ key: 'a', label: 'A', sticky: 'left' }, { key: 'b', label: 'B', sticky: 'left' }, { key: 'c', label: 'C' }],
