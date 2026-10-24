@@ -1,0 +1,21 @@
+{
+  "title": "제주 돌담, 다시 쌓을 때",
+  "type": "cover",
+  "layout": "cover_split_image",
+  "imageRatio": 0.35,
+  "elements": [
+    {
+      "kind": "project",
+      "text": "JDC 인사포털 및 성과관리시스템 재구축 용역"
+    },
+    {
+      "kind": "headline",
+      "text": "제주 돌담, 다시 쌓을 때"
+    },
+    {
+      "kind": "subtitle",
+      "text": "평가자산은 검증해 잇고, 인사·성과는 새롭게"
+    }
+  ],
+  "claims": []
+}
