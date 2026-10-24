@@ -1,0 +1,6 @@
+export { presentationTokens } from './tokens'
+export { presentationLayouts } from './layouts'
+export { validatePresentationSlide } from './validator'
+export type { SlideSpec, Issue } from './validator'
+export type { PresentationLayoutId } from './layouts'
+export { jdcTheme, jdcExampleSlides } from './themes/jdc'
