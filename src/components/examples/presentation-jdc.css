@@ -165,3 +165,26 @@
 .premium-jdc .ppt-migration-step>.ui-icon{width:3.1cqw;height:3.1cqw;color:#22648b}
 .premium-jdc .ppt-migration-step strong{font-size:1.55cqw}
 .premium-jdc .ppt-migration-step p{font-size:1.18cqw;color:#587080;line-height:1.4;margin:0}
+
+
+/* Enterprise proposal modes: direct comparison and visible data-quality gates. */
+.premium-jdc .ppt-transform{margin-top:2.5cqw}
+.premium-jdc .ppt-transform-header{display:grid;grid-template-columns:1fr 4cqw 1fr;align-items:center;gap:1.1cqw;margin-bottom:.8cqw;font-size:1.6cqw}
+.premium-jdc .ppt-transform-header b{color:#183753}
+.premium-jdc .ppt-transform-header b:last-child{color:#b15a38}
+.premium-jdc .ppt-transform-header small{font-size:1.05cqw;font-weight:500}
+.premium-jdc .ppt-transform-header>span{text-align:center;font-size:1cqw;color:#738696}
+.premium-jdc .ppt-transform-row{display:grid;grid-template-columns:1fr 4cqw 1fr;gap:1.1cqw;align-items:stretch;margin-bottom:.7cqw}
+.premium-jdc .ppt-transform-row>div{background:#fff;padding:1.05cqw 1.5cqw;min-height:6.1cqw;border:1px solid #dbe3e8}
+.premium-jdc .ppt-transform-row>div:last-child{background:#fff4ea;border-color:#e9d0bf}
+.premium-jdc .ppt-transform-row strong{font-size:1.55cqw}.premium-jdc .ppt-transform-row p{margin:.4cqw 0 0;font-size:1.14cqw;color:#607080}
+.premium-jdc .ppt-transform-row>.ui-icon{align-self:center;justify-self:center;color:#d16b36;width:2.25cqw;height:2.25cqw}
+.premium-jdc .ppt-audit{margin-top:4.1cqw}
+.premium-jdc .ppt-audit-flow{display:grid;grid-template-columns:1fr 3cqw 1fr 3cqw 1fr;gap:1cqw;align-items:center}
+.premium-jdc .ppt-audit-flow>div{height:15.5cqw;background:#fff;border:1px solid #dce5e8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1cqw}
+.premium-jdc .ppt-audit-flow>div .ui-icon{color:#22648b;width:3.5cqw;height:3.5cqw}
+.premium-jdc .ppt-audit-flow>div strong{font-size:1.7cqw}.premium-jdc .ppt-audit-flow>div small{font-size:1.1cqw;color:#687c8b}
+.premium-jdc .ppt-audit-flow>.ui-icon{color:#c65b35;width:2.4cqw;height:2.4cqw}
+.premium-jdc .ppt-audit-gates{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7cqw;margin-top:2cqw}
+.premium-jdc .ppt-audit-gates span{background:#e6eef1;border-radius:.4cqw;padding:1.05cqw .5cqw;display:flex;align-items:center;justify-content:center;gap:.5cqw;font-size:1.14cqw;font-weight:650;color:#183753;white-space:nowrap}
+.premium-jdc .ppt-audit-gates .ui-icon{width:1.5cqw;height:1.5cqw;color:#2589ae}

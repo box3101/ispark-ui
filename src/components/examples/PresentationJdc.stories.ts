@@ -62,11 +62,11 @@ const Preview = defineComponent({
     <template v-else-if="page === 'content013'">
       <main class="ppt-detail">
         <div class="ppt-detail-heading"><span>01-3 / 핵심 추진 방향</span><h1>인사에서 성과까지,<br><em>끊김 없는 업무 연결</em></h1><p>분절된 기능을 사용자의 업무 여정을 중심으로 정렬합니다.</p></div>
-        <div class="ppt-flow">
-          <div><UiIcon name="contact-round" :size="42"/><b>인사·직무</b><small>인사정보·직무관리</small></div><UiIcon class="ppt-flow-arrow" name="arrow-right" :size="28"/>
-          <div><UiIcon name="graduation-cap" :size="42"/><b>성장·역량</b><small>교육·경력개발</small></div><UiIcon class="ppt-flow-arrow" name="arrow-right" :size="28"/>
-          <div><UiIcon name="chart-no-axes-combined" :size="42"/><b>성과관리</b><small>개인·조직 평가</small></div><UiIcon class="ppt-flow-arrow" name="arrow-right" :size="28"/>
-          <div><UiIcon name="bar-chart-3" :size="42"/><b>성과 활용</b><small>지표·분석·환류</small></div>
+        <div class="ppt-transform">
+          <div class="ppt-transform-header"><b>AS-IS <small>현재 과제</small></b><span>전환 설계</span><b>TO-BE <small>재구축 방향</small></b></div>
+          <div class="ppt-transform-row"><div><strong>노후 기술 기반</strong><p>기능 및 접근 경험 개선 필요</p></div><UiIcon name="arrow-right" :size="28"/><div><strong>통합 사용자 경험</strong><p>인사·성과 업무의 일관된 화면과 흐름</p></div></div>
+          <div class="ppt-transform-row"><div><strong>컨설팅과 업무 간 단절</strong><p>변경된 규칙의 운영 반영 필요</p></div><UiIcon name="arrow-right" :size="28"/><div><strong>제도 중심 업무 구현</strong><p>정책·승인·평가 흐름의 업무규칙 연결</p></div></div>
+          <div class="ppt-transform-row"><div><strong>평가이력 전환 부담</strong><p>산식·기준정보·이력 확인 필요</p></div><UiIcon name="arrow-right" :size="28"/><div><strong>검증 가능한 자산 계승</strong><p>기존 이력과 계산 결과의 대조·확인</p></div></div>
         </div>
         <div class="ppt-insight"><b>설계 원칙</b><span>연계 업무의 데이터 흐름과 권한·이력을 함께 고려</span></div>
       </main>
@@ -74,11 +74,15 @@ const Preview = defineComponent({
     <template v-else-if="page === 'content014'">
       <main class="ppt-detail">
         <div class="ppt-detail-heading"><span>01-4 / 기존 평가자산 계승</span><h1>쌓아 온 평가자산은,<br><em>검증하고 이어갑니다.</em></h1><p>전환의 핵심은 데이터 복사가 아니라 의미와 결과의 보존입니다.</p></div>
-        <div class="ppt-migration">
-          <div class="ppt-migration-step"><UiIcon name="database" :size="34"/><strong>01 현황 파악</strong><p>평가항목·산식·이력 확인</p></div>
-          <div class="ppt-migration-step"><UiIcon name="git-compare-arrows" :size="34"/><strong>02 매핑·정비</strong><p>기준정보와 구조 매핑</p></div>
-          <div class="ppt-migration-step"><UiIcon name="shield-check" :size="34"/><strong>03 전환 검증</strong><p>건수·값·산출 결과 대조</p></div>
-          <div class="ppt-migration-step"><UiIcon name="check-check" :size="34"/><strong>04 안정화</strong><p>오류 보정·운영 확인</p></div>
+        <div class="ppt-audit">
+          <div class="ppt-audit-flow">
+            <div><UiIcon name="database" :size="36"/><strong>기존 평가자산</strong><small>항목·산식·이력</small></div>
+            <UiIcon name="arrow-right" :size="28"/>
+            <div><UiIcon name="git-compare-arrows" :size="36"/><strong>구조 매핑</strong><small>기준정보·코드 변환</small></div>
+            <UiIcon name="arrow-right" :size="28"/>
+            <div><UiIcon name="database-zap" :size="36"/><strong>전환 데이터</strong><small>적재·정합성 점검</small></div>
+          </div>
+          <div class="ppt-audit-gates"><span><UiIcon name="check-circle-2" :size="21"/> 건수·누락 점검</span><span><UiIcon name="check-circle-2" :size="21"/> 값·코드 대조</span><span><UiIcon name="check-circle-2" :size="21"/> 평가 산식 재계산</span><span><UiIcon name="check-circle-2" :size="21"/> 차이 보정·승인</span></div>
         </div>
         <div class="ppt-insight"><b>품질 게이트</b><span>검증 기준과 승인 절차는 착수 후 JDC와 협의하여 확정</span></div>
       </main>
