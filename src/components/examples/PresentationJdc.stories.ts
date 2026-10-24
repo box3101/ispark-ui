@@ -15,7 +15,7 @@ const Preview = defineComponent({
     </header>
     <template v-if="page === 'cover'">
       <main class="ppt-cover-copy">
-        <h1>제주 돌담,<br><em>다시</em> 쌓을 때</h1>
+        <h1>제주 돌담,<br><em class="ppt-handwriting">다시</em> 쌓을 때</h1>
         <div class="ppt-rule"></div>
         <p>평가자산은 검증해 잇고,<br>인사·성과는 새롭게</p>
       </main>
