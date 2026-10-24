@@ -1,0 +1,17 @@
+{
+  "title": "JDC 제주 돌담을 살피다",
+  "type": "section",
+  "layout": "section_minimal",
+  "imageRatio": 0,
+  "elements": [
+    {
+      "kind": "number",
+      "text": "01"
+    },
+    {
+      "kind": "subtitle",
+      "text": "사업 이해와 재구축 방향"
+    }
+  ],
+  "claims": []
+}

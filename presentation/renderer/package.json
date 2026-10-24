@@ -1,0 +1,11 @@
+{
+  "name": "ispark-presentation-renderer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs ../../decks/jdc ../../decks/jdc/deck.pptx"
+  },
+  "dependencies": {
+    "pptxgenjs": "^3.12.0"
+  }
+}
