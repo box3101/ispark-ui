@@ -138,3 +138,30 @@
   height:var(--ppt-icon-detail-size);
   stroke-width:1.75;
 }
+
+
+/* Additional Section 01 story layouts: 01-2, 01-3, 01-4 */
+.premium-jdc.ppt--content012,.premium-jdc.ppt--content013,.premium-jdc.ppt--content014{background:linear-gradient(115deg,#fbfaf7,#edf3f5)}
+.premium-jdc .ppt-detail{position:absolute;inset:15% 5% 10%}
+.premium-jdc .ppt-detail-heading>span{display:block;color:#b65d3a;letter-spacing:.08em;font-weight:750;font-size:1.14cqw}
+.premium-jdc .ppt-detail-heading h1{font-size:3.05cqw;line-height:1.25;letter-spacing:-.055em;margin:1cqw 0 .7cqw;font-weight:800}
+.premium-jdc .ppt-detail-heading h1 em{color:#c65b35;font-style:normal}
+.premium-jdc .ppt-detail-heading p{margin:0;font-size:1.28cqw;color:#4d6374}
+.premium-jdc .ppt-gap-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2cqw;margin-top:3cqw}
+.premium-jdc .ppt-gap-grid article{min-width:0;padding:2.05cqw 1.8cqw 1.8cqw;min-height:22cqw;background:#fff;border-top:.28cqw solid #c65b35;box-shadow:0 7px 27px #18375312;display:flex;flex-direction:column;align-items:flex-start}
+.premium-jdc .ppt-gap-grid article>.ui-icon{width:3cqw;height:3cqw;color:#285f83}
+.premium-jdc .ppt-gap-grid article span{font-size:1cqw;color:#a05b45;margin-top:1.4cqw}
+.premium-jdc .ppt-gap-grid h2{font-size:2.1cqw;margin:.45cqw 0 1cqw}
+.premium-jdc .ppt-gap-grid p{font-size:1.32cqw;line-height:1.5;margin:0}
+.premium-jdc .ppt-insight{position:absolute;bottom:3%;left:0;right:0;padding:1.15cqw 1.6cqw;background:#122f4b;color:#fff;display:flex;gap:2.1cqw;align-items:center;font-size:1.3cqw;border-radius:.35cqw}
+.premium-jdc .ppt-insight b{color:#f6b68a;white-space:nowrap}
+.premium-jdc .ppt-flow{display:flex;align-items:center;justify-content:space-between;gap:.5cqw;margin-top:5.4cqw}
+.premium-jdc .ppt-flow>div{flex:1;min-width:0;min-height:16cqw;background:#fff;border:1px solid #dce4e8;border-radius:.8cqw;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1cqw}
+.premium-jdc .ppt-flow>div>.ui-icon{color:#236487;width:3.7cqw;height:3.7cqw}
+.premium-jdc .ppt-flow b{font-size:1.7cqw}.premium-jdc .ppt-flow small{font-size:1.12cqw;color:#587080}
+.premium-jdc .ppt-flow>.ppt-flow-arrow{flex:0 0 2.1cqw;width:2.1cqw;height:2.1cqw;color:#c65b35}
+.premium-jdc .ppt-migration{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.2cqw;margin-top:5cqw}
+.premium-jdc .ppt-migration-step{min-height:16cqw;background:#fff;border:1px solid #dce4e8;border-bottom:.35cqw solid #c65b35;padding:1.6cqw;display:flex;flex-direction:column;gap:1.1cqw}
+.premium-jdc .ppt-migration-step>.ui-icon{width:3.1cqw;height:3.1cqw;color:#22648b}
+.premium-jdc .ppt-migration-step strong{font-size:1.55cqw}
+.premium-jdc .ppt-migration-step p{font-size:1.18cqw;color:#587080;line-height:1.4;margin:0}
