@@ -20,3 +20,7 @@ The normalized design geometry is in `jdc-golden-v2.json`. Zones are expressed a
 - Jeju photo is an art-directed asset, never a stock texture filler.
 - Real ISPark blue logo and JDC logo with source verification.
 - Content layout needs purpose-built diagrams and clear factual hierarchy, not generic repeated cards.
+
+## Rendered prototype review (2026-10-24)
+
+An editable three-page JDC prototype was rendered locally with PptxGenJS and checked with the slide overflow test (pass). It is **not** visually equivalent to the approved three-slide collage. Photographs were cropped from a previous generated image as temporary imagery; logos were represented as editable text, not authentic brand assets. Before claiming design completion: use official assets, bring hero and body typography closer to reference, compare at equal resolution, and run visual QA.
