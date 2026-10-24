@@ -1,5 +1,5 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
 .premium-jdc{width:min(1220px,96vw);aspect-ratio:16/9;position:relative;container-type:inline-size;overflow:hidden;box-sizing:border-box;background:#f7f5f0;color:#102440;font-family:Pretendard,'Noto Sans KR',Arial,sans-serif;box-shadow:0 12px 35px #10244026;padding:4.5% 5%;isolation:isolate}
 .premium-jdc *{box-sizing:border-box}
 .premium-jdc .ppt-photo{position:absolute;inset:0 0 0 34%;background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Seongsan_Ilchulbong_from_the_road.jpg');background-position:center;background-size:cover;filter:saturate(.72) sepia(.12);z-index:-2}
@@ -107,4 +107,34 @@
 .premium-jdc .ppt-section-copy p,
 .premium-jdc .ppt-facts {
   font-family: var(--ppt-font-body);
+}
+
+/* Proposal typography and icon rhythm, reviewed against publicly available IR decks.
+   Keep source components (UiIcon) and replace only visual role parameters. */
+.premium-jdc {
+  --ppt-font-brush: 'Nanum Pen Script', cursive;
+  --ppt-icon-primary-size: 3.05cqw;
+  --ppt-icon-detail-size: 2.15cqw;
+}
+.premium-jdc .ppt-cover-copy .ppt-handwriting {
+  font-size: 1.28em;
+  font-weight: 400;
+  letter-spacing: -.075em;
+  line-height: .84;
+  vertical-align: -.07em;
+  transform: rotate(-1deg);
+  text-shadow: .018em .008em 0 currentColor;
+}
+.premium-jdc .ppt-orbit-node { gap: .48cqw; }
+.premium-jdc .ppt-orbit-node .ui-icon {
+  width: var(--ppt-icon-primary-size);
+  height: var(--ppt-icon-primary-size);
+  stroke-width: 1.75;
+}
+.premium-jdc .ppt-orbit-node span { line-height:1.23; }
+.premium-jdc .ppt-facts>div { grid-template-columns:2.5cqw 30% minmax(0,1fr); gap:.6cqw; }
+.premium-jdc .ppt-facts .ui-icon {
+  width:var(--ppt-icon-detail-size);
+  height:var(--ppt-icon-detail-size);
+  stroke-width:1.75;
 }
