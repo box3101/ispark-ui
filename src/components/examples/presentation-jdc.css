@@ -62,3 +62,11 @@
   .premium-jdc .ppt-header { font-size:1.2cqw; }
   .premium-jdc .ppt-footer span { font-size:1cqw; }
 }
+
+/* Explicit font loading, rather than relying on an OS-installed font. */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+.premium-jdc{font-family:'Pretendard','Noto Sans KR',sans-serif;font-synthesis:none;letter-spacing:-.035em}
+.premium-jdc .ppt-orbit-node{flex-direction:column;gap:.25cqw}
+.premium-jdc .ppt-orbit-node .ui-icon{width:2.1cqw;height:2.1cqw;color:#22648b}
+.premium-jdc .ppt-facts>div{grid-template-columns:2cqw 30% 1fr;gap:.6cqw}
+.premium-jdc .ppt-facts .ui-icon{width:1.6cqw;height:1.6cqw;color:#2589ae}
