@@ -39,3 +39,26 @@
 .premium-jdc .ppt-facts>div{display:grid;grid-template-columns:34% 1fr;align-items:center;gap:1cqw;padding:1.1cqw 1.3cqw;background:#ffffffed;border-radius:.7cqw;box-shadow:0 4px 20px #1837530b}
 .premium-jdc .ppt-facts b{font-size:1.35cqw;white-space:nowrap}
 .premium-jdc .ppt-facts span{font-size:1.12cqw;line-height:1.4}
+
+/* Golden reference v2: fixed 1600:900 design coordinates scaled by container width.
+   All geometric values use container units, not the device viewport. */
+.premium-jdc { width: min(1220px, 96vw); aspect-ratio: 16 / 9; container-type: inline-size; padding: 0; }
+.premium-jdc .ppt-header { position:absolute; top:6.5%; left:5%; right:5%; width:90%; font-size:1.22cqw; z-index:3; }
+.premium-jdc .ppt-cover-copy { left:5%; top:21%; width:61%; z-index:2; }
+.premium-jdc .ppt-cover-copy h1 { font-size:6.3cqw; line-height:1.11; font-weight:800; letter-spacing:-.068em; }
+.premium-jdc .ppt-cover-copy p { font-size:2.22cqw; line-height:1.45; }
+.premium-jdc .ppt-rule { margin:3.3cqw 0 2.0cqw; }
+.premium-jdc .ppt-footer { left:5%; right:5%; bottom:4.2%; z-index:3; }
+.premium-jdc.ppt--section .ppt-section-copy { left:6%; top:38%; width:90%; gap:2.5cqw; z-index:2; }
+.premium-jdc.ppt--section .ppt-section-index { font-size:8.3cqw; }
+.premium-jdc.ppt--section .ppt-section-copy h1 { font-size:3.05cqw; }
+.premium-jdc.ppt--content .ppt-content-copy { position:absolute; inset:15% 5% 8%; margin:0; }
+.premium-jdc.ppt--content .ppt-content-grid { margin-top:2.6cqw; grid-template-columns:58% 38%; gap:4%; }
+.premium-jdc.ppt--content .ppt-overview { height:30cqw; }
+.premium-jdc.ppt--content .ppt-footer { bottom:2.8%; }
+.premium-jdc .ppt-client small { display:block; }
+@media (max-width:650px) {
+  .premium-jdc { width: 100%; }
+  .premium-jdc .ppt-header { font-size:1.2cqw; }
+  .premium-jdc .ppt-footer span { font-size:1cqw; }
+}
