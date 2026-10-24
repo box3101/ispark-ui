@@ -1,3 +1,5 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap');
 .premium-jdc{width:min(1220px,96vw);aspect-ratio:16/9;position:relative;container-type:inline-size;overflow:hidden;box-sizing:border-box;background:#f7f5f0;color:#102440;font-family:Pretendard,'Noto Sans KR',Arial,sans-serif;box-shadow:0 12px 35px #10244026;padding:4.5% 5%;isolation:isolate}
 .premium-jdc *{box-sizing:border-box}
 .premium-jdc .ppt-photo{position:absolute;inset:0 0 0 34%;background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Seongsan_Ilchulbong_from_the_road.jpg');background-position:center;background-size:cover;filter:saturate(.72) sepia(.12);z-index:-2}
@@ -61,4 +63,48 @@
   .premium-jdc { width: 100%; }
   .premium-jdc .ppt-header { font-size:1.2cqw; }
   .premium-jdc .ppt-footer span { font-size:1cqw; }
+}
+
+/* Explicit font loading, rather than relying on an OS-installed font. */
+.premium-jdc{font-family:'Pretendard','Noto Sans KR',sans-serif;font-synthesis:none;letter-spacing:-.035em}
+.premium-jdc .ppt-orbit-node{flex-direction:column;gap:.25cqw}
+.premium-jdc .ppt-orbit-node .ui-icon{width:2.1cqw;height:2.1cqw;color:#22648b}
+.premium-jdc .ppt-facts>div{grid-template-columns:2cqw 30% 1fr;gap:.6cqw}
+.premium-jdc .ppt-facts .ui-icon{width:1.6cqw;height:1.6cqw;color:#2589ae}
+
+/* JDC typography roles: editable semantic type tokens. */
+.premium-jdc {
+  --ppt-font-headline: 'Pretendard', 'Noto Sans KR', sans-serif;
+  --ppt-font-body: 'Pretendard', 'Noto Sans KR', sans-serif;
+  --ppt-font-brush: 'Nanum Brush Script', cursive;
+  --ppt-font-numeral: 'Pretendard', Arial, sans-serif;
+  --ppt-headline-weight: 800;
+}
+.premium-jdc .ppt-cover-copy h1,
+.premium-jdc .ppt-section-copy h1,
+.premium-jdc .ppt-content-intro h1 {
+  font-family: var(--ppt-font-headline);
+  font-weight: var(--ppt-headline-weight);
+}
+.premium-jdc .ppt-cover-copy .ppt-handwriting {
+  display: inline-block;
+  font-family: var(--ppt-font-brush);
+  font-size: 1.25em;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: -.09em;
+  line-height: .82;
+  vertical-align: -.075em;
+  transform: rotate(-3deg);
+  transform-origin: center;
+}
+.premium-jdc .ppt-section-index {
+  font-family: var(--ppt-font-numeral);
+  font-weight: 200;
+  font-variant-numeric: lining-nums;
+}
+.premium-jdc .ppt-cover-copy p,
+.premium-jdc .ppt-section-copy p,
+.premium-jdc .ppt-facts {
+  font-family: var(--ppt-font-body);
 }

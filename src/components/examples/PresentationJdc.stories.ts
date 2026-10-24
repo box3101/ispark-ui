@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import { defineComponent } from 'vue'
+import UiIcon from '../ui/UiIcon.vue'
 import './presentation-jdc.css'
 
 const Preview = defineComponent({
+  components: { UiIcon },
   props: { page: { type: String, default: 'cover' } },
   template: `<div class="ppt premium-jdc" :class="'ppt--' + page">
     <div class="ppt-photo" v-if="page !== 'content'" aria-hidden="true"></div>
@@ -13,7 +15,7 @@ const Preview = defineComponent({
     </header>
     <template v-if="page === 'cover'">
       <main class="ppt-cover-copy">
-        <h1>제주 돌담,<br><em>다시</em> 쌓을 때</h1>
+        <h1>제주 돌담,<br><em class="ppt-handwriting">다시</em> 쌓을 때</h1>
         <div class="ppt-rule"></div>
         <p>평가자산은 검증해 잇고,<br>인사·성과는 새롭게</p>
       </main>
@@ -31,16 +33,16 @@ const Preview = defineComponent({
           <div class="ppt-overview">
             <div class="ppt-orbit">
               <div class="ppt-orbit-center">JDC<br>인사포털 및<br>성과관리</div>
-              <div class="ppt-orbit-node top">인사·직무<br>교육·경력개발</div>
-              <div class="ppt-orbit-node left">개인평가<br>조직성과</div>
-              <div class="ppt-orbit-node right">평가자산<br>검증·계승</div>
+              <div class="ppt-orbit-node top"><UiIcon name="users" :size="28" :stroke-width="1.6" /><span>인사·직무<br>교육·경력개발</span></div>
+              <div class="ppt-orbit-node left"><UiIcon name="chart-no-axes-combined" :size="28" :stroke-width="1.6" /><span>개인평가<br>조직성과</span></div>
+              <div class="ppt-orbit-node right"><UiIcon name="shield-check" :size="28" :stroke-width="1.6" /><span>평가자산<br>검증·계승</span></div>
             </div>
           </div>
           <div class="ppt-facts">
-            <div><b>사업기간</b><span>계약체결일로부터 240일</span></div>
-            <div><b>제도 구현</b><span>인사·성과 컨설팅 결과 반영</span></div>
-            <div><b>데이터</b><span>기존 데이터 이관·표준·연동</span></div>
-            <div><b>운영 기반</b><span>품질·보안·교육·안정화</span></div>
+            <div><UiIcon name="calendar-days" :size="20" /><b>사업기간</b><span>계약체결일로부터 240일</span></div>
+            <div><UiIcon name="workflow" :size="20" /><b>제도 구현</b><span>인사·성과 컨설팅 결과 반영</span></div>
+            <div><UiIcon name="database" :size="20" /><b>데이터</b><span>기존 데이터 이관·표준·연동</span></div>
+            <div><UiIcon name="shield-check" :size="20" /><b>운영 기반</b><span>품질·보안·교육·안정화</span></div>
           </div>
         </div>
       </main>
