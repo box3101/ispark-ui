@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import { defineComponent } from 'vue'
 import UiIcon from '../ui/UiIcon.vue'
-import ProposalIcon from '../ui/ProposalIcon.vue'
 import './presentation-jdc.css'
 
 const Preview = defineComponent({
@@ -119,21 +118,5 @@ export const Content012: Story = { name: '04 Content 01-2', args: { page: 'conte
 export const Content013: Story = { name: '05 Content 01-3', args: { page: 'content013' } }
 export const Content014: Story = { name: '06 Content 01-4', args: { page: 'content014' } }
 
-export const ProposalIcons: Story = {
-  name: '07 Proposal Icons',
-  render: () => ({
-    components: { ProposalIcon },
-    template: `<div style="padding:32px;background:#ffffff;color:#1f2937;font-family:Pretendard,sans-serif">
-      <h2 style="margin:0 0 12px">ISPark 제안서 아이콘</h2>
-      <p style="margin:0 0 24px">기존 UiIcon 기반 · Hero / Diagram / Inline</p>
-      <div style="display:flex;gap:24px;flex-wrap:wrap">
-        <div v-for="(x,i) in [{name:'database',label:'데이터 이관'},{name:'users',label:'인사·직무'},{name:'shield-check',label:'품질 검증'},{name:'workflow',label:'업무 연계'}]" :key="x.name" style="text-align:center;min-width:115px">
-          <ProposalIcon :name="x.name" variant="hero" :tone="i===2?'orange':'blue'" :size="82" />
-          <div style="margin-top:10px;font-weight:650">{{x.label}}</div>
-        </div>
-      </div>
-      <hr style="border:0;border-top:1px solid #ddd;margin:30px 0">
-      <div style="display:flex;gap:20px;align-items:center"><ProposalIcon name="database" variant="diagram" :size="62"/><ProposalIcon name="arrow-right" variant="inline" :size="40"/><ProposalIcon name="shield-check" variant="diagram" tone="teal" :size="62"/></div>
-    </div>`,
-  }),
-}
+// 아이콘 갤러리는 Presentation/Proposal Icon System 으로 옮겼다.
+// 이 스토리는 덱 페이지만 다룬다.

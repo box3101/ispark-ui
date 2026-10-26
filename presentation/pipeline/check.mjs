@@ -62,17 +62,13 @@ else {
 // ============================================
 /**
  * `debt`가 붙은 항목은 교체 예정이라 실패로 올리지 않고 따로 보고한다.
- * 교체가 끝나면 debt를 지워서 정식 검사 대상으로 되돌릴 것.
+ * 교체가 끝나면 debt를 지워서 정식 검사 대상으로 되돌린다.
+ * 지금은 비어 있다 — ProposalIcon 의 Phosphor 전환으로 미상환 17건이 해소됐다.
  */
 const SCAN = [
   { path: 'presentation/renderer/build.mjs', style: 'bare' },
   { path: 'src/components/examples/presentation-jdc.css', style: 'hex' },
-  { path: 'src/presentation/ProposalBadge.vue', style: 'hex' },
-  {
-    path: 'src/components/ui/ProposalIcon.vue',
-    style: 'hex',
-    debt: 'Phosphor 전환 시 교체 예정 — 연한 배경 + 진한 선 글리프라 장표와 명암이 반대',
-  },
+  { path: 'src/presentation/ProposalIcon.vue', style: 'hex' },
 ]
 
 for (const target of SCAN) {

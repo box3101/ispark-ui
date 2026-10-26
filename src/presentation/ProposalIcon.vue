@@ -1,38 +1,59 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { IconGlyph } from './icon-sets.data'
+import { byKey, type ProposalTone } from '../../presentation/icons/icon-map'
+import { phosphorGlyphs } from '../../presentation/icons/phosphor-glyphs'
 
 /**
- * 제안 장표용 아이콘 배지 — 채도 높은 원형 배경 + 흰 솔리드 글리프.
- * 기존 ProposalIcon(연한 배경 + 진한 선 글리프)과 명암이 반대다.
+ * 제안 장표용 아이콘 배지 — 채도 높은 원형 바탕 + 흰 솔리드 글리프.
  *
- * 글리프는 세트마다 좌표계가 달라서 원본 viewBox를 그대로 쓴다.
- * preserveAspectRatio 기본값(xMidYMid meet)에 맡겨야 세트별 비율 차이가
- * 그대로 드러나고, 그래야 비교에 의미가 있다.
+ * 이름이 아니라 **개념**을 받는다. 장표에서 필요한 건 "database 아이콘"이 아니라
+ * "데이터 이관"이고, 글리프는 갈아끼울 수 있어야 하기 때문이다.
+ * 개념 목록은 presentation/icons/icon-map.ts 에 있다.
+ *
+ * 글리프는 Phosphor fill(256 정사각 고정)이라 여러 개를 나란히 놓아도 크기가 고르다.
+ * 이전 구현은 lucide 선 아이콘에 연한 배경을 썼는데, 장표와 명암이 반대라
+ * 투사하면 글리프가 날아갔다.
  */
 const props = withDefaults(
   defineProps<{
-    glyph: IconGlyph
+    /** presentation/icons/icon-map.ts 의 개념 key */
+    concept: string
     /** hero=카드 헤더 / path=소형 배지 / inline=배경 없는 미니 */
     variant?: 'hero' | 'path' | 'inline'
-    /** orange=실행·강점 / blue=이해·검증 */
-    tone?: 'orange' | 'blue'
+    /** 생략하면 개념에 정해진 톤을 쓴다 */
+    tone?: ProposalTone
     size?: number
   }>(),
-  { variant: 'hero', tone: 'orange', size: 82 },
+  { variant: 'hero', size: 82 },
 )
+
+const entry = computed(() => {
+  const found = byKey[props.concept]
+  if (!found) console.warn(`[ProposalIcon] Unknown concept: "${props.concept}"`)
+  return found
+})
+
+const glyph = computed(() => {
+  if (!entry.value) return null
+  const found = phosphorGlyphs[entry.value.glyph]
+  if (!found) console.warn(`[ProposalIcon] Missing glyph: "${entry.value.glyph}" — npm run build:proposal-icons`)
+  return found ?? null
+})
+
+const resolvedTone = computed(() => props.tone ?? entry.value?.tone ?? 'blue')
 
 /** 배지 지름 대비 글리프 비율 — inline은 배경이 없어 더 크게 */
 const GLYPH_RATIO = { hero: 0.46, path: 0.48, inline: 0.8 } as const
-
 const glyphSize = computed(() => Math.round(props.size * GLYPH_RATIO[props.variant]))
 </script>
 
 <template>
   <span
-    class="proposal-badge"
-    :class="[`variant-${variant}`, `tone-${tone}`]"
+    v-if="glyph"
+    class="proposal-icon"
+    :class="[`variant-${variant}`, `tone-${resolvedTone}`]"
     :style="{ '--badge-size': size + 'px' }"
+    :title="entry?.label"
   >
     <svg
       :viewBox="glyph.viewBox"
@@ -50,9 +71,9 @@ const glyphSize = computed(() => Math.round(props.size * GLYPH_RATIO[props.varia
 /**
  * 색은 presentation/tokens.ts 와 같은 값이다. 바꿀 때 양쪽을 함께 고친다.
  * orange500 #D9641A · blue600 #006FBD 위에서만 흰 글리프가 비텍스트 대비 3:1을 넘는다.
- * 그라디언트 밝은 쪽(orange400 #F58220 / blue500 #0290D5)은 장식이라 단독 바탕으로 쓰지 않는다.
+ * 그라디언트 밝은 쪽(orange400 / blue500)은 장식이라 단독 바탕으로 쓰지 않는다.
  */
-.proposal-badge {
+.proposal-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -84,12 +105,12 @@ const glyphSize = computed(() => Math.round(props.size * GLYPH_RATIO[props.varia
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      background-image: linear-gradient(180deg, rgb(255 255 255 / 28%), rgb(255 255 255 / 0%) 55%);
+      background-image: linear-gradient(180deg, #ffffff47, #ffffff00 55%);
       pointer-events: none;
     }
   }
 
-  // 배경 없이 글리프만 — 본문 안에 섞여 들어가는 용도
+  // 배경 없이 글리프만 — 본문에 섞여 들어가는 용도
   &.variant-inline {
     background-image: none;
     box-shadow: none;
