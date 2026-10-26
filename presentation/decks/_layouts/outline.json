@@ -1,0 +1,72 @@
+{
+  "topic": "제안 발표 레이아웃 카탈로그",
+  "core_hook": "레이아웃 11종이 실제로 렌더되는지 확인하는 샘플 덱이다.",
+  "pages": [
+    {
+      "title": "제안 발표 레이아웃 카탈로그",
+      "type": "cover",
+      "layout": "cover_split_image",
+      "brief": "제안 발표 레이아웃 카탈로그"
+    },
+    {
+      "title": "장 구분은 비워야 숨이 쉰다",
+      "type": "section",
+      "layout": "section_minimal",
+      "brief": "실측 43장 중 10장이 이 유형이었다"
+    },
+    {
+      "title": "발표 순서",
+      "type": "content",
+      "layout": "agenda_list",
+      "brief": "발표 순서"
+    },
+    {
+      "title": "세 개의 축으로 나눕니다",
+      "type": "content",
+      "layout": "three_column_cards",
+      "brief": "세 개의 축으로 나눕니다"
+    },
+    {
+      "title": "현재 과제와 전환 설계를 나란히",
+      "type": "content",
+      "layout": "matrix_grid",
+      "brief": "실측 최다 구조 — 본문 31장 중 12장이 5열 이상이었다"
+    },
+    {
+      "title": "무엇이 무엇으로 바뀌는가",
+      "type": "content",
+      "layout": "two_column_comparison",
+      "brief": "무엇이 무엇으로 바뀌는가"
+    },
+    {
+      "title": "세 단계로 확인하며 넘어갑니다",
+      "type": "content",
+      "layout": "timeline_horizontal",
+      "brief": "세 단계로 확인하며 넘어갑니다"
+    },
+    {
+      "title": "목표 시스템 구성",
+      "type": "content",
+      "layout": "architecture_flow",
+      "brief": "목표 시스템 구성"
+    },
+    {
+      "title": "주장마다 확인할 수 있는 근거를 둡니다",
+      "type": "content",
+      "layout": "evidence_grid",
+      "brief": "주장마다 확인할 수 있는 근거를 둡니다"
+    },
+    {
+      "title": "전략별로 어느 평가에 답하는가",
+      "type": "content",
+      "layout": "data_table",
+      "brief": "전략별로 어느 평가에 답하는가"
+    },
+    {
+      "title": "측정한 대로 그리고, 확인한 것만 말합니다",
+      "type": "section",
+      "layout": "closing",
+      "brief": "레이아웃 11종 · A4 가로 · 역할 토큰 기반"
+    }
+  ]
+}

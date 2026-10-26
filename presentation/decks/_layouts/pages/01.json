@@ -1,0 +1,30 @@
+{
+  "eyebrow": "레이아웃 · 샘플",
+  "brandLines": [
+    "JEJU",
+    "FOR A",
+    "SUSTAINABLE",
+    "TOMORROW"
+  ],
+  "footerLeft": "ISPark · 사람이 있는 디지털 변화",
+  "footerRight": "LAYOUT CATALOG",
+  "title": "제안 발표 레이아웃 카탈로그",
+  "type": "cover",
+  "layout": "cover_split_image",
+  "imageRatio": 0,
+  "elements": [
+    {
+      "kind": "project",
+      "text": "레이아웃 11종 렌더 검증용 샘플 덱"
+    },
+    {
+      "kind": "headline",
+      "text": "측정한 대로 그립니다"
+    },
+    {
+      "kind": "subtitle",
+      "text": "A4 가로 · JDC CI 팔레트 · 편집 가능한 개체"
+    }
+  ],
+  "claims": []
+}

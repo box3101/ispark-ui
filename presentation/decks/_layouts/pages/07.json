@@ -1,0 +1,32 @@
+{
+  "eyebrow": "레이아웃 · 샘플",
+  "brandLines": [
+    "JEJU",
+    "FOR A",
+    "SUSTAINABLE",
+    "TOMORROW"
+  ],
+  "footerLeft": "ISPark · 사람이 있는 디지털 변화",
+  "footerRight": "LAYOUT CATALOG",
+  "title": "세 단계로 확인하며 넘어갑니다",
+  "type": "content",
+  "layout": "timeline_horizontal",
+  "imageRatio": 0,
+  "steps": [
+    {
+      "title": "사전 클렌징",
+      "note": "중복·결측·코드 정비"
+    },
+    {
+      "title": "이관 후 대사",
+      "note": "건수·금액·이력 대조"
+    },
+    {
+      "title": "현업 검증 승인",
+      "note": "오류 시 롤백 가동"
+    }
+  ],
+  "conclusion": "전환 시점은 평가 시즌과 겹치지 않게 설계합니다",
+  "conclusionLabel": "무중단 전환",
+  "claims": []
+}

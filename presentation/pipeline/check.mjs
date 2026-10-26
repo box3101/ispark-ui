@@ -66,6 +66,8 @@ else {
  * 지금은 비어 있다 — ProposalIcon 의 Phosphor 전환으로 미상환 17건이 해소됐다.
  */
 const SCAN = [
+  { path: 'presentation/renderer/theme.mjs', style: 'bare' },
+  { path: 'presentation/renderer/layouts.mjs', style: 'bare' },
   { path: 'presentation/renderer/build.mjs', style: 'bare' },
   { path: 'src/presentation/ProposalIcon.vue', style: 'hex' },
 ]

@@ -1,0 +1,65 @@
+{
+  "eyebrow": "레이아웃 · 샘플",
+  "brandLines": [
+    "JEJU",
+    "FOR A",
+    "SUSTAINABLE",
+    "TOMORROW"
+  ],
+  "footerLeft": "ISPark · 사람이 있는 디지털 변화",
+  "footerRight": "LAYOUT CATALOG",
+  "title": "전략별로 어느 평가에 답하는가",
+  "type": "content",
+  "layout": "data_table",
+  "imageRatio": 0,
+  "columns": [
+    "전략",
+    "활용 강점",
+    "겨냥 평가요소"
+  ],
+  "rows": [
+    [
+      "1. 무결점 이관",
+      "현행 운영사",
+      {
+        "text": "데이터 요구사항",
+        "emphasis": true
+      }
+    ],
+    [
+      "2. 컨설팅 원팀",
+      "원저자 참여",
+      {
+        "text": "전략 및 방법론",
+        "emphasis": true
+      }
+    ],
+    [
+      "3. 성과관리 검증",
+      "구축 경험",
+      {
+        "text": "성과관리 요구사항",
+        "emphasis": true
+      }
+    ],
+    [
+      "4. 신규 구간 조성",
+      "백지 설계",
+      {
+        "text": "수행실적",
+        "emphasis": true
+      }
+    ],
+    [
+      "5. 다음 코스",
+      "AI PoC",
+      {
+        "text": "과업 범위 외 추가제안",
+        "emphasis": true
+      }
+    ]
+  ],
+  "highlightColumn": 2,
+  "caption": "평가요소 항목명과 배점은 RFP 원문과 대조해 확정 후 반영합니다.",
+  "claims": []
+}

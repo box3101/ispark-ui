@@ -1,0 +1,38 @@
+{
+  "eyebrow": "레이아웃 · 샘플",
+  "brandLines": [
+    "JEJU",
+    "FOR A",
+    "SUSTAINABLE",
+    "TOMORROW"
+  ],
+  "footerLeft": "ISPark · 사람이 있는 디지털 변화",
+  "footerRight": "LAYOUT CATALOG",
+  "title": "주장마다 확인할 수 있는 근거를 둡니다",
+  "type": "content",
+  "layout": "evidence_grid",
+  "imageRatio": 0,
+  "elements": [
+    {
+      "title": "데이터 구조 이해",
+      "note": "현행 시스템 운영 경험",
+      "proof": "운영사 지위"
+    },
+    {
+      "title": "제도 해석 일치",
+      "note": "컨설팅 원저자 참여",
+      "proof": "원저자 직접 투입"
+    },
+    {
+      "title": "성과관리 구현",
+      "note": "공공기관 구축 경험",
+      "proof": "검증 전 — RFP 대조 필요"
+    },
+    {
+      "title": "전환 안정성",
+      "note": "3단계 검증 체계",
+      "proof": "롤백 시나리오 포함"
+    }
+  ],
+  "claims": []
+}

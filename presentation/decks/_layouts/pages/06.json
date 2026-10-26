@@ -1,0 +1,50 @@
+{
+  "eyebrow": "레이아웃 · 샘플",
+  "brandLines": [
+    "JEJU",
+    "FOR A",
+    "SUSTAINABLE",
+    "TOMORROW"
+  ],
+  "footerLeft": "ISPark · 사람이 있는 디지털 변화",
+  "footerRight": "LAYOUT CATALOG",
+  "title": "무엇이 무엇으로 바뀌는가",
+  "type": "content",
+  "layout": "two_column_comparison",
+  "imageRatio": 0,
+  "beforeLabel": "AS-IS",
+  "afterLabel": "TO-BE",
+  "pairs": [
+    {
+      "before": {
+        "title": "노후 기술 기반",
+        "note": "기능과 접근 경험 개선 필요"
+      },
+      "after": {
+        "title": "통합 사용자 경험",
+        "note": "인사·성과 업무의 일관된 흐름"
+      }
+    },
+    {
+      "before": {
+        "title": "컨설팅과 업무 간 단절",
+        "note": "변경된 규칙의 반영 필요"
+      },
+      "after": {
+        "title": "제도 중심 업무 구현",
+        "note": "승인·평가 흐름의 규칙 연결"
+      }
+    },
+    {
+      "before": {
+        "title": "평가이력 전환 부담",
+        "note": "산식·기준정보 확인 필요"
+      },
+      "after": {
+        "title": "검증 가능한 자산 계승",
+        "note": "이력과 계산 결과 대조"
+      }
+    }
+  ],
+  "claims": []
+}

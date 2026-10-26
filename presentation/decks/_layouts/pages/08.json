@@ -1,0 +1,51 @@
+{
+  "eyebrow": "레이아웃 · 샘플",
+  "brandLines": [
+    "JEJU",
+    "FOR A",
+    "SUSTAINABLE",
+    "TOMORROW"
+  ],
+  "footerLeft": "ISPark · 사람이 있는 디지털 변화",
+  "footerRight": "LAYOUT CATALOG",
+  "title": "목표 시스템 구성",
+  "type": "content",
+  "layout": "architecture_flow",
+  "imageRatio": 0,
+  "tiers": [
+    {
+      "label": "채널",
+      "boxes": [
+        "인사포털",
+        "성과관리",
+        "모바일"
+      ]
+    },
+    {
+      "label": "서비스",
+      "boxes": [
+        "인사기본",
+        "평가",
+        "성과",
+        "교육"
+      ]
+    },
+    {
+      "label": "데이터",
+      "boxes": [
+        "기준정보",
+        "평가이력",
+        "성과지표"
+      ]
+    },
+    {
+      "label": "인프라",
+      "boxes": [
+        "인증·권한",
+        "연계",
+        "모니터링"
+      ]
+    }
+  ],
+  "claims": []
+}

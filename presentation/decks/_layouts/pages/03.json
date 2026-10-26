@@ -1,0 +1,48 @@
+{
+  "eyebrow": "레이아웃 · 샘플",
+  "brandLines": [
+    "JEJU",
+    "FOR A",
+    "SUSTAINABLE",
+    "TOMORROW"
+  ],
+  "footerLeft": "ISPark · 사람이 있는 디지털 변화",
+  "footerRight": "LAYOUT CATALOG",
+  "title": "발표 순서",
+  "type": "content",
+  "layout": "agenda_list",
+  "imageRatio": 0,
+  "subheadEn": "AGENDA",
+  "elements": [
+    {
+      "title": "사업 이해",
+      "note": "발주 배경과 과업 해석",
+      "rfpRef": "평가 1-1"
+    },
+    {
+      "title": "추진 전략",
+      "note": "기술·제도·데이터 통합",
+      "rfpRef": "평가 1-2"
+    },
+    {
+      "title": "수행 방안",
+      "note": "단계별 산출물과 검증",
+      "rfpRef": "평가 2-1"
+    },
+    {
+      "title": "수행 조직",
+      "note": "투입 인력과 R&R",
+      "rfpRef": "평가 3-1"
+    },
+    {
+      "title": "품질·보안",
+      "note": "게이트와 접근 통제",
+      "rfpRef": "평가 3-2"
+    },
+    {
+      "title": "맺음",
+      "note": "약속과 다음 단계"
+    }
+  ],
+  "claims": []
+}

@@ -42,6 +42,7 @@
     "build:icons": "node scripts/build-icons.mjs",
     "build:proposal-icons": "node scripts/build-proposal-icons.mjs",
     "check:deck": "node presentation/pipeline/check.mjs",
+    "check:layouts": "node presentation/pipeline/check.mjs presentation/decks/_layouts",
     "release": "node scripts/release.mjs",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",

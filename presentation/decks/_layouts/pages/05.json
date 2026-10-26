@@ -1,0 +1,80 @@
+{
+  "eyebrow": "레이아웃 · 샘플",
+  "brandLines": [
+    "JEJU",
+    "FOR A",
+    "SUSTAINABLE",
+    "TOMORROW"
+  ],
+  "footerLeft": "ISPark · 사람이 있는 디지털 변화",
+  "footerRight": "LAYOUT CATALOG",
+  "title": "현재 과제와 전환 설계를 나란히",
+  "type": "content",
+  "layout": "matrix_grid",
+  "imageRatio": 0,
+  "subtitle": "실측 최다 구조 — 본문 31장 중 12장이 5열 이상이었다",
+  "columns": [
+    "현재 과제",
+    "전환 설계",
+    "검증 방법"
+  ],
+  "rows": [
+    {
+      "label": "기술 기반",
+      "cells": [
+        {
+          "text": "노후 구조",
+          "note": "사용자 경험 개선 필요"
+        },
+        {
+          "text": "통합 경험",
+          "note": "일관된 화면과 흐름",
+          "tone": "blue"
+        },
+        {
+          "text": "사용성 점검",
+          "note": "주요 업무 시나리오"
+        }
+      ]
+    },
+    {
+      "label": "제도·업무",
+      "cells": [
+        {
+          "text": "컨설팅과 단절",
+          "note": "변경 규칙 미반영"
+        },
+        {
+          "text": "업무규칙 연결",
+          "note": "정책·승인·평가 흐름",
+          "tone": "blue"
+        },
+        {
+          "text": "규칙 대조",
+          "note": "산출물 기준"
+        }
+      ]
+    },
+    {
+      "label": "평가자산",
+      "cells": [
+        {
+          "text": "전환 부담",
+          "note": "산식·기준정보 확인"
+        },
+        {
+          "text": "검증 계승",
+          "note": "이력과 결과 대조",
+          "tone": "orange"
+        },
+        {
+          "text": "재계산 검증",
+          "note": "전후 일치 확인"
+        }
+      ]
+    }
+  ],
+  "conclusion": "세 축을 따로 메우지 않고 하나의 과제로 통합합니다",
+  "conclusionLabel": "재구축 방향",
+  "claims": []
+}
