@@ -1,8 +1,13 @@
 import type { SlideSpec } from '../validator'
+import { presentationTokens } from '../tokens'
+
 export const jdcTheme = {
-  id: 'jdc-heritage-modern',
-  name: 'JDC Heritage Modern',
-  accent: '#C65B35',
+  id: 'jdc-ci-blue',
+  name: 'JDC CI Blue',
+  /** 주조 — CI 서브2 */
+  primary: presentationTokens.colors.blue600,
+  /** 강조 — CI 보색 */
+  accent: presentationTokens.colors.orange500,
   photographicStyle: 'documentary close-up of Jeju basalt stone wall, natural neutral daylight, no artificial sunset',
   logoRules: { client: 'top-right', proposer: 'bottom-left', useOfficialAssetsOnly: true },
 } as const

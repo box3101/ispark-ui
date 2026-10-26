@@ -94,7 +94,20 @@ const Preview = defineComponent({
 const meta = {
   title: 'Presentation/JDC Heritage Modern',
   component: Preview,
-  parameters: { layout: 'fullscreen', docs: { description: { component: 'Premium JDC layout preview. Scenic photo is a Creative Commons Wikimedia placeholder; the JDC and ISPark wordmarks are typographic placeholders, not official logo assets. No exported PPTX parity is claimed.' } } },
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        component: [
+          'Premium JDC layout preview. Scenic photo is a Creative Commons Wikimedia placeholder; the JDC and ISPark wordmarks are typographic placeholders, not official logo assets. No exported PPTX parity is claimed.',
+          '',
+          '**디자인 토큰** — 색은 `presentation/tokens.ts`를 따른다. 발주처 JDC 공식 CI 기준이며, 전체 팔레트와 근거는 `Presentation/Foundation`에 있다.',
+          '',
+          '> 이전 ivory `#F7F5F0` / copper `#C65B35` 팔레트는 폐기했다. 실제 제안서 3종 어디에도 없었고 발주처 CI와도 무관한 값이었다.',
+        ].join('\n'),
+      },
+    },
+  },
   args: { page: 'cover' },
 } satisfies Meta<typeof Preview>
 export default meta
@@ -110,7 +123,7 @@ export const ProposalIcons: Story = {
   name: '07 Proposal Icons',
   render: () => ({
     components: { ProposalIcon },
-    template: `<div style="padding:32px;background:#f7f5f0;color:#13263f;font-family:Pretendard,sans-serif">
+    template: `<div style="padding:32px;background:#ffffff;color:#1f2937;font-family:Pretendard,sans-serif">
       <h2 style="margin:0 0 12px">ISPark 제안서 아이콘</h2>
       <p style="margin:0 0 24px">기존 UiIcon 기반 · Hero / Diagram / Inline</p>
       <div style="display:flex;gap:24px;flex-wrap:wrap">

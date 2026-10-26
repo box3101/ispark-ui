@@ -1,15 +1,26 @@
 # JDC Heritage Modern · Deck Style
 
 - Format: 16:9, 1280 x 720 reference canvas
-- Background: #F7F5F0
-- Main text: #13263F
-- Primary accent: #C65B35
-- Secondary accent: #83909B
-- Card: #FFFFFF
-- Border: #DDE1DF
+- Palette source: JDC official CI (jdcenter.com/about/symbolsystem/symbol.cs). Values below mirror `presentation/tokens.ts` — change both together.
+- Background: #FFFFFF
+- Main text: #1F2937
+- Heading: #092E49
+- Deep panel: #124568
+- Primary (CI sub2): #006FBD
+- Secondary (CI sub1): #0290D5
+- Tint (CI main): #76B1E1
+- Light surface: #DFEDF6
+- Basalt neutral (CI sub3): #918976
+- Accent text (CI complement): #B85610
+- Accent (CI complement): #D9641A
+- Accent light: #F58220
+- Accent surface: #FDE3CA
+- Caption: #6B7684
+- Border: #E5E8EB
 - Title font: Pretendard SemiBold / CJK fallback sans-serif
 - Body font: Pretendard Regular
 - Principle: strong editorial hierarchy, reserved photography, editable text, no decorative shapes
+- Accent discipline: keep #D9641A under 10% of slide area. #F58220 is decoration only — white glyphs on it fail contrast (2.59).
 - Branding: official JDC top-right; ISPark bottom-left; never generate official logo text as imagery
 - Cover: cover_split_image
 - Section: section_minimal
