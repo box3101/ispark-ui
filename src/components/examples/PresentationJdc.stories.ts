@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import { defineComponent } from 'vue'
-import UiIcon from '../ui/UiIcon.vue'
+import ProposalIcon from '../../presentation/ProposalIcon.vue'
 import './presentation-jdc.css'
 
 const Preview = defineComponent({
-  components: { UiIcon },
+  components: { ProposalIcon },
   props: { page: { type: String, default: 'cover' } },
   template: `<div class="ppt premium-jdc" :class="'ppt--' + page">
     <div class="ppt-photo" v-if="page !== 'content'" aria-hidden="true"></div>
@@ -33,16 +33,16 @@ const Preview = defineComponent({
           <div class="ppt-overview">
             <div class="ppt-orbit">
               <div class="ppt-orbit-center">JDC<br>인사포털 및<br>성과관리</div>
-              <div class="ppt-orbit-node top"><UiIcon name="users" :size="28" :stroke-width="1.6" /><span>인사·직무<br>교육·경력개발</span></div>
-              <div class="ppt-orbit-node left"><UiIcon name="chart-no-axes-combined" :size="28" :stroke-width="1.6" /><span>개인평가<br>조직성과</span></div>
-              <div class="ppt-orbit-node right"><UiIcon name="shield-check" :size="28" :stroke-width="1.6" /><span>평가자산<br>검증·계승</span></div>
+              <div class="ppt-orbit-node top"><ProposalIcon concept="people" variant="inline" :size="28" /><span>인사·직무<br>교육·경력개발</span></div>
+              <div class="ppt-orbit-node left"><ProposalIcon concept="performance" variant="inline" :size="28" /><span>개인평가<br>조직성과</span></div>
+              <div class="ppt-orbit-node right"><ProposalIcon concept="quality" variant="inline" :size="28" /><span>평가자산<br>검증·계승</span></div>
             </div>
           </div>
           <div class="ppt-facts">
-            <div><UiIcon name="calendar-days" :size="20" /><b>사업기간</b><span>계약체결일로부터 240일</span></div>
-            <div><UiIcon name="workflow" :size="20" /><b>제도 구현</b><span>인사·성과 컨설팅 결과 반영</span></div>
-            <div><UiIcon name="database" :size="20" /><b>데이터</b><span>기존 데이터 이관·표준·연동</span></div>
-            <div><UiIcon name="shield-check" :size="20" /><b>운영 기반</b><span>품질·보안·교육·안정화</span></div>
+            <div><ProposalIcon concept="schedule" variant="inline" :size="20" /><b>사업기간</b><span>계약체결일로부터 240일</span></div>
+            <div><ProposalIcon concept="workflow" variant="inline" :size="20" /><b>제도 구현</b><span>인사·성과 컨설팅 결과 반영</span></div>
+            <div><ProposalIcon concept="data-migration" variant="inline" :size="20" /><b>데이터</b><span>기존 데이터 이관·표준·연동</span></div>
+            <div><ProposalIcon concept="quality" variant="inline" :size="20" /><b>운영 기반</b><span>품질·보안·교육·안정화</span></div>
           </div>
         </div>
       </main>
@@ -52,9 +52,9 @@ const Preview = defineComponent({
       <main class="ppt-detail">
         <div class="ppt-detail-heading"><span>01-2 / 재구축 필요성</span><h1>변화한 제도와 노후 기술 사이,<br><em>하나의 운영체계</em>가 필요합니다.</h1><p>단순 화면 개선을 넘어 인사·성과 업무 흐름을 다시 연결합니다.</p></div>
         <div class="ppt-gap-grid">
-          <article><UiIcon name="monitor-cog" :size="36"/><span>현재 과제 01</span><h2>기술 기반</h2><p>노후 시스템 구조와 사용자 경험 개선 필요</p></article>
-          <article><UiIcon name="workflow" :size="36"/><span>현재 과제 02</span><h2>제도·업무</h2><p>인사·성과 컨설팅 결과의 실제 업무 반영</p></article>
-          <article><UiIcon name="database-zap" :size="36"/><span>현재 과제 03</span><h2>평가자산</h2><p>누적 평가데이터·산식의 검증과 안전한 전환</p></article>
+          <article><ProposalIcon concept="platform" variant="inline" :size="36" /><span>현재 과제 01</span><h2>기술 기반</h2><p>노후 시스템 구조와 사용자 경험 개선 필요</p></article>
+          <article><ProposalIcon concept="workflow" variant="inline" :size="36" /><span>현재 과제 02</span><h2>제도·업무</h2><p>인사·성과 컨설팅 결과의 실제 업무 반영</p></article>
+          <article><ProposalIcon concept="converted-data" variant="inline" :size="36" /><span>현재 과제 03</span><h2>평가자산</h2><p>누적 평가데이터·산식의 검증과 안전한 전환</p></article>
         </div>
         <div class="ppt-insight"><b>재구축 방향</b><span>기술 고도화 + 제도 구현 + 데이터 검증을 하나의 과제로 통합</span></div>
       </main>
@@ -64,9 +64,9 @@ const Preview = defineComponent({
         <div class="ppt-detail-heading"><span>01-3 / 핵심 추진 방향</span><h1>인사에서 성과까지,<br><em>끊김 없는 업무 연결</em></h1><p>분절된 기능을 사용자의 업무 여정을 중심으로 정렬합니다.</p></div>
         <div class="ppt-transform">
           <div class="ppt-transform-header"><b>AS-IS <small>현재 과제</small></b><span>전환 설계</span><b>TO-BE <small>재구축 방향</small></b></div>
-          <div class="ppt-transform-row"><div><strong>노후 기술 기반</strong><p>기능 및 접근 경험 개선 필요</p></div><UiIcon name="arrow-right" :size="28"/><div><strong>통합 사용자 경험</strong><p>인사·성과 업무의 일관된 화면과 흐름</p></div></div>
-          <div class="ppt-transform-row"><div><strong>컨설팅과 업무 간 단절</strong><p>변경된 규칙의 운영 반영 필요</p></div><UiIcon name="arrow-right" :size="28"/><div><strong>제도 중심 업무 구현</strong><p>정책·승인·평가 흐름의 업무규칙 연결</p></div></div>
-          <div class="ppt-transform-row"><div><strong>평가이력 전환 부담</strong><p>산식·기준정보·이력 확인 필요</p></div><UiIcon name="arrow-right" :size="28"/><div><strong>검증 가능한 자산 계승</strong><p>기존 이력과 계산 결과의 대조·확인</p></div></div>
+          <div class="ppt-transform-row"><div><strong>노후 기술 기반</strong><p>기능 및 접근 경험 개선 필요</p></div><ProposalIcon concept="next" variant="inline" :size="28" /><div><strong>통합 사용자 경험</strong><p>인사·성과 업무의 일관된 화면과 흐름</p></div></div>
+          <div class="ppt-transform-row"><div><strong>컨설팅과 업무 간 단절</strong><p>변경된 규칙의 운영 반영 필요</p></div><ProposalIcon concept="next" variant="inline" :size="28" /><div><strong>제도 중심 업무 구현</strong><p>정책·승인·평가 흐름의 업무규칙 연결</p></div></div>
+          <div class="ppt-transform-row"><div><strong>평가이력 전환 부담</strong><p>산식·기준정보·이력 확인 필요</p></div><ProposalIcon concept="next" variant="inline" :size="28" /><div><strong>검증 가능한 자산 계승</strong><p>기존 이력과 계산 결과의 대조·확인</p></div></div>
         </div>
         <div class="ppt-insight"><b>설계 원칙</b><span>연계 업무의 데이터 흐름과 권한·이력을 함께 고려</span></div>
       </main>
@@ -76,13 +76,13 @@ const Preview = defineComponent({
         <div class="ppt-detail-heading"><span>01-4 / 기존 평가자산 계승</span><h1>쌓아 온 평가자산은,<br><em>검증하고 이어갑니다.</em></h1><p>전환의 핵심은 데이터 복사가 아니라 의미와 결과의 보존입니다.</p></div>
         <div class="ppt-audit">
           <div class="ppt-audit-flow">
-            <div><UiIcon name="database" :size="36"/><strong>기존 평가자산</strong><small>항목·산식·이력</small></div>
-            <UiIcon name="arrow-right" :size="28"/>
-            <div><UiIcon name="git-compare-arrows" :size="36"/><strong>구조 매핑</strong><small>기준정보·코드 변환</small></div>
-            <UiIcon name="arrow-right" :size="28"/>
-            <div><UiIcon name="database-zap" :size="36"/><strong>전환 데이터</strong><small>적재·정합성 점검</small></div>
+            <div><ProposalIcon concept="data-migration" variant="inline" :size="36" /><strong>기존 평가자산</strong><small>항목·산식·이력</small></div>
+            <ProposalIcon concept="next" variant="inline" :size="28" />
+            <div><ProposalIcon concept="mapping" variant="inline" :size="36" /><strong>구조 매핑</strong><small>기준정보·코드 변환</small></div>
+            <ProposalIcon concept="next" variant="inline" :size="28" />
+            <div><ProposalIcon concept="converted-data" variant="inline" :size="36" /><strong>전환 데이터</strong><small>적재·정합성 점검</small></div>
           </div>
-          <div class="ppt-audit-gates"><span><UiIcon name="check-circle-2" :size="21"/> 건수·누락 점검</span><span><UiIcon name="check-circle-2" :size="21"/> 값·코드 대조</span><span><UiIcon name="check-circle-2" :size="21"/> 평가 산식 재계산</span><span><UiIcon name="check-circle-2" :size="21"/> 차이 보정·승인</span></div>
+          <div class="ppt-audit-gates"><span><ProposalIcon concept="verified" variant="inline" :size="21" /> 건수·누락 점검</span><span><ProposalIcon concept="verified" variant="inline" :size="21" /> 값·코드 대조</span><span><ProposalIcon concept="verified" variant="inline" :size="21" /> 평가 산식 재계산</span><span><ProposalIcon concept="verified" variant="inline" :size="21" /> 차이 보정·승인</span></div>
         </div>
         <div class="ppt-insight"><b>품질 게이트</b><span>검증 기준과 승인 절차는 착수 후 JDC와 협의하여 확정</span></div>
       </main>

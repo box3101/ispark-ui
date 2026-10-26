@@ -78,8 +78,16 @@ export const Variants: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          'hero는 카드 헤더, path는 소형 배지, inline은 배경 없이 본문에 섞이는 용도다. inline은 바탕이 없어 글리프가 직접 대비를 책임지므로 `orange700` 단계를 쓴다. 장표의 번호 닷(step)은 계획 [12]에서 다룬다.',
+        story: [
+          'hero는 카드 헤더 배지, path는 소형 배지다. 둘 다 톤에 따라 바탕이 칠해지고 글리프는 흰색이다.',
+          '',
+          '**inline은 다르다.** 래퍼 없이 글리프만 내보내고 색을 정하지 않는다 — 다이어그램처럼 바깥 CSS가',
+          '크기와 색을 잡아야 하는 자리에 쓰기 때문이다. 감싸는 요소에 인라인 style로 크기를 박으면',
+          '특이도 때문에 CSS가 이길 수 없다. 아래 inline 행은 부모가 `color`를 준 결과다.',
+          '',
+          '배지가 없으니 대비는 부모 책임이다 — 본문 크기라면 `orange700` · `blue600` 이상을 쓸 것.',
+          '장표의 번호 닷(step)은 계획 [12]에서 다룬다.',
+        ].join('\n'),
       },
     },
   },
@@ -87,9 +95,13 @@ export const Variants: Story = {
     components: { ProposalIcon },
     template: `<div style="${wrap}">
       <div v-for="t in ['orange','blue']" :key="t" style="display:flex;gap:30px;align-items:center;margin-bottom:22px">
-        <div v-for="v in ['hero','path','inline']" :key="v" style="text-align:center">
-          <ProposalIcon concept="quality" :variant="v" :tone="t" :size="v === 'hero' ? 82 : v === 'path' ? 56 : 40" />
+        <div v-for="v in ['hero','path']" :key="v" style="text-align:center">
+          <ProposalIcon concept="quality" :variant="v" :tone="t" :size="v === 'hero' ? 82 : 56" />
           <div style="margin-top:8px;font-size:12px;color:#6b7684">{{ t }} · {{ v }}</div>
+        </div>
+        <div style="text-align:center" :style="{ color: t === 'orange' ? '#b85610' : '#006fbd' }">
+          <ProposalIcon concept="quality" variant="inline" :size="40" />
+          <div style="margin-top:8px;font-size:12px;color:#6b7684">{{ t }} · inline</div>
         </div>
       </div>
     </div>`,

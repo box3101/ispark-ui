@@ -68,9 +68,9 @@
 /* Explicit font loading, rather than relying on an OS-installed font. */
 .premium-jdc{font-family:'Pretendard','Noto Sans KR',sans-serif;font-synthesis:none;letter-spacing:-.035em}
 .premium-jdc .ppt-orbit-node{flex-direction:column;gap:.25cqw}
-.premium-jdc .ppt-orbit-node .ui-icon{width:2.1cqw;height:2.1cqw;color:#006fbd}
+.premium-jdc .ppt-orbit-node .proposal-glyph{width:2.1cqw;height:2.1cqw;color:#006fbd}
 .premium-jdc .ppt-facts>div{grid-template-columns:2cqw 30% 1fr;gap:.6cqw}
-.premium-jdc .ppt-facts .ui-icon{width:1.6cqw;height:1.6cqw;color:#0290d5}
+.premium-jdc .ppt-facts .proposal-glyph{width:1.6cqw;height:1.6cqw;color:#0290d5}
 
 /* JDC typography roles: editable semantic type tokens. */
 .premium-jdc {
@@ -126,14 +126,14 @@
   text-shadow: .018em .008em 0 currentColor;
 }
 .premium-jdc .ppt-orbit-node { gap: .48cqw; }
-.premium-jdc .ppt-orbit-node .ui-icon {
+.premium-jdc .ppt-orbit-node .proposal-glyph {
   width: var(--ppt-icon-primary-size);
   height: var(--ppt-icon-primary-size);
   stroke-width: 1.75;
 }
 .premium-jdc .ppt-orbit-node span { line-height:1.23; }
 .premium-jdc .ppt-facts>div { grid-template-columns:2.5cqw 30% minmax(0,1fr); gap:.6cqw; }
-.premium-jdc .ppt-facts .ui-icon {
+.premium-jdc .ppt-facts .proposal-glyph {
   width:var(--ppt-icon-detail-size);
   height:var(--ppt-icon-detail-size);
   stroke-width:1.75;
@@ -149,7 +149,7 @@
 .premium-jdc .ppt-detail-heading p{margin:0;font-size:1.28cqw;color:#6b7684}
 .premium-jdc .ppt-gap-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2cqw;margin-top:3cqw}
 .premium-jdc .ppt-gap-grid article{min-width:0;padding:2.05cqw 1.8cqw 1.8cqw;min-height:22cqw;background:#fff;border-top:.28cqw solid #d9641a;box-shadow:0 7px 27px #092e4912;display:flex;flex-direction:column;align-items:flex-start}
-.premium-jdc .ppt-gap-grid article>.ui-icon{width:3cqw;height:3cqw;color:#006fbd}
+.premium-jdc .ppt-gap-grid article>.proposal-glyph{width:3cqw;height:3cqw;color:#006fbd}
 .premium-jdc .ppt-gap-grid article span{font-size:1cqw;color:#b85610;margin-top:1.4cqw}
 .premium-jdc .ppt-gap-grid h2{font-size:2.1cqw;margin:.45cqw 0 1cqw}
 .premium-jdc .ppt-gap-grid p{font-size:1.32cqw;line-height:1.5;margin:0}
@@ -157,12 +157,12 @@
 .premium-jdc .ppt-insight b{color:#fde3ca;white-space:nowrap}
 .premium-jdc .ppt-flow{display:flex;align-items:center;justify-content:space-between;gap:.5cqw;margin-top:5.4cqw}
 .premium-jdc .ppt-flow>div{flex:1;min-width:0;min-height:16cqw;background:#fff;border:1px solid #e5e8eb;border-radius:.8cqw;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1cqw}
-.premium-jdc .ppt-flow>div>.ui-icon{color:#006fbd;width:3.7cqw;height:3.7cqw}
+.premium-jdc .ppt-flow>div>.proposal-glyph{color:#006fbd;width:3.7cqw;height:3.7cqw}
 .premium-jdc .ppt-flow b{font-size:1.7cqw}.premium-jdc .ppt-flow small{font-size:1.12cqw;color:#6b7684}
 .premium-jdc .ppt-flow>.ppt-flow-arrow{flex:0 0 2.1cqw;width:2.1cqw;height:2.1cqw;color:#b85610}
 .premium-jdc .ppt-migration{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.2cqw;margin-top:5cqw}
 .premium-jdc .ppt-migration-step{min-height:16cqw;background:#fff;border:1px solid #e5e8eb;border-bottom:.35cqw solid #d9641a;padding:1.6cqw;display:flex;flex-direction:column;gap:1.1cqw}
-.premium-jdc .ppt-migration-step>.ui-icon{width:3.1cqw;height:3.1cqw;color:#006fbd}
+.premium-jdc .ppt-migration-step>.proposal-glyph{width:3.1cqw;height:3.1cqw;color:#006fbd}
 .premium-jdc .ppt-migration-step strong{font-size:1.55cqw}
 .premium-jdc .ppt-migration-step p{font-size:1.18cqw;color:#6b7684;line-height:1.4;margin:0}
 
@@ -178,13 +178,13 @@
 .premium-jdc .ppt-transform-row>div{background:#fff;padding:1.05cqw 1.5cqw;min-height:6.1cqw;border:1px solid #e5e8eb}
 .premium-jdc .ppt-transform-row>div:last-child{background:#fde3ca;border-color:#fde3ca}
 .premium-jdc .ppt-transform-row strong{font-size:1.55cqw}.premium-jdc .ppt-transform-row p{margin:.4cqw 0 0;font-size:1.14cqw;color:#6b7684}
-.premium-jdc .ppt-transform-row>.ui-icon{align-self:center;justify-self:center;color:#b85610;width:2.25cqw;height:2.25cqw}
+.premium-jdc .ppt-transform-row>.proposal-glyph{align-self:center;justify-self:center;color:#b85610;width:2.25cqw;height:2.25cqw}
 .premium-jdc .ppt-audit{margin-top:4.1cqw}
 .premium-jdc .ppt-audit-flow{display:grid;grid-template-columns:1fr 3cqw 1fr 3cqw 1fr;gap:1cqw;align-items:center}
 .premium-jdc .ppt-audit-flow>div{height:15.5cqw;background:#fff;border:1px solid #e5e8eb;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1cqw}
-.premium-jdc .ppt-audit-flow>div .ui-icon{color:#006fbd;width:3.5cqw;height:3.5cqw}
+.premium-jdc .ppt-audit-flow>div .proposal-glyph{color:#006fbd;width:3.5cqw;height:3.5cqw}
 .premium-jdc .ppt-audit-flow>div strong{font-size:1.7cqw}.premium-jdc .ppt-audit-flow>div small{font-size:1.1cqw;color:#6b7684}
-.premium-jdc .ppt-audit-flow>.ui-icon{color:#b85610;width:2.4cqw;height:2.4cqw}
+.premium-jdc .ppt-audit-flow>.proposal-glyph{color:#b85610;width:2.4cqw;height:2.4cqw}
 .premium-jdc .ppt-audit-gates{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7cqw;margin-top:2cqw}
 .premium-jdc .ppt-audit-gates span{background:#dfedf6;border-radius:.4cqw;padding:1.05cqw .5cqw;display:flex;align-items:center;justify-content:center;gap:.5cqw;font-size:1.14cqw;font-weight:650;color:#092e49;white-space:nowrap}
-.premium-jdc .ppt-audit-gates .ui-icon{width:1.5cqw;height:1.5cqw;color:#0290d5}
+.premium-jdc .ppt-audit-gates .proposal-glyph{width:1.5cqw;height:1.5cqw;color:#0290d5}

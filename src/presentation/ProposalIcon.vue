@@ -18,7 +18,10 @@ const props = withDefaults(
   defineProps<{
     /** presentation/icons/icon-map.ts 의 개념 key */
     concept: string
-    /** hero=카드 헤더 / path=소형 배지 / inline=배경 없는 미니 */
+    /**
+     * hero = 카드 헤더 배지 / path = 소형 배지
+     * inline = 배지 없이 글리프만. 다이어그램·본문용이라 크기와 색을 CSS가 잡는다
+     */
     variant?: 'hero' | 'path' | 'inline'
     /** 생략하면 개념에 정해진 톤을 쓴다 */
     tone?: ProposalTone
@@ -42,14 +45,34 @@ const glyph = computed(() => {
 
 const resolvedTone = computed(() => props.tone ?? entry.value?.tone ?? 'blue')
 
-/** 배지 지름 대비 글리프 비율 — inline은 배경이 없어 더 크게 */
-const GLYPH_RATIO = { hero: 0.46, path: 0.48, inline: 0.8 } as const
+/**
+ * 배지 지름 대비 글리프 비율.
+ * inline은 배지가 없으므로 size가 곧 글리프 크기다 — UiIcon과 같은 감각으로 쓴다.
+ */
+const GLYPH_RATIO = { hero: 0.46, path: 0.48, inline: 1 } as const
 const glyphSize = computed(() => Math.round(props.size * GLYPH_RATIO[props.variant]))
 </script>
 
 <template>
+  <!--
+    inline은 래퍼 없이 글리프만 내보낸다. 감싸는 span에 인라인 style로 크기를 박으면
+    바깥 CSS가 이길 수 없어서, 다이어그램처럼 CSS가 크기를 잡는 자리에 못 쓴다.
+    width/height는 표현 속성이라 CSS가 그대로 덮어쓸 수 있다.
+  -->
+  <svg
+    v-if="glyph && variant === 'inline'"
+    class="proposal-glyph"
+    :viewBox="glyph.viewBox"
+    :width="glyphSize"
+    :height="glyphSize"
+    focusable="false"
+    aria-hidden="true"
+  >
+    <path v-for="(d, i) in glyph.paths" :key="i" :d="d" fill="currentColor" />
+  </svg>
+
   <span
-    v-if="glyph"
+    v-else-if="glyph"
     class="proposal-icon"
     :class="[`variant-${variant}`, `tone-${resolvedTone}`]"
     :style="{ '--badge-size': size + 'px' }"
@@ -110,14 +133,16 @@ const glyphSize = computed(() => Math.round(props.size * GLYPH_RATIO[props.varia
     }
   }
 
-  // 배경 없이 글리프만 — 본문에 섞여 들어가는 용도
-  &.variant-inline {
-    background-image: none;
-    box-shadow: none;
+}
 
-    // 배경이 없으니 글리프 자체가 대비를 책임진다 — 텍스트 안전 단계를 쓴다
-    &.tone-orange { color: #b85610; }
-    &.tone-blue   { color: #006fbd; }
-  }
+/**
+ * inline 글리프 — 색을 정하지 않는다. 부모가 color로 잡는다.
+ * 여기서 색을 박으면 바깥 CSS보다 특이도가 높아 다이어그램에서 덮어쓸 수 없다.
+ * 배경이 없으니 대비는 부모가 책임진다 — 본문 크기면 orange700/blue600 이상을 쓸 것.
+ */
+.proposal-glyph {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
 }
 </style>

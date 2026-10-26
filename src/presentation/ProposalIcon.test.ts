@@ -61,3 +61,31 @@ describe('제안 아이콘 — 렌더링', () => {
     expect(container.querySelector('svg')?.getAttribute('width')).toBe('46')
   })
 })
+
+describe('제안 아이콘 — inline은 CSS가 크기·색을 잡는다', () => {
+  it('래퍼 없이 글리프만 내보낸다', () => {
+    const { container } = render(ProposalIcon, { props: { concept: 'next', variant: 'inline' } })
+    // 감싸는 span에 인라인 style로 크기가 박히면 바깥 CSS가 이길 수 없다
+    expect(container.querySelector('.proposal-icon')).toBeNull()
+    expect(container.querySelector('svg.proposal-glyph')).not.toBeNull()
+  })
+
+  it('size가 곧 글리프 크기다 — UiIcon과 같은 감각', () => {
+    const { container } = render(ProposalIcon, { props: { concept: 'next', variant: 'inline', size: 28 } })
+    const svg = container.querySelector('svg.proposal-glyph')
+    expect(svg?.getAttribute('width')).toBe('28')
+    expect(svg?.getAttribute('height')).toBe('28')
+  })
+
+  it('크기를 인라인 style로 박지 않는다 — CSS가 덮어쓸 수 있어야 한다', () => {
+    const { container } = render(ProposalIcon, { props: { concept: 'next', variant: 'inline', size: 28 } })
+    expect(container.querySelector('svg.proposal-glyph')?.getAttribute('style')).toBeNull()
+  })
+
+  it('글리프는 currentColor로 칠한다 — 부모가 색을 정한다', () => {
+    const { container } = render(ProposalIcon, { props: { concept: 'next', variant: 'inline' } })
+    for (const path of container.querySelectorAll('svg.proposal-glyph path')) {
+      expect(path.getAttribute('fill')).toBe('currentColor')
+    }
+  })
+})
