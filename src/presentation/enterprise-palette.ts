@@ -14,6 +14,9 @@
  */
 
 import { presentationTokens, jdcCI } from '../../presentation/tokens'
+import { contrastRatio, contrastVerdict } from '../../presentation/contrast'
+
+export { contrastRatio, contrastVerdict }
 
 const C = presentationTokens.colors
 
@@ -113,24 +116,3 @@ export const ciTokenMapping = [
   { ci: jdcCI.sub2, token: 'blue600', hex: C.blue600 },
   { ci: jdcCI.sub3, token: 'taupe500', hex: C.taupe500 },
 ]
-
-/** WCAG 상대 휘도 */
-const luminance = (hex: string) => {
-  const ch = [1, 3, 5]
-    .map((i) => parseInt(hex.substr(i, 2), 16) / 255)
-    .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4))
-  return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2]
-}
-
-/** 두 색의 대비비 — 1~21 */
-export const contrastRatio = (a: string, b: string) => {
-  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x)
-  return (hi + 0.05) / (lo + 0.05)
-}
-
-/** 투사 환경 기준 판정 */
-export const contrastVerdict = (ratio: number) =>
-  ratio >= 7 ? { label: 'AAA', tone: 'pass' as const }
-  : ratio >= 4.5 ? { label: 'AA', tone: 'pass' as const }
-  : ratio >= 3 ? { label: '큰 글씨·아이콘', tone: 'warn' as const }
-  : { label: '배경 전용', tone: 'fail' as const }

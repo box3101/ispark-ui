@@ -5,7 +5,14 @@ const dir = resolve(process.argv[2] || 'presentation/decks/jdc')
 const out = resolve(process.argv[3] || join(dir, 'deck.pptx'))
 const outline = JSON.parse(readFileSync(join(dir, 'outline.json'), 'utf8'))
 const pptx = new pptxgen()
-pptx.layout = 'LAYOUT_WIDE'
+// A4 가로(10.83 x 7.5 in, 1.444). LAYOUT_WIDE 는 13.333 x 7.5 = 1.778(16:9)이라 쓰면 안 된다.
+// 실측: JDC/우체국 PDF 780x540pt, 제안서 pptx 9906000x6858000 EMU - 셋 다 1.444.
+pptx.defineLayout({ name: 'A4_LANDSCAPE', width: 10.83, height: 7.5 })
+pptx.layout = 'A4_LANDSCAPE'
+// 기존 좌표는 13.333in 폭(16:9)에 맞춰 쓰여 있다. 호출부를 전부 고치는 대신
+// 그리는 지점에서 가로만 환산한다. 세로는 7.5in 그대로라 건드리지 않는다.
+const DESIGN_W = 13.333
+const sx = (v) => +(v * (10.83 / DESIGN_W)).toFixed(4)
 pptx.author = 'ISPark Presentation System'
 pptx.subject = outline.topic
 pptx.lang = 'ko-KR'
@@ -17,10 +24,10 @@ const C = {
   text:'1F2937', caption:'6B7684', border:'E5E8EB', white:'FFFFFF',
 }
 function text(slide,value,x,y,w,h,size=20,bold=false,color=C.navy900,options={}) {
-  slide.addText(value,{x,y,w,h,fontFace:'Pretendard',fontSize:size,bold,color,margin:0,fit:'shrink',valign:'mid',...options})
+  slide.addText(value,{x:sx(x),y,w:sx(w),h,fontFace:'Pretendard',fontSize:size,bold,color,margin:0,fit:'shrink',valign:'mid',...options})
 }
 function box(slide,x,y,w,h,color=C.white) {
-  slide.addShape(pptx.ShapeType.rect,{x,y,w,h,line:{color},fill:{color}})
+  slide.addShape(pptx.ShapeType.rect,{x:sx(x),y,w:sx(w),h,line:{color},fill:{color}})
 }
 function header(slide,label) {
   text(slide,label,.65,.45,10.5,.26,12,true)
@@ -56,7 +63,7 @@ for (const [i,entry] of outline.pages.entries()) {
     if (cards.length!==3) throw Error('Exactly 3 pillars required')
     cards.forEach((card,n)=>{
       const x=.7+n*4.07,y=3.04,w=3.85,h=2.72
-      slide.addShape(pptx.ShapeType.rect,{x,y,w,h,line:{color:C.border,width:1},fill:{color:C.white}})
+      slide.addShape(pptx.ShapeType.rect,{x:sx(x),y,w:sx(w),h,line:{color:C.border,width:1},fill:{color:C.white}})
       text(slide,'0'+(n+1),x+.24,y+.3,.8,.35,19,true,C.accent)
       text(slide,card.title,x+.24,y+1.02,w-.48,.65,21,true)
       text(slide,card.description,x+.24,y+1.83,w-.48,.65,14,false,C.caption,{valign:'top'})

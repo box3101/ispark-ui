@@ -1,17 +1,22 @@
 /**
- * ISPark 제안 발표 토큰 — Vue 런타임과 독립. 팔레트의 단일 출처다.
+ * ISPark 제안 발표 토큰 — Vue 런타임과 독립. 색과 캔버스의 단일 출처다.
  *
- * 색은 발주처 JDC의 공식 CI를 주조로 삼는다.
- * - CI 원본 값은 그대로 쓴다 (blue600 / blue500 / blue300 / taupe500)
- * - CI에 없는 짙은·옅은 단계만 CI 색상환 H=205°에서 파생한다
- * - 강조는 CI 블루의 보색 H=25°에서 가져온다 (차이 1.5°)
+ * ── 캔버스
+ * A4 가로(10.83 × 7.5 in, 비율 1.444)다. 16:9 가 아니다.
+ * 실측: JDC·우체국 PDF 780 × 540 pt, 제안서 pptx 9906000 × 6858000 EMU — 셋 다 1.444.
+ * 심사위원이 인쇄본으로도 보기 때문이고, 16:9 로 만들면 4:3 프로젝터에서 축소된다.
+ * pptxgenjs 의 LAYOUT_WIDE(13.333 × 7.5 = 1.778)를 쓰면 안 된다.
  *
- * 이전 팔레트(ivory #F7F5F0 / copper #C65B35)는 폐기했다.
- * 실제 제안서 3종 어디에도 그 계열이 없었고, 발주처 CI와도 무관한 값이었다.
- * 돌담·현무암 톤은 CI 서브3 taupe500 #918976이 대신한다.
+ * ── 색
+ * 발주처 JDC 공식 CI 를 주조로 삼는다 (jdcenter.com/about/symbolsystem/symbol.cs).
+ * CI 원본 값은 그대로 쓰고, 없는 단계만 CI 색상환 H=205° 에서 파생한다.
+ * 강조는 CI 블루의 보색 H=25° 에서 가져왔다 (차이 1.5°).
+ *
+ * 스펙 JSON 은 `colors` 의 원시값이 아니라 `roles` 의 역할 이름만 쓴다.
+ * 원시 HEX 를 직접 쓰면 "왜 이 색인지"가 사라지고, 대비 검사도 걸 수 없다.
  */
 
-/** JDC 공식 CI — jdcenter.com/about/symbolsystem/symbol.cs */
+/** JDC 공식 CI — 공식 사이트에 실린 값 그대로 */
 export const jdcCI = {
   main: '#76B1E1',
   sub1: '#0290D5',
@@ -21,37 +26,24 @@ export const jdcCI = {
 } as const
 
 export const presentationTokens = {
-  canvas: { width: 13.333, height: 7.5, unit: 'in', aspectRatio: '16:9' },
-  typography: { family: 'Pretendard', fallback: 'Arial', titlePt: 32, headingPt: 24, bodyPt: 18, footnotePt: 10 },
+  /** A4 가로. pptxgenjs 는 defineLayout 으로 직접 잡아야 한다 */
+  canvas: { width: 10.83, height: 7.5, unit: 'in', ratio: 1.444, aspectRatio: 'A4-landscape' },
+  typography: { family: 'Pretendard', fallback: 'Arial', titlePt: 24, headingPt: 18, bodyPt: 12, footnotePt: 7 },
   spacing: { marginXIn: 0.65, marginYIn: 0.45, gapIn: 0.22 },
   colors: {
-    /** 제목, 짙은 배경 — CI H205° 파생 (L 16%) · 흰 배경 대비 14.01 */
     navy900: '#092E49',
-    /** 카드 헤더, 보조 배경 — CI H205° 파생 (L 24%) · 10.11 */
     navy700: '#124568',
-    /** 주 강조·링크 — CI 서브2 원본 · 5.24 (본문 통과하는 유일한 CI 블루) */
     blue600: '#006FBD',
-    /** 차트 2계열, 아이콘 — CI 서브1 원본 · 3.53 */
     blue500: '#0290D5',
-    /** 보조 면 — CI 메인 원본 · 2.30 (배경 전용, 텍스트 금지) */
     blue300: '#76B1E1',
-    /** 연한 카드 배경 — CI H205° 파생 (L 92%) */
     blue100: '#DFEDF6',
-    /** 현무암·돌담 톤 — CI 서브3 원본 · 3.47 */
     taupe500: '#918976',
-    /** 강조 텍스트 — 흰 배경 4.80 (AA). 본문 크기 강조는 반드시 이 단계로 */
     orange700: '#B85610',
-    /** 배지 바탕(흰 글리프 가능), 보더·면 — CI 보색 H25° · 3.63 */
     orange500: '#D9641A',
-    /** 그라디언트 밝은 쪽 — 장식 전용. 흰 글리프 얹으면 2.59라 바탕 금지 */
     orange400: '#F58220',
-    /** 강조 카드 배경 */
     orange100: '#FDE3CA',
-    /** 본문 */
     gray900: '#1F2937',
-    /** 캡션, 출처 표기 */
     gray500: '#6B7684',
-    /** 보더, 구분선 */
     gray200: '#E5E8EB',
     white: '#FFFFFF',
   },
@@ -59,7 +51,70 @@ export const presentationTokens = {
 } as const
 
 export type PresentationTokens = typeof presentationTokens
-export type PresentationColor = keyof typeof presentationTokens.colors
+export type ColorToken = keyof typeof presentationTokens.colors
 
-/** check.mjs·스토리에서 팔레트 정합을 검사할 때 쓰는 허용 목록 */
+/**
+ * 색마다 허용되는 쓰임.
+ * 흰 배경 대비를 재서 정한 것이고, 실제 통과 여부는 validator 가 배경까지 보고 다시 계산한다.
+ * 여기 목록은 "의도"이고, 대비 계산이 "판정"이다.
+ */
+export type ColorUsage = 'text' | 'largeText' | 'icon' | 'fill' | 'border' | 'decorative' | 'chart'
+
+export const colorUsage: Record<ColorToken, ColorUsage[]> = {
+  navy900: ['text', 'largeText', 'icon', 'fill'],      // 14.01
+  navy700: ['text', 'largeText', 'icon', 'fill'],      // 10.11
+  blue600: ['text', 'largeText', 'icon', 'chart', 'border'], // 5.24
+  blue500: ['largeText', 'icon', 'chart'],             // 3.53 — 본문 불가
+  blue300: ['fill', 'decorative'],                     // 2.30 — 배경 전용
+  blue100: ['fill'],                                   // 1.19
+  taupe500: ['largeText', 'icon', 'chart'],            // 3.47
+  orange700: ['text', 'largeText'],                    // 4.80
+  orange500: ['largeText', 'icon', 'fill', 'border'],  // 3.63 — 본문 불가
+  orange400: ['decorative'],                           // 2.59 — 장식 전용
+  orange100: ['fill'],                                 // 1.23
+  gray900: ['text', 'largeText'],                      // 14.68
+  gray500: ['text', 'largeText', 'icon'],              // 4.62
+  gray200: ['border', 'fill'],
+  white: ['text', 'largeText', 'fill'],
+}
+
+/**
+ * 역할 토큰 — 스펙 JSON 이 쓰는 유일한 색 어휘.
+ * fg/bg 는 ColorToken 이름이고, minPt·bold 는 대비 하한을 낮추기 위한 조건이다.
+ */
+export type RoleSpec = {
+  fg?: ColorToken
+  bg?: ColorToken
+  border?: ColorToken
+  /** 이 역할로 찍는 글자의 최소 크기 — 큰 텍스트 기준(3:1)을 쓰려면 필요 */
+  minPt?: number
+  bold?: boolean
+}
+
+export const roles = {
+  'text.title': { fg: 'navy900', minPt: 18 },
+  'text.heading': { fg: 'navy900', minPt: 14, bold: true },
+  'text.body': { fg: 'gray900', minPt: 12 },
+  'text.footnote': { fg: 'gray500', minPt: 7 },
+  'text.emphasis': { fg: 'orange700', minPt: 12 },
+  'text.link': { fg: 'blue600', minPt: 12 },
+  'surface.page': { bg: 'white' },
+  'surface.dark': { bg: 'navy900', fg: 'white', minPt: 12 },
+  'surface.cardHeader': { bg: 'navy700', fg: 'white', minPt: 12 },
+  'surface.neutralCard': { bg: 'blue100', fg: 'gray900', minPt: 12 },
+  'surface.emphasisCard': { bg: 'orange100', fg: 'gray900', border: 'orange500', minPt: 12 },
+  /**
+   * 흰 글자 배지. orange500 과 흰색의 대비는 3.63 이라 본문 크기로는 안 된다.
+   * bold 14pt 이상으로 강제해야 '큰 텍스트' 기준 3.0 을 적용할 수 있다.
+   */
+  'badge.emphasis': { bg: 'orange500', fg: 'white', minPt: 14, bold: true },
+  'border.subtle': { border: 'gray200' },
+} as const satisfies Record<string, RoleSpec>
+
+export type RoleToken = keyof typeof roles
+
+/** 차트 시리즈 순서 — 5개 이상이면 장을 나눈다 */
+export const chartSeries: ColorToken[] = ['blue600', 'blue500', 'navy700', 'taupe500']
+
 export const allowedHexes = Object.values(presentationTokens.colors) as readonly string[]
+export const roleNames = Object.keys(roles) as RoleToken[]

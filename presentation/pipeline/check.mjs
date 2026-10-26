@@ -67,7 +67,6 @@ else {
  */
 const SCAN = [
   { path: 'presentation/renderer/build.mjs', style: 'bare' },
-  { path: 'src/components/examples/presentation-jdc.css', style: 'hex' },
   { path: 'src/presentation/ProposalIcon.vue', style: 'hex' },
 ]
 
@@ -92,7 +91,10 @@ for (const target of SCAN) {
 // 덱 사양
 // ============================================
 const outline = read(join(deck, 'outline.json'))
-const allowed = new Set(['cover_split_image', 'section_minimal', 'three_column_cards', 'two_column_comparison', 'timeline_horizontal', 'architecture_flow', 'evidence_grid'])
+// 레이아웃 목록도 layouts.ts 하나에서 읽는다 — 손으로 복사해 두면 또 어긋난다
+const layoutsSrc = existsSync(join(root, 'presentation/layouts.ts')) ? readFileSync(join(root, 'presentation/layouts.ts'), 'utf8') : ''
+const allowed = new Set([...layoutsSrc.matchAll(/^\s{2}(\w+):\s*\{\s*id:/gm)].map((m) => m[1]))
+if (allowed.size < 5) issue('layouts.ts', 'LAYOUTS', 'Could not read the layout catalog')
 if (!outline?.core_hook?.trim()) issue('outline', 'HOOK', 'Deck must have a core hook')
 if (!Array.isArray(outline?.pages) || !outline.pages.length) issue('outline', 'PAGES', 'Deck needs pages')
 
