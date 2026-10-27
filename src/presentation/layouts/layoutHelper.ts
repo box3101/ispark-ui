@@ -3,14 +3,24 @@
  * (Slidev 테마들이 layoutHelper 를 따로 두는 것과 같은 이유)
  */
 
+import { presentationTokens } from '../../../presentation/tokens'
+
+const DPI = 96
+
 /**
- * 기준 캔버스 — A4 가로(10.83 × 7.5 in)를 96dpi 로 환산한 값.
+ * 기준 캔버스 — presentation/tokens.ts 의 인치 값을 96dpi 로 환산한 것.
+ *
+ * 숫자를 여기 또 적지 않는다. 치수가 두 군데 있으면 한쪽만 바뀌어 어긋난다.
  *
  * 실측: ISPark 제안서 pptx 는 9906000 × 6858000 EMU, JDC·우체국 PDF 는 780 × 540 pt.
  * 셋 다 비율 1.444 다. 16:9 가 아니라 A4 가로인 이유는 심사위원이 인쇄본으로도
  * 보기 때문이다. 16:9 로 만들면 4:3 프로젝터에서 축소돼 가뜩이나 빽빽한 내용이 더 작아진다.
  */
-export const CANVAS = { width: 1040, height: 720, ratio: 1040 / 720 } as const
+export const CANVAS = {
+  width: Math.round(presentationTokens.canvas.width * DPI),
+  height: Math.round(presentationTokens.canvas.height * DPI),
+  ratio: presentationTokens.canvas.width / presentationTokens.canvas.height,
+} as const
 
 /** 실측에서 나온 격자 범위 — 이 밖이면 레이아웃을 잘못 고른 것이다 */
 export const GRID_LIMITS = { minCols: 2, maxCols: 8, minRows: 1, maxRows: 9 } as const

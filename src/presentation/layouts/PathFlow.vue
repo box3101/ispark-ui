@@ -92,7 +92,7 @@ const curve = computed(() => {
           <path d="M0,1 L9,5 L0,9 z" fill="#d9641a" />
         </marker>
       </defs>
-      <path :d="curve" fill="none" stroke="#d9641a" stroke-width="0.45" marker-end="url(#pf-arrow)" />
+      <path class="curve" :d="curve" fill="none" stroke="#d9641a" stroke-width="0.45" marker-end="url(#pf-arrow)" />
     </svg>
 
     <!-- 경로 위 노드 -->
