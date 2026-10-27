@@ -1,3 +1,4 @@
+import {presentationAssetUrl} from './asset-url'
 /** Stable asset IDs; labels may change without breaking stored slide specs. */
 import {byKey,proposalIcons} from '../../../presentation/icons/icon-map'
 const additionalConcepts=['people','quality','schedule','verified','next','converted-data','understanding','strategy','organization','staffing','risk','security','training','deliverable','stabilization','maintenance','integration','infrastructure','testing'] as const
@@ -12,7 +13,7 @@ export const illustrationAssets = [
 ] as const
 export type IllustrationId = typeof illustrationAssets[number]['id']
 export const illustrationById = Object.fromEntries(illustrationAssets.map(a=>[a.id,a])) as Record<IllustrationId,typeof illustrationAssets[number]>
-export const illustrationUrl=(id:IllustrationId)=>`/presentation/illustrated/icons/${illustrationById[id].file}`
+export const illustrationUrl=(id:IllustrationId)=>presentationAssetUrl(`/presentation/illustrated/icons/${illustrationById[id].file}`)
 export const defaultIllustrationByConcept:Record<string,IllustrationId>=Object.fromEntries(illustrationAssets.map(a=>[a.concept,a.id]))
 export const illustrationCoverage=proposalIcons.map(c=>({concept:c.key,label:c.label,illustration:defaultIllustrationByConcept[c.key]}))
 export const strategyIllustrations={server:'legacy-server',system:'system-blocks',analytics:'analytics-review'} as const

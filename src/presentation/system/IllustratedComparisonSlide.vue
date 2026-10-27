@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {presentationAssetUrl} from './asset-url'
+
 import {computed,watchEffect} from 'vue'
 import IllustratedComparisonRow,{type IllustratedComparisonItem} from './IllustratedComparisonRow.vue'
 import {slideTokens} from './tokens'
@@ -15,7 +17,7 @@ watchEffect(()=>{if(props.rows.length!==3)throw Error('Illustrated comparison re
 <template>
  <div class="ic-viewport" :style="{width:`${width}px`,height:`${width*1024/1536}px`}">
   <section class="ic-slide" :style="{...colors,transform:`scale(${width/1536})`}">
-   <img v-if="background" class="ic-background" :src="background" alt=""/><div class="ic-wash" />
+   <img v-if="background" class="ic-background" :src="presentationAssetUrl(background)" alt=""/><div class="ic-wash" />
    <header class="ic-heading"><p class="ic-section" data-check>{{section}}</p><h1 data-check>{{title}} <em>{{emphasis}}</em></h1><p class="ic-subtitle" data-check>{{subtitle}}</p></header>
    <table class="ic-table" aria-label="현재와 재구축 결과 비교">
     <colgroup><col style="width:29%"/><col style="width:32%"/><col style="width:39%"/></colgroup>

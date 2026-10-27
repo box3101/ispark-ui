@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {presentationAssetUrl} from './asset-url'
+
 import {computed,watchEffect,useId} from 'vue'
 import IllustrationIcon from './IllustrationIcon.vue'
 import {themeVariables} from './tokens'
@@ -16,7 +18,7 @@ const edges=computed(()=>(props.data.connections??[]).map(c=>({ ...c,a:position(
 </script>
 <template>
  <section class="pl-slide" :class="['pl-kind-'+data.kind,{'pl-dark':dark}]" :style="themeVariables">
-  <img v-if="background" class="pl-background" :src="background" alt=""/><div class="pl-wash"/>
+  <img v-if="background" class="pl-background" :src="presentationAssetUrl(background)" alt=""/><div class="pl-wash"/>
   <header class="pl-heading"><p data-fit>{{data.section}}</p><h1 data-fit>{{data.title}}</h1><p class="pl-subtitle" data-fit>{{data.subtitle}}</p></header>
   <main class="pl-body">
    <div v-if="data.kind==='section'" class="pl-chapter" data-fit>{{data.number}}</div>
@@ -31,7 +33,7 @@ const edges=computed(()=>(props.data.connections??[]).map(c=>({ ...c,a:position(
    <table v-else-if="data.kind==='timeline'" class="pl-gantt"><thead><tr><th scope="col">주요 작업</th><th v-for="month in data.months" :key="month" scope="col">{{month}}</th></tr></thead><tbody><tr v-for="(track,i) in data.tracks" :key="i"><th scope="row">{{track.label}}</th><td :colspan="data.months!.length"><div class="pl-gridlines" :style="{backgroundSize:`${100/data.months!.length}% 100%`}"></div><div class="pl-bar" :style="{left:`${(track.start-1)/data.months!.length*100}%`,width:`${(track.end-track.start+1)/data.months!.length*100}%`}"><span>{{track.milestone}}</span><b aria-hidden="true">◆</b></div></td></tr></tbody></table>
    <div v-else-if="data.kind==='organization'" class="pl-org"><article class="pl-leader"><strong data-fit>{{data.items[0].title}}</strong><p data-fit>{{data.items[0].body}}</p></article><div class="pl-teams"><article v-for="(item,i) in data.items.slice(1)" :key="i" class="pl-panel"><IllustrationIcon v-if="item.icon" :name="item.icon" :size="90"/><h2 data-fit>{{item.title}}</h2><p data-fit>{{item.body}}</p></article></div></div>
    <table v-else-if="['trace','risk','table'].includes(data.kind)" class="pl-table"><thead><tr><th v-for="header in data.headers" :key="header" scope="col">{{header}}</th></tr></thead><tbody><tr v-for="(item,i) in data.items" :key="i"><th scope="row" data-fit><span>{{String(i+1).padStart(2,'0')}}</span>{{item.title}}</th><td data-fit>{{item.body}}</td><td data-fit>{{item.detail}}</td></tr></tbody></table>
-   <div v-else-if="data.kind==='screen'" class="pl-screen"><figure><img v-if="data.screen" :src="data.screen.src" :alt="data.screen.alt"/><div v-else class="pl-screen-placeholder"><IllustrationIcon name="legacy-server" :size="140"/><strong>화면 이미지 영역</strong><p>실제 서비스 화면으로 교체</p></div><figcaption>{{data.screen?.alt||'화면 미등록 · 설명용 자리 표시'}}</figcaption></figure><ol><li v-for="(item,i) in data.items" :key="i"><span>{{String(i+1).padStart(2,'0')}}</span><h2 data-fit>{{item.title}}</h2><p data-fit>{{item.body}}</p></li></ol></div>
+   <div v-else-if="data.kind==='screen'" class="pl-screen"><figure><img v-if="data.screen" :src="presentationAssetUrl(data.screen.src)" :alt="data.screen.alt"/><div v-else class="pl-screen-placeholder"><IllustrationIcon name="legacy-server" :size="140"/><strong>화면 이미지 영역</strong><p>실제 서비스 화면으로 교체</p></div><figcaption>{{data.screen?.alt||'화면 미등록 · 설명용 자리 표시'}}</figcaption></figure><ol><li v-for="(item,i) in data.items" :key="i"><span>{{String(i+1).padStart(2,'0')}}</span><h2 data-fit>{{item.title}}</h2><p data-fit>{{item.body}}</p></li></ol></div>
    <div v-else class="pl-cards"><article v-for="(item,i) in data.items" :key="i" class="pl-panel"><span class="pl-index">{{String(i+1).padStart(2,'0')}}</span><div v-if="data.kind==='metrics'" class="pl-value" data-fit>{{item.value}}</div><IllustrationIcon v-else-if="item.icon" :name="item.icon" :size="132"/><h2 data-fit>{{item.title}}</h2><p data-fit>{{item.body}}</p><strong v-if="item.detail" class="pl-evidence" data-fit>{{item.detail}}</strong></article></div>
   </main>
   <aside v-if="data.takeaway&&!dark" class="pl-takeaway" data-fit>{{data.takeaway}}</aside>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {presentationAssetUrl} from './asset-url'
+
 import {computed,ref} from 'vue'
 import IllustrationIcon from './IllustrationIcon.vue'
 import ArtworkWindow from './ArtworkWindow.vue'
@@ -23,7 +25,7 @@ const matches=computed(()=>illustrationAssets.filter(a=>[a.id,a.label,a.concept,
   <p v-if="!matches.length" role="status">검색 결과가 없습니다.</p>
   <h2 class="asset-group-title">배경 · 장식</h2>
   <div class="asset-backgrounds">
-   <article><img :src="'/presentation/illustrated/jeju-background.png'" alt="제주 해안 배경"/><h3>제주 해안 배경</h3><p>AI 생성 콘셉트 이미지 · 문구 없음</p><a href="/presentation/illustrated/jeju-background.png" download>배경 PNG 다운로드 ↓</a></article>
+   <article><img :src="presentationAssetUrl('/presentation/illustrated/jeju-background.png')" alt="제주 해안 배경"/><h3>제주 해안 배경</h3><p>AI 생성 콘셉트 이미지 · 문구 없음</p><a :href="presentationAssetUrl('/presentation/illustrated/jeju-background.png')" download>배경 PNG 다운로드 ↓</a></article>
    <article><div class="asset-wave"><ArtworkWindow src="/presentation/illustrated/artwork-atlas.png" :x="65" :y="641" :width="438" :height="178" /></div><h3>카드 하단 물결</h3><p>밝은 카드용 아트워크 영역 · 투명 파일 아님</p><code>ArtworkWindow · 65, 641, 438, 178</code></article>
   </div>
   <p class="asset-note">입체 아이콘은 이미지이므로 색상 토큰으로 재색칠되지 않습니다. 기본 SVG는 색상 변경이 가능하며, 두 표현은 같은 의미 이름으로 연결됩니다.</p>

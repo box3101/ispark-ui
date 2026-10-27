@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {presentationAssetUrl} from './asset-url'
+
 import {watchEffect} from 'vue'
 import IllustratedStrategyCard, {type IllustratedCardData} from './IllustratedStrategyCard.vue'
 import './illustrated-strategy.css'
@@ -18,7 +20,7 @@ watchEffect(()=>{
 <template>
   <div class="iv-viewport" :style="{width:`${width}px`,height:`${width*1042/1510}px`}">
     <section class="iv-slide" :style="{transform:`scale(${width/1510})`}" aria-label="사업 이해 발표 장표">
-      <img class="iv-background" :src="background" alt="" />
+      <img class="iv-background" :src="presentationAssetUrl(background)" alt="" />
       <div class="iv-background-wash" aria-hidden="true" />
       <header class="iv-header">
         <p class="iv-section" data-check>{{section}}</p>

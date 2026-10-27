@@ -1,3 +1,4 @@
+import {presentationAssetUrl} from './asset-url'
 import { defineComponent, h, type PropType } from 'vue'
 import ProposalIcon from '../ProposalIcon.vue'
 import { byKey } from '../../../presentation/icons/icon-map'
@@ -31,7 +32,7 @@ export const SemanticIcon = defineComponent({name:'SemanticIcon',props:{concept:
 }})
 export const FlowConnector = defineComponent({name:'FlowConnector',props:{direction:{type:String as PropType<'right'|'down'|'up'>,default:'right'}},setup:p=>()=>h('span',{class:'ds-connector','aria-hidden':'true'},{right:'→',down:'↓',up:'↑'}[p.direction])})
 export const SlideCanvas = defineComponent({name:'SlideCanvas',props:{background:String,tone:{type:String as PropType<'light'|'dark'|'split'>,default:'light'},source:{type:String,required:true},page:{type:Number,required:true},takeaway:String,kind:String,profile:{type:String as PropType<'proposal'|'enterprise'|'scenic'>,default:'proposal'}},setup:(p,{slots})=>()=>h('section',{class:['ds-slide',`ds-tone-${p.tone}`,p.kind&&`ds-kind-${p.kind}`,`ds-${p.profile}`],style:themeVariables},[
-  p.background?h('img',{class:'ds-background',src:p.background,alt:''}):null,h('div',{class:'ds-wash','aria-hidden':'true'}),
+  p.background?h('img',{class:'ds-background',src:presentationAssetUrl(p.background),alt:''}):null,h('div',{class:'ds-wash','aria-hidden':'true'}),
   slots.header?.(),h('main',{class:'ds-main'},slots.default?.()),p.takeaway?h(TakeawayBar,{text:p.takeaway}):null,h(EvidenceFooter,{source:p.source,page:p.page}),
 ])})
 export const ComparisonDiagram = defineComponent({name:'ComparisonDiagram',props:{rows:{type:Array as PropType<ComparisonRow[]>,required:true}},setup:p=>()=>{
