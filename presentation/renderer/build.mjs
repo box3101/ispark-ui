@@ -17,7 +17,8 @@
 import pptxgen from 'pptxgenjs'
 import { readFileSync, mkdirSync } from 'node:fs'
 import { join, resolve, dirname } from 'node:path'
-import { CANVAS } from './theme.mjs'
+import { CANVAS, startRecording, stopRecording } from './theme.mjs'
+import { report } from './qa.mjs'
 import { layouts } from './layouts.mjs'
 
 const dir = resolve(process.argv[2] || 'presentation/decks/jdc')
@@ -32,6 +33,7 @@ pptx.subject = outline.topic
 pptx.lang = 'ko-KR'
 
 const problems = []
+const drawn = []
 
 for (const [i, entry] of outline.pages.entries()) {
   const id = String(i + 1).padStart(2, '0')
@@ -50,11 +52,23 @@ for (const [i, entry] of outline.pages.entries()) {
 
   const slide = pptx.addSlide()
   slide.background = { color: 'FFFFFF' }
+  startRecording()
   try {
     draw(slide, pptx, spec, i + 1)
   } catch (e) {
     problems.push(`${id}: ${e.message}`)
   }
+  drawn.push(stopRecording())
+}
+
+// 결정론 QA — 넘침·여백·대비·겹침. 렌더 전에 막는다
+const qa = report(drawn)
+if (!qa.fontMeasured) console.warn('⚠ Pretendard 를 찾지 못해 넘침 검사를 건너뜁니다')
+if (!qa.valid) {
+  console.error(`QA ${qa.issues.length}건 (${Object.entries(qa.byCode).map(([k, v]) => k + ' ' + v).join(', ')})`)
+  for (const x of qa.issues.slice(0, 20)) console.error(`  p${x.page} ${x.code}  ${x.message}`)
+  if (qa.issues.length > 20) console.error(`  … 외 ${qa.issues.length - 20}건`)
+  if (!process.argv.includes('--allow-qa-issues')) problems.push(`QA 검사 ${qa.issues.length}건`)
 }
 
 if (problems.length) {
@@ -65,3 +79,4 @@ if (problems.length) {
 mkdirSync(dirname(out), { recursive: true })
 await pptx.writeFile({ fileName: out })
 console.log(`Created: ${out}  (${outline.pages.length} slides, ${CANVAS.w}x${CANVAS.h}in)`)
+console.log(`QA: 텍스트 ${qa.textsChecked}개 검사, 문제 ${qa.issues.length}건`)

@@ -20,14 +20,14 @@ function chrome(slide, spec) {
     text(slide, parts, { x: SAFE.x, y: SAFE.top, w: 60, h: 4 }, { size: PT.chip })
   }
   for (const [i, line] of (spec.brandLines ?? []).entries()) {
-    text(slide, line, { x: 72, y: 2.2 + i * 2.3, w: 24.6, h: 2.2 }, { size: PT.subheadEn, color: C.blue300, align: 'right', bold: true })
+    text(slide, line, { x: 72, y: 2.2 + i * 2.3, w: 24.6, h: 2.2 }, { size: PT.subheadEn, color: C.navy700, align: 'right', bold: true })
   }
 }
 
 /** 제목 + 영문 서브헤드. 실측 제목 y 13.8%, 서브헤드 y 20.8% */
 function heading(slide, spec) {
   if (spec.title) text(slide, spec.title, { x: SAFE.x, y: 13.2, w: 82, h: 7 }, { size: PT.title, bold: true, color: C.navy900 })
-  if (spec.subheadEn) text(slide, spec.subheadEn, { x: SAFE.x + 0.1, y: 20.6, w: 50, h: 3 }, { size: PT.subheadEn, color: C.taupe500, charSpacing: 2 })
+  if (spec.subheadEn) text(slide, spec.subheadEn, { x: SAFE.x + 0.1, y: 20.6, w: 50, h: 3 }, { size: PT.subheadEn, color: C.gray500, charSpacing: 2 })
   if (spec.subtitle) text(slide, spec.subtitle, { x: SAFE.x, y: 24, w: 70, h: 4 }, { size: PT.body, color: C.gray500 })
 }
 
@@ -59,7 +59,7 @@ const BODY = (spec) => ({ top: spec.title ? 29 : 22, bottom: spec.conclusion ? 8
 const L = {}
 
 L.cover_split_image = (slide, pptx, spec) => {
-  rect(slide, pptx, { x: 62, y: 0, w: 38, h: 100 }, C.blue100)
+  rect(slide, pptx, { x: 62, y: 0, w: 38, h: 88 }, C.blue100)
   chrome(slide, spec)
   const el = (k) => spec.elements?.find((e) => e.kind === k)?.text ?? ''
   text(slide, el('project') || spec.title, { x: SAFE.x, y: 10, w: 55, h: 5 }, { size: PT.body, bold: true, color: C.navy900 })
@@ -91,7 +91,7 @@ L.agenda_list = (slide, pptx, spec, i) => {
     const cy = b.top + (rh + 1) * Math.floor(n / cols)
     rect(slide, pptx, { x: cx, y: cy, w: 0.4, h: rh }, C.orange500)
     text(slide, String(n + 1).padStart(2, '0'), { x: cx + 1.4, y: cy + 0.6, w: 6, h: rh - 1 },
-      { size: PT.cardTitle, bold: true, color: C.blue300, valign: 'mid' })
+      { size: PT.cardTitle, bold: true, color: C.blue500, valign: 'mid' })
     text(slide, it.title, { x: cx + 7, y: cy + 0.4, w: cw - 16, h: rh / 2 },
       { size: PT.tagline, bold: true, color: C.navy900, valign: 'mid' })
     if (it.note) text(slide, it.note, { x: cx + 7, y: cy + rh / 2, w: cw - 16, h: rh / 2 },
@@ -144,9 +144,9 @@ L.matrix_grid = (slide, pptx, spec, i) => {
       const tone = cell.tone === 'orange' ? C.orange100 : cell.tone === 'blue' ? C.blue100 : C.white
       rect(slide, pptx, { x: cx, y: ry, w: cw, h: rh }, tone, C.gray200)
       text(slide, cell.text ?? String(cell), { x: cx + 1, y: ry + 0.8, w: cw - 2, h: rh / 2 },
-        { size: PT.body, bold: true, color: cell.tone === 'orange' ? C.orange700 : C.navy900 })
+        { size: PT.body, bold: true, color: C.navy900 })
       if (cell.note) text(slide, cell.note, { x: cx + 1, y: ry + rh / 2, w: cw - 2, h: rh / 2 - 0.5 },
-        { size: PT.small, color: C.gray500 })
+        { size: PT.small, color: cell.tone ? C.navy700 : C.gray500 })
     })
   })
   conclusion(slide, pptx, spec); footer(slide, spec, i)
@@ -167,10 +167,10 @@ L.two_column_comparison = (slide, pptx, spec, i) => {
     rect(slide, pptx, { x: SAFE.x, y: ry, w: sideW, h: rh }, C.white, C.gray200)
     text(slide, p.before.title, { x: SAFE.x + 1.2, y: ry + 0.8, w: sideW - 2.4, h: rh / 2 }, { size: PT.body, bold: true, color: C.gray500 })
     if (p.before.note) text(slide, p.before.note, { x: SAFE.x + 1.2, y: ry + rh / 2, w: sideW - 2.4, h: rh / 2 - 0.5 }, { size: PT.small, color: C.gray500 })
-    text(slide, '▶', { x: SAFE.x + sideW + 1, y: ry, w: 6, h: rh }, { size: PT.tagline, color: C.orange500, align: 'center', valign: 'mid' })
+    text(slide, '▶', { x: SAFE.x + sideW + 1, y: ry, w: 6, h: rh }, { size: PT.cardTitle, color: C.orange500, align: 'center', valign: 'mid' })
     rect(slide, pptx, { x: rightX, y: ry, w: sideW, h: rh }, C.orange100)
     text(slide, p.after.title, { x: rightX + 1.2, y: ry + 0.8, w: sideW - 2.4, h: rh / 2 }, { size: PT.body, bold: true, color: C.navy900 })
-    if (p.after.note) text(slide, p.after.note, { x: rightX + 1.2, y: ry + rh / 2, w: sideW - 2.4, h: rh / 2 - 0.5 }, { size: PT.small, color: C.gray500 })
+    if (p.after.note) text(slide, p.after.note, { x: rightX + 1.2, y: ry + rh / 2, w: sideW - 2.4, h: rh / 2 - 0.5 }, { size: PT.small, color: C.navy700 })
   })
   conclusion(slide, pptx, spec); footer(slide, spec, i)
 }

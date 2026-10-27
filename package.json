@@ -43,6 +43,8 @@
     "build:proposal-icons": "node scripts/build-proposal-icons.mjs",
     "check:deck": "node presentation/pipeline/check.mjs",
     "check:layouts": "node presentation/pipeline/check.mjs presentation/decks/_layouts",
+    "deck:build": "node presentation/renderer/build.mjs presentation/decks/jdc presentation/decks/jdc/deck.pptx",
+    "deck:preview": "node presentation/renderer/render.mjs presentation/decks/jdc/deck.pptx",
     "release": "node scripts/release.mjs",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",

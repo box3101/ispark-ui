@@ -59,11 +59,34 @@ export const py = (pct) => +(CANVAS.h * pct / 100).toFixed(4)
 export const box = (x, y, w, h) => ({ x: px(x), y: py(y), w: px(w), h: py(h) })
 
 /**
+ * 그린 것을 기록한다. QA 가 이 목록으로 넘침·겹침·여백·대비를 검사한다.
+ * PPTX 를 다시 열어 읽는 것보다 그릴 때 받아두는 쪽이 정확하다 —
+ * 의도한 글자 크기와 굵기를 그대로 알 수 있기 때문이다.
+ */
+let recording = null
+export function startRecording() { recording = [] ; return recording }
+export function stopRecording() { const r = recording; recording = null; return r ?? [] }
+const record = (entry) => { if (recording) recording.push(entry) }
+
+/**
  * 텍스트 한 줄. 좌표는 캔버스 % 로 받는다.
  * margin:0 은 필수 — pptxgenjs 텍스트 박스 기본 여백이 들어가면 측정값과 어긋난다.
  */
 export function text(slide, value, pos, opts = {}) {
   const { size = PT.body, bold = false, color = COLOR.gray900, align = 'left', valign = 'top', ...rest } = opts
+  // 서식 조각 배열은 조각마다 색이 다르다. 묶어서 기본색으로 기록하면 거짓 양성이 난다.
+  // 넘침은 전체 문자열로, 대비는 조각별로 봐야 한다.
+  if (Array.isArray(value)) {
+    const plain = value.map((v) => v.text ?? '').join('')
+    record({ kind: 'text', text: plain, ...pos, size, bold, color, measureOnly: true })
+    for (const run of value) {
+      if (!String(run.text ?? '').trim()) continue
+      record({ kind: 'text', text: run.text, ...pos, size: run.options?.fontSize ?? size,
+        bold: run.options?.bold ?? bold, color: run.options?.color ?? color, contrastOnly: true })
+    }
+  } else {
+    record({ kind: 'text', text: String(value), ...pos, size, bold, color })
+  }
   slide.addText(value, {
     ...box(pos.x, pos.y, pos.w, pos.h),
     fontFace: FONT, fontSize: size, bold, color,
@@ -74,6 +97,7 @@ export function text(slide, value, pos, opts = {}) {
 
 /** 채움 사각형 */
 export function rect(slide, pptx, pos, fill, line) {
+  record({ kind: 'rect', ...pos, fill })
   slide.addShape(pptx.ShapeType.rect, {
     ...box(pos.x, pos.y, pos.w, pos.h),
     fill: { color: fill },

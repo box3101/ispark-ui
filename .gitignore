@@ -37,3 +37,7 @@ storybook-static
 scripts/release.local.json
 .gstack/
 snapshot.txt
+
+# 렌더 산출물 — 빌드로 재생성
+presentation/decks/*/deck.pptx
+presentation/decks/*/preview/
