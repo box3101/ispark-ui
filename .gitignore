@@ -41,3 +41,8 @@ snapshot.txt
 # 렌더 산출물 — 빌드로 재생성
 presentation/decks/*/deck.pptx
 presentation/decks/*/preview/
+
+# Local PDF design review artifacts and confidential deck inputs
+/output/pdf/
+/tmp/pdfs/
+/presentation/pdf-system/local/

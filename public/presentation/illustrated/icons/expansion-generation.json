@@ -1,0 +1,121 @@
+{
+  "tool": "built-in image_gen",
+  "transparent_background": true,
+  "reference": "data-migration.png",
+  "jobs": [
+    {
+      "id": "people",
+      "label": "인사·직무",
+      "subject": "Two polished abstract human busts, one blue and one silver, standing side by side. Clearly two people; no facial detail.",
+      "prompt": "Create ONE reusable 3D business presentation icon: Two polished abstract human busts, one blue and one silver, standing side by side. Clearly two people; no facial detail. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "quality",
+      "label": "품질 검증",
+      "subject": "A thick silver shield with a large blue checkmark inset on its face. Shield must be dominant.",
+      "prompt": "Create ONE reusable 3D business presentation icon: A thick silver shield with a large blue checkmark inset on its face. Shield must be dominant. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "schedule",
+      "label": "수행 일정",
+      "subject": "A silver desk calendar with blue binding rings and a neat grid of blue square day markers, no numbers or letters.",
+      "prompt": "Create ONE reusable 3D business presentation icon: A silver desk calendar with blue binding rings and a neat grid of blue square day markers, no numbers or letters. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "verified",
+      "label": "확인 완료",
+      "subject": "An upright silver circular certification medallion with a large raised blue checkmark. Circle, not a shield.",
+      "prompt": "Create ONE reusable 3D business presentation icon: An upright silver circular certification medallion with a large raised blue checkmark. Circle, not a shield. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "next",
+      "label": "다음 단계",
+      "subject": "One thick blue forward-pointing right arrow with polished silver bevels, angled slightly isometrically. Simple strong directional arrow.",
+      "prompt": "Create ONE reusable 3D business presentation icon: One thick blue forward-pointing right arrow with polished silver bevels, angled slightly isometrically. Simple strong directional arrow. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "converted-data",
+      "label": "전환 데이터",
+      "subject": "Two curved blue arrows forming a circular synchronization loop around a small silver data cylinder.",
+      "prompt": "Create ONE reusable 3D business presentation icon: Two curved blue arrows forming a circular synchronization loop around a small silver data cylinder. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "understanding",
+      "label": "사업 이해",
+      "subject": "A silver and translucent blue light bulb with a visible glowing blue filament, symbolizing insight.",
+      "prompt": "Create ONE reusable 3D business presentation icon: A silver and translucent blue light bulb with a visible glowing blue filament, symbolizing insight. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "strategy",
+      "label": "추진 전략",
+      "subject": "A silver blue chess knight on a small strategic path of three connected nodes. Main symbol is a chess knight.",
+      "prompt": "Create ONE reusable 3D business presentation icon: A silver blue chess knight on a small strategic path of three connected nodes. Main symbol is a chess knight. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "organization",
+      "label": "수행 조직",
+      "subject": "An organizational chart formed by one upper blue person bust connected to three lower silver and blue busts by clean silver branches.",
+      "prompt": "Create ONE reusable 3D business presentation icon: An organizational chart formed by one upper blue person bust connected to three lower silver and blue busts by clean silver branches. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "staffing",
+      "label": "투입 인력",
+      "subject": "A silver personnel ID badge with a blue person silhouette and two simple blue bars, blue lanyard clip. No letters or numbers.",
+      "prompt": "Create ONE reusable 3D business presentation icon: A silver personnel ID badge with a blue person silhouette and two simple blue bars, blue lanyard clip. No letters or numbers. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "risk",
+      "label": "위험 관리",
+      "subject": "An upright silver beveled warning triangle with an unmistakable raised blue exclamation symbol.",
+      "prompt": "Create ONE reusable 3D business presentation icon: An upright silver beveled warning triangle with an unmistakable raised blue exclamation symbol. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "security",
+      "label": "보안",
+      "subject": "A substantial silver padlock with a blue inset front and a polished curved silver shackle. Closed lock.",
+      "prompt": "Create ONE reusable 3D business presentation icon: A substantial silver padlock with a blue inset front and a polished curved silver shackle. Closed lock. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "training",
+      "label": "교육",
+      "subject": "A blue graduation cap with silver tassel hovering over an open silver book with simple blue line details, no text.",
+      "prompt": "Create ONE reusable 3D business presentation icon: A blue graduation cap with silver tassel hovering over an open silver book with simple blue line details, no text. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "deliverable",
+      "label": "산출물",
+      "subject": "Three neatly stacked silver document pages with blue folded corners and a blue folder beneath them, no letters or numbers.",
+      "prompt": "Create ONE reusable 3D business presentation icon: Three neatly stacked silver document pages with blue folded corners and a blue folder beneath them, no letters or numbers. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "stabilization",
+      "label": "안정화",
+      "subject": "A silver rounded monitor showing a single blue heartbeat pulse waveform, with a small stable blue circular indicator.",
+      "prompt": "Create ONE reusable 3D business presentation icon: A silver rounded monitor showing a single blue heartbeat pulse waveform, with a small stable blue circular indicator. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "maintenance",
+      "label": "하자 보수",
+      "subject": "A polished silver wrench diagonally crossing a blue gear. Wrench and gear clearly visible.",
+      "prompt": "Create ONE reusable 3D business presentation icon: A polished silver wrench diagonally crossing a blue gear. Wrench and gear clearly visible. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "integration",
+      "label": "시스템 연계",
+      "subject": "Two blue and silver connector plugs joined together in the center, with two short gracefully curved cables.",
+      "prompt": "Create ONE reusable 3D business presentation icon: Two blue and silver connector plugs joined together in the center, with two short gracefully curved cables. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "infrastructure",
+      "label": "인프라",
+      "subject": "Two tall silver server racks side by side with blue rack panels and tiny cyan status lamps, no hourglass.",
+      "prompt": "Create ONE reusable 3D business presentation icon: Two tall silver server racks side by side with blue rack panels and tiny cyan status lamps, no hourglass. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    },
+    {
+      "id": "testing",
+      "label": "테스트",
+      "subject": "A blue-filled laboratory test tube in a silver holder with a small blue checkmark badge, no writing.",
+      "prompt": "Create ONE reusable 3D business presentation icon: A blue-filled laboratory test tube in a silver holder with a small blue checkmark badge, no writing. Match the supplied reference's polished silver metal, saturated blue accents, subtle cyan edge light, clean isometric 3/4 perspective, studio highlights and small translucent circular glass plinth. Consistent premium enterprise icon family, not cartoon. Center the complete object on a square canvas occupying 78-82% with at least 10% safe margins and no clipping. GENUINE transparent alpha background outside the object and small soft contact shadow; no white rectangle, no checkerboard baked in, no landscape. No text, no labels, no numbers, no logos. Reference is style/material/lighting only; draw the requested subject, not the reference database. Palette silver, white metal, deep blue and cyan only; no orange or purple."
+    }
+  ]
+}

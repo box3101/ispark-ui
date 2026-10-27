@@ -1,0 +1,96 @@
+/* Approved narrative profile. All diagrams are semantic HTML, no baked-in text. */
+.profile-route .slide{padding:44px 54px 62px}
+.profile-route .eyebrow{margin-bottom:23px;padding-bottom:13px;border-bottom:2px solid var(--blue600);width:max-content;max-width:900px;font-size:16px;letter-spacing:0}
+.profile-route h1{font-size:35px;letter-spacing:-1px}
+.profile-route .body{margin-top:40px}
+.profile-route .footer{left:54px;right:54px;font-size:10px}
+.profile-route .takeaway{left:54px;right:54px;bottom:82px;background:var(--navy900);color:white;border:0;border-left:5px solid var(--orange500);padding:19px 22px;font-size:21px;line-height:1.4;box-shadow:0 5px 14px rgba(9,46,73,.12)}
+.profile-route .has-background:not(.section):not(.cover):not(.closing) .photo-wash{background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(255,255,255,.92) 25%,rgba(255,255,255,.96) 70%,rgba(255,255,255,.65) 95%),linear-gradient(90deg,white,rgba(255,255,255,.5) 60%,rgba(255,255,255,.1))}
+.profile-route .station{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:54px;height:54px;border-radius:50%;background:var(--white);border:2px solid var(--blue600);box-shadow:0 0 0 7px rgba(223,237,246,.85);font-size:23px;font-weight:700;color:var(--blue600);position:relative;z-index:1}
+.profile-route .cover .eyebrow{border:0;color:var(--blue100);font-size:17px;font-weight:400}
+.profile-route .cover-copy{position:relative;z-index:1;margin-top:100px}
+.profile-route .cover-intro{font-size:31px;color:white}
+.profile-route .cover.has-background h1{margin-top:13px;font-size:70px;line-height:1.13;max-width:850px}
+.profile-route .cover h1 em{font-style:normal;color:var(--orange100)}
+.profile-route .cover .lead{font-size:21px;margin-top:24px}
+.profile-route .cover .cover-end{bottom:94px;font-size:14px}
+.profile-route .layout-agenda .photo-wash{background:linear-gradient(90deg,rgba(255,255,255,.9) 0%,rgba(255,255,255,.88) 33%,rgba(9,46,73,.94) 33%,rgba(9,46,73,.84) 100%)!important}
+.profile-route .layout-agenda>.eyebrow{max-width:245px}
+.profile-route .layout-agenda>h1{width:250px;font-size:40px;line-height:1.33;margin-top:24px}
+.profile-route .agenda-count{position:absolute;left:54px;top:380px;z-index:1;color:var(--blue600);font-size:122px;line-height:1;font-weight:700}
+.profile-route .agenda-count small{display:block;font-size:13px;letter-spacing:2px;margin:14px 0 0 7px;font-weight:400}
+.profile-route .route-agenda{position:absolute;z-index:1;left:374px;right:46px;top:71px;display:grid;grid-template-columns:1fr 1fr}
+.profile-route .agenda-stop{display:flex;gap:14px;min-height:137px;padding:19px 10px 15px 0;border-top:1px solid rgba(118,177,225,.55)}
+.profile-route .agenda-stop:nth-child(even){padding-left:18px;border-left:1px solid rgba(118,177,225,.55)}
+.profile-route .agenda-stop:last-child{grid-column:1/-1;min-height:110px}
+.profile-route .agenda-stop .station{width:44px;height:44px;box-shadow:none;background:none;border:none;font-size:36px;color:var(--blue300)}
+.profile-route .course-name{font-size:14px;color:var(--orange100);display:block;margin:2px 0 9px}
+.profile-route .agenda-stop h3{font-size:20px;color:white;line-height:1.35}
+.profile-route .agenda-stop p{font-size:14px;color:var(--blue100);margin-top:10px;line-height:1.5}
+.profile-route .layout-agenda .footer{color:white;left:374px;border-color:rgba(255,255,255,.2)}
+.profile-route .layout-agenda .footer span:first-child{max-width:520px;font-size:9px}
+.profile-route .route-pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;position:relative}
+.profile-route .route-pillars:before{content:'';position:absolute;top:27px;left:30px;right:30px;height:3px;background:var(--orange500)}
+.profile-route .pillar-stop{position:relative;padding:0 22px 18px;background:linear-gradient(180deg,transparent 26px,rgba(255,255,255,.94) 26px);border-bottom:3px solid var(--blue600);box-shadow:0 14px 24px -20px rgba(9,46,73,.6)}
+.profile-route .pillar-stop:nth-child(2){transform:translateY(25px)}
+.profile-route .pillar-stop:nth-child(3){transform:translateY(8px)}
+.profile-route .pillar-stop .station{border-color:var(--orange500);color:var(--orange700);box-shadow:0 0 0 7px white}
+.profile-route .route-category{font-size:12px;letter-spacing:2px;color:var(--blue600);margin-top:25px}
+.profile-route .pillar-stop h2{font-size:26px;margin-top:10px}
+.profile-route .pillar-stop p{font-size:20px;line-height:1.6;margin-top:17px}
+.profile-route .destination{font-size:15px;color:var(--blue600);border-top:1px solid var(--blue100);padding-top:14px;margin-top:17px}
+.profile-route .compare-labels,.profile-route .compare-row{display:grid;grid-template-columns:180px 1fr 50px 1fr;gap:16px;align-items:center}
+.profile-route .compare-labels{font-size:14px;color:var(--gray500);padding:0 0 14px}
+.profile-route .compare-labels span:last-child{color:var(--orange700)}
+.profile-route .compare-row{margin-bottom:16px;min-height:99px;background:rgba(255,255,255,.85)}
+.profile-route .compare-key{background:var(--navy900);height:99px;display:flex;align-items:center;padding:15px;gap:15px}
+.profile-route .compare-key .station{width:39px;height:39px;font-size:18px;border-color:var(--blue300);color:var(--blue100);background:none;box-shadow:none}
+.profile-route .compare-key h3{color:white;font-size:22px}
+.profile-route .compare-row p{font-size:19px;line-height:1.5}
+.profile-route .connector{font-size:39px;color:var(--orange700)}
+.profile-route .compare-result{padding:20px;background:var(--blue100);border-left:3px solid var(--orange500);height:99px;display:flex;align-items:center;color:var(--navy900);font-weight:700}
+.profile-route .section .section-no{font-size:94px;margin-top:29px}
+.profile-route .section.has-background h1{font-size:60px;margin-top:28px}
+.profile-route .section .lead{font-size:21px!important}
+.profile-route .course-map{position:absolute;left:54px;right:54px;bottom:99px;display:flex;justify-content:space-between;z-index:1;padding-top:15px;border-top:2px solid var(--blue300)}
+.profile-route .course-map span{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--navy900);background:rgba(255,255,255,.85);padding:6px 10px}
+.profile-route .course-map .active{color:var(--orange700);font-weight:700}
+.profile-route .route-process{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:rgba(255,255,255,.88);padding:27px 14px 22px;border:1px solid var(--blue100);border-radius:18px;box-shadow:0 10px 25px rgba(9,46,73,.06)}
+.profile-route .process-stop{position:relative;padding:0 17px;text-align:center}
+.profile-route .process-stop .station{background:var(--navy900);color:white;border-color:var(--navy900);width:66px;height:66px;font-size:27px}
+.profile-route .process-stop:first-child .station{background:var(--orange700);border-color:var(--orange700)}
+.profile-route .concept-icon svg{width:35px;height:35px}
+.profile-route .step-label{font-size:13px;color:var(--blue600);margin:19px 0 12px}
+.profile-route .process-stop h3{font-size:22px}
+.profile-route .process-stop p{font-size:18px;margin-top:17px;line-height:1.5}
+.profile-route .process-stop small{display:block;font-size:12px;color:var(--gray500);margin-top:18px}
+.profile-route .step-arrow{position:absolute;right:-17px;top:5px;font-size:43px;color:var(--blue600);z-index:2}
+.profile-route .layout-timeline .lead{font-size:17px}
+.profile-route .timeline{background:rgba(255,255,255,.9);padding:14px 16px 15px;margin-top:24px;border:1px solid var(--blue100);border-radius:14px;grid-template-columns:152px repeat(8,1fr)}
+.profile-route .timeline .bar{border-radius:22px;font-size:14px;padding:11px 13px;box-shadow:0 3px 5px rgba(9,46,73,.12)}
+.profile-route .timeline .label{font-size:17px;padding:14px 0}
+.profile-route .timeline .month{font-size:15px;color:var(--navy900)}
+.profile-route .route-hierarchy{display:grid;grid-template-columns:120px 1fr 120px;gap:24px}
+.profile-route .hierarchy-stop{display:flex;gap:22px;align-items:center;position:relative;background:rgba(255,255,255,.95);padding:12px 22px;border:1px solid var(--blue100);margin-bottom:12px;min-height:82px;border-radius:8px}
+.profile-route .hierarchy-stop:not(:last-child):after{content:'↓';position:absolute;bottom:-20px;left:48%;font-size:23px;color:var(--blue600);z-index:2}
+.profile-route .hierarchy-stop:first-child{background:var(--navy900)}
+.profile-route .hierarchy-stop:first-child h3,.profile-route .hierarchy-stop:first-child p{color:white}
+.profile-route .hierarchy-stop h3{font-size:22px}.profile-route .hierarchy-stop p{font-size:16px;margin-top:4px}
+.profile-route .hierarchy-stop .station{width:44px;height:44px;font-size:18px;box-shadow:none}
+.profile-route .flow-rail{display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--blue600);background:rgba(223,237,246,.75);border-radius:55px}
+.profile-route .flow-rail b{font-size:24px}.profile-route .flow-rail span{font-size:76px;line-height:1.4}.profile-route .flow-rail small{font-size:16px;text-align:center;line-height:1.5}
+.profile-route .flow-rail.up{color:var(--orange700);background:rgba(253,227,202,.8)}
+.profile-route .trace-head,.profile-route .trace-row{display:grid;grid-template-columns:1fr 1.2fr 1.2fr}
+.profile-route .trace-head{background:var(--navy900);color:white;border-radius:10px 10px 0 0}
+.profile-route .trace-head>div{padding:18px;font-size:20px}.profile-route .trace-head span{color:var(--blue300);margin-right:15px;font-size:14px}
+.profile-route .trace-row{background:rgba(255,255,255,.94);border-bottom:1px solid var(--blue100)}
+.profile-route .trace-row>div{position:relative;display:flex;align-items:center;gap:16px;padding:20px 18px;min-height:96px}
+.profile-route .trace-row p{font-size:18px;line-height:1.5}
+.profile-route .trace-row .station{width:37px;height:37px;font-size:16px;box-shadow:none}
+.profile-route .trace-arrow{color:var(--orange700);font-size:25px}
+.profile-route .closing h1{font-size:48px}
+.profile-route .closing .commitments{margin-top:39px;max-width:800px}
+.profile-route .closing .commitment{padding:19px 0;grid-template-columns:56px 1fr}
+.profile-route .closing .commitment p{font-size:23px}
+.profile-route .closing .station{width:42px;height:42px;font-size:18px;box-shadow:none}
+.profile-route .closing-signoff{position:absolute;bottom:92px;left:54px;color:var(--navy900);font-size:17px;font-weight:700;z-index:1}
