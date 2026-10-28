@@ -23,7 +23,7 @@ try{
 const fontDir=process.env.PROPOSAL_FONT_DIR||join(process.env.LOCALAPPDATA||'','Microsoft/Windows/Fonts');
 const font=weight=>{const p=join(fontDir,`Pretendard-${weight}.otf`);if(!existsSync(p))throw Error(`Missing font: ${p}`);return pathToFileURL(p).href};
 const css=readFileSync(join(root,'src/presentation/system/system.css'),'utf8');
-const fonts=`@font-face{font-family:Proposal;src:url('${font('Regular')}');font-weight:400}@font-face{font-family:Proposal;src:url('${font('Bold')}');font-weight:700}`;
+const fonts=`@font-face{font-family:Pretendard;src:url('${font('Regular')}');font-weight:400}@font-face{font-family:Pretendard;src:url('${font('Bold')}');font-weight:700}`;
 mkdirSync(dirname(out),{recursive:true});
 const htmlPath=out.replace(/\.pdf$/i,'.html');
 writeFileSync(htmlPath,`<!doctype html><html lang="ko"><meta charset="utf-8"><title>Presentation components v0.3</title><style>${fonts}${css}body{margin:0;background:#e5e8eb}.ds-slide{margin:20px auto}</style>${rendered}</html>`);
@@ -55,7 +55,7 @@ try{
  const dir=out.replace(/\.pdf$/i,'-preview');mkdirSync(dir,{recursive:true});
  const slides=page.locator('.ds-slide'),count=await slides.count();
  for(let i=0;i<count;i++)await slides.nth(i).screenshot({path:join(dir,`${String(i+1).padStart(2,'0')}.png`)});
- writeFileSync(join(dir,'index.html'),`<!doctype html><html lang="ko"><meta charset="utf-8"><title>v0.3 미리보기</title><style>body{background:#e5e8eb;margin:30px;font-family:Arial}main{display:grid;grid-template-columns:1fr 1fr;gap:24px}img{width:100%}figure{margin:0}</style><h1>발표 컴포넌트 시스템 v0.3</h1><main>${Array.from({length:count},(_,i)=>`<figure><a href="${String(i+1).padStart(2,'0')}.png"><img alt="${i+1}번 장표" src="${String(i+1).padStart(2,'0')}.png"></a><figcaption>${i+1}</figcaption></figure>`).join('')}</main></html>`);
+ writeFileSync(join(dir,'index.html'),`<!doctype html><html lang="ko"><meta charset="utf-8"><title>v0.3 미리보기</title><style>body{background:#e5e8eb;margin:30px;font-family:Pretendard,sans-serif}main{display:grid;grid-template-columns:1fr 1fr;gap:24px}img{width:100%}figure{margin:0}</style><h1>발표 컴포넌트 시스템 v0.3</h1><main>${Array.from({length:count},(_,i)=>`<figure><a href="${String(i+1).padStart(2,'0')}.png"><img alt="${i+1}번 장표" src="${String(i+1).padStart(2,'0')}.png"></a><figcaption>${i+1}</figcaption></figure>`).join('')}</main></html>`);
  writeFileSync(out.replace(/\.pdf$/i,'-qa.json'),JSON.stringify({pages:count,errors,renderer:'Vue SSR shared with Storybook',canvasPt:[780,540],input,review:'not a submission-ready deck'},null,2));
  console.log(`Built ${count} component pages: ${out}`);
 }finally{await browser.close()}

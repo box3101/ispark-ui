@@ -9,9 +9,9 @@ const swatches=[['navy900','제목 · 결론','흰 배경의 핵심 문장'],['b
     <template #header><SlideHeader section="01 / 타이포그래피" title="평가위원이 핵심을 바로 읽는 크기" subtitle="글자 크기를 줄이지 않고, 내용의 양을 조절합니다." /></template>
     <div class="ds-guide-grid">
       <div class="ds-guide-block">
-        <div class="ds-spec-row"><b style="font-size:42px">대제목</b><span>42 px / 31.5 pt</span></div>
-        <div class="ds-spec-row"><b style="font-size:28px">핵심 결과</b><span>28 px / 21 pt</span></div>
-        <div class="ds-spec-row"><b style="font-size:26px">소제목</b><span>26 px / 19.5 pt</span></div>
+        <div class="ds-spec-row"><b style="font-size:var(--type-title)">대제목</b><span>42 px / 31.5 pt</span></div>
+        <div class="ds-spec-row"><b style="font-size:var(--type-heading)">핵심 결과</b><span>28 px / 21 pt</span></div>
+        <div class="ds-spec-row"><b style="font-size:var(--type-heading)">소제목</b><span>26 px / 19.5 pt</span></div>
         <div class="ds-spec-row"><SlideText text="설명 본문" /><span>24 px / 18 pt</span></div>
         <div class="ds-spec-row"><span>출처 · 페이지</span><span>12 px / 9 pt</span></div>
       </div>

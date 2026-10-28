@@ -29,5 +29,15 @@
 | integration | 시스템 연계 |
 | infrastructure | 인프라 |
 | testing | 테스트 |
+| project-lead | 프로젝트 책임자 |
+| business-design-team | 업무·설계팀 |
+| development-integration-team | 개발·연계팀 |
+| quality-assurance-team | 품질·검증팀 |
+| cloud-service | 클라우드 서비스 |
+| api-connection | API 연계 |
+| document-search | 문서 검색 |
+| approval-workflow | 결재 승인 |
+
+2026-10-28: 역할 및 범용 아이콘 8개를 추가해 총 33개입니다. 기존 의미별 기본 아이콘은 유지하고 새 아이콘은 명시적인 ID로 선택합니다. 내장 imagegen으로 개별 생성했으며 프롬프트와 원본 경로는 `roles-common-generation.json`에 기록합니다.
 
 생성 방식: built-in `image_gen`, `transparent_background: true`. 재사용 시 생성 호출 없음. 초기 프롬프트는 `generation.json`, 추가 19종의 참조 이미지와 최종 프롬프트는 `expansion-generation.json`에 기록합니다. 기본 SVG 색상 토큰과 달리 입체 PNG 내부 명암·색은 고정입니다. 임의의 CSS 필터로 재색칠하지 않습니다. 물결/배경은 상위 폴더에서 별도로 관리합니다.

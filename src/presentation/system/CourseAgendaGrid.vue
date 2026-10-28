@@ -7,7 +7,7 @@ const checked=computed(()=>{
   assertCount('CourseAgendaGrid',props.items,3,8)
   props.items.forEach((x)=>{
     assertText('course section',x.section,12)
-    assertText('course title',x.title,24)
+    assertText('course title',x.title,40)
     assertText('course description',x.description,45)
   })
   return props.items

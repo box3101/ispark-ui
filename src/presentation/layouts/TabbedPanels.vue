@@ -63,7 +63,7 @@ section {
   padding: 0.65cqw 1.4cqw;
   border-radius: 0.5cqw 0.5cqw 0 0;
   font-size: 1.15cqw;
-  font-weight: 700;
+  font-weight:var(--weight-bold);
   color: #ffffff;
 
   > .proposal-glyph { color: #ffffff; }
@@ -93,7 +93,7 @@ article {
   background: #f7f9fb;
   border-left: 0.22cqw solid #dfedf6;
 
-  strong { font-size: 1.22cqw; font-weight: 700; color: #092e49; word-break: keep-all; }
+  strong { font-size: 1.22cqw; font-weight:var(--weight-bold); color: #092e49; word-break: keep-all; }
   p { margin: 0; font-size: 1cqw; line-height: 1.4; color: #6b7684; word-break: keep-all; }
 }
 

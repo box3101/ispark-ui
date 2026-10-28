@@ -96,7 +96,7 @@ article {
 
   .no {
     font-size: 2cqw;
-    font-weight: 800;
+    font-weight:var(--weight-bold);
     color: #006fbd;
     font-variant-numeric: tabular-nums;
   }
@@ -123,7 +123,7 @@ article:last-child .badge { border-color: #d9641a; .no { color: #b85610; } }
     gap: 0.45cqw;
 
     > .proposal-glyph { color: #006fbd; }
-    strong { font-size: 1.3cqw; font-weight: 700; color: #092e49; word-break: keep-all; }
+    strong { font-size: 1.3cqw; font-weight:var(--weight-bold); color: #092e49; word-break: keep-all; }
   }
 
   p { margin: 0; font-size: 1cqw; color: #6b7684; line-height: 1.4; word-break: keep-all; }
@@ -141,7 +141,7 @@ ul {
     padding: 0.4cqw 0.5cqw;
     background: #dfedf6;
     font-size: 0.92cqw;
-    font-weight: 650;
+    font-weight:var(--weight-bold);
     color: #092e49;
     word-break: keep-all;
   }
@@ -152,7 +152,7 @@ ul {
   top: 0;
   right: 0;
   font-size: 0.95cqw;
-  font-weight: 700;
+  font-weight:var(--weight-bold);
   color: #6b7684;
 }
 </style>

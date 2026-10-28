@@ -89,7 +89,7 @@ td {
 thead th {
   background: #092e49;
   color: #ffffff;
-  font-weight: 700;
+  font-weight:var(--weight-bold);
   text-align: center;
   border-color: #092e49;
 }
@@ -97,7 +97,7 @@ thead th {
 tbody .is-rowhead {
   background: #dfedf6;
   color: #092e49;
-  font-weight: 700;
+  font-weight:var(--weight-bold);
 }
 
 tbody td { color: #1f2937; }
@@ -109,7 +109,7 @@ tbody .is-break > * { border-top: 0.2cqw solid #092e49; }
 thead .is-highlight { background: #b85610; border-color: #b85610; }
 tbody .is-highlight.is-rowhead { background: #fde3ca; color: #b85610; }
 
-.is-emphasis { font-weight: 700; color: #b85610; }
+.is-emphasis { font-weight:var(--weight-bold); color: #b85610; }
 
 .caption {
   flex: none;

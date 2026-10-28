@@ -5,6 +5,7 @@ from PIL import Image
 root=Path('public/presentation/illustrated/icons')
 expected=['legacy-server','system-blocks','analytics-review','data-migration','workflow-design','performance-target']
 expected += [j['id'] for j in json.loads((root/'expansion-generation.json').read_text(encoding='utf8'))['jobs']]
+expected += [j['id'] for j in json.loads((root/'roles-common-generation.json').read_text(encoding='utf8'))['jobs']]
 report=[]
 for key in expected:
  with Image.open(root/f'{key}.png') as im:

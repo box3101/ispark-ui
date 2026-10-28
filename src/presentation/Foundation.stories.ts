@@ -9,7 +9,7 @@ import {
   contrastVerdict,
 } from './enterprise-palette'
 
-const wrap = 'padding:28px;background:#fff;color:#1F2937;font-family:Pretendard,sans-serif'
+const wrap = 'padding:28px;background:#fff;color:#1F2937;font-family:Pretendard Variable,Pretendard,sans-serif'
 const TONE = { pass: '#1f7a4d', warn: '#b45309', fail: '#b91c1c' }
 
 /**

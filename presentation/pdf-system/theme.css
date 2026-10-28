@@ -1,6 +1,6 @@
-@font-face{font-family:Proposal;src:url('__FONT_REGULAR__');font-weight:400}
-@font-face{font-family:Proposal;src:url('__FONT_BOLD__');font-weight:700}
-*{box-sizing:border-box}body{margin:0;background:#e5e8eb;font-family:Proposal,sans-serif;color:var(--gray900);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@font-face{font-family:Pretendard;src:url('__FONT_REGULAR__');font-weight:400}
+@font-face{font-family:Pretendard;src:url('__FONT_BOLD__');font-weight:700}
+*{box-sizing:border-box}body{margin:0;background:#e5e8eb;font-family:Pretendard,sans-serif;color:var(--gray900);-webkit-print-color-adjust:exact;print-color-adjust:exact}
 @page{size:1040px 720px;margin:0}
 .slide{width:1040px;height:720px;position:relative;background:var(--white);padding:52px 64px 62px;page-break-after:always;overflow:hidden;margin:24px auto}
 .slide:last-child{page-break-after:auto}.eyebrow{font-size:14px;font-weight:700;color:var(--blue600);letter-spacing:1px;margin:0 0 18px}

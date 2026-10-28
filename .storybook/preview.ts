@@ -2,6 +2,7 @@ import type { Preview } from '@storybook/vue3'
 import { setup } from '@storybook/vue3'
 import { configureStoryIds } from './vue-id-prefix'
 import '../src/styles/main.scss'
+import '../src/presentation/system/typography.css'
 
 setup(configureStoryIds)
 

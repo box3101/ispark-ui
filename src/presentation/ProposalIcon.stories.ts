@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import ProposalIcon from './ProposalIcon.vue'
 import { proposalIcons } from '../../presentation/icons/icon-map'
 
-const wrap = 'padding:28px;background:#ffffff;color:#1f2937;font-family:Pretendard,sans-serif'
+const wrap = 'padding:28px;background:#ffffff;color:#1f2937;font-family:Pretendard Variable,Pretendard,sans-serif'
 
 const meta = {
   title: 'Presentation/Proposal Icon System',

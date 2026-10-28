@@ -71,8 +71,8 @@ header {
   padding: 0.9cqw 1cqw;
   border-bottom: 1px solid #e5e8eb;
 
-  .label { display: block; font-size: 0.88cqw; font-weight: 700; color: #6b7684; }
-  .title { display: block; font-size: 1.35cqw; font-weight: 700; color: #092e49; word-break: keep-all; }
+  .label { display: block; font-size: 0.88cqw; font-weight:var(--weight-bold); color: #6b7684; }
+  .title { display: block; font-size: 1.35cqw; font-weight:var(--weight-bold); color: #092e49; word-break: keep-all; }
 }
 
 ul {
@@ -107,7 +107,7 @@ li {
   }
 
   &.is-strong {
-    font-weight: 700;
+    font-weight:var(--weight-bold);
     color: #092e49;
     background: #dfedf6;
 
@@ -122,7 +122,7 @@ li {
   background: #092e49;
   color: #ffffff;
   font-size: 1.02cqw;
-  font-weight: 650;
+  font-weight:var(--weight-bold);
   word-break: keep-all;
 }
 

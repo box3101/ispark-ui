@@ -1,0 +1,8 @@
+/* Locally bundled font files shared by presentation previews and PDF exports. */
+@font-face{font-family:PresentationPretendard;src:url('../fonts/Pretendard-Regular.otf') format('opentype');font-weight:400;font-style:normal;font-display:block}
+@font-face{font-family:PresentationPretendard;src:url('../fonts/Pretendard-Medium.otf') format('opentype');font-weight:500;font-style:normal;font-display:block}
+@font-face{font-family:PresentationPretendard;src:url('../fonts/Pretendard-Bold.otf') format('opentype');font-weight:700;font-style:normal;font-display:block}
+:root{--presentation-font:PresentationPretendard,Pretendard,sans-serif;--type-display:56px;--type-title:40px;--type-heading:26px;--type-body:24px;--type-supporting:20px;--type-label:18px;--type-source:12px;--type-step:32px;--type-metric:48px;--type-detail:16px;--type-micro:14px;--weight-regular:400;--weight-medium:500;--weight-bold:700;--line-title:1.25;--line-body:1.5}
+:where(.pl-slide,.detail-slide,.ds-slide,.chapter-slide,.section-cover,.iv-slide,.ic-slide,.chapter-navigation){font-synthesis:none}
+:where(.pl-index,.pl-value,.trace-number,.chapter-number,.iv-number,.ic-number,.ds-course-index,.card-top b,.stage-dot,.months,.pl-gantt){font-variant-numeric:lining-nums tabular-nums}
+.iv-slide{--type-scale:1.451923}.ic-slide{--type-scale:1.476923}

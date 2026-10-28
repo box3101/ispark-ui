@@ -105,7 +105,7 @@ withDefaults(
   padding: 2.6cqw 3.4cqw 2cqw;
   background: #ffffff;
   color: #1f2937;
-  font-family: Pretendard, 'Noto Sans KR', Arial, sans-serif;
+  font-family:var(--presentation-font);
   box-shadow: 0 12px 35px #092e4926;
   overflow: hidden;
 }
@@ -184,7 +184,7 @@ withDefaults(
   align-items: baseline;
   gap: 0.5cqw;
   font-size: 2.31cqw;
-  font-weight: 700;
+  font-weight:var(--weight-bold);
 
   .accent { color: #fc5528; }
   .dot { color: #000000; }
@@ -194,7 +194,7 @@ withDefaults(
 .client {
   margin: 0;
   font-size: 1.3cqw;
-  font-weight: 700;
+  font-weight:var(--weight-bold);
   color: #006fbd;
 }
 
@@ -208,7 +208,7 @@ withDefaults(
   gap: 0.55cqw;
   text-align: right;
   font-size: 1.03cqw;
-  font-weight: 600;
+  font-weight:var(--weight-bold);
   letter-spacing: 0.06em;
   color: #768ed2;
 }
@@ -220,7 +220,7 @@ withDefaults(
   h1 {
     margin: 0;
     font-size: 3.08cqw;
-    font-weight: 700;
+    font-weight:var(--weight-bold);
     line-height: 1.3;
     color: #0a2e3d;
     word-break: keep-all;

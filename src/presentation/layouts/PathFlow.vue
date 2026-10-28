@@ -143,7 +143,7 @@ const curve = computed(() => {
   z-index: 3;
   transform: translateX(-50%);
   font-size: 2.05cqw;   /* 실측 16pt */
-  font-weight: 700;
+  font-weight:var(--weight-bold);
   color: #fd734d;
   white-space: nowrap;
   text-shadow: 0 0.1cqw 0.3cqw #ffffffcc;
@@ -184,7 +184,7 @@ const curve = computed(() => {
   top: 0.4cqw;
   left: 1.4cqw;
   font-size: 4.2cqw;
-  font-weight: 800;
+  font-weight:var(--weight-bold);
   line-height: 1;
   color: #a1b7cf59;
   font-variant-numeric: tabular-nums;
@@ -196,7 +196,7 @@ const curve = computed(() => {
 .title {
   margin-top: 0.5cqw;
   font-size: 2.2cqw;      /* 실측 18pt. 국문 폭이 더 넓어 소폭 축소 */
-  font-weight: 700;
+  font-weight:var(--weight-bold);
   letter-spacing: -0.015em;
   line-height: 1.25;
   color: #0a2e3d;
@@ -206,7 +206,7 @@ const curve = computed(() => {
 .tagline {
   margin-top: 0.45cqw;
   font-size: 1.54cqw;     /* 실측 12pt */
-  font-weight: 650;
+  font-weight:var(--weight-bold);
   color: #000099;
   word-break: keep-all;
 

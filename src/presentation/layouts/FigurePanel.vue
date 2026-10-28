@@ -73,7 +73,7 @@ figure {
   background: #092e49;
   color: #ffffff;
   font-size: 1cqw;
-  font-weight: 700;
+  font-weight:var(--weight-bold);
 }
 
 .frame {
@@ -96,7 +96,7 @@ figure {
   gap: 0.6cqw;
   color: #8fb4db;
   font-size: 1.05cqw;
-  font-weight: 650;
+  font-weight:var(--weight-bold);
 }
 
 figcaption {
@@ -138,10 +138,10 @@ figcaption {
     background: #fde3ca;
     color: #b85610;
     font-size: 1.05cqw;
-    font-weight: 800;
+    font-weight:var(--weight-bold);
   }
 
-  strong { display: block; font-size: 1.18cqw; font-weight: 700; color: #092e49; word-break: keep-all; }
+  strong { display: block; font-size: 1.18cqw; font-weight:var(--weight-bold); color: #092e49; word-break: keep-all; }
   p { margin: 0.15cqw 0 0; font-size: 0.98cqw; color: #6b7684; line-height: 1.4; word-break: keep-all; }
 }
 </style>

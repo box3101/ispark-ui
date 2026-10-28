@@ -1,0 +1,14 @@
+<script setup lang="ts">
+import ChapterNavigation,{type ChapterItem,type ChapterNavigationTheme} from '../system/ChapterNavigation.vue'
+import {presentationAssetUrl} from '../system/asset-url'
+defineProps<{items:ChapterItem[];activeId:string;variant?:'full'|'compact';theme?:Partial<ChapterNavigationTheme>;title:string;subtitle?:string;rows?:{title:string;body:string;result:string}[];takeaway?:string;page?:number}>()
+</script>
+<template><article class="chapter-slide">
+ <img class="chapter-background" :src="presentationAssetUrl('/presentation/illustrated/jeju-background.png')" alt=""/>
+ <header><ChapterNavigation :items="items" :active-id="activeId" :variant="variant" :theme="theme"/><h1 data-fit>{{title}}</h1><p v-if="subtitle" data-fit>{{subtitle}}</p></header>
+ <main><slot><div class="row-head"><span>자료 유형</span><span>확인할 내용</span><span>활용 목적</span></div><section v-for="row in rows" :key="row.title" class="content-row" data-fit><h2>{{row.title}}</h2><p>{{row.body}}</p><strong>{{row.result}}</strong></section></slot></main>
+ <aside v-if="takeaway" data-fit>{{takeaway}}</aside><footer>DESIGN SYSTEM · LAYOUT PREVIEW<span>{{String(page||1).padStart(2,'0')}}</span></footer>
+</article></template>
+<style scoped>
+.chapter-slide{position:relative;width:1040px;height:720px;padding:36px 40px;box-sizing:border-box;font-family:var(--presentation-font);color:var(--ds-text-heading,#092e49);background:white;overflow:hidden}.chapter-background{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.1;pointer-events:none}.chapter-slide header,.chapter-slide main,.chapter-slide aside,.chapter-slide footer{position:relative}.chapter-slide h1{font-size:var(--type-step);line-height:1.3;letter-spacing:-1px;margin:28px 0 12px}.chapter-slide header>p{font-size:var(--type-supporting);color:#526c7e;margin:0}.chapter-slide main{margin-top:38px;min-height:330px}.row-head,.content-row{display:grid;grid-template-columns:24% 48% 28%;align-items:center;gap:0}.row-head{font-size:var(--type-micro);color:#526c7e;padding:0 20px 12px}.content-row{padding:20px;margin-bottom:12px;border:1px solid #dfedf6;border-radius:12px;background:#f0f8fdd9;min-height:92px;box-sizing:border-box}.content-row h2{font-size:var(--type-body);margin:0}.content-row p{font-size:var(--type-supporting);line-height:1.5;margin:0;padding-right:20px;white-space:pre-line;word-break:keep-all}.content-row strong{font-size:var(--type-supporting);color:#006fbd}.chapter-slide aside{margin-top:20px;padding:18px 24px;background:#092e49;color:white;font-size:var(--type-supporting);border-radius:9px;line-height:1.4}.chapter-slide footer{position:absolute;bottom:20px;left:40px;right:40px;display:flex;justify-content:space-between;font-size:var(--type-source);color:#6b7684;border-top:1px solid #dfedf6;padding-top:12px}
+</style>

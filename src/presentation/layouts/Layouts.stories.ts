@@ -337,7 +337,7 @@ export const GridLimits: Story = {
         [2, 2], [3, 4], [4, 4], [5, 5], [6, 6], [7, 6], [8, 9],
       ].map(([c, r]) => ({ c, r, cells: c * r, density: gridDensity(c, r) })),
     }),
-    template: `<div style="padding:28px;background:#fff;font-family:Pretendard,sans-serif;color:#1f2937">
+    template: `<div style="padding:28px;background:#fff;font-family:Pretendard Variable,Pretendard,sans-serif;color:#1f2937">
       <table style="border-collapse:collapse;font-size:13px">
         <thead><tr>
           <th style="padding:8px 14px;text-align:left;color:#6b7684">격자</th>

@@ -4,7 +4,8 @@ const config: StorybookConfig = {
   // .mdx 포함 — Introduction 같은 문서 페이지 지원
   stories: [
     '../src/**/*.mdx',
-    '../src/**/*.stories.@(ts|js)',
+    // 개별 데모는 메뉴에서 제외하고 Asset / Layout Library를 중심으로 제공합니다.
+    '../src/**/!(ProposalIcon|Layouts|PresentationSystem|CourseAgenda|IllustratedAssets|IllustratedComparison|IllustratedStrategy).stories.@(ts|js)',
   ],
   addons: ['@storybook/addon-essentials'],
   framework: {
