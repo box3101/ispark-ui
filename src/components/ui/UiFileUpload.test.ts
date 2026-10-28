@@ -1,5 +1,5 @@
 ﻿import { render, fireEvent } from '@testing-library/vue'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import UiFileUpload from './UiFileUpload.vue'
 
 describe('UiFileUpload', () => {
@@ -124,4 +124,48 @@ describe('UiFileUpload dropzone validation', () => {
     expect(emitted().upload).toEqual([[file]])
     expect(getByRole('button').tagName).toBe('BUTTON')
   })
+})
+
+it('horizontal supports multiple files and disables selection while loading', async () => {
+  const {container, emitted, rerender} = render(UiFileUpload, {props:{variant:'horizontal',multiple:true,accept:'.pdf'}})
+  const input=container.querySelector('input')!
+  const files=[new File(['a'],'a.pdf'),new File(['b'],'b.pdf')]
+  await fireEvent.change(input,{target:{files}})
+  expect(emitted().upload).toEqual(files.map(file=>[file]))
+  await rerender({loading:true})
+  expect(container.querySelector('button')?.disabled).toBe(true)
+  await fireEvent.drop(container.querySelector('.ui-file-upload-horizontal')!,{dataTransfer:{files}})
+  expect(emitted().upload).toHaveLength(2)
+})
+
+it('accepts valid siblings after a rejected file and allows reselection', async () => {
+ const {container,emitted}=render(UiFileUpload,{props:{variant:'horizontal',multiple:true,accept:'.pdf',maxSize:2}})
+ const good=new File(['a'],'a.pdf'),bad=new File(['a'],'a.exe'),large=new File(['abcd'],'large.pdf')
+ const zone=container.querySelector('.ui-file-upload-horizontal')!
+ await fireEvent.drop(zone,{dataTransfer:{files:[bad,good,large,good]}})
+ expect(emitted().upload).toEqual([[good],[good]])
+ expect(emitted().reject).toHaveLength(2)
+ expect(container.querySelector('[role="alert"]')).not.toBeNull()
+ await fireEvent.change(container.querySelector('input')!,{target:{files:[good]}})
+ expect(emitted().upload).toHaveLength(3)
+ expect(container.querySelector('[role="alert"]')).toBeNull()
+ expect(container.querySelector('button button')).toBeNull()
+})
+
+it('opens the picker once from the horizontal area or button and blocks busy states', async () => {
+ const {container,rerender}=render(UiFileUpload,{props:{variant:'horizontal'}})
+ const input=container.querySelector('input')!
+ const click=vi.spyOn(input,'click').mockImplementation(()=>{})
+ const zone=container.querySelector('.ui-file-upload-horizontal')!
+ await fireEvent.click(zone)
+ expect(click).toHaveBeenCalledTimes(1)
+ await fireEvent.click(container.querySelector('button')!)
+ expect(click).toHaveBeenCalledTimes(2)
+ await rerender({disabled:true})
+ await fireEvent.click(zone)
+ expect(click).toHaveBeenCalledTimes(2)
+ await rerender({disabled:false,loading:true})
+ await fireEvent.click(zone)
+ expect(click).toHaveBeenCalledTimes(2)
+ click.mockRestore()
 })

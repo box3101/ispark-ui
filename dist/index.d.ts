@@ -394,7 +394,11 @@ declare type __VLS_Props_8 = {
     accept?: string;
     label?: string;
     disabled?: boolean;
-    variant?: 'button' | 'dropzone';
+    variant?: 'button' | 'dropzone' | 'horizontal';
+    /** Opt in to per-file upload events; rejected files do not block valid siblings. */
+    multiple?: boolean;
+    /** Horizontal heading; label remains the picker button text. */
+    title?: string;
     /** 파일당 최대 bytes. 생략하면 제한 없음 */
     maxSize?: number;
     /** 드래그 영역 보조 문구 */
@@ -1722,7 +1726,7 @@ reject: (message: string) => any;
 onUpload?: ((file: File) => any) | undefined;
 onReject?: ((message: string) => any) | undefined;
 }>, {
-variant: "button" | "dropzone";
+variant: "button" | "dropzone" | "horizontal";
 disabled: boolean;
 loading: boolean;
 label: string;

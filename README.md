@@ -135,3 +135,40 @@ npm run build                     # 빌드
 ---
 
 <sub>이찬용 · <a href="https://github.com/box3101">@box3101</a></sub>
+
+
+### UiFileUpload horizontal (local build)
+
+```vue
+<UiFileUpload
+  variant="horizontal"
+  multiple
+  title="Supporting documents"
+  label="Select files"
+  hint="Drop files here or select files"
+  accept=".pdf,.docx,.pptx,.txt"
+  :loading="uploading"
+  :error="uploadError"
+  @upload="uploadFile"
+  @reject="onRejected"
+/>
+```
+
+`horizontal` is an opt-in layout containing an icon, title, hint and UiButton.
+`multiple` defaults to false. With true, validation runs separately for each file:
+valid files emit the existing `upload(file)` event, invalid files emit
+`reject(message)` and do not prevent later valid files from uploading. The last
+rejection is displayed until a new selection, changed validation rules or external
+error replaces it. Selection and drop share accept/maxSize validation. The picker
+resets after each selection to support retrying the same file. Loading/disabled
+block both picker and drop. `error` represents a parent/server error. Server calls,
+file lists and document classification remain the parent's responsibility.
+
+Existing button/dropzone defaults and single-file event contracts are unchanged.
+Storybook includes Horizontal, HorizontalLong, HorizontalNarrow, HorizontalLoading,
+HorizontalDisabled, HorizontalError and HorizontalMultiple.
+
+The horizontal upload area opens the picker when clicked anywhere. The existing
+UiButton remains the keyboard entry point (Enter/Space); its click does not
+bubble into a second picker request. Hover/focus feedback is disabled while
+loading or disabled, and transitions respect reduced-motion preferences.

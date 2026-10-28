@@ -286,3 +286,12 @@ describe('UiTable', () => {
     expect(screen.getByText('점수')).toBeTruthy()
   })
 })
+
+it('preserves mergeRows for adjacent nonempty cells after data changes', async () => {
+ const {container,rerender}=render(UiTable,{props:{columns:[{key:'a',label:'A',mergeRows:true},{key:'b',label:'B'}],data:[{a:'same',b:1},{a:'same',b:2},{a:'',b:3},{a:'',b:4}]}})
+ expect(container.querySelector('tbody td')?.getAttribute('rowspan')).toBe('2')
+ expect(container.querySelectorAll('tbody td')).toHaveLength(7)
+ await rerender({data:[{a:'same',b:1},{a:'different',b:2}]})
+ expect(container.querySelectorAll('tbody td')).toHaveLength(4)
+ expect((container.querySelector('tbody td') as HTMLTableCellElement)?.rowSpan).toBe(1)
+})
