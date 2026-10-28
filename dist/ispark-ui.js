@@ -36189,6 +36189,7 @@ const tbe = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
   props: {
     items: {},
     triggerVariant: { default: "text" },
+    triggerSize: { default: "md" },
     triggerLabel: { default: "메뉴 열기" },
     title: { default: "" },
     open: { type: Boolean, default: void 0 },
@@ -36258,7 +36259,7 @@ const tbe = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
               Le(m.$slots, "trigger", {}, () => [
                 A("button", {
                   type: "button",
-                  class: Q(["ui-dropdown-trigger", { "ui-dropdown-trigger--icon": t.triggerVariant === "icon" }]),
+                  class: Q(["ui-dropdown-trigger", { "ui-dropdown-trigger--icon": t.triggerVariant === "icon", "size-sm": t.triggerSize === "sm" }]),
                   "aria-label": t.triggerLabel
                 }, [
                   t.triggerVariant === "text" ? (C(), L(ve, { key: 0 }, [
@@ -36270,8 +36271,8 @@ const tbe = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
                   ], 64)) : (C(), Ce(We, {
                     key: 1,
                     name: "ellipsis",
-                    size: 20
-                  }))
+                    size: t.triggerSize === "sm" ? 16 : 20
+                  }, null, 8, ["size"]))
                 ], 10, C8e)
               ])
             ]),
@@ -36285,7 +36286,7 @@ const tbe = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
             Le(m.$slots, "trigger", {}, () => [
               A("button", {
                 type: "button",
-                class: Q(["ui-dropdown-trigger", { "ui-dropdown-trigger--icon": t.triggerVariant === "icon" }]),
+                class: Q(["ui-dropdown-trigger", { "ui-dropdown-trigger--icon": t.triggerVariant === "icon", "size-sm": t.triggerSize === "sm" }]),
                 "aria-label": t.triggerLabel
               }, [
                 t.triggerVariant === "text" ? (C(), L(ve, { key: 0 }, [
@@ -36297,8 +36298,8 @@ const tbe = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
                 ], 64)) : (C(), Ce(We, {
                   key: 1,
                   name: "ellipsis",
-                  size: 20
-                }))
+                  size: t.triggerSize === "sm" ? 16 : 20
+                }, null, 8, ["size"]))
               ], 10, S8e)
             ])
           ]),

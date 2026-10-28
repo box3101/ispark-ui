@@ -27,6 +27,7 @@ const meta = {
     layout: 'centered',
     docs: { description: { component: `아이콘과 액션을 정돈한 드롭다운 메뉴입니다. 기본 텍스트 버튼과 더보기 버튼을 제공하며 기존 trigger 슬롯도 지원합니다.
 
+- **triggerSize**: `md` (default) or `sm` (30px trigger).
 - **triggerVariant**: text (기본) / icon. **triggerLabel**: 버튼 텍스트 및 접근성 이름.
 - **items**: label, value, icon?, color?, disabled?, separator?, description?, shortcut?.
 - **icon**: Lucide 이름(pencil, copy 등). 기존 icon-edit 같은 CSS 클래스도 지원합니다.
@@ -40,6 +41,7 @@ const meta = {
   argTypes: {
     triggerVariant: { control: 'inline-radio', options: ['text', 'icon'] },
     triggerLabel: { control: 'text' },
+    triggerSize: { control: 'inline-radio', options: ['md', 'sm'] },
     side: { control: 'inline-radio', options: ['top', 'right', 'bottom', 'left'] },
     align: { control: 'inline-radio', options: ['start', 'center', 'end'] },
     sideOffset: { control: { type: 'number', min: 0, max: 20 } },
