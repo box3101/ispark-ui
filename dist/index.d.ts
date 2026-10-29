@@ -121,6 +121,7 @@ align: "start" | "center" | "end";
 collisionPadding: number;
 triggerLabel: string;
 triggerVariant: "text" | "icon";
+triggerSize: "sm" | "md";
 openOnHover: boolean;
 hoverCloseDelay: number;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
@@ -1148,6 +1149,8 @@ declare interface Props_19 {
     items: DropdownMenuItemDef[];
     /** 기본 버튼 형태. trigger 슬롯이 있으면 슬롯을 사용 */
     triggerVariant?: 'text' | 'icon';
+    /** Built-in trigger size; custom trigger slots control their own size. */
+    triggerSize?: 'sm' | 'md';
     /** 버튼 텍스트 및 접근성 이름 */
     triggerLabel?: string;
     /** 상단 비클릭 라벨 (DropdownMenuLabel) — 구역 안내용 */

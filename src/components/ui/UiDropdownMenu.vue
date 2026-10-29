@@ -23,9 +23,9 @@
     >
       <DropdownMenuTrigger as-child>
         <slot name="trigger">
-          <button type="button" class="ui-dropdown-trigger" :class="{ 'ui-dropdown-trigger--icon': triggerVariant === 'icon' }" :aria-label="triggerLabel">
+          <button type="button" class="ui-dropdown-trigger" :class="{ 'ui-dropdown-trigger--icon': triggerVariant === 'icon', 'size-sm': triggerSize === 'sm' }" :aria-label="triggerLabel">
             <template v-if="triggerVariant === 'text'">{{ triggerLabel }}<UiIcon name="chevron-down" :size="16" /></template>
-            <UiIcon v-else name="ellipsis" :size="20" />
+            <UiIcon v-else name="ellipsis" :size="triggerSize === 'sm' ? 16 : 20" />
           </button>
         </slot>
       </DropdownMenuTrigger>
@@ -35,9 +35,9 @@
       as-child
     >
       <slot name="trigger">
-        <button type="button" class="ui-dropdown-trigger" :class="{ 'ui-dropdown-trigger--icon': triggerVariant === 'icon' }" :aria-label="triggerLabel">
+        <button type="button" class="ui-dropdown-trigger" :class="{ 'ui-dropdown-trigger--icon': triggerVariant === 'icon', 'size-sm': triggerSize === 'sm' }" :aria-label="triggerLabel">
           <template v-if="triggerVariant === 'text'">{{ triggerLabel }}<UiIcon name="chevron-down" :size="16" /></template>
-          <UiIcon v-else name="ellipsis" :size="20" />
+          <UiIcon v-else name="ellipsis" :size="triggerSize === 'sm' ? 16 : 20" />
         </button>
       </slot>
     </DropdownMenuTrigger>
@@ -123,6 +123,8 @@ interface Props {
   items: DropdownMenuItemDef[]
   /** 기본 버튼 형태. trigger 슬롯이 있으면 슬롯을 사용 */
   triggerVariant?: 'text' | 'icon'
+  /** Built-in trigger size; custom trigger slots control their own size. */
+  triggerSize?: 'sm' | 'md'
   /** 버튼 텍스트 및 접근성 이름 */
   triggerLabel?: string
   /** 상단 비클릭 라벨 (DropdownMenuLabel) — 구역 안내용 */
@@ -145,6 +147,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   title: '',
   triggerVariant: 'text',
+  triggerSize: 'md',
   triggerLabel: '메뉴 열기',
   open: undefined,
   side: 'bottom',
@@ -375,6 +378,8 @@ watch(openState, (v) => emit('update:open', v))
   &:hover, &[data-state='open'] { background: $color-background; }
   &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
   &--icon { width: 36px; padding: 0; }
+  &.size-sm { height: $size-sm-height; padding: 0 $size-sm-padding-x; font-size: $size-sm-font; }
+  &.size-sm.ui-dropdown-trigger--icon { width: $size-sm-height; padding: 0; }
 }
 
 @keyframes ui-dropdown-in {

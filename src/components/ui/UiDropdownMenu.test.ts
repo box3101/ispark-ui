@@ -100,6 +100,17 @@ describe('UiDropdownMenu built-in triggers and menu content', () => {
     expect(trigger.querySelector('svg')).not.toBeNull()
   })
 
+  it('supports the small built-in icon trigger while keeping the default size', () => {
+    const {rerender}=render(UiDropdownMenu,{props:{items,triggerVariant:'icon',triggerLabel:'more',triggerSize:'sm'}})
+    const trigger=screen.getByRole('button',{name:'more'})
+    expect(trigger.classList.contains('size-sm')).toBe(true)
+    expect(trigger.querySelector('svg')?.getAttribute('width')).toBe('16')
+    return rerender({triggerSize:'md'}).then(()=>{
+      expect(trigger.classList.contains('size-sm')).toBe(false)
+      expect(trigger.querySelector('svg')?.getAttribute('width')).toBe('20')
+    })
+  })
+
   it('renders separators, Lucide and legacy icons, hints and disabled state', async () => {
     render(UiDropdownMenu, { props: { open: true, title: '파일 작업', items: [
       { label: '이름 변경', value: 'rename', icon: 'pencil', shortcut: 'F2' },
