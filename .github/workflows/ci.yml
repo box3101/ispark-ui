@@ -16,6 +16,12 @@ jobs:
           node-version: '20'
       - run: npm ci
       - run: npm run typecheck
+      # presentation QA 테스트용 Pretendard 폰트 (publish.yml 과 동일)
+      - name: Install Pretendard font
+        run: |
+          curl -fsSL -o /tmp/pretendard.zip https://github.com/orioncactus/pretendard/releases/download/v1.3.9/Pretendard-1.3.9.zip
+          sudo mkdir -p /usr/share/fonts/opentype/pretendard
+          sudo unzip -j -o /tmp/pretendard.zip public/static/Pretendard-Regular.otf public/static/Pretendard-SemiBold.otf -d /usr/share/fonts/opentype/pretendard
       - run: npm test
       - run: npm run build
       - run: npm run build-storybook
