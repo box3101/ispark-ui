@@ -105,7 +105,7 @@ function onDragEnter(event: DragEvent) {
 .ui-file-upload-horizontal.is-error { border-color:$color-danger; }
 .ui-file-upload-horizontal.is-dragging { border-color:var(--color-primary); }
 .ui-file-upload-horizontal__title { font-size:17px; }
-.ui-file-upload-horizontal__copy { flex:1; min-width:min(160px,100%); overflow-wrap:anywhere; display:grid; gap:6px; font-size:14px; span { color:$color-text-muted; font-size:12px; } }
+.ui-file-upload-horizontal__copy { flex:1; min-width:min(160px,100%); overflow-wrap:anywhere; display:grid; gap:2px; font-size:14px; span { color:$color-text-muted; font-size:12px; } }
 .ui-file-upload-field { display: inline-flex; flex-direction: column; gap: 8px; max-width: 100%; }
 .ui-file-upload-field--dropzone { display: flex; width: 100%; }
 .ui-file-upload {

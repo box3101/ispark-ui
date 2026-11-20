@@ -1004,6 +1004,10 @@ declare interface Props_11 {
     text?: string;
     /** 오버레이(dim) 모드 — viewport 전체 fixed + 반투명 dim */
     overlay?: boolean;
+    /** 스피너 모양 — ring: 원형 테두리(기본) / bars: 막대 12개 */
+    variant?: 'ring' | 'bars';
+    /** 스피너 크기 — md(기본) / lg. ring 32→48px, bars 48→72px */
+    size?: 'md' | 'lg';
 }
 
 declare interface Props_12 {
@@ -1745,6 +1749,8 @@ strokeWidth: number;
 export declare const UiInput: __VLS_WithTemplateSlots_3<typeof __VLS_component_3, __VLS_TemplateResult_3["slots"]>;
 
 export declare const UiLoading: DefineComponent<Props_11, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<Props_11> & Readonly<{}>, {
+variant: "ring" | "bars";
+size: "md" | "lg";
 text: string;
 overlay: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLDivElement>;

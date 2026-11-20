@@ -29,15 +29,27 @@ ispark-ui 표준 로딩 인디케이터. 응답 대기 중인 비동기 상태�
 - **inline** (기본) — 영역 안 \`flex: 1; min-height: 200px\` 자리표시. 페이지/패널 안에서 사용.
 - **overlay** (\`overlay: true\`) — viewport 전체 \`position: fixed\` + 반투명 dim. 작업 전체 차단 시 사용 (저장/업로드 등).
 
+## 스피너 모양 (\`variant\`)
+- **ring** (기본) — 원형 테두리 회전. 목록·패널 안의 짧은 대기.
+- **bars** — 막대 12개가 시계 방향으로 진해졌다 옅어진다. 화면 전체 진입 로딩, 저장·확정처럼 사용자가 기다려야 하는 작업에 사용.
+  - 막대 굵기 7.5%·길이 25%로 가운데를 지름의 절반만큼 비운다.
+  > 막대가 가운데까지 길게 들어오면 서로 붙어 답답해 보여서, 가운데를 비워 막대 간격을 넓혔다. 길이를 늘리지 말 것.
+
+## 크기 (\`size\`)
+- **md** (기본) — ring 32px / bars 48px
+- **lg** — ring 48px / bars 72px. 화면 전체 로딩에 사용.
+
 ## 접근성
 - 루트 \`<div role="status" aria-live="polite">\` — 스크린리더가 로딩 시작/끝을 polite하게 announce
 - spinner는 장식 → \`aria-hidden="true"\` 자동
 - \`text\`가 비면 \`aria-label="로딩 중"\` fallback으로 SR 보장
-- \`prefers-reduced-motion: reduce\` 시 spinner 애니메이션 정지 (vestibular 안전)
+- \`prefers-reduced-motion: reduce\` 시 spinner 애니메이션 정지 (vestibular 안전). bars는 멈춘 채 진하기 차이만 남김
 
 ## API
 - **\`text\`** \`string\` — 표시 텍스트. 기본 \`'불러오는 중...'\`. 빈 문자열이면 미렌더 + aria-label 자동
 - **\`overlay\`** \`boolean\` — 전체 화면 dim 모드. 기본 \`false\`
+- **\`variant\`** \`'ring' | 'bars'\` — 스피너 모양. 기본 \`'ring'\`
+- **\`size\`** \`'md' | 'lg'\` — 스피너 크기. 기본 \`'md'\`
         `,
       },
     },
@@ -61,6 +73,26 @@ ispark-ui 표준 로딩 인디케이터. 응답 대기 중인 비동기 상태�
         defaultValue: { summary: 'false' },
       },
     },
+    variant: {
+      control: 'inline-radio',
+      options: ['ring', 'bars'],
+      description: '스피너 모양. ring: 원형 테두리 / bars: 막대 12개.',
+      table: {
+        category: 'Appearance',
+        type: { summary: "'ring' | 'bars'" },
+        defaultValue: { summary: "'ring'" },
+      },
+    },
+    size: {
+      control: 'inline-radio',
+      options: ['md', 'lg'],
+      description: '스피너 크기. ring 32→48px, bars 48→72px.',
+      table: {
+        category: 'Appearance',
+        type: { summary: "'md' | 'lg'" },
+        defaultValue: { summary: "'md'" },
+      },
+    },
   },
 } satisfies Meta<typeof UiLoading>
 
@@ -73,6 +105,8 @@ export const Playground: Story = {
   args: {
     text: '불러오는 중...',
     overlay: false,
+    variant: 'ring',
+    size: 'md',
   },
   render: (args) => ({
     components: { UiLoading },
@@ -125,6 +159,25 @@ export const NoText: Story = {
     const status = canvas.getByRole('status')
     // 텍스트 없으면 aria-label로 fallback
     await expect(status.getAttribute('aria-label')).toBe('로딩 중')
+  },
+}
+
+// bars 모양 — md / lg 비교
+export const Bars: Story = {
+  render: () => ({
+    components: { UiLoading },
+    template: `
+      <div style="display: flex; gap: 24px;">
+        <UiLoading variant="bars" text="불러오는 중..." />
+        <UiLoading variant="bars" size="lg" text="공유 저장소 연결 중…" />
+      </div>
+    `,
+  }),
+  play: async ({ canvasElement }) => {
+    const bars = canvasElement.querySelectorAll('.ui-loading-bars')
+    await expect(bars.length).toBe(2)
+    await expect(bars[0].querySelectorAll('i').length).toBe(12)
+    await expect(bars[1].classList.contains('size-lg')).toBe(true)
   },
 }
 

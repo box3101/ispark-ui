@@ -36,4 +36,17 @@ describe('UiLoading', () => {
     expect(container.querySelector('.ui-loading-spinner')!.getAttribute('aria-hidden')).toBe('true')
     expect(screen.getByText('저장 중...')).toBeTruthy()
   })
+
+  // 4. variant='bars' — 원형 스피너 대신 막대 12개, 장식이므로 aria-hidden
+  it("variant='bars': 막대 12개 렌더 + ring 미렌더 + size 클래스", () => {
+    const { container } = render(UiLoading, {
+      props: { variant: 'bars', size: 'lg' },
+    })
+    const bars = container.querySelector('.ui-loading-bars')!
+    expect(bars).not.toBeNull()
+    expect(bars.querySelectorAll('i').length).toBe(12)
+    expect(bars.getAttribute('aria-hidden')).toBe('true')
+    expect(bars.classList.contains('size-lg')).toBe(true)
+    expect(container.querySelector('.ui-loading-spinner')).toBeNull()
+  })
 })

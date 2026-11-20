@@ -3,6 +3,19 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.12.0] - 2026-11-20
+
+### Added
+- UiLoading `variant="bars"`: 막대 12개가 시계 방향으로 진해졌다 옅어지는 스피너. 가운데를 지름의 절반만큼 비워 막대 간격을 넓게 둔다.
+- UiLoading `size` 옵션(`md`/`lg`) — ring 32→48px, bars 48→72px.
+
+### Changed
+- UiFileUpload 가로형 제목·설명 간격 6px → 2px.
+- UiDropdownMenu 스토리 문서의 백틱 이스케이프 수정.
+
+### Fixed
+- presentation QA 테스트가 쓰는 `fontkit`을 devDependencies에 추가 (CI `npm test` 실패 해결).
+
 ## [0.11.2] - 2026-10-14
 
 ### Changed
