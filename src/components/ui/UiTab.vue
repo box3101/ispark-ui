@@ -515,9 +515,9 @@ const onKeydown = (e: KeyboardEvent) => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 20px;
-  height: 20px;
-  margin-left: -2px;
+  min-width: 18px;
+  height: 18px;
+  margin-left: -1px;
   padding: 0 6px;
   border-radius: 999px;
   // 선택 안 된 탭도 옅은 칩을 깔아 글자와 숫자가 한 묶음으로 보이게 한다 (선택 시 색만 바뀌어 폭도 그대로)
