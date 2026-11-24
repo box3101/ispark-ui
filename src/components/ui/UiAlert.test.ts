@@ -15,3 +15,14 @@ it('supports controlled visibility and an explicit urgent role', async () => {
   await rerender({ modelValue: true })
   expect(screen.getByRole('alert').textContent).toContain('오류')
 })
+it('applies actions placement and elevated classes', () => {
+  const { container } = render(UiAlert, {
+    props: { title: '안내', actionsPlacement: 'bottom', elevated: true },
+    slots: { actions: '<button>다시 시도</button>' },
+  })
+  const el = container.querySelector('.ui-alert')!
+  expect(el.classList.contains('actions-bottom')).toBe(true)
+  expect(el.classList.contains('has-actions')).toBe(true)
+  expect(el.classList.contains('is-elevated')).toBe(true)
+  expect(screen.getByRole('button', { name: '다시 시도' })).toBeTruthy()
+})

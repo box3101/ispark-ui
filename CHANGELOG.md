@@ -3,6 +3,18 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.14.0] - 2026-11-24
+
+### Added
+- UiAlert `actionsPlacement` (`end` 기본 / `bottom`) — 본문이 길거나 버튼이 여러 개일 때 버튼을 글자 아래(글자 시작선)로.
+- UiAlert `elevated` — 화면 위에 떠 있는 알럿(상단 고정 배너 등)용 그림자.
+- UiAlert 스토리 `AllCases` (제목만·긴 설명·버튼·진행 정보·닫기·좁은 폭·elevated).
+
+### Changed
+- UiAlert 정렬을 "첫 줄 기준"으로 — 아이콘·제목 줄·액션·닫기 버튼을 버튼 높이에 맞춘 첫 줄 안에서 가운데 정렬. 버튼이 들어가도 한 줄 알럿이 어긋나지 않고, 여러 줄이면 첫 줄에 나란히 선 뒤 설명이 아래로 이어진다.
+- UiAlert 폭이 480px 이하이면(컨테이너 기준) 버튼이 자동으로 글자 아래로 — 모달·패널 안에서도 동작.
+- UiAlert 버튼이 있을 때 위아래 여백 13→10px, 내부 배치를 flex로(빈 닫기 칸 때문에 버튼 뒤에 남던 공간 제거).
+
 ## [0.13.1] - 2026-11-24
 
 ### Changed

@@ -295,6 +295,8 @@ onClose?: (() => any) | undefined;
 variant: AlertVariant;
 role: "status" | "alert";
 dismissible: boolean;
+actionsPlacement: "end" | "bottom";
+elevated: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
 declare const __VLS_component_8: DefineComponent<Props_8, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<Props_8> & Readonly<{}>, {
@@ -356,6 +358,15 @@ declare type __VLS_Props_4 = {
     dismissible?: boolean;
     /** 긴급 알림만 alert 사용. 기본은 일반 안내 status */
     role?: 'status' | 'alert';
+    /**
+     * 액션 버튼 위치
+     * - end(기본): 오른쪽 끝, 첫 줄(제목 줄)과 가운데 맞춤
+     * - bottom: 글자 아래, 글자 시작선에 맞춤 — 본문이 길거나 버튼이 여러 개일 때
+     * 알럿 폭이 480px 이하로 좁으면 end 여도 자동으로 아래로 내려간다.
+     */
+    actionsPlacement?: 'end' | 'bottom';
+    /** 화면 위에 떠 있는 알럿(상단 고정 배너 등)용 그림자 */
+    elevated?: boolean;
 };
 
 declare type __VLS_Props_5 = {
