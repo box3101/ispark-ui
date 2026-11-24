@@ -3,6 +3,12 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.14.1] - 2026-11-24
+
+### Changed
+- UiAlert 위아래 여백 8px 16px로 통일 (버튼 유무와 상관없이).
+- UiAlert 닫기 아이콘 18px·굵기 2.5, 알럿 색(info 파랑·error 빨강 등)으로 표시해 더 잘 보이게.
+
 ## [0.14.0] - 2026-11-24
 
 ### Added

@@ -35502,13 +35502,14 @@ const tbe = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
         }, [
           Q(We, {
             name: "x",
-            size: 16
+            size: 18,
+            "stroke-width": 2.5
           })
         ])) : K("", !0)
       ])
     ], 10, w6e)) : K("", !0);
   }
-}), YBe = /* @__PURE__ */ je(E6e, [["__scopeId", "data-v-1cfd9117"]]), T6e = ["aria-label"], D6e = ["src", "alt"], $6e = {
+}), YBe = /* @__PURE__ */ je(E6e, [["__scopeId", "data-v-ea171274"]]), T6e = ["aria-label"], D6e = ["src", "alt"], $6e = {
   key: 1,
   class: "ui-avatar__initials"
 }, z6e = {

@@ -43,7 +43,7 @@ function close() { visible.value = false; emit('close') }
         <div v-if="description || $slots.default" class="ui-alert-description"><slot>{{ description }}</slot></div>
       </div>
       <div v-if="hasActions" class="ui-alert-actions"><slot name="actions" /></div>
-      <button v-if="dismissible" type="button" class="ui-alert-close" aria-label="안내 닫기" @click="close"><UiIcon name="x" :size="16" /></button>
+      <button v-if="dismissible" type="button" class="ui-alert-close" aria-label="안내 닫기" @click="close"><UiIcon name="x" :size="18" :stroke-width="2.5" /></button>
     </div>
   </div>
 </template>
@@ -62,7 +62,7 @@ function close() { visible.value = false; emit('close') }
   container-type: inline-size;
   box-sizing: border-box;
   width: 100%;
-  padding: 13px 16px;
+  padding: 8px 16px;
   border: 1px solid var(--alert-border);
   border-radius: 8px;
   background: var(--alert-bg);
@@ -79,8 +79,6 @@ function close() { visible.value = false; emit('close') }
   &.is-dismissible { --alert-line: 28px; }
   &.has-actions.actions-end {
     --alert-line: 32px; // UiButton md
-    padding-top: 10px;
-    padding-bottom: 10px;
     &:has(.ui-alert-actions .size-xs) { --alert-line: 26px; }
     &:has(.ui-alert-actions .size-sm) { --alert-line: 30px; }
     &:has(.ui-alert-actions .size-lg) { --alert-line: 34px; }
@@ -131,8 +129,9 @@ function close() { visible.value = false; emit('close') }
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0; width: 28px; height: 28px;
   margin: calc((var(--alert-line) - 28px) / 2) -6px 0 0;
-  border: 0; border-radius: 4px; background: transparent; color: #64748b; cursor: pointer;
-  &:hover { background: rgba(15, 23, 42, 0.05); }
+  border: 0; border-radius: 6px; background: transparent; color: var(--alert-color); cursor: pointer;
+  // 닫기 아이콘은 알럿 색(info 파랑·error 빨강…)에 굵기 2.5로 잘 보이게
+  &:hover { background: rgba(15, 23, 42, 0.07); }
   &:focus-visible { outline: 2px solid var(--alert-color); outline-offset: 2px; }
 }
 
