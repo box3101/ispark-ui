@@ -35509,7 +35509,7 @@ const tbe = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
       ])
     ], 10, w6e)) : K("", !0);
   }
-}), YBe = /* @__PURE__ */ je(E6e, [["__scopeId", "data-v-ea171274"]]), T6e = ["aria-label"], D6e = ["src", "alt"], $6e = {
+}), YBe = /* @__PURE__ */ je(E6e, [["__scopeId", "data-v-707ebec4"]]), T6e = ["aria-label"], D6e = ["src", "alt"], $6e = {
   key: 1,
   class: "ui-avatar__initials"
 }, z6e = {

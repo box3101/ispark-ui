@@ -62,7 +62,7 @@ function close() { visible.value = false; emit('close') }
   container-type: inline-size;
   box-sizing: border-box;
   width: 100%;
-  padding: 8px 16px;
+  padding: 10px 16px;
   border: 1px solid var(--alert-border);
   border-radius: 8px;
   background: var(--alert-bg);

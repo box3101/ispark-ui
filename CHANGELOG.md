@@ -3,6 +3,11 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.14.2] - 2026-11-24
+
+### Changed
+- UiAlert 위아래 여백 8px → 10px (padding 10px 16px).
+
 ## [0.14.1] - 2026-11-24
 
 ### Changed
