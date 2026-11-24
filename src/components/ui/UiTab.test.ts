@@ -190,4 +190,12 @@ describe('UiTab', () => {
     const badge = container.querySelector('.ui-tab-item-count')!
     expect(badge.textContent).toBe('12')
   })
+
+  it('variant: 기본 line, 지정 시 variant 클래스 적용', () => {
+    const { container, unmount } = render(UiTab, { props: { modelValue: 'overview', tabs } })
+    expect(container.querySelector('.ui-tab')!.classList.contains('variant-line')).toBe(true)
+    unmount()
+    const pill = render(UiTab, { props: { modelValue: 'overview', tabs, variant: 'pill' } })
+    expect(pill.container.querySelector('.ui-tab')!.classList.contains('variant-pill')).toBe(true)
+  })
 })

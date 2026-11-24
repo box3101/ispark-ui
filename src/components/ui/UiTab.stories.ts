@@ -22,7 +22,8 @@ ispark-ui 표준 탭 — 페이지/모달 내부 콘텐츠 네비게이션. unde
 ## API
 - **\`modelValue\`** \`string\` — 현재 선택된 탭 value (v-model)
 - **\`tabs\`** \`TabItem[]\` — 탭 정의 배열
-- **\`size\`** \`'sm' | 'md' | 'lg'\` — sm(36px) / md(40px·기본) / lg(48px)
+- **\`variant\`** \`'line' | 'slide' | 'pill' | 'segment' | 'toggle' | 'card' | 'button' | 'ghost'\` — line(탭마다 밑줄·기본) / slide(밑줄 하나가 선택 탭으로 미끄러짐) / pill(떨어진 알약, 선택=primary 채움) / segment(둥근 회색 트랙 안 선택 칩=진한 채움) / toggle(사각 트랙 안 같은 폭 버튼, 선택=primary 채움) / card(브라우저 탭, 선택 탭이 아래 흰 패널과 이어짐) / button(글자만, 선택=둥근 사각형 primary 채움) / ghost(글자만, 선택=옅은 primary 배경)
+- **\`size\`** \`'sm' | 'md' | 'lg'\` — sm(약 33px·14px 글자) / md(약 38px·15px·기본) / lg(약 44px·16px)
 - **\`align\`** \`'left' | 'center' | 'right' | 'stretch'\` — left/center/right/stretch(균등 분할)
 - **\`contentMaxWidth\`** \`string\` — \`.ui-tab-inner\` max-width (예: \`'800px'\`). 빈 값이면 full-width
 - **\`contentPaddingX\`** \`string\` — contentMaxWidth 사용 시 좌우 padding (기본 \`'16px'\`)
@@ -87,6 +88,7 @@ interface TabItem {
     },
   },
   argTypes: {
+    variant: { control: 'inline-radio', options: ['line', 'slide', 'pill', 'segment', 'toggle', 'card', 'button', 'ghost'] },
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
     align: { control: 'inline-radio', options: ['left', 'center', 'right', 'stretch'] },
     contentMaxWidth: { control: 'text' },
@@ -202,6 +204,42 @@ export const WithDisabledItem: Story = {
     // 마지막 호출이 'activity'가 아니어야 함
     await expect(calls[calls.length - 1][0]).not.toBe('activity')
   },
+}
+
+// 3가지 variant 비교 (count 포함)
+export const AllVariants: Story = {
+  render: () => ({
+    components: { UiTab },
+    setup: () => {
+      const v1 = ref('all')
+      const v2 = ref('all')
+      const v3 = ref('all')
+      const v4 = ref('all')
+      const v5 = ref('all')
+      const v6 = ref('all')
+      const v7 = ref('all')
+      const v8 = ref('all')
+      const tabs = [
+        { label: '전체', value: 'all', count: 6 },
+        { label: '작성 중', value: 'draft', count: 6 },
+        { label: '검토 중', value: 'review', count: 0 },
+        { label: '완료', value: 'done', count: 0 },
+      ]
+      return { v1, v2, v3, v4, v5, v6, v7, v8, tabs }
+    },
+    template: `
+      <div style="display: flex; flex-direction: column; gap: 28px;">
+        <div><h4 style="margin: 0 0 8px; color: #6f7a93; font-size: 12px;">variant: line (기본)</h4><UiTab v-model="v1" :tabs="tabs" variant="line" align="left" /></div>
+        <div><h4 style="margin: 0 0 8px; color: #6f7a93; font-size: 12px;">variant: pill</h4><UiTab v-model="v2" :tabs="tabs" variant="pill" align="left" /></div>
+        <div><h4 style="margin: 0 0 8px; color: #6f7a93; font-size: 12px;">variant: segment</h4><UiTab v-model="v3" :tabs="tabs" variant="segment" align="left" /></div>
+        <div><h4 style="margin: 0 0 8px; color: #6f7a93; font-size: 12px;">variant: slide</h4><UiTab v-model="v4" :tabs="tabs" variant="slide" align="left" /></div>
+        <div><h4 style="margin: 0 0 8px; color: #6f7a93; font-size: 12px;">variant: toggle</h4><UiTab v-model="v5" :tabs="tabs" variant="toggle" align="left" /></div>
+        <div><h4 style="margin: 0 0 8px; color: #6f7a93; font-size: 12px;">variant: button</h4><UiTab v-model="v7" :tabs="tabs" variant="button" align="left" /></div>
+        <div><h4 style="margin: 0 0 8px; color: #6f7a93; font-size: 12px;">variant: ghost</h4><UiTab v-model="v8" :tabs="tabs" variant="ghost" align="left" /></div>
+        <div style="padding: 20px; background: #eceff4; border-radius: 12px;"><h4 style="margin: 0 0 8px; color: #6f7a93; font-size: 12px;">variant: card (아래 흰 패널과 이어짐)</h4><UiTab v-model="v6" :tabs="tabs" variant="card" align="left" /><div style="padding: 16px 18px; background: #fff; border-radius: 0 10px 10px 10px; color: #4d5462; font-size: 14px;">선택된 탭 내용이 여기에 표시됩니다.</div></div>
+      </div>
+    `,
+  }),
 }
 
 // 3가지 size 비교

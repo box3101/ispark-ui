@@ -1288,7 +1288,19 @@ declare interface Props_2 {
 declare interface Props_20 {
     modelValue: string;
     tabs: TabItem[];
-    /** 탭 크기 — sm(36px) / md(40px·기본) / lg(48px) */
+    /**
+     * 모양
+     * - line(기본): 탭마다 밑줄
+     * - slide: 밑줄 하나가 선택 탭으로 미끄러지며 폭도 맞춰 바뀜
+     * - pill: 떨어진 알약 버튼, 선택은 primary 채움
+     * - segment: 둥근 회색 트랙 안에서 선택 칩만 진하게 채움
+     * - toggle: 사각 트랙 안 같은 폭 버튼, 선택은 primary 채움
+     * - card: 브라우저 탭처럼 위만 둥근 상자. 선택 탭은 흰색으로 아래 패널과 이어짐
+     * - button: 배경 없는 글자 탭, 선택만 각진 둥근 사각형으로 primary 채움
+     * - ghost: button 과 같은 모양, 선택은 옅은 primary 배경 + primary 글자
+     */
+    variant?: 'line' | 'slide' | 'pill' | 'segment' | 'toggle' | 'card' | 'button' | 'ghost';
+    /** 탭 크기 — sm(약 33px·14px 글자) / md(약 38px·15px·기본) / lg(약 44px·16px) */
     size?: 'sm' | 'md' | 'lg';
     /** 정렬 — left / center / right / stretch(균등 분할) */
     align?: 'left' | 'center' | 'right' | 'stretch';
@@ -1843,6 +1855,7 @@ change: (value: string) => any;
 "onUpdate:modelValue"?: ((value: string) => any) | undefined;
 onChange?: ((value: string) => any) | undefined;
 }>, {
+variant: "line" | "slide" | "pill" | "segment" | "toggle" | "card" | "button" | "ghost";
 size: "sm" | "md" | "lg";
 ariaLabel: string;
 align: "left" | "center" | "right" | "stretch";

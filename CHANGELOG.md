@@ -3,6 +3,18 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.13.0] - 2026-11-24
+
+### Added
+- UiTab `variant` 옵션 — `line`(기본·탭마다 밑줄) / `slide`(밑줄 하나가 선택 탭으로 미끄러지며 폭도 맞춤) / `pill`(떨어진 알약, 선택=primary 채움) / `segment`(둥근 회색 트랙 안 선택 칩=진한 채움) / `toggle`(사각 트랙 안 같은 폭 버튼) / `card`(브라우저 탭, 선택 탭이 아래 흰 패널과 이어짐) / `button`(글자만, 선택=둥근 사각형 primary 채움) / `ghost`(글자만, 선택=옅은 primary 배경).
+- UiTab 스토리 `AllVariants`, variant 클래스 테스트.
+
+### Changed
+- UiTab 글자 크기 sm 14px / md 15px(기본) / lg 16px, md 높이 40→38px(padding 8px 16px).
+- UiTab 모든 탭 굵기 600 고정 — 선택은 색과 밑줄로만 구분해 선택이 바뀌어도 탭 폭이 흔들리지 않음.
+- UiTab line 밑줄 3px·각진 끝, 선택 글자색 primary.
+- UiTab 카운트 칩 11px·700, 선택 안 된 탭에도 옅은 칩 배경(회색 바탕 탭은 흰 칩)을 깔아 글자와 숫자 간격을 일정하게.
+
 ## [0.12.0] - 2026-11-20
 
 ### Added
