@@ -297,6 +297,7 @@ role: "status" | "alert";
 dismissible: boolean;
 actionsPlacement: "end" | "bottom";
 elevated: boolean;
+closeTone: "accent" | "neutral";
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
 declare const __VLS_component_8: DefineComponent<Props_8, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<Props_8> & Readonly<{}>, {
@@ -367,9 +368,23 @@ declare type __VLS_Props_4 = {
     actionsPlacement?: 'end' | 'bottom';
     /** 화면 위에 떠 있는 알럿(상단 고정 배너 등)용 그림자 */
     elevated?: boolean;
+    /**
+     * 닫기(X) 버튼 색
+     * - accent(기본): 알럿 색(info 파랑·error 빨강…)
+     * - neutral: 검회색 — 경고·안내 알럿에서 상태 색을 덜어내고 차분하게 닫기만 제공할 때
+     */
+    closeTone?: 'accent' | 'neutral';
 };
 
 declare type __VLS_Props_5 = {
+    tone?: CloseButtonTone;
+    /** sm 24px(아이콘 16) · md 28px(아이콘 18) */
+    size?: CloseButtonSize;
+    ariaLabel?: string;
+    disabled?: boolean;
+};
+
+declare type __VLS_Props_6 = {
     /** Lucide 아이콘 이름 (kebab-case) */
     name: string;
     /** 토큰('xs'|'sm'|'md'|'lg') 또는 숫자(px) */
@@ -380,7 +395,7 @@ declare type __VLS_Props_5 = {
     strokeWidth?: number;
 };
 
-declare type __VLS_Props_6 = {
+declare type __VLS_Props_7 = {
     modelValue?: DateRange;
     /** 기본: 시작일/종료일 독립 달력. range는 기존 두 달 달력 */
     mode?: 'separate' | 'range';
@@ -394,14 +409,14 @@ declare type __VLS_Props_6 = {
     presets?: DateRangePreset[];
 };
 
-declare type __VLS_Props_7 = {
+declare type __VLS_Props_8 = {
     files: FileItem[];
     getUrl: (path: string) => string;
     deletable?: boolean;
     layout?: 'list' | 'grid';
 };
 
-declare type __VLS_Props_8 = {
+declare type __VLS_Props_9 = {
     loading?: boolean;
     accept?: string;
     label?: string;
@@ -844,6 +859,15 @@ export declare interface CalendarMonthEvent {
 }
 
 export declare type ChartType = 'bar' | 'line' | 'pie' | 'mixed' | 'radar';
+
+export declare type CloseButtonSize = 'sm' | 'md';
+
+/**
+ * 공통 닫기(X) 아이콘 버튼 — 알럿·배너·패널 등 닫을 수 있는 영역의 오른쪽 위에 둔다.
+ * - tone neutral(기본): 검회색 X. 어떤 배경색(경고 노랑·안내 파랑 등) 위에서도 튀지 않고 잘 보인다.
+ * - tone inherit: 부모 글자색(currentColor)을 따른다. 오류 알럿의 빨간 X처럼 상태 색을 강조할 때.
+ */
+export declare type CloseButtonTone = 'neutral' | 'inherit';
 
 declare function closeCalendar(): void;
 
@@ -1715,13 +1739,24 @@ legendPosition: "top" | "bottom" | "left" | "right";
 
 export declare const UiCheckbox: __VLS_WithTemplateSlots_11<typeof __VLS_component_11, __VLS_TemplateResult_11["slots"]>;
 
+export declare const UiCloseButton: DefineComponent<__VLS_Props_5, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+click: (event: MouseEvent) => any;
+}, string, PublicProps, Readonly<__VLS_Props_5> & Readonly<{
+onClick?: ((event: MouseEvent) => any) | undefined;
+}>, {
+size: CloseButtonSize;
+disabled: boolean;
+ariaLabel: string;
+tone: CloseButtonTone;
+}, {}, {}, {}, string, ComponentProvideOptions, false, {}, HTMLButtonElement>;
+
 export declare const UiConfirm: DefineComponent<    {}, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 export declare const UiDatePicker: __VLS_WithTemplateSlots_16<typeof __VLS_component_16, __VLS_TemplateResult_16["slots"]>;
 
-export declare const UiDateRangePicker: DefineComponent<__VLS_Props_6, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+export declare const UiDateRangePicker: DefineComponent<__VLS_Props_7, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 "update:modelValue": (value: DateRange) => any;
-}, string, PublicProps, Readonly<__VLS_Props_6> & Readonly<{
+}, string, PublicProps, Readonly<__VLS_Props_7> & Readonly<{
 "onUpdate:modelValue"?: ((value: DateRange) => any) | undefined;
 }>, {
 size: "xs" | "sm" | "md" | "lg";
@@ -1740,19 +1775,19 @@ export declare const UiDropdownMenu: __VLS_WithTemplateSlots_15<typeof __VLS_com
 
 export declare const UiEmpty: __VLS_WithTemplateSlots_5<typeof __VLS_component_5, __VLS_TemplateResult_5["slots"]>;
 
-export declare const UiFileList: DefineComponent<__VLS_Props_7, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+export declare const UiFileList: DefineComponent<__VLS_Props_8, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 delete: (file: FileItem) => any;
-}, string, PublicProps, Readonly<__VLS_Props_7> & Readonly<{
+}, string, PublicProps, Readonly<__VLS_Props_8> & Readonly<{
 onDelete?: ((file: FileItem) => any) | undefined;
 }>, {
 layout: "list" | "grid";
 deletable: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;
 
-export declare const UiFileUpload: DefineComponent<__VLS_Props_8, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+export declare const UiFileUpload: DefineComponent<__VLS_Props_9, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
 upload: (file: File) => any;
 reject: (message: string) => any;
-}, string, PublicProps, Readonly<__VLS_Props_8> & Readonly<{
+}, string, PublicProps, Readonly<__VLS_Props_9> & Readonly<{
 onUpload?: ((file: File) => any) | undefined;
 onReject?: ((message: string) => any) | undefined;
 }>, {
@@ -1764,7 +1799,7 @@ label: string;
 input: HTMLInputElement;
 }, HTMLDivElement>;
 
-export declare const UiIcon: DefineComponent<__VLS_Props_5, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<__VLS_Props_5> & Readonly<{}>, {
+export declare const UiIcon: DefineComponent<__VLS_Props_6, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<__VLS_Props_6> & Readonly<{}>, {
 size: string | number;
 strokeWidth: number;
 }, {}, {}, {}, string, ComponentProvideOptions, false, {}, any>;

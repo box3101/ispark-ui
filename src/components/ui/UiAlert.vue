@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue'
 import UiIcon from './UiIcon.vue'
+import UiCloseButton from './UiCloseButton.vue'
 
 export type AlertVariant = 'info' | 'success' | 'warning' | 'error' | 'neutral'
 const props = withDefaults(defineProps<{
@@ -19,7 +20,13 @@ const props = withDefaults(defineProps<{
   actionsPlacement?: 'end' | 'bottom'
   /** 화면 위에 떠 있는 알럿(상단 고정 배너 등)용 그림자 */
   elevated?: boolean
-}>(), { variant: 'info', dismissible: false, role: 'status', actionsPlacement: 'end', elevated: false })
+  /**
+   * 닫기(X) 버튼 색
+   * - accent(기본): 알럿 색(info 파랑·error 빨강…)
+   * - neutral: 검회색 — 경고·안내 알럿에서 상태 색을 덜어내고 차분하게 닫기만 제공할 때
+   */
+  closeTone?: 'accent' | 'neutral'
+}>(), { variant: 'info', dismissible: false, role: 'status', actionsPlacement: 'end', elevated: false, closeTone: 'accent' })
 const visible = defineModel<boolean>({ default: true })
 const emit = defineEmits<{ close: [] }>()
 const slots = useSlots()
@@ -43,7 +50,7 @@ function close() { visible.value = false; emit('close') }
         <div v-if="description || $slots.default" class="ui-alert-description"><slot>{{ description }}</slot></div>
       </div>
       <div v-if="hasActions" class="ui-alert-actions"><slot name="actions" /></div>
-      <button v-if="dismissible" type="button" class="ui-alert-close" aria-label="안내 닫기" @click="close"><UiIcon name="x" :size="18" :stroke-width="2.5" /></button>
+      <UiCloseButton v-if="dismissible" class="ui-alert-close" :tone="closeTone === 'neutral' ? 'neutral' : 'inherit'" aria-label="안내 닫기" @click="close" />
     </div>
   </div>
 </template>
@@ -125,14 +132,10 @@ function close() { visible.value = false; emit('close') }
   min-height: var(--alert-line);
   margin-left: 6px;
 }
-.ui-alert-close {
-  display: inline-flex; align-items: center; justify-content: center;
-  flex-shrink: 0; width: 28px; height: 28px;
-  margin: calc((var(--alert-line) - 28px) / 2) -6px 0 0;
-  border: 0; border-radius: 6px; background: transparent; color: var(--alert-color); cursor: pointer;
-  // 닫기 아이콘은 알럿 색(info 파랑·error 빨강…)에 굵기 2.5로 잘 보이게
-  &:hover { background: rgba(15, 23, 42, 0.07); }
-  &:focus-visible { outline: 2px solid var(--alert-color); outline-offset: 2px; }
+.ui-alert .ui-alert-close {
+  // 공통 UiCloseButton(28px). accent는 알럿 색(info 파랑·error 빨강…), neutral은 검회색
+  margin: calc((var(--alert-line) - 28px) / 2) -2px 0 0;
+  &.tone-inherit { color: var(--alert-color); }
 }
 
 // 버튼을 글자 아래 줄로 — 아이콘 폭(20px)+간격(10px)만큼 들여 글자 시작선에 맞춘다.

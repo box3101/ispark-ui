@@ -20,6 +20,14 @@ export const AllVariants: Story = {
     <UiAlert variant="neutral" description="서비스 점검 일정을 확인해 주세요." />
   </div>` }),
 }
+export const CloseTone: Story = {
+  name: '닫기 버튼 색 (closeTone)',
+  render: () => ({ components: { UiAlert }, template: `<div style="display: grid; gap: 12px;">
+    <UiAlert variant="error" dismissible title="오류" description="accent(기본) — 알럿 색 X" />
+    <UiAlert variant="warning" dismissible close-tone="neutral" title="이전 작업에 실패했습니다" description="neutral — 공통 검회색 X(UiCloseButton)" />
+    <UiAlert variant="info" dismissible close-tone="neutral" title="안내" description="neutral — 공통 검회색 X(UiCloseButton)" />
+  </div>` }),
+}
 export const Dismissible: Story = {
   render: () => ({
     components: { UiAlert, UiButton },

@@ -3,6 +3,15 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.14.3] - 2026-11-25
+
+### Added
+- UiCloseButton — 공통 닫기(X) 아이콘 버튼. `tone` neutral(기본, 검회색) / inherit(부모 글자색), `size` sm(24px) / md(28px).
+- UiAlert `closeTone` (`accent` 기본 / `neutral`) — neutral이면 닫기 X를 공통 검회색 UiCloseButton으로 표시. 오류 알럿의 빨간 X 등 기존 기본값은 그대로.
+
+### Changed
+- UiAlert 닫기 버튼 오른쪽 여백 -6px → -2px.
+
 ## [0.14.2] - 2026-11-24
 
 ### Changed

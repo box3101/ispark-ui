@@ -26,3 +26,11 @@ it('applies actions placement and elevated classes', () => {
   expect(el.classList.contains('is-elevated')).toBe(true)
   expect(screen.getByRole('button', { name: '다시 시도' })).toBeTruthy()
 })
+it('uses the shared close button with accent or neutral tone', async () => {
+  const { container, rerender } = render(UiAlert, { props: { title: '경고', variant: 'warning', dismissible: true } })
+  const close = () => container.querySelector('.ui-alert-close')!
+  expect(close().classList.contains('ui-close-button')).toBe(true)
+  expect(close().classList.contains('tone-inherit')).toBe(true)
+  await rerender({ closeTone: 'neutral' })
+  expect(close().classList.contains('tone-neutral')).toBe(true)
+})
