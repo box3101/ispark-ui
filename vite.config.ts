@@ -19,7 +19,11 @@ export default defineConfig({
         if (!imports) return
         for (const name of entryStyles) {
           const asset = bundle[name]
-          if (asset?.type === 'asset') asset.source = `${imports}\n${asset.source}`
+          if (asset?.type === 'asset') {
+            const source = String(asset.source)
+            const charset = source.match(/^@charset\s+[^;]+;/)?.[0] ?? ''
+            asset.source = `${charset}${imports}\n${source.slice(charset.length)}`
+          }
         }
       },
     },
