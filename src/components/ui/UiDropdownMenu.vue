@@ -168,7 +168,7 @@ const effectiveSideOffset = computed(() =>
 
 // hover wrap div의 hover 영역 확장 — trigger와 content 사이 gap을 wrap padding으로 흡수
 // (mouse가 빈 영역 거쳐 close 발화하는 것 방지)
-const hoverBridgeStyle = computed<Record<string, string>>(() => {
+const hoverBridgeStyle = computed((): Record<string, string> => {
   if (!props.openOnHover) return {}
   const pad = `${props.sideOffset + 4}px`
   const sideMap: Record<NonNullable<Props['side']>, string> = {

@@ -1,0 +1,20 @@
+/* JDC opening theme. All layout colors come from presentation/tokens.ts. */
+.pl-slide.jdc-batdam-cover .pl-wash{background:linear-gradient(90deg,var(--ds-navy900) 0%,color-mix(in srgb,var(--ds-navy900) 92%,transparent) 43%,color-mix(in srgb,var(--ds-navy900) 28%,transparent) 75%,color-mix(in srgb,var(--ds-navy900) 12%,transparent)),linear-gradient(0deg,color-mix(in srgb,var(--ds-navy900) 80%,transparent),transparent 42%)}
+.pl-slide.jdc-batdam-cover .pl-heading{top:92px;right:48px}
+.pl-slide.jdc-batdam-cover .pl-heading>p:first-child{color:var(--ds-blue100);font-size:var(--type-body,24px)}
+.pl-slide.jdc-batdam-cover .pl-heading h1{font-size:var(--type-title,40px);line-height:1.38;max-width:920px;letter-spacing:-1.7px;color:var(--ds-white)}
+.pl-slide.jdc-batdam-cover .pl-heading .pl-subtitle{color:var(--ds-white);font-size:var(--type-display,56px);font-weight:var(--weight-bold);line-height:1.2;margin-top:12px}
+.pl-slide.jdc-batdam-cover .pl-body{top:340px;height:110px}
+.pl-slide.jdc-batdam-cover .pl-cover-line{white-space:pre-line;line-height:1.65;padding:8px 20px;border-color:var(--ds-blue500);color:var(--ds-white)}
+.pl-slide.jdc-batdam-cover .pl-footer{color:var(--ds-blue100);border-color:color-mix(in srgb,var(--ds-blue300) 45%,transparent)}
+.ds-slide.jdc-batdam-agenda .ds-wash{background:linear-gradient(90deg,color-mix(in srgb,var(--ds-white) 93%,transparent) 0%,color-mix(in srgb,var(--ds-white) 91%,transparent) 32%,color-mix(in srgb,var(--ds-navy900) 96%,transparent) 32%,color-mix(in srgb,var(--ds-navy900) 88%,transparent))}
+.ds-slide.jdc-batdam-agenda .ds-course-section{color:var(--ds-blue300)}
+.ds-slide.jdc-batdam-agenda .ds-course-item{min-height:142px;padding-top:13px;padding-bottom:12px}
+.ds-slide.jdc-batdam-agenda .ds-course-description{font-size:var(--type-detail,16px)}
+
+.ds-slide.jdc-batdam-agenda .ds-course-section{margin-bottom:8px!important}
+.ds-slide.jdc-batdam-agenda .ds-course-description{margin-top:8px!important}
+.ds-slide.jdc-batdam-agenda .ds-course-content h2{white-space:pre-line;font-size:var(--type-supporting,20px);line-height:1.35}
+
+/* Reveal the connected field walls at right without enlarging the foreground stones. */
+.pl-slide.jdc-batdam-cover .pl-background{object-position:right center}

@@ -1,9 +1,18 @@
 # ISPark PPT Design System (v1 draft)
 
-A presentation-focused design specification alongside the existing Vue component library. This folder is intentionally **not** exported from the existing npm package until reviewed.
+A presentation-focused design specification alongside the existing Vue component library. This folder is not exported as a whole. A reviewed subset is public:
+
+```ts
+import { PresentationSlide, presentationLayouts, checkSlideContent, setPresentationAssetBase } from '@leechanyong/ispark-ui/presentation'
+import '@leechanyong/ispark-ui/presentation.css' // layout styles + Pretendard
+```
+
+- Public layouts (v1): `section-cover`, `parallel-message-cards`, `focus-process`. Field specs live in `src/presentation/public/catalog.ts`.
+- Pass an optional six-digit HEX `accentColor` to `PresentationSlide` to tint the section-cover gradient and the takeaway band in cards and processes.
+- Assets ship under `dist/presentation/`. Serve them from the app and call `setPresentationAssetBase('<base>/')`.
 
 ## Fixed rules
-- 16:9 canvas; approved color, font-size and spacing tokens
+- 1040×720 canvas (780×540pt PDF, `slideTokens.canvas`); approved color, font-size and spacing tokens
 - Choose layout by content relationship, not visual decoration
 - Cover image <= 40%, section <= 30%, ordinary content <= 12%
 - Official logos only; do not recreate logos with image generation

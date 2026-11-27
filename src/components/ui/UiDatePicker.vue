@@ -405,9 +405,11 @@ const emit = defineEmits<{
  * radix-vue DatePickerRoot.Granularity는 'day' | 'hour' | 'minute' | 'second' union.
  * 'month'는 라이브러리 타입에 없지만 런타임에선 동작 (캘린더 입력 처리). 명시적 union으로 좁힘.
  */
-type DatePickerGranularity = 'day' | 'hour' | 'minute' | 'second' | 'month'
+// Preserve the existing runtime month extension at the Radix adapter boundary.
+// Radix's published Granularity declaration omits month; do not change field behavior.
+type DatePickerGranularity = NonNullable<InstanceType<typeof DatePickerRoot>['$props']['granularity']>
 const pickerGranularity = computed<DatePickerGranularity>(() =>
-  props.type === 'month' ? 'month' : 'day',
+  (props.type === 'month' ? 'month' : 'day') as DatePickerGranularity,
 )
 
 // 필드 클릭 시 달력 팝업 열기 (트리거 버튼 클릭 프록시)

@@ -1,0 +1,128 @@
+{
+  "generator": "built-in image_gen",
+  "transparent_background": true,
+  "reference": "data-migration.png",
+  "date": "2026-10-28",
+  "jobs": [
+    {
+      "id": "project-lead",
+      "label": "프로젝트 책임자",
+      "concept": "organization",
+      "tags": [
+        "PM",
+        "책임자",
+        "프로젝트",
+        "총괄",
+        "관리자"
+      ],
+      "prompt": "Create ONE reusable premium 3D enterprise presentation icon, square canvas, isolated genuine transparent alpha background. Match the provided reference ONLY in materials, palette and lighting: polished silver metal, saturated cobalt blue, subtle cyan edge light, studio highlights, slight three-quarter perspective, small translucent circular glass plinth. Subject: A single faceless professional project director bust in a navy suit and blue tie, silver-white face, neatly sculpted dark-blue hair, confident straight-on three-quarter pose. No other objects. Center the full object at 78% canvas coverage with at least 10% clear margins. No clipping, no text labels, numbers, letters, watermark, logos, scenery, white rectangle or checkerboard baked in. Silver, white, deep blue and cyan only. Strong readable silhouette at small size. Reference database is not the requested subject.",
+      "source": "C:\\Users\\pc\\.codex\\generated_images\\01a180d8-cd54-7e60-8321-cb439cfe2699\\exec-c854be8f-245c-4424-9471-a83f7233c972.png",
+      "file": "project-lead.png"
+    },
+    {
+      "id": "business-design-team",
+      "label": "업무·설계팀",
+      "concept": "workflow",
+      "tags": [
+        "업무",
+        "설계",
+        "팀",
+        "요구사항",
+        "분석"
+      ],
+      "prompt": "Create ONE reusable premium 3D enterprise presentation icon, square canvas, isolated genuine transparent alpha background. Match the provided reference ONLY in materials, palette and lighting: polished silver metal, saturated cobalt blue, subtle cyan edge light, studio highlights, slight three-quarter perspective, small translucent circular glass plinth. Subject: Three abstract professional human busts grouped in front of a large silver requirements document with three blue lines and a small blue blueprint corner. One blue leader and two silver colleagues. Clear team and document silhouette. Center the full object at 78% canvas coverage with at least 10% clear margins. No clipping, no text labels, numbers, letters, watermark, logos, scenery, white rectangle or checkerboard baked in. Silver, white, deep blue and cyan only. Strong readable silhouette at small size. Reference database is not the requested subject.",
+      "source": "C:\\Users\\pc\\.codex\\generated_images\\01a180d8-cd54-7e60-8321-cb439cfe2699\\exec-b6b71b04-26fd-44e5-917b-2b9c8094d4b2.png",
+      "file": "business-design-team.png"
+    },
+    {
+      "id": "development-integration-team",
+      "label": "개발·연계팀",
+      "concept": "integration",
+      "tags": [
+        "개발",
+        "연계",
+        "팀",
+        "코드",
+        "DB"
+      ],
+      "prompt": "Create ONE reusable premium 3D enterprise presentation icon, square canvas, isolated genuine transparent alpha background. Match the provided reference ONLY in materials, palette and lighting: polished silver metal, saturated cobalt blue, subtle cyan edge light, studio highlights, slight three-quarter perspective, small translucent circular glass plinth. Subject: A professional developer bust beside a small silver software window with a simple blue angle-bracket code glyph, linked by short clean blue connectors to two silver database cylinders. One cohesive compact group. Center the full object at 78% canvas coverage with at least 10% clear margins. No clipping, no text labels, numbers, letters, watermark, logos, scenery, white rectangle or checkerboard baked in. Silver, white, deep blue and cyan only. Strong readable silhouette at small size. Reference database is not the requested subject.",
+      "source": "C:\\Users\\pc\\.codex\\generated_images\\01a180d8-cd54-7e60-8321-cb439cfe2699\\exec-5692c876-01a9-45ec-90be-275b585841cb.png",
+      "file": "development-integration-team.png"
+    },
+    {
+      "id": "quality-assurance-team",
+      "label": "품질·검증팀",
+      "concept": "quality",
+      "tags": [
+        "품질",
+        "검증",
+        "QA",
+        "테스트",
+        "팀"
+      ],
+      "prompt": "Create ONE reusable premium 3D enterprise presentation icon, square canvas, isolated genuine transparent alpha background. Match the provided reference ONLY in materials, palette and lighting: polished silver metal, saturated cobalt blue, subtle cyan edge light, studio highlights, slight three-quarter perspective, small translucent circular glass plinth. Subject: Three abstract blue and silver professional busts in front of a large silver shield with blue checkmark and a small checklist document. Cohesive quality assurance team symbol. Center the full object at 78% canvas coverage with at least 10% clear margins. No clipping, no text labels, numbers, letters, watermark, logos, scenery, white rectangle or checkerboard baked in. Silver, white, deep blue and cyan only. Strong readable silhouette at small size. Reference database is not the requested subject.",
+      "source": "C:\\Users\\pc\\.codex\\generated_images\\01a180d8-cd54-7e60-8321-cb439cfe2699\\exec-980db983-b245-43d2-927e-59acafa8c979.png",
+      "file": "quality-assurance-team.png"
+    },
+    {
+      "id": "cloud-service",
+      "label": "클라우드 서비스",
+      "concept": "infrastructure",
+      "tags": [
+        "클라우드",
+        "서버",
+        "서비스",
+        "인프라",
+        "SaaS"
+      ],
+      "prompt": "Create ONE reusable premium 3D enterprise presentation icon, square canvas, isolated genuine transparent alpha background. Match the provided reference ONLY in materials, palette and lighting: polished silver metal, saturated cobalt blue, subtle cyan edge light, studio highlights, slight three-quarter perspective, small translucent circular glass plinth. Subject: A polished silver cloud with cobalt blue inset and three small connected server cubes beneath, a simple cohesive cloud computing symbol. Center full object at 78% canvas coverage, 10% clear margins. No clipping, text labels, letters, watermark, logos, scenery, white rectangle or checkerboard. Silver, white, deep blue and cyan only. Strong silhouette at small size. Reference database is only a material reference, not the subject.",
+      "source": "C:\\Users\\pc\\.codex\\generated_images\\01a180d8-cd54-7e60-8321-cb439cfe2699\\exec-54eca8a3-5099-4d76-b9f8-dc36d6f806a5.png",
+      "file": "cloud-service.png"
+    },
+    {
+      "id": "api-connection",
+      "label": "API 연계",
+      "concept": "integration",
+      "tags": [
+        "API",
+        "연계",
+        "인터페이스",
+        "연결",
+        "통합"
+      ],
+      "prompt": "Create ONE reusable premium 3D enterprise presentation icon, square canvas, isolated genuine transparent alpha background. Match the provided reference ONLY in materials, palette and lighting: polished silver metal, saturated cobalt blue, subtle cyan edge light, studio highlights, slight three-quarter perspective, small translucent circular glass plinth. Subject: Two polished silver software window panels with blue inset screens linked by two opposing cobalt blue arrows, a clear software interface connection symbol. No text or letters. Center full object at 78% canvas coverage, 10% clear margins. No clipping, text labels, letters, watermark, logos, scenery, white rectangle or checkerboard. Silver, white, deep blue and cyan only. Strong silhouette at small size. Reference database is only a material reference, not the subject.",
+      "source": "C:\\Users\\pc\\.codex\\generated_images\\01a180d8-cd54-7e60-8321-cb439cfe2699\\exec-dc26bdf3-0776-4105-ba91-6e1c0851a7a4.png",
+      "file": "api-connection.png"
+    },
+    {
+      "id": "document-search",
+      "label": "문서 검색",
+      "concept": "understanding",
+      "tags": [
+        "문서",
+        "검색",
+        "조회",
+        "분석",
+        "탐색"
+      ],
+      "prompt": "Create ONE reusable premium 3D enterprise presentation icon, square canvas, isolated genuine transparent alpha background. Match the provided reference ONLY in materials, palette and lighting: polished silver metal, saturated cobalt blue, subtle cyan edge light, studio highlights, slight three-quarter perspective, small translucent circular glass plinth. Subject: A polished silver document with three embossed cobalt blue horizontal lines and a large blue and silver magnifying glass in front, strong simple silhouette. Center full object at 78% canvas coverage, 10% clear margins. No clipping, text labels, letters, watermark, logos, scenery, white rectangle or checkerboard. Silver, white, deep blue and cyan only. Strong silhouette at small size. Reference database is only a material reference, not the subject.",
+      "source": "C:\\Users\\pc\\.codex\\generated_images\\01a180d8-cd54-7e60-8321-cb439cfe2699\\exec-e1409631-1667-4861-abbc-1afc0cf5057e.png",
+      "file": "document-search.png"
+    },
+    {
+      "id": "approval-workflow",
+      "label": "결재 승인",
+      "concept": "verified",
+      "tags": [
+        "결재",
+        "승인",
+        "검토",
+        "확인",
+        "완료"
+      ],
+      "prompt": "Create ONE reusable premium 3D enterprise presentation icon, square canvas, isolated genuine transparent alpha background. Match the provided reference ONLY in materials, palette and lighting: polished silver metal, saturated cobalt blue, subtle cyan edge light, studio highlights, slight three-quarter perspective, small translucent circular glass plinth. Subject: A polished silver clipboard with blue horizontal lines, a prominent blue circular checkmark seal and a small elegant silver pen, a clear approval symbol. Center full object at 78% canvas coverage, 10% clear margins. No clipping, text labels, letters, watermark, logos, scenery, white rectangle or checkerboard. Silver, white, deep blue and cyan only. Strong silhouette at small size. Reference database is only a material reference, not the subject.",
+      "source": "C:\\Users\\pc\\.codex\\generated_images\\01a180d8-cd54-7e60-8321-cb439cfe2699\\exec-855b5281-50f0-45db-8491-ed5fc48c9320.png",
+      "file": "approval-workflow.png"
+    }
+  ]
+}

@@ -58,6 +58,14 @@ export const proposalIcons: ProposalConcept[] = [
   { key: 'integration', label: '시스템 연계', glyph: 'plugs-connected', tone: 'blue', terms: ['연계', '인터페이스', '연동'] },
   { key: 'infrastructure', label: '인프라', glyph: 'hard-drives', tone: 'blue', terms: ['인프라', '서버', '자원'] },
   { key: 'testing', label: '테스트', glyph: 'test-tube', tone: 'orange', terms: ['테스트', '시험', '검사'] },
+  { key: 'requirements-traceability', label: '요구사항 추적', glyph: 'tree-structure', tone: 'blue', terms: ['요구사항', '추적성', 'RFP', '요구사항 대응'] },
+  { key: 'evaluation-criteria', label: '평가기준', glyph: 'clipboard-text', tone: 'blue', terms: ['평가', '배점', '심사', '평가기준'] },
+  { key: 'budget-cost', label: '예산·비용', glyph: 'calculator', tone: 'blue', terms: ['예산', '비용', '견적', 'TCO'] },
+  { key: 'data-quality', label: '데이터 품질', glyph: 'database', tone: 'blue', terms: ['데이터', '정합성', '중복', '데이터 품질'] },
+  { key: 'user-experience', label: '사용자 경험', glyph: 'devices', tone: 'blue', terms: ['UX', 'UI', '화면', '사용성', '접근성'] },
+  { key: 'ai-assistant', label: 'AI 지원', glyph: 'robot', tone: 'blue', terms: ['AI', '인공지능', '자동화', '에이전트'] },
+  { key: 'knowledge-search', label: '지식 검색', glyph: 'book-open', tone: 'blue', terms: ['검색', 'RAG', '지식', '문서 검색'] },
+  { key: 'operations-handover', label: '운영 인수인계', glyph: 'handshake', tone: 'blue', terms: ['운영', '인수인계', '이관', '운영 전환'] },
 ]
 
 /** 개념 key → 정의 */

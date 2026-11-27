@@ -3,6 +3,17 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.15.0] - 2026-11-27
+
+### Added
+- Publish `@leechanyong/ispark-ui/presentation` with PresentationSlide, layout catalog, content validation and configurable asset base.
+- Publish `@leechanyong/ispark-ui/presentation.css` and bundled presentation images, including JDC illustrations and Jeju Batdam background.
+- Include all main-branch updates through v0.14.3, including UiTab card variant and UiCloseButton.
+
+### Fixed
+- Correct presentation renderer sizing types and remove unreachable metrics fallback.
+- Preserve DatePicker month behavior at the Radix type boundary and correct dropdown style typing.
+
 ## [0.14.3] - 2026-11-25
 
 ### Added

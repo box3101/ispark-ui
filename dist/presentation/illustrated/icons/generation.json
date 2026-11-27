@@ -1,0 +1,50 @@
+[
+  {
+    "key": "legacy-server",
+    "file": "exec-863dcb4a-576c-496f-ae80-9c82bc744a27.png",
+    "subject": "the server stack with hourglass in the FIRST card",
+    "tool": "built-in image_gen",
+    "transparent_background": true,
+    "prompt": "Use case: background-extraction. Extract ONLY the server stack with hourglass in the FIRST card from the provided reference slide as ONE isolated reusable 3D icon with genuine transparent alpha background. Preserve the original blue/silver materials, isometric perspective, object shapes and soft studio lighting. Retain any small integral glass base or orbit ring belonging to this icon, but remove the entire slide, cards, surrounding texts, numerals, decorative lines, other icons and background. Center this one icon at a consistent 80 percent of a square canvas, keep 10 percent clear margins, no clipping. No labels, no letters, no checkerboard pixels, no white rectangle, no opaque ground plane. Transparent outside the object with only a subtle soft contact shadow. Intended to be reused on both navy and white slides."
+  },
+  {
+    "key": "system-blocks",
+    "file": "exec-863dcb4a-576c-496f-ae80-9c82bc744a27.png",
+    "subject": "the silver blue interlocking blocks and document in the SECOND card",
+    "tool": "built-in image_gen",
+    "transparent_background": true,
+    "prompt": "Use case: background-extraction. Extract ONLY the silver blue interlocking blocks and document in the SECOND card from the provided reference slide as ONE isolated reusable 3D icon with genuine transparent alpha background. Preserve the original blue/silver materials, isometric perspective, object shapes and soft studio lighting. Retain any small integral glass base or orbit ring belonging to this icon, but remove the entire slide, cards, surrounding texts, numerals, decorative lines, other icons and background. Center this one icon at a consistent 80 percent of a square canvas, keep 10 percent clear margins, no clipping. No labels, no letters, no checkerboard pixels, no white rectangle, no opaque ground plane. Transparent outside the object with only a subtle soft contact shadow. Intended to be reused on both navy and white slides."
+  },
+  {
+    "key": "analytics-review",
+    "file": "exec-863dcb4a-576c-496f-ae80-9c82bc744a27.png",
+    "subject": "the chart screen and magnifying glass in the THIRD card",
+    "tool": "built-in image_gen",
+    "transparent_background": true,
+    "prompt": "Use case: background-extraction. Extract ONLY the chart screen and magnifying glass in the THIRD card from the provided reference slide as ONE isolated reusable 3D icon with genuine transparent alpha background. Preserve the original blue/silver materials, isometric perspective, object shapes and soft studio lighting. Retain any small integral glass base or orbit ring belonging to this icon, but remove the entire slide, cards, surrounding texts, numerals, decorative lines, other icons and background. Center this one icon at a consistent 80 percent of a square canvas, keep 10 percent clear margins, no clipping. No labels, no letters, no checkerboard pixels, no white rectangle, no opaque ground plane. Transparent outside the object with only a subtle soft contact shadow. Intended to be reused on both navy and white slides."
+  },
+  {
+    "key": "data-migration",
+    "file": "exec-962066cb-9569-4a36-9d4d-e2ccfebf2ff0.png",
+    "subject": "the database cylinder on the LEFT of the FIRST row",
+    "tool": "built-in image_gen",
+    "transparent_background": true,
+    "prompt": "Use case: background-extraction. Extract ONLY the database cylinder on the LEFT of the FIRST row from the provided reference slide as ONE isolated reusable 3D icon with genuine transparent alpha background. Preserve the original blue/silver materials, isometric perspective, object shapes and soft studio lighting. Retain any small integral glass base or orbit ring belonging to this icon, but remove the entire slide, cards, surrounding texts, numerals, decorative lines, other icons and background. Center this one icon at a consistent 80 percent of a square canvas, keep 10 percent clear margins, no clipping. No labels, no letters, no checkerboard pixels, no white rectangle, no opaque ground plane. Transparent outside the object with only a subtle soft contact shadow. Intended to be reused on both navy and white slides."
+  },
+  {
+    "key": "workflow-design",
+    "file": "exec-962066cb-9569-4a36-9d4d-e2ccfebf2ff0.png",
+    "subject": "the upright document and blue cubes on the LEFT of the SECOND row",
+    "tool": "built-in image_gen",
+    "transparent_background": true,
+    "prompt": "Use case: background-extraction. Extract ONLY the upright document and blue cubes on the LEFT of the SECOND row from the provided reference slide as ONE isolated reusable 3D icon with genuine transparent alpha background. Preserve the original blue/silver materials, isometric perspective, object shapes and soft studio lighting. Retain any small integral glass base or orbit ring belonging to this icon, but remove the entire slide, cards, surrounding texts, numerals, decorative lines, other icons and background. Center this one icon at a consistent 80 percent of a square canvas, keep 10 percent clear margins, no clipping. No labels, no letters, no checkerboard pixels, no white rectangle, no opaque ground plane. Transparent outside the object with only a subtle soft contact shadow. Intended to be reused on both navy and white slides."
+  },
+  {
+    "key": "performance-target",
+    "file": "exec-962066cb-9569-4a36-9d4d-e2ccfebf2ff0.png",
+    "subject": "the bar chart and target with arrow on the LEFT of the THIRD row",
+    "tool": "built-in image_gen",
+    "transparent_background": true,
+    "prompt": "Use case: background-extraction. Extract ONLY the bar chart and target with arrow on the LEFT of the THIRD row from the provided reference slide as ONE isolated reusable 3D icon with genuine transparent alpha background. Preserve the original blue/silver materials, isometric perspective, object shapes and soft studio lighting. Retain any small integral glass base or orbit ring belonging to this icon, but remove the entire slide, cards, surrounding texts, numerals, decorative lines, other icons and background. Center this one icon at a consistent 80 percent of a square canvas, keep 10 percent clear margins, no clipping. No labels, no letters, no checkerboard pixels, no white rectangle, no opaque ground plane. Transparent outside the object with only a subtle soft contact shadow. Intended to be reused on both navy and white slides."
+  }
+]

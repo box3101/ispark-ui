@@ -1,6 +1,6 @@
 {
   "name": "@leechanyong/ispark-ui",
-  "version": "0.14.3",
+  "version": "0.15.0",
   "type": "module",
   "description": "Ispark Design System UI Library (Vue 3 + Vite + Storybook)",
   "author": "box3101 <tony.at.cp@gmail.com>",
@@ -28,6 +28,12 @@
       "import": "./dist/ispark-ui.js",
       "require": "./dist/ispark-ui.cjs"
     },
+    "./presentation": {
+      "types": "./dist/presentation.d.ts",
+      "import": "./dist/presentation.js",
+      "require": "./dist/presentation.cjs"
+    },
+    "./presentation.css": "./dist/presentation.css",
     "./dist/ispark-ui.css": "./dist/ispark-ui.css",
     "./style.css": "./dist/ispark-ui.css",
     "./styles": "./dist/ispark-ui.css"

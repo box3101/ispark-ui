@@ -8,6 +8,21 @@ import { resolve } from 'node:path'
 export default defineConfig({
   plugins: [
     vue(),
+    // Multi-entry library builds extract shared component CSS into its own file.
+    // Consumers import either entry stylesheet, so both must load shared CSS.
+    {
+      name: 'include-shared-library-css',
+      generateBundle(_options, bundle) {
+        const entryStyles = ['ispark-ui.css', 'presentation.css']
+        const sharedStyles = Object.keys(bundle).filter(name => name.endsWith('.css') && !entryStyles.includes(name))
+        const imports = sharedStyles.map(name => `@import "./${name}";`).join('\n')
+        if (!imports) return
+        for (const name of entryStyles) {
+          const asset = bundle[name]
+          if (asset?.type === 'asset') asset.source = `${imports}\n${asset.source}`
+        }
+      },
+    },
     // .d.ts 자동 생성 (vue-tsc 기반)
     dts({
       include: ['src/**/*.ts', 'src/**/*.vue'],
@@ -41,9 +56,16 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: resolve(fileURLToPath(new URL('./src', import.meta.url)), 'index.ts'),
+      // index: 기본 UI 컴포넌트 / presentation: 발표 장표(@leechanyong/ispark-ui/presentation)
+      entry: {
+        index: resolve(fileURLToPath(new URL('./src', import.meta.url)), 'index.ts'),
+        presentation: resolve(fileURLToPath(new URL('./src', import.meta.url)), 'presentation/public/index.ts'),
+      },
       name: 'IsparkUi',
-      fileName: (format) => (format === 'es' ? 'ispark-ui.js' : 'ispark-ui.cjs'),
+      fileName: (format, entryName) => {
+        const base = entryName === 'index' ? 'ispark-ui' : entryName
+        return format === 'es' ? `${base}.js` : `${base}.cjs`
+      },
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
@@ -56,13 +78,15 @@ export default defineConfig({
           '@internationalized/date': 'InternationalizedDate',
         },
         // CSS 단일 파일로 (consumer가 ./style.css로 import)
+        // 진입점별 CSS: 기본 UI → ispark-ui.css, 발표 장표(폰트 포함) → presentation.css
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'style.css') return 'ispark-ui.css'
+          if (assetInfo.name === 'style.css' || assetInfo.name === 'index.css') return 'ispark-ui.css'
+          if (assetInfo.name === 'presentation.css') return 'presentation.css'
           return assetInfo.name || 'asset'
         },
       },
     },
-    cssCodeSplit: false,
+    cssCodeSplit: true,
   },
   server: {
     port: 3000,
