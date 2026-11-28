@@ -257,7 +257,7 @@ const J_ = {
       const O = String(i.modelValue ?? "");
       return N(O);
     }), I = (O) => {
-      const X = F(O);
+      const X = i.numberOnly || D.value ? F(O) : O;
       if (typeof i.modelValue == "number") {
         if (X === "" || X === "-") return X;
         const he = parseFloat(X);
@@ -486,7 +486,7 @@ const J_ = {
       }, j(t.desc), 9, b2)) : Y("", !0)
     ], 6));
   }
-}), ab = /* @__PURE__ */ Ue(y2, [["__scopeId", "data-v-50759071"]]), id = /* @__PURE__ */ Oe({
+}), ab = /* @__PURE__ */ Ue(y2, [["__scopeId", "data-v-c5285ef1"]]), id = /* @__PURE__ */ Oe({
   __name: "UiTooltip",
   props: {
     content: { default: "" },

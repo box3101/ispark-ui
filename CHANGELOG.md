@@ -3,6 +3,11 @@
 본 프로젝트는 [Keep a Changelog](https://keepachangelog.com/ko/) 형식과 [Semantic Versioning](https://semver.org/lang/ko/)을 따릅니다.
 
 
+## [0.15.1] - 2026-11-28
+
+### Fixed
+- UiInput 일반 텍스트 입력의 쉼표를 지우지 않음 (숫자 입력만 천 단위 콤마 제거)
+
 ## [0.15.0] - 2026-11-27
 
 ### Added
