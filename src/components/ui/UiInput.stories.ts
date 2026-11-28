@@ -341,6 +341,27 @@ export const NumberOnly: Story = {
   }),
 }
 
+// ===== 5-1. TextWithComma — 일반 텍스트는 쉼표를 그대로 둔다 (숫자 입력만 천 단위 콤마 제거) =====
+export const TextWithComma: Story = {
+  name: '일반 텍스트의 쉼표 유지',
+  render: () => ({
+    components: { UiInput },
+    setup() {
+      const text = ref('직무 하나하나, 결에 맞는 자리를 찾습니다')
+      const amount = ref('')
+      return { text, amount }
+    },
+    template: `
+      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 420px;">
+        <UiInput v-model="text" label="일반 텍스트" desc="쉼표가 값에 그대로 남습니다" />
+        <p style="margin:0;font-size:13px;">값: {{ text }}</p>
+        <UiInput v-model="amount" number-only label="숫자 (numberOnly)" desc="표시는 1,234 · 값은 1234" />
+        <p style="margin:0;font-size:13px;">값: {{ amount }}</p>
+      </div>
+    `,
+  }),
+}
+
 // ===== 6. FormValidation — 실시간 검증으로 errorMessage 동작 시연 =====
 export const FormValidation: Story = {
   name: '실전: 폼 검증 (실시간 에러)',

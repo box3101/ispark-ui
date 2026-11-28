@@ -397,8 +397,9 @@ const displayValue = computed(() => {
 })
 
 // emit 값 타입 정합 — modelValue가 number면 number로 emit
+// 콤마 제거는 숫자 입력(천 단위 콤마 포맷)에서만 한다. 일반 텍스트의 쉼표는 그대로 둔다.
 const emitValue = (raw: string): string | number => {
-  const cleaned = removeCommas(raw)
+  const cleaned = props.numberOnly || isCommaEnabled.value ? removeCommas(raw) : raw
   if (typeof props.modelValue === 'number') {
     if (cleaned === '' || cleaned === '-') return cleaned
     const n = parseFloat(cleaned)

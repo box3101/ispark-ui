@@ -21,6 +21,30 @@ describe('UiInput', () => {
     expect(onEnter).toHaveBeenCalledWith('test value')
   })
 
+  // ===== 회귀: 일반 텍스트의 쉼표 유지 =====
+  it('일반 텍스트 입력은 쉼표를 지우지 않고 emit', async () => {
+    const onUpdate = vi.fn()
+    render(UiInput, { props: { modelValue: '', 'onUpdate:modelValue': onUpdate } })
+    const input = screen.getByRole('textbox') as HTMLInputElement
+    await fireEvent.update(input, '직무 하나하나, 결에 맞는 자리를 찾습니다')
+    expect(onUpdate).toHaveBeenLastCalledWith('직무 하나하나, 결에 맞는 자리를 찾습니다')
+  })
+
+  it('Enter 이벤트도 일반 텍스트의 쉼표를 유지', async () => {
+    const onEnter = vi.fn()
+    render(UiInput, { props: { modelValue: '가, 나, 다', onEnter } })
+    await fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Enter' })
+    expect(onEnter).toHaveBeenCalledWith('가, 나, 다')
+  })
+
+  it('numberOnly 숫자 입력은 천 단위 콤마를 제거해 emit', async () => {
+    const onUpdate = vi.fn()
+    render(UiInput, { props: { numberOnly: true, modelValue: '', 'onUpdate:modelValue': onUpdate } })
+    const input = screen.getByRole('textbox') as HTMLInputElement
+    await fireEvent.update(input, '1,234,567')
+    expect(onUpdate).toHaveBeenLastCalledWith('1234567')
+  })
+
   // ===== 정책: numberOnly — 한글 IME 환경 대비 =====
   it('numberOnly=true 면 숫자 외 입력 제거 후 emit', async () => {
     const onUpdate = vi.fn()
